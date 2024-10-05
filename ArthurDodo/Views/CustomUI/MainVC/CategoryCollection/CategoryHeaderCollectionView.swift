@@ -91,17 +91,10 @@ extension CategoryHeaderCollectionView: UICollectionViewDataSource, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Tapped indexPath \(indexPath)")
-        
         onUpdateProductsCollectionView?(indexPath.row)
         selectCell(indexPath)
     }
-    
-    //        selectItem(at: indexPath, animated: false, scrollPosition: .centeredHorizontally)
-    //        designChosenCategory(collectionView, indexPath)
-    //        deSelectPreviousCell()
-    
-    
+
     private func designChosenCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryViewCell else { print("Hey2"); return }
         cell.setTitleColor(.white)
@@ -112,14 +105,3 @@ extension CategoryHeaderCollectionView: UICollectionViewDataSource, UICollection
         cell.setTitleColor(.darkGray.withAlphaComponent(0.4))
     }
 }
-
-
-
-//    private func deselectFirstCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
-//        let firstIndexPath = IndexPath(row: 0, section: 0)
-//        if indexPath != firstIndexPath {
-//            guard let cell = collectionView.cellForItem(at: firstIndexPath) as? CategoryViewCell else { return }
-//            cell.setTitleColor(.darkGray.withAlphaComponent(0.4))
-//        }
-//    }
-
