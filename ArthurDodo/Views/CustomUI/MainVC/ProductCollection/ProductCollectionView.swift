@@ -9,15 +9,16 @@ import UIKit
 
 final class ProductCollectionView: UICollectionView {
 
-    // MARK: - Properties
+    // MARK: - Properties&Callbacks
     var onUpdateTableView: ( (IndexPath) -> Void )?
+    var onCellSelected: ( (FoodItems) -> Void )?
     var onChangeCategoryName: ( (IndexPath) -> Void)?
-    var products: [FoodItems] = []
+
     private let cellHeight: CGFloat = 150
     private let leftPadding: CGFloat = 0
     private let rightPadding: CGFloat = 0
 
-    var isCollectionScrolling = false
+    private var isCollectionScrolling = false
 
     // MARK: - Init
     override init(frame: CGRect = .zero,
@@ -65,14 +66,20 @@ extension ProductCollectionView: UICollectionViewDataSource, UICollectionViewDel
         return cell
     }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = categories[indexPath.section].items[indexPath.row]
+        onCellSelected?(item)
+    }
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: collectionView.frame.width, height: cellHeight)
     }
 }
 
+// MARK: - ScrollViewDelegate
 extension ProductCollectionView {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(isCollectionScrolling)
+//        print(isCollectionScrolling)
         if !isCollectionScrolling {
             let index = indexPathsForVisibleItems.sorted()
             let correctIndex = index[1]
@@ -80,38 +87,3 @@ extension ProductCollectionView {
         }
     }
 }
-
-
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        selectItem(at: indexPath, animated: false, scrollPosition: .centeredHorizontally)
-//
-//        deselectFirstCategory(collectionView, indexPath)
-//        designChosenCategory(collectionView, indexPath)
-//        onUpdateTableView?(indexPath)
-//    }
-//
-//    func selectFirstCategory(_ collectionView: UICollectionView) {
-//        let firstCategoryIndexPath = IndexPath(row: 0, section: 0)
-//        onUpdateTableView?(firstCategoryIndexPath)
-//        designChosenCategory(collectionView, firstCategoryIndexPath)
-//    }
-
-//    private func designChosenCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
-//        guard let cell = collectionView.cellForItem(at: indexPath) as? ProductCollectionCell else { print("Hey2"); return }
-//        cell.titleLabel.textColor = .white
-//    }
-//
-//    private func deselectFirstCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
-//        let firstIndexPath = IndexPath(row: 0, section: 0)
-//        if indexPath != firstIndexPath {
-//            guard let cell = collectionView.cellForItem(at: firstIndexPath) as? ProductCollectionCell else { return }
-//            cell.titleLabel.textColor = .darkGray.withAlphaComponent(0.4)
-//        }
-//    }
-
-//    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-//        guard let cell = collectionView.cellForItem(at: indexPath) as? ProductCollectionCell else { return }
-//        cell.titleLabel.textColor = .darkGray.withAlphaComponent(0.4)
-//    }
-//}
-

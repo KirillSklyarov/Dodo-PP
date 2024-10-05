@@ -28,8 +28,6 @@ final class MainViewController: UIViewController {
 
     // MARK: - Other Properties
     var collectionHeaderTopConstraint: NSLayoutConstraint?
-    var collectionHeightConstraint: NSLayoutConstraint?
-
     var isCollectionFixed = false
 
     // MARK: - Life cycles
@@ -37,35 +35,62 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         dataBinding()
-//        updateCart()
-//        productCellTapped()
-        configCartButton()
-    }
-
-
-    // MARK: - Private methods
-    @objc private func cartButtonTapped(_ sender: UIButton) {
-        let cartVC = CartViewController()
-        present(cartVC, animated: true)
-
-        cartVC.onEmptyCart = { [weak self] in
-            guard let self else { return }
-            cartButton.resetPrice()
-            cartButton.isHidden = true
-        }
-
-        cartVC.onRefreshCart = { [weak self] in
-            self?.cartButton.getTotalCartPriceFromStorage()
-        }
     }
 
     // MARK: - Private methods
     private func dataBinding() {
         setupProductsCollectionView()
-        uploadProductsFromCategory()
+        scrollToProductsFromSelectedCategory()
+        productCellTapped()
+        configCartButton()
+//        setupCartButtonCallbacks()
+
+        setupHeaderView()
     }
 
-    private func uploadProductsFromCategory() {
+    private func setupHeaderView() {
+        headerView.onProfileButtonTapped = { [weak self] in
+            let profileVC = ProfileVC()
+            profileVC.modalPresentationStyle = .fullScreen
+            self?.present(profileVC, animated: true)
+        }
+    }
+
+    private func configCartButton() {
+        cartButton.onCartButtonTapped = { [weak self] in
+            guard let self else { return }
+            let cartVC = CartViewController()
+            present(cartVC, animated: true)
+
+            cartVC.onEmptyCart = { [weak self] in
+                guard let self else { return }
+                cartButton.resetPrice()
+                cartButton.isHidden = true
+            }
+
+            cartVC.onRefreshCart = { [weak self] in
+                self?.cartButton.getTotalCartPriceFromStorage()
+            }
+        }
+    }
+
+    private func productCellTapped() {
+        productsCollectionView.onCellSelected = { [weak self] pizza in
+            let productDetailVC = ProductDetailsViewController()
+            productDetailVC.getPizzaData(pizza)
+            productDetailVC.modalPresentationStyle = .overFullScreen
+            productDetailVC.isModalInPresentation = false
+            self?.present(productDetailVC, animated: true)
+
+            productDetailVC.onCartButtonTapped = { [weak self] orderPrice in
+                guard let self else { return }
+                self.cartButton.setNewPrice(orderPrice)
+                self.cartButton.isHidden = false
+            }
+        }
+    }
+
+    private func scrollToProductsFromSelectedCategory() {
         categoryHeaderCollectionView.onUpdateProductsCollectionView = { [weak self] section in
             guard let self = self else { return }
             let indexPath = IndexPath(item: 0, section: section)
@@ -76,40 +101,6 @@ final class MainViewController: UIViewController {
             }
         }
     }
-
-//    private func updateCollectionViewHeight() {
-//        let collectionHeight = productsCollectionView.collectionViewLayout.collectionViewContentSize.height
-//        collectionHeightConstraint?.constant = collectionHeight
-//        print(collectionHeight)
-//        collectionHeightConstraint?.isActive = true
-//    }
-
-//    private func productCellTapped() {
-//        productTableView.onCellTapped = { [weak self] pizza in
-//            let productDetailVC = ProductDetailsViewController()
-//            productDetailVC.getPizzaData(pizza)
-//            productDetailVC.modalPresentationStyle = .overFullScreen
-//            productDetailVC.isModalInPresentation = false
-//            self?.present(productDetailVC, animated: true)
-//
-//            productDetailVC.onCartButtonTapped = { [weak self] orderPrice in
-//                guard let self else { return }
-//                self.cartButton.setNewPrice(orderPrice)
-//                self.cartButton.isHidden = false
-//            }
-//        }
-//    }
-//
-//    private func updateProductTableView(_ indexPath: IndexPath) {
-//        let products = categories[indexPath.row].items
-//        productTableView.uploadListOfProducts(products)
-//    }
-//
-//    private func updateCart() {
-//        productTableView.onUpdateCart = { [weak self] price in
-//            self?.cartButton.setNewPrice(price)
-//        }
-//    }
 
     private func setupUI() {
         view.backgroundColor = .black
@@ -134,10 +125,6 @@ final class MainViewController: UIViewController {
         contentView.addSubviews(stackView)
     }
 
-    private func configCartButton() {
-        cartButton.addTarget(self, action: #selector(cartButtonTapped), for: .touchUpInside)
-    }
-
     private func setupProductsCollectionView() {
         productsCollectionView.onChangeCategoryName = { [weak self] newIndexPath in
             guard let self else { return }
@@ -149,18 +136,15 @@ final class MainViewController: UIViewController {
 
 // MARK: - SetupConstraints
 private extension MainViewController {
-
     func setupConstraints() {
-        backgroundView.topAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
-
-        collectionHeightConstraint = productsCollectionView.heightAnchor.constraint(equalToConstant: 800)
-        collectionHeightConstraint?.isActive = true
+        NSLayoutConstraint.activate([
+            backgroundView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 5),
+            productsCollectionView.heightAnchor.constraint(equalToConstant: 800),
+            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
+        ])
 
         setupInitialHeaderLayout()
-
-        //           cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-        //           cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
-        //       ])
     }
 }
 
@@ -200,3 +184,17 @@ extension MainViewController: UIScrollViewDelegate {
         isCollectionFixed = true
     }
 }
+
+
+//    private func setupCartButtonCallbacks() {
+//        productsCollectionView.onUpdateCart = { [weak self] price in
+//            self?.cartButton.setNewPrice(price)
+//        }
+//    }
+
+//    private func updateCollectionViewHeight() {
+//        let collectionHeight = productsCollectionView.collectionViewLayout.collectionViewContentSize.height
+//        collectionHeightConstraint?.constant = collectionHeight
+//        print(collectionHeight)
+//        collectionHeightConstraint?.isActive = true
+//    }

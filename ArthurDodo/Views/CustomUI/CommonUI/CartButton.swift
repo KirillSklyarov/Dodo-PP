@@ -11,6 +11,7 @@ final class CartButton: UIButton {
 
     // MARK: - Properties
     private var totalPrice = 0
+    var onCartButtonTapped: (() -> Void)?
     private let buttonHeight: CGFloat = 50
     private let dataStorage = OrderDataStorage.shared
 
@@ -69,9 +70,14 @@ final class CartButton: UIButton {
         configuration = config
 
         self.isHidden = isHidden
+        addTarget(self, action: #selector(cartButtonTapped), for: .touchUpInside)
     }
 
     private func setupLayout() {
         heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
+    }
+
+    @objc private func cartButtonTapped() {
+        onCartButtonTapped?()
     }
 }

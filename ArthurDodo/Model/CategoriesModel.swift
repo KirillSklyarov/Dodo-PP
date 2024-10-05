@@ -20,9 +20,9 @@ struct Categories {
     let items: [FoodItems]
 }
 
-let categories: [Categories] = [Categories(header: "Римские пиццы", items: romanPizzas),
-                                Categories(header: "Пиццы", items: pizzas),
-                                Categories(header: "Комбо", items: combos),
-                                Categories(header: "Закуски", items: starters),
-                                Categories(header: "Завтраки", items: breakfast)
+let categories: [Categories] = [ Categories(header: "Завтрак", items: breakfast),
+                                 Categories(header: "Римские пиццы", items: romanPizzas),
+                                 Categories(header: "Пиццы", items: pizzas),
+                                 Categories(header: "Комбо", items: combos),
+                                 Categories(header: "Закуски", items: starters),
 ]
