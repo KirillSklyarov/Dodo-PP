@@ -70,9 +70,10 @@ extension ProductCollectionView: UICollectionViewDataSource, UICollectionViewDel
     }
 }
 
+// MARK: - ScrollViewDelegate
 extension ProductCollectionView {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(isCollectionScrolling)
+//        print(isCollectionScrolling)
         if !isCollectionScrolling {
             let index = indexPathsForVisibleItems.sorted()
             let correctIndex = index[1]

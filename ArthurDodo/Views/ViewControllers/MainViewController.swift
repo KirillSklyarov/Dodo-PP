@@ -158,9 +158,10 @@ private extension MainViewController {
 
         setupInitialHeaderLayout()
 
-        //           cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-        //           cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
-        //       ])
+        NSLayoutConstraint.activate([
+            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
+        ])
     }
 }
 
