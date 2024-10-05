@@ -9,8 +9,14 @@ import UIKit
 
 final class CartProductCell: UITableViewCell {
 
-    // MARK: - Static Properties
+    // MARK: - Properties
     static let identifier: String = "CartProductCell"
+    private let imageSize: CGFloat = 100
+    private let hitImageSize: CGFloat = 30
+
+    var onValueIsNull: (() -> Void)?
+    var onStepperValueChanged: ((Int) -> Void)?
+    var onChangeButtonTapped: ( () -> Void)?
 
     // MARK: - UI Properties
     private lazy var pizzaImageView: UIImageView = {
@@ -33,40 +39,31 @@ final class CartProductCell: UITableViewCell {
     }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Карбонара"
         label.textColor = .white
         return label
     }()
     private lazy var sizeDoughLabel: UILabel = {
         let label = UILabel()
-        label.text = "Маленькая 25 см, традиционное тесто"
         label.textColor = .gray
         label.font = .systemFont(ofSize: 12)
         return label
     }()
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
-        label.text = "549 ₽"
         label.textColor = .white
         label.font = .systemFont(ofSize: 20, weight: .bold)
         return label
     }()
-    private lazy var changeNumbersLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Изменить"
-        label.textColor = .systemOrange
-        label.font = .systemFont(ofSize: 16, weight: .semibold)
-        return label
+    private lazy var changeNumbersButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Изменить", for: .normal)
+        button.setTitleColor(.systemOrange, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
+        button.addTarget(self, action: #selector (changeButtonTapped), for: .touchUpInside)
+        return button
     }()
     private lazy var countStepper = CustomStepperView()
     private lazy var contentContainer = UIView()
-
-    // MARK: - Other Properties
-    private let imageSize: CGFloat = 100
-    private let hitImageSize: CGFloat = 30
-
-    var onValueIsNull: (() -> Void)?
-    var onStepperValueChanged: ((Int) -> Void)?
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -77,6 +74,11 @@ final class CartProductCell: UITableViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - IB Actions
+    @objc private func changeButtonTapped(_ sender: UIButton) {
+        onChangeButtonTapped?()
     }
 
     // MARK: - Public methods
@@ -129,7 +131,7 @@ final class CartProductCell: UITableViewCell {
         }()
 
         let countStackView: UIStackView = {
-            let stack = UIStackView(arrangedSubviews: [changeNumbersLabel, countStepper])
+            let stack = UIStackView(arrangedSubviews: [changeNumbersButton, countStepper])
             stack.axis = .horizontal
             stack.spacing = 10
             countStepper.widthAnchor.constraint(equalToConstant: 90).isActive = true
@@ -149,12 +151,11 @@ final class CartProductCell: UITableViewCell {
             nameSizeStackView.leadingAnchor.constraint(equalTo: pizzaImageView.trailingAnchor, constant: 10),
             nameSizeStackView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -10),
 
-            priceLabel.topAnchor.constraint(equalTo: pizzaImageView.bottomAnchor, constant: 10),
+            priceLabel.topAnchor.constraint(equalTo: pizzaImageView.bottomAnchor, constant: 5),
             priceLabel.leadingAnchor.constraint(equalTo: pizzaImageView.leadingAnchor),
 
             countStackView.centerYAnchor.constraint(equalTo: priceLabel.centerYAnchor),
             countStackView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -10),
-            countStackView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor, constant: -10)
         ])
     }
 

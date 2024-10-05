@@ -102,6 +102,11 @@ final class CartViewController: UIViewController {
         cartProductTableView.onCountIncreased = { [weak self] in
             self?.loadOrderFromStorage()
         }
+
+        cartProductTableView.onChangeItem = { [weak self] in
+            let productVC = ProductDetailsViewController()
+            self?.present(productVC, animated: true)
+        }
     }
 
     private func setupSpecialOfferCollectionView() {
@@ -248,8 +253,7 @@ extension CartViewController {
     private func setupPromoButtonConstraints() {
         NSLayoutConstraint.activate([
             promoButton.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 5),
-            promoButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            promoButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            promoButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
     }
 

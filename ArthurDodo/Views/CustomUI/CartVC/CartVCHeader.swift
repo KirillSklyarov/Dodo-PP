@@ -9,10 +9,11 @@ import UIKit
 
 final class CartVCHeader: UIView {
 
+    // MARK: - Properties&Callbacks
     var onCloseButtonTapped: (() -> Void)?
-
     private let viewHeight: CGFloat = 60
 
+    // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Корзина"
@@ -29,12 +30,9 @@ final class CartVCHeader: UIView {
         return button
     }()
 
-    private lazy var blurView: UIVisualEffectView = {
-        let blur = UIBlurEffect(style: .systemUltraThinMaterialDark)
-        let blurView = UIVisualEffectView(effect: blur)
-        return blurView
-    }()
+    private lazy var blurView = CustomBlurView()
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         configUI()
@@ -44,10 +42,17 @@ final class CartVCHeader: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - IB Actions
+    @objc private func closeButtonTapped() {
+        onCloseButtonTapped?()
+    }
+
+    // MARK: - Public methods
     func getViewHeight() -> CGFloat {
         viewHeight
     }
 
+    // MARK: - Private methods
     private func configUI() {
         addSubviews(blurView, dismissButton, titleLabel)
         setupLayout()
@@ -81,9 +86,5 @@ final class CartVCHeader: UIView {
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
-    }
-
-    @objc private func closeButtonTapped() {
-        onCloseButtonTapped?()
     }
 }

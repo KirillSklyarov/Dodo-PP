@@ -7,29 +7,47 @@
 
 import UIKit
 
-final class CustomSegmentControl: UISegmentedControl {
+// Здесь делается фон и на него накладывается сегментКонтрол
+final class SegmentControlView: UIView {
 
+    // MARK: - Properties&Callbacks
     var onSegmentControllerValueChanged: ((Int) -> Void)?
 
-    override init(items: [Any]?) {
-        super.init(items: items)
-        configSegmentControl()
+    private let viewHeight: CGFloat = 40
+    private var segmentControl: CustomSegmentControl?
+
+    // MARK: - Init
+    init(frame: CGRect = .zero, items: [Any]?, defaultSelection: Int) {
+        super.init(frame: frame)
+        segmentControl = CustomSegmentControl(items: items, defaultSelection: defaultSelection)
+        setupUI()
+        dataBinding()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func configSegmentControl() {
-        setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 16, weight: .bold)], for: .normal)
-        selectedSegmentIndex = 0
-        heightAnchor.constraint(equalToConstant: 40).isActive = true
+    // MARK: - Private methods
+    private func setupUI() {
+        backgroundColor = .black.withAlphaComponent(0.6)
+        layer.cornerRadius = viewHeight / 2
+        clipsToBounds = true
 
-        addTarget(self, action: #selector(sizeSegmentControlValueChanged), for: .valueChanged)
+        guard let segmentControl else { return }
+        addSubviews(segmentControl)
+
+        NSLayoutConstraint.activate([
+            segmentControl.topAnchor.constraint(equalTo: topAnchor, constant: 2),
+            segmentControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
+            segmentControl.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -2),
+            segmentControl.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2)
+        ])
     }
 
-    @objc private func sizeSegmentControlValueChanged(_ sender: UISegmentedControl) {
-        let index = sender.selectedSegmentIndex
-        onSegmentControllerValueChanged?(index)
+    private func dataBinding() {
+        segmentControl?.onSegmentControllerValueChanged = { [weak self] index in
+            self?.onSegmentControllerValueChanged?(index)
+        }
     }
 }

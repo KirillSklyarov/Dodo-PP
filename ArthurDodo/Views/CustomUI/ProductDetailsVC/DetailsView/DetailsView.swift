@@ -27,9 +27,9 @@ final class DetailsView: UIView {
         return imageView
     }()
 
-    private lazy var sizeSegmentControl = CustomSegmentControl(items: ["25 cм", "30 см", "35 см"])
+    private lazy var sizeSegmentControl = SegmentControlView(items: AppConstants.sizeCases, defaultSelection: 1)
 
-    private lazy var doughSegmentControl = CustomSegmentControl(items: ["Обычное", "Тонкое"])
+    private lazy var doughSegmentControl = SegmentControlView(items: AppConstants.doughCases, defaultSelection: 0)
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -71,7 +71,7 @@ final class DetailsView: UIView {
     private func setupUI() {
         heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
 
-        backgroundColor = .systemYellow
+        backgroundColor = UIColor(hex: "485460")
         layer.cornerRadius = 20
         layer.masksToBounds = true
 
@@ -110,23 +110,24 @@ final class DetailsView: UIView {
     }
 
     private func setupSizeSegmentControl() {
-        sizeSegmentControl.selectedSegmentIndex = 1
         sizeSegmentControl.onSegmentControllerValueChanged = { [weak self] index in
-            self?.onSegmentValueChanged?(index)
+            guard let self else { print("123"); return }
+            onSegmentValueChanged?(index)
 
             switch index {
-            case 0: self?.chosenSize = .small
-            case 1: self?.chosenSize = .medium
-            case 2: self?.chosenSize = .large
+            case 0: chosenSize = .small
+            case 1: chosenSize = .medium
+            case 2: chosenSize = .large
             default: break }
         }
     }
 
     private func setupDoughSegmentControl() {
         doughSegmentControl.onSegmentControllerValueChanged = { [weak self] index in
+            guard let self else { print("123"); return }
             switch index {
-            case 0: self?.chosenDough = .basic
-            case 1: self?.chosenDough = .thin
+            case 0: chosenDough = .basic
+            case 1: chosenDough = .thin
             default: break
             }
         }

@@ -115,13 +115,19 @@ final class ProductTableViewCell: UITableViewCell {
         ])
     }
 
-    func configureCell(pizza: Pizza) {
+    func configureCell(pizza: FoodItems) {
         pizzaImageView.image = UIImage(named: pizza.imageName)
         titleLabel.text = pizza.name
         ingredientsLabel.text = pizza.ingredients
-        let lowestPrice = pizza.size[.small]?.price ?? 0
-        let price = "от \(lowestPrice) ₽"
+        
+        var itemPrice = pizza.itemSize[.medium]?.price.description ?? ""
+        if let pizza = pizza as? Pizza {
+            itemPrice = pizza.itemSize[.small]?.price.description ?? ""
+        }
+
+        let price = "от \(itemPrice) ₽"
         priceButton.setTitle(price, for: .normal)
+
         if pizza.isHit {
             hitImageView.isHidden = false
         } else {

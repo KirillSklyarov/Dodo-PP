@@ -9,52 +9,48 @@ import UIKit
 
 final class ProductHeaderView: UIView {
 
+    // MARK: - Properties&Callbacks
     var onCloseButtonTapped: (() -> Void)?
 
     private let buttonSize: CGFloat = 40
     private let viewHeight: CGFloat = 100
 
+    // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = .systemFont(ofSize: 24, weight: .bold)
+        label.font = AppFonts.bold20
         return label
     }()
 
-    private lazy var dismissButton: UIButton = {
-        let button = UIButton()
-        let image = UIImage(systemName: "xmark.circle.fill")?.withTintColor(.darkGray, renderingMode: .alwaysOriginal)
-        button.setImage(image, for: .normal)
-        button.contentVerticalAlignment = .fill
-        button.contentHorizontalAlignment = .fill
-        button.tintColor = .white
-        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-        button.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
-        button.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
-        return button
-    }()
+    private lazy var dismissButton = DismissProductView()
+    private lazy var blurView = CustomBlurView()
 
-    private lazy var blurView: UIVisualEffectView = {
-        let blur = UIBlurEffect(style: .systemUltraThinMaterialDark)
-        let blurView = UIVisualEffectView(effect: blur)
-        return blurView
-    }()
-
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         configUI()
+        closeButtonTapped()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Public methods
     func updateTitle(_ title: String) {
         titleLabel.text = title
     }
 
     func getViewHeight() -> CGFloat {
         viewHeight
+    }
+
+    // MARK: - Private methods
+    private func closeButtonTapped() {
+        dismissButton.onCloseButtonTapped = { [weak self] in
+            self?.onCloseButtonTapped?()
+        }
     }
 
     private func configUI() {
@@ -90,9 +86,5 @@ final class ProductHeaderView: UIView {
             titleLabel.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
-    }
-
-    @objc private func closeButtonTapped() {
-        onCloseButtonTapped?()
     }
 }

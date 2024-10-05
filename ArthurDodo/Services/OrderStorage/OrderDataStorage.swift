@@ -34,5 +34,4 @@ final class OrderDataStorage {
     func getTotalOrderPrice() -> Int {
         order.compactMap{ $0.price * $0.count }.reduce(0, +)
     }
-
 }

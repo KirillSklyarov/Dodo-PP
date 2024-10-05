@@ -10,7 +10,7 @@ import UIKit
 final class CartButton: UIButton {
 
     // MARK: - Properties
-    var totalPrice = 0
+    private var totalPrice = 0
     private let buttonHeight: CGFloat = 50
     private let dataStorage = OrderDataStorage.shared
 
@@ -18,6 +18,7 @@ final class CartButton: UIButton {
     init(frame: CGRect = .zero, isHidden: Bool) {
         super.init(frame: frame)
         configButton(isHidden: isHidden)
+        setupLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -28,7 +29,7 @@ final class CartButton: UIButton {
     func setNewTitle(_ title: String) {
         configuration?.attributedTitle = AttributedString(title, attributes: AttributeContainer([
             .foregroundColor: UIColor.white,
-            .font: UIFont.systemFont(ofSize: 18, weight: .bold)])
+            .font: AppFonts.bold18])
         )
     }
 
@@ -37,7 +38,7 @@ final class CartButton: UIButton {
         let title = "\(totalPrice) ₽"
         configuration?.attributedTitle = AttributedString(title, attributes: AttributeContainer([
             .foregroundColor: UIColor.white,
-            .font: UIFont.systemFont(ofSize: 18, weight: .bold)]))
+            .font: AppFonts.bold18]))
     }
 
     func resetPrice() {
@@ -61,14 +62,16 @@ final class CartButton: UIButton {
         config.image = image
         config.attributedTitle = AttributedString(title, attributes: AttributeContainer([
             .foregroundColor: UIColor.white,
-            .font: UIFont.systemFont(ofSize: 18, weight: .bold)]
+            .font: AppFonts.bold18]
         ))
         config.background.backgroundColor = .systemOrange
         config.cornerStyle = .capsule
         configuration = config
 
         self.isHidden = isHidden
+    }
 
+    private func setupLayout() {
         heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
     }
 }

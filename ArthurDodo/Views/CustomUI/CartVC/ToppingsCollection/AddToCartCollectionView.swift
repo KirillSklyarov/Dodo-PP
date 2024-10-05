@@ -75,15 +75,13 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? AddToCartCollectionCell else { return }
-        cell.cellSelected()
         let positionToAdd = getOrderFromIndexPath(indexPath)
         addItemToOrder(positionToAdd)
     }
 
     private func getOrderFromIndexPath(_ indexPath: IndexPath) -> Order {
         let pizzaToAdd = romanPizzas[indexPath.row]
-        let positionToAdd = Order(pizzaName: pizzaToAdd.name, imageName: pizzaToAdd.imageName, size: .small, dough: Dough.basic, price: pizzaToAdd.size[.small]?.price ?? 0, isHit: pizzaToAdd.isHit)
+        let positionToAdd = Order(pizzaName: pizzaToAdd.name, imageName: pizzaToAdd.imageName, size: .small, dough: Dough.basic, price: pizzaToAdd.itemSize[.small]?.price ?? 0, isHit: pizzaToAdd.isHit)
         return positionToAdd
     }
 

@@ -10,8 +10,10 @@ import UIKit
 final class SpecialOfferCollectionView: UICollectionView {
 
     // MARK: - Properties
-    let collectionHeight: CGFloat = 90
-    let itemWidth: CGFloat = 210
+    private let collectionHeight: CGFloat = 90
+    private let itemWidth: CGFloat = 210
+    private let leftPadding: CGFloat = 0
+    private let rightPadding: CGFloat = 0
 
     var onUpdateTableView: ( (IndexPath) -> Void )?
 
@@ -23,24 +25,33 @@ final class SpecialOfferCollectionView: UICollectionView {
 
         super.init(frame: frame, collectionViewLayout: collectionLayout)
         configCollectionView()
-        setupLayout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func didMoveToSuperview() {
+        setupLayout()
+    }
+
     // MARK: - Private methods
+    private func setupLayout() {
+        guard let superview else { print("You must add SpecialOfferCollectionView to superview"); return }
+
+        NSLayoutConstraint.activate([
+            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: leftPadding),
+            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: rightPadding),
+            heightAnchor.constraint(equalToConstant: collectionHeight)
+        ])
+    }
+
     private func configCollectionView() {
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
         register(SpecialOfferCollectionCell.self, forCellWithReuseIdentifier: SpecialOfferCollectionCell.identifier)
         dataSource = self
         delegate = self
-    }
-
-    private func setupLayout() {
-        heightAnchor.constraint(equalToConstant: collectionHeight).isActive = true
     }
 }
 

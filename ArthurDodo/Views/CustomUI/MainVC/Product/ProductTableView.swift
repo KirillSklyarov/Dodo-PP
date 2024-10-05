@@ -10,9 +10,9 @@ import UIKit
 final class ProductTableView: UITableView {
 
     // MARK: - Properties&Callbacks
-    var products: [Pizza] = []
+    var products: [FoodItems] = []
     var onUpdateCart: ( (Int) -> Void )?
-    var onCellTapped: ( (Pizza) -> Void )?
+    var onCellTapped: ( (FoodItems) -> Void )?
 
     private let cellHeight: CGFloat = 150
     private var heightConstraint: NSLayoutConstraint?
@@ -28,7 +28,7 @@ final class ProductTableView: UITableView {
     }
 
     // MARK: - Public methods
-    func uploadListOfProducts(_ products: [Pizza]) {
+    func uploadListOfProducts(_ products: [FoodItems]) {
         self.products = products
         calculateTableHeight()
         reloadData()

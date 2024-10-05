@@ -7,26 +7,26 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		737D0DD52C99BF7000B7D739 /* ArthutDodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArthutDodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		737D0DD52C99BF7000B7D739 /* ArthurDodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArthurDodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		737D0E072C99C09200B7D739 /* Exceptions for "ArthutDodo" folder in "ArthutDodo" target */ = {
+		737D0E072C99C09200B7D739 /* Exceptions for "ArthurDodo" folder in "ArthurDodo" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Resources/Info.plist,
 			);
-			target = 737D0DD42C99BF7000B7D739 /* ArthutDodo */;
+			target = 737D0DD42C99BF7000B7D739 /* ArthurDodo */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		737D0DD72C99BF7000B7D739 /* ArthutDodo */ = {
+		737D0DD72C99BF7000B7D739 /* ArthurDodo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				737D0E072C99C09200B7D739 /* Exceptions for "ArthutDodo" folder in "ArthutDodo" target */,
+				737D0E072C99C09200B7D739 /* Exceptions for "ArthurDodo" folder in "ArthurDodo" target */,
 			);
-			path = ArthutDodo;
+			path = ArthurDodo;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -45,7 +45,7 @@
 		737D0DCC2C99BF7000B7D739 = {
 			isa = PBXGroup;
 			children = (
-				737D0DD72C99BF7000B7D739 /* ArthutDodo */,
+				737D0DD72C99BF7000B7D739 /* ArthurDodo */,
 				737D0DD62C99BF7000B7D739 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -53,7 +53,7 @@
 		737D0DD62C99BF7000B7D739 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				737D0DD52C99BF7000B7D739 /* ArthutDodo.app */,
+				737D0DD52C99BF7000B7D739 /* ArthurDodo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,9 +61,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		737D0DD42C99BF7000B7D739 /* ArthutDodo */ = {
+		737D0DD42C99BF7000B7D739 /* ArthurDodo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 737D0DE82C99BF7100B7D739 /* Build configuration list for PBXNativeTarget "ArthutDodo" */;
+			buildConfigurationList = 737D0DE82C99BF7100B7D739 /* Build configuration list for PBXNativeTarget "ArthurDodo" */;
 			buildPhases = (
 				737D0DD12C99BF7000B7D739 /* Sources */,
 				737D0DD22C99BF7000B7D739 /* Frameworks */,
@@ -74,13 +74,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				737D0DD72C99BF7000B7D739 /* ArthutDodo */,
+				737D0DD72C99BF7000B7D739 /* ArthurDodo */,
 			);
-			name = ArthutDodo;
+			name = ArthurDodo;
 			packageProductDependencies = (
 			);
 			productName = ArthutDodo;
-			productReference = 737D0DD52C99BF7000B7D739 /* ArthutDodo.app */;
+			productReference = 737D0DD52C99BF7000B7D739 /* ArthurDodo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -98,7 +98,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 737D0DD02C99BF7000B7D739 /* Build configuration list for PBXProject "ArthutDodo" */;
+			buildConfigurationList = 737D0DD02C99BF7000B7D739 /* Build configuration list for PBXProject "ArthurDodo" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -112,7 +112,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				737D0DD42C99BF7000B7D739 /* ArthutDodo */,
+				737D0DD42C99BF7000B7D739 /* ArthurDodo */,
 			);
 		};
 /* End PBXProject section */
@@ -147,7 +147,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7W278NP9KT;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ArthutDodo/Resources/Info.plist;
+				INFOPLIST_FILE = ArthurDodo/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -179,7 +179,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7W278NP9KT;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ArthutDodo/Resources/Info.plist;
+				INFOPLIST_FILE = ArthurDodo/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -324,7 +324,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		737D0DD02C99BF7000B7D739 /* Build configuration list for PBXProject "ArthutDodo" */ = {
+		737D0DD02C99BF7000B7D739 /* Build configuration list for PBXProject "ArthurDodo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				737D0DEB2C99BF7100B7D739 /* Debug */,
@@ -333,7 +333,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		737D0DE82C99BF7100B7D739 /* Build configuration list for PBXNativeTarget "ArthutDodo" */ = {
+		737D0DE82C99BF7100B7D739 /* Build configuration list for PBXNativeTarget "ArthurDodo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				737D0DE92C99BF7100B7D739 /* Debug */,

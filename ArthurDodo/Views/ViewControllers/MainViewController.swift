@@ -11,30 +11,37 @@ final class MainViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = HeaderView()
-    private lazy var backgroundView = configBackgroundView()
+    private lazy var backgroundView = BackgroundView()
     private lazy var storiesCollectionView = StoriesCollectionView()
-    private lazy var specialOfferLabel = configSpecialOfferLabel()
+    private lazy var specialOfferLabel = SpecialOfferLabel()
     private lazy var specialOfferCollectionView = SpecialOfferCollectionView()
-    private lazy var categoryCollectionView = CategoryCollectionView()
-    private lazy var productTableView = ProductTableView()
+    private lazy var categoryHeaderCollectionView = CategoryHeaderCollectionView()
+    private lazy var productsCollectionView = ProductCollectionView()
+
     private lazy var cartButton = CartButton(isHidden: true)
 
-    private lazy var scrollView = UIScrollView()
-    private lazy var contentView = UIView()
+    private lazy var scrollView = AppScrollView()
+    private lazy var contentView = CustomContentView()
+    private lazy var placeholderView = PlaceholderView()
+
+    private lazy var stackView = ContentStackView(arrangedSubviews: [storiesCollectionView, specialOfferLabel, specialOfferCollectionView, placeholderView, productsCollectionView])
+
+    // MARK: - Other Properties
+    var collectionHeaderTopConstraint: NSLayoutConstraint?
+    var collectionHeightConstraint: NSLayoutConstraint?
+
+    var isCollectionFixed = false
 
     // MARK: - Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        uploadProductsFromCategory()
-        updateCart()
-        productCellTapped()
+        dataBinding()
+//        updateCart()
+//        productCellTapped()
         configCartButton()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        selectFirstCategory()
-    }
 
     // MARK: - Private methods
     @objc private func cartButtonTapped(_ sender: UIButton) {
@@ -53,182 +60,143 @@ final class MainViewController: UIViewController {
     }
 
     // MARK: - Private methods
-    private func productCellTapped() {
-        productTableView.onCellTapped = { [weak self] pizza in
-            let productDetailVC = ProductDetailsViewController()
-            productDetailVC.getPizzaData(pizza)
-            productDetailVC.modalPresentationStyle = .overFullScreen
-            productDetailVC.isModalInPresentation = false
-            self?.present(productDetailVC, animated: true)
+    private func dataBinding() {
+        setupProductsCollectionView()
+        uploadProductsFromCategory()
+    }
 
-            productDetailVC.onCartButtonTapped = { [weak self] orderPrice in
-                guard let self else { return }
-                self.cartButton.setNewPrice(orderPrice)
-                self.cartButton.isHidden = false
+    private func uploadProductsFromCategory() {
+        categoryHeaderCollectionView.onUpdateProductsCollectionView = { [weak self] section in
+            guard let self = self else { return }
+            let indexPath = IndexPath(item: 0, section: section)
+            productsCollectionView.setIsScrolling(true)
+            productsCollectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                self.productsCollectionView.setIsScrolling(false)
             }
         }
     }
 
-    private func selectFirstCategory() {
-        categoryCollectionView.selectFirstCategory(categoryCollectionView)
-    }
+//    private func updateCollectionViewHeight() {
+//        let collectionHeight = productsCollectionView.collectionViewLayout.collectionViewContentSize.height
+//        collectionHeightConstraint?.constant = collectionHeight
+//        print(collectionHeight)
+//        collectionHeightConstraint?.isActive = true
+//    }
 
-    private func uploadProductsFromCategory() {
-        categoryCollectionView.onUpdateTableView = { [weak self] indexPath in
-            self?.updateProductTableView(indexPath)
-        }
-    }
-
-    private func updateProductTableView(_ indexPath: IndexPath) {
-        let products = categories[indexPath.row].items
-        productTableView.uploadListOfProducts(products)
-    }
-
-    private func updateCart() {
-        productTableView.onUpdateCart = { [weak self] price in
-            self?.cartButton.setNewPrice(price)
-        }
-    }
+//    private func productCellTapped() {
+//        productTableView.onCellTapped = { [weak self] pizza in
+//            let productDetailVC = ProductDetailsViewController()
+//            productDetailVC.getPizzaData(pizza)
+//            productDetailVC.modalPresentationStyle = .overFullScreen
+//            productDetailVC.isModalInPresentation = false
+//            self?.present(productDetailVC, animated: true)
+//
+//            productDetailVC.onCartButtonTapped = { [weak self] orderPrice in
+//                guard let self else { return }
+//                self.cartButton.setNewPrice(orderPrice)
+//                self.cartButton.isHidden = false
+//            }
+//        }
+//    }
+//
+//    private func updateProductTableView(_ indexPath: IndexPath) {
+//        let products = categories[indexPath.row].items
+//        productTableView.uploadListOfProducts(products)
+//    }
+//
+//    private func updateCart() {
+//        productTableView.onUpdateCart = { [weak self] price in
+//            self?.cartButton.setNewPrice(price)
+//        }
+//    }
 
     private func setupUI() {
         view.backgroundColor = .black
-        view.addSubviews(headerView, backgroundView, cartButton)
+        view.addSubviews(headerView, backgroundView, categoryHeaderCollectionView, cartButton)
 
         configScrollView()
-        configContentView()
-
         setupConstraints()
     }
 
     private func configScrollView() {
         backgroundView.addSubviews(scrollView)
+        scrollView.delegate = self
+        configContentView()
     }
 
     private func configContentView() {
         scrollView.addSubviews(contentView)
+        configStackView()
+    }
 
-        contentView.addSubviews(storiesCollectionView, specialOfferLabel, specialOfferCollectionView, categoryCollectionView, productTableView)
+    private func configStackView() {
+        contentView.addSubviews(stackView)
     }
 
     private func configCartButton() {
         cartButton.addTarget(self, action: #selector(cartButtonTapped), for: .touchUpInside)
     }
 
-    private func configBackgroundView() -> UIView {
-        let view = UIView()
-        view.backgroundColor = .darkGray.withAlphaComponent(0.4)
-        view.layer.cornerRadius = 20
-        return view
-    }
-
-    private func configSpecialOfferLabel() -> UILabel {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .semibold)
-        label.text = "Выгодно и вкусно"
-        label.textColor = .white
-        label.textAlignment = .left
-        return label
+    private func setupProductsCollectionView() {
+        productsCollectionView.onChangeCategoryName = { [weak self] newIndexPath in
+            guard let self else { return }
+            let categoryIndex = IndexPath(item: newIndexPath.section, section: 0)
+            categoryHeaderCollectionView.selectCell(categoryIndex)
+        }
     }
 }
 
 // MARK: - SetupConstraints
 private extension MainViewController {
+
     func setupConstraints() {
-        setupHeaderViewLayout()
-        setupBackgroundViewLayout()
-        setupScrollViewLayout()
-        setupContentViewLayout()
+        backgroundView.topAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
 
-        setupStoriesLayout()
-        setupSpecialOfferHeaderLayout()
-        setupSpecialOfferLayout()
-        setupCategoryCollectionViewLayout()
-        setupProductTableViewLayout()
-        setupCarButtonLayout()
+        collectionHeightConstraint = productsCollectionView.heightAnchor.constraint(equalToConstant: 800)
+        collectionHeightConstraint?.isActive = true
+
+        setupInitialHeaderLayout()
+
+        //           cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+        //           cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
+        //       ])
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+extension MainViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if isNeedToFixHeader() { fixCategoryHeaderOnTop() }
+        if isNeedToUnfixHeader() { setupInitialHeaderLayout() }
     }
 
-    func setupHeaderViewLayout() {
-        NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
-            ])
+    // Проверяем что верх хэдера ушел за пределы backgroundView
+    private func isNeedToFixHeader() -> Bool {
+        let categoryHeaderFrame = categoryHeaderCollectionView.convert(categoryHeaderCollectionView.bounds, to: view)
+        let backgroundFrame = backgroundView.convert(backgroundView.bounds, to: view)
+
+        return categoryHeaderFrame.origin.y <= backgroundFrame.origin.y && !isCollectionFixed
     }
 
-    func setupBackgroundViewLayout() {
-        NSLayoutConstraint.activate([
-            backgroundView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
-            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            ])
+    // Проверяем что прокрутка Скролла уже меньше чем вершина placeholderView
+    private func isNeedToUnfixHeader() -> Bool {
+        return scrollView.contentOffset.y < placeholderView.frame.origin.y && isCollectionFixed
     }
 
-    func setupScrollViewLayout() {
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: backgroundView.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor)
-        ])
+    // Тут мы размещаем header в его месте
+    private func setupInitialHeaderLayout() {
+        collectionHeaderTopConstraint?.isActive = false
+        collectionHeaderTopConstraint = categoryHeaderCollectionView.topAnchor.constraint(equalTo: placeholderView.topAnchor)
+        collectionHeaderTopConstraint?.isActive = true
+        isCollectionFixed = false
     }
 
-    func setupContentViewLayout() {
-        NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        ])
-    }
-
-    func setupStoriesLayout() {
-        NSLayoutConstraint.activate([
-            storiesCollectionView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            storiesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            storiesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-        ])
-    }
-
-    func setupSpecialOfferHeaderLayout() {
-        NSLayoutConstraint.activate([
-            specialOfferLabel.topAnchor.constraint(equalTo: storiesCollectionView.bottomAnchor, constant: 10),
-            specialOfferLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            specialOfferLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-        ])
-    }
-
-    func setupSpecialOfferLayout() {
-        NSLayoutConstraint.activate([
-            specialOfferCollectionView.topAnchor.constraint(equalTo: specialOfferLabel.bottomAnchor, constant: 5),
-            specialOfferCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            specialOfferCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-        ])
-    }
-
-    func setupCategoryCollectionViewLayout() {
-        NSLayoutConstraint.activate([
-            categoryCollectionView.topAnchor.constraint(equalTo: specialOfferCollectionView.bottomAnchor, constant: 5),
-            categoryCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            categoryCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-        ])
-    }
-
-    func setupProductTableViewLayout() {
-        NSLayoutConstraint.activate([
-            productTableView.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor),
-            productTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            productTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            productTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-        ])
-    }
-
-    func setupCarButtonLayout() {
-        NSLayoutConstraint.activate([
-            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
-        ])
+    // Тут мы фиксируем header наверху
+    private func fixCategoryHeaderOnTop() {
+        collectionHeaderTopConstraint?.isActive = false
+        collectionHeaderTopConstraint = categoryHeaderCollectionView.topAnchor.constraint(equalTo: backgroundView.topAnchor)
+        collectionHeaderTopConstraint?.isActive = true
+        isCollectionFixed = true
     }
 }

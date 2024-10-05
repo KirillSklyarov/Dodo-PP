@@ -10,25 +10,40 @@ import UIKit
 final class StoriesCollectionView: UICollectionView {
 
     private let collectionHeight: CGFloat = 120
+    private let leftPadding: CGFloat = 0
+    private let rightPadding: CGFloat = 0
+    private let topPadding: CGFloat = 0
+
+    private let cellWidth: CGFloat = 90
 
     var onUpdateTableView: ( (IndexPath) -> Void )?
 
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 90, height: collectionHeight)
+        layout.itemSize = CGSize(width: cellWidth, height: collectionHeight)
 
         super.init(frame: frame, collectionViewLayout: layout)
         configCollectionView()
-        setupLayout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupLayout() {
-        heightAnchor.constraint(equalToConstant: collectionHeight).isActive = true
+    override func didMoveToSuperview() {
+        setupLayout()
+    }
+
+    func setupLayout() {
+        guard let superview else { print("You must add StoriesCollectionView to a view"); return }
+
+        NSLayoutConstraint.activate([
+            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: leftPadding),
+            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: rightPadding),
+            topAnchor.constraint(equalTo: superview.topAnchor, constant: topPadding),
+            heightAnchor.constraint(equalToConstant: collectionHeight)
+        ])
     }
 
     private func configCollectionView() {
@@ -69,19 +84,19 @@ extension StoriesCollectionView: UICollectionViewDataSource, UICollectionViewDel
 
     private func designChosenCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryViewCell else { print("Hey1"); return }
-        cell.titleLabel.textColor = .black
+        cell.setTitleColor(.black)
     }
 
     private func deselectFirstCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
         let firstIndexPath = IndexPath(row: 0, section: 0)
         if indexPath != firstIndexPath {
             guard let cell = collectionView.cellForItem(at: firstIndexPath) as? CategoryViewCell else { return }
-            cell.titleLabel.textColor = .lightGray
+            cell.setTitleColor(.lightGray)
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryViewCell else { return }
-        cell.titleLabel.textColor = .lightGray
+        cell.setTitleColor(.lightGray)
     }
 }

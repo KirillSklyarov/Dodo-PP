@@ -16,11 +16,7 @@ final class CartButtonViewFooter: UIView {
 
     // MARK: - UI Properties
     private lazy var cartButton = CartButton(isHidden: false)
-    private lazy var blurView: UIVisualEffectView = {
-        let blur = UIBlurEffect(style: .systemUltraThinMaterialDark)
-        let blurView = UIVisualEffectView(effect: blur)
-        return blurView
-    }()
+    private lazy var blurView = CustomBlurView()
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -44,13 +40,13 @@ final class CartButtonViewFooter: UIView {
 
     func updatePrice(_ price: Int) {
         currentPrice = price
-        let title = "В корзине за \(price) ₽"
+        let title = "В корзину за \(price) ₽"
         cartButton.setNewTitle(title)
     }
 
     // MARK: - Private methods
     private func configureCartButton() {
-        let title = "В корзине за 0 ₽"
+        let title = "В корзину за 0 ₽"
         cartButton.setNewTitle(title)
         let image = UIImage()
         cartButton.setImage(image, for: .normal)

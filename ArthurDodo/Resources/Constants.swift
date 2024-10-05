@@ -39,7 +39,29 @@ enum CPFCData: String, CaseIterable {
     case carbohydrates = "Углеводы"
 }
 
+struct AppConstants {
+    static let sizeCases = ["25 cм", "30 см", "35 см"]
+    static let doughCases = ["Обычное", "Тонкое"]
+    static let appBuild = "1"
+}
+
+struct AppFonts {
+    static let basicFont = UIFont.systemFont(ofSize: 30)
+
+    static let regular16 = UIFont(name: "SFProRounded-Regular", size: 15) ?? basicFont
+    static let semibold16 = UIFont(name: "SFProRounded-Semibold", size: 16) ?? basicFont
+    static let medium16 = UIFont(name: "SFProRounded-Medium", size: 16) ?? basicFont
+
+    static let bold14 = UIFont(name: "SFProRounded-Bold", size: 14) ?? basicFont
+    static let bold16 = UIFont(name: "SFProRounded-Bold", size: 16) ?? basicFont
+    static let bold18 = UIFont(name: "SFProRounded-Bold", size: 16) ?? basicFont
+    static let bold20 = UIFont(name: "SFProRounded-Bold", size: 20) ?? basicFont
+}
+
 struct AppColors {
+    static let grayFont = UIColor.darkGray.withAlphaComponent(0.4)
+    static let backgroundGray = UIColor(hex: "222222")
+
     let peach = UIColor(hex: "f7d794")
     let blue = UIColor(hex: "778beb")
     let geranium = UIColor(hex: "cf6a87")

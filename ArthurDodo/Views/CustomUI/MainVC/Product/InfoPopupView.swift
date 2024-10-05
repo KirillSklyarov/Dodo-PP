@@ -15,7 +15,7 @@ final class InfoPopupView: UIView {
     private var tableViewHeight: CGFloat { cellHeight * CGFloat(data.count) }
 
     private let data = CPFCData.allCases
-    private var pizza: Pizza?
+    private var pizza: FoodItems?
     private var selectedSize: Size = .medium
 
     private lazy var titleLabel: UILabel = {
@@ -55,7 +55,7 @@ final class InfoPopupView: UIView {
         return label
     }()
 
-    init(frame: CGRect = .zero, pizza: Pizza?) {
+    init(frame: CGRect = .zero, pizza: FoodItems?) {
         super.init(frame: frame)
         self.pizza = pizza
         setupView()
@@ -104,7 +104,7 @@ extension InfoPopupView: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cpfcTableViewCell.identifier, for: indexPath) as? cpfcTableViewCell else { return UITableViewCell() }
-        guard let item = pizza?.size[selectedSize] else { print("Jopa"); return cell }
+        guard let item = pizza?.itemSize[selectedSize] else { print("Jopa"); return cell }
         let title = data[indexPath.row]
         var value = ""
         switch title {

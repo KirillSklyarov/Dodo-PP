@@ -12,7 +12,7 @@ final class AddToCartCollectionCell: UICollectionViewCell {
     // MARK: - Properties
     static let identifier: String = "AddToCartCollectionCell"
     private let imageSize: CGFloat = 100
-    private let buttonHeight: CGFloat = 25
+    private let priceLabelHeight: CGFloat = 25
 
     // MARK: - UI Properties
     private lazy var cellBackgroundView: UIView = {
@@ -45,22 +45,16 @@ final class AddToCartCollectionCell: UICollectionViewCell {
         label.textColor = .gray
         return label
     }()
-    private lazy var priceButton: UIButton = {
-        let button = UIButton()
-        let title = ""
-
-        var config = UIButton.Configuration.filled()
-        config.title = title
-        config.attributedTitle = AttributedString(title, attributes: AttributeContainer([
-            .font: UIFont.systemFont(ofSize: 12, weight: .regular)]
-        ))
-        config.baseForegroundColor = .white
-        config.baseBackgroundColor = .darkGray.withAlphaComponent(0.4)
-        config.cornerStyle = .capsule
-
-        button.configuration = config
-        button.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-        return button
+    private lazy var priceLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 12, weight: .semibold)
+        label.backgroundColor = .darkGray.withAlphaComponent(0.4)
+        label.textAlignment = .center
+        label.textColor = .white
+        label.layer.cornerRadius = 10
+        label.layer.masksToBounds = true
+        label.heightAnchor.constraint(equalToConstant: priceLabelHeight).isActive = true
+        return label
     }()
 
     // MARK: - Init
@@ -80,12 +74,9 @@ final class AddToCartCollectionCell: UICollectionViewCell {
         let dough = Dough.basic.rawValue
         let size = Size.small.rawValue.components(separatedBy: " ").dropFirst().joined(separator: " ")
         weightLabel.text = "\(dough), \(size)"
-        let price = pizzaToAdd.size[.small]?.price ?? 0
+        let price = pizzaToAdd.itemSize[.small]?.price ?? 0
         let title = "\(price) ₽"
-
-        priceButton.configuration?.attributedTitle = AttributedString(title, attributes: AttributeContainer([
-            .font: UIFont.systemFont(ofSize: 14, weight: .semibold)])
-        )
+        priceLabel.text = title
     }
 
     // MARK: - Private methods
@@ -93,7 +84,7 @@ final class AddToCartCollectionCell: UICollectionViewCell {
         layer.cornerRadius = 10
         layer.masksToBounds = true
 
-        contentView.addSubviews(cellBackgroundView, itemImageView, titleLabel, weightLabel, priceButton)
+        contentView.addSubviews(cellBackgroundView, itemImageView, titleLabel, weightLabel, priceLabel)
 
         setupLayout()
     }
@@ -117,27 +108,9 @@ final class AddToCartCollectionCell: UICollectionViewCell {
             weightLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
             weightLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
 
-            priceButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
-            priceButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            priceButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
+            priceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+            priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
+            priceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
         ])
     }
-
-    func cellSelected() {
-//        priceButton.isHidden = true
-//        countStepper.isHidden = false
-    }
 }
-
-
-
-//
-//    func hideTopping() {
-//        backgroundColor = .clear
-//        chosenImageView.isHidden = true
-//    }
-
-//    func getChosenToppingPrice() -> Int {
-//        let price = priceLabel.text?.components(separatedBy: " ").first ?? "0"
-//        return Int(String(price)) ?? 0
-//    }

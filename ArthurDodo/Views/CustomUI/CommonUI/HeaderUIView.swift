@@ -9,45 +9,48 @@ import UIKit
 
 final class HeaderView: UIView {
 
+    // MARK: - Properties
+    private let imageSize: CGFloat = 30
+    private let buttonSize: CGFloat = 30
+    private let viewHeight: CGFloat = 30
+
+    private let leftPadding: CGFloat = 20
+    private let rightPadding: CGFloat = -20
+
+    // MARK: - UI Properties
     private lazy var courierImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "figure.walk.circle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        imageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
         return imageView
     }()
-
     private lazy var addressLabel: UILabel = {
         let label = UILabel()
         label.text = "Укажите адрес доставки"
         label.textColor = .white
         return label
     }()
-
     private lazy var chevronImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "chevron.down")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         return imageView
     }()
-
-    private lazy var smileButton: UIButton = {
+    private lazy var profileButton: UIButton = {
         let button = UIButton()
         let image = UIImage(systemName: "person.circle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         button.setImage(image, for: .normal)
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
-        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        button.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
+        button.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
         return button
     }()
+    private lazy var contentContainer = UIView()
 
-    private lazy var contentContainer: UIView = {
-        let view = UIView()
-        return view
-    }()
-
-    init() {
-        super.init(frame: .zero)
+    // MARK: - Init
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupUI()
     }
     
@@ -55,8 +58,24 @@ final class HeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func didMoveToSuperview() {
+        setupLayout()
+    }
+
+    // MARK: - Private methods
+    private func setupLayout() {
+        guard let superview else { print("You must add HeaderView to a view before setting up layout"); return }
+
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.topAnchor),
+            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: leftPadding),
+            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: rightPadding),
+            heightAnchor.constraint(equalToConstant: viewHeight)
+        ])
+    }
+
     private func setupUI() {
-        heightAnchor.constraint(equalToConstant: 30).isActive = true
+        translatesAutoresizingMaskIntoConstraints = false
 
         addSubviews(contentContainer)
 
@@ -71,7 +90,7 @@ final class HeaderView: UIView {
     }
 
     private func setupContentContainer() {
-        contentContainer.addSubviews(courierImageView, addressLabel, chevronImageView, smileButton)
+        contentContainer.addSubviews(courierImageView, addressLabel, chevronImageView, profileButton)
 
         NSLayoutConstraint.activate([
             courierImageView.topAnchor.constraint(equalTo: contentContainer.topAnchor),
@@ -83,8 +102,8 @@ final class HeaderView: UIView {
             chevronImageView.topAnchor.constraint(equalTo: addressLabel.topAnchor),
             chevronImageView.leadingAnchor.constraint(equalTo: addressLabel.trailingAnchor, constant: 10),
 
-            smileButton.topAnchor.constraint(equalTo: contentContainer.topAnchor),
-            smileButton.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor)
+            profileButton.topAnchor.constraint(equalTo: contentContainer.topAnchor),
+            profileButton.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor)
         ])
     }
 }

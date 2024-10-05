@@ -10,7 +10,7 @@ import UIKit
 final class ProductDetailsViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var headerView = ProductHeader()
+    private lazy var headerView = ProductHeaderView()
     private lazy var backgroundView = DetailsView()
     private lazy var infoView = IngredientsView()
     private lazy var infoPopupView = InfoPopupView(pizza: pizza)
@@ -23,7 +23,7 @@ final class ProductDetailsViewController: UIViewController {
     // MARK: - Other Properties
     private let dataStorage = OrderDataStorage.shared
     private var tapGesture: UITapGestureRecognizer?
-    private var pizza: Pizza?
+    private var pizza: FoodItems?
     private var order: Order?
 
     var onCartButtonTapped: ( (Int) -> Void )?
@@ -56,7 +56,7 @@ final class ProductDetailsViewController: UIViewController {
     }
 
     // MARK: - Public methods
-    func getPizzaData(_ pizza: Pizza) {
+    func getPizzaData(_ pizza: FoodItems) {
         self.pizza = pizza
     }
 
@@ -66,8 +66,11 @@ final class ProductDetailsViewController: UIViewController {
         headerView.updateTitle(pizza.name)
         backgroundView.updatePizzaImage(pizza.imageName)
         infoView.updateIngredients(pizza.ingredients)
-        infoView.updateWeight(pizza.size[.medium]?.weight ?? 0)
-        cartButtonView.updatePrice(pizza.size[.medium]?.price ?? 0)
+
+        if let pizza = pizza as? Pizza {
+            infoView.updateWeight(pizza.itemSize[.medium]?.weight ?? 0)
+            cartButtonView.updatePrice(pizza.itemSize[.medium]?.price ?? 0)
+        }
     }
 
     private func setupUI() {
@@ -113,7 +116,13 @@ final class ProductDetailsViewController: UIViewController {
                   let pizza else { return }
             let chosenSize = backgroundView.getChosenSize()
             let chosenDough = backgroundView.getChosenDough()
-            let price = pizza.size[chosenSize]?.price ?? 0
+
+            var price = pizza.itemSize[.medium]?.price ?? 0
+
+            if let pizza = pizza as? Pizza {
+                price = pizza.itemSize[chosenSize]?.price ?? 0
+            }
+
             order = Order(pizzaName: pizza.name, imageName: pizza.imageName, size: chosenSize, dough: chosenDough, price: price, isHit: pizza.isHit)
             guard let order else { return }
             dataStorage.sendToOrderStorage(order)
@@ -148,8 +157,8 @@ extension ProductDetailsViewController {
             case 2: size = .large
             default: break }
 
-            let weight = self.pizza?.size[size]?.weight ?? 0
-            let price = self.pizza?.size[size]?.price ?? 0
+            let weight = self.pizza?.itemSize[size]?.weight ?? 0
+            let price = self.pizza?.itemSize[size]?.price ?? 0
             self.infoView.updateWeight(weight)
             self.cartButtonView.updatePrice(price)
             self.infoPopupView.setSelectedSize(size)
@@ -174,13 +183,12 @@ extension ProductDetailsViewController {
         view.addSubviews(infoPopupView)
         setupInfoPopupViewConstraints()
 
-        let buttonFrame = infoView.infoButton.convert(infoView.infoButton.bounds, to: nil)
-
+        let buttonFrame = infoView.getButtonFrame()
         infoPopupView.frame = buttonFrame
         infoPopupView.isHidden = false
 
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            self?.view.layoutIfNeeded()
         }
     }
 
@@ -258,7 +266,7 @@ extension ProductDetailsViewController {
     }
 
     private func setupInfoPopupViewConstraints() {
-        let buttonFrame = infoView.infoButton.convert(infoView.infoButton.bounds, to: nil)
+        let buttonFrame = infoView.getButtonFrame()
 
         NSLayoutConstraint.activate([
             infoPopupView.trailingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: buttonFrame.origin.x - 10),

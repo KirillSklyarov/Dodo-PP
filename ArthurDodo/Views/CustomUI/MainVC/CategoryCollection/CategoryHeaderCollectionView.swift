@@ -9,7 +9,7 @@ import UIKit
 
 final class CategoryHeaderCollectionView: UICollectionView {
 
-    var onUpdateTableView: ( (IndexPath) -> Void )?
+    var onUpdateProductsCollectionView: ( (Int) -> Void )?
     private let viewHeight: CGFloat = 50
     private let cornerRadius: CGFloat = 20
     private var previousInd: IndexPath = []
@@ -40,6 +40,21 @@ final class CategoryHeaderCollectionView: UICollectionView {
         previousInd = indexPath
     }
 
+    func selectCell(_ indexPath: IndexPath) {
+        deSelectPreviousCell()
+        if let cell = cellForItem(at: indexPath) as? CategoryViewCell {
+            selectItem(at: indexPath, animated: false, scrollPosition: .centeredHorizontally)
+            cell.setTitleColor(.white)
+            setPreviousInd(indexPath)
+        }
+    }
+
+    private func deSelectPreviousCell() {
+        if let previousCell = cellForItem(at: previousInd) as? CategoryViewCell {
+            previousCell.setTitleColor(AppColors.grayFont)
+        }
+    }
+
     private func setupLayout() {
         guard let superview else { print("You must add CategoryCollectionView to superview"); return }
 
@@ -67,30 +82,37 @@ extension CategoryHeaderCollectionView: UICollectionViewDataSource, UICollection
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         categories.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryViewCell.identifier, for: indexPath) as? CategoryViewCell else { return UICollectionViewCell() }
         let title = categories[indexPath.row].header
         cell.configHeader(title, indexPath: indexPath)
         return cell
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectItem(at: indexPath, animated: false, scrollPosition: .centeredHorizontally)
-        designChosenCategory(collectionView, indexPath)
-        onUpdateTableView?(indexPath)
+        print("Tapped indexPath \(indexPath)")
+        
+        onUpdateProductsCollectionView?(indexPath.row)
+        selectCell(indexPath)
     }
-
+    
+    //        selectItem(at: indexPath, animated: false, scrollPosition: .centeredHorizontally)
+    //        designChosenCategory(collectionView, indexPath)
+    //        deSelectPreviousCell()
+    
+    
     private func designChosenCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryViewCell else { print("Hey2"); return }
         cell.setTitleColor(.white)
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryViewCell else { return }
         cell.setTitleColor(.darkGray.withAlphaComponent(0.4))
     }
 }
+
 
 
 //    private func deselectFirstCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {

@@ -7,14 +7,22 @@
 
 import Foundation
 
+protocol FoodItems {
+    var name: String { get set }
+    var imageName: String { get set }
+    var ingredients: String { get set }
+    var isHit: Bool { get set }
+    var itemSize: [Size: WeightPrice] { get set }
+}
+
 struct Categories {
     let header: String
-    let items: [Pizza]
+    let items: [FoodItems]
 }
 
 let categories: [Categories] = [Categories(header: "Римские пиццы", items: romanPizzas),
-                                Categories(header: "Пиццы", items: Pizzas),
-                                Categories(header: "Комбо", items: []),
-                                Categories(header: "Закуски", items: []),
-                                Categories(header: "Завтраки", items: [])
+                                Categories(header: "Пиццы", items: pizzas),
+                                Categories(header: "Комбо", items: combos),
+                                Categories(header: "Закуски", items: starters),
+                                Categories(header: "Завтраки", items: breakfast)
 ]

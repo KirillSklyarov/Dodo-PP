@@ -9,24 +9,26 @@ import UIKit
 
 final class IngredientsView: UIView {
 
+    // MARK: - Properties&Callbacks
     var onInfoButtonTapped: (() -> Void)?
+    private let buttonSize: CGFloat = 24
 
-    private lazy var infoLabel: UILabel = {
+    // MARK: - UI Properties
+    private lazy var ingredientsLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = AppFonts.regular16
         label.textAlignment = .left
         label.numberOfLines = 0
-        label.text = "Моцарелла, чеддер, пармезан, соус альфредо"
         return label
     }()
-    lazy var infoButton: UIButton = {
+    private lazy var infoButton: UIButton = {
         let button = UIButton()
         let image = UIImage(systemName: "info.circle")?.withTintColor(.lightGray, renderingMode: .alwaysOriginal)
         button.setImage(image, for: .normal)
         button.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
-        button.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        button.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        button.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
+        button.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         return button
@@ -34,25 +36,30 @@ final class IngredientsView: UIView {
     private lazy var weightLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        label.font = AppFonts.semibold16
         label.textAlignment = .left
         label.numberOfLines = 0
-        label.text = "300 г"
         return label
     }()
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - IB Action
+    @objc private func infoButtonTapped() {
+        onInfoButtonTapped?()
+    }
+
+    // MARK: - Public methods
     func updateIngredients(_ ingredients: String) {
-        infoLabel.text = ingredients
+        ingredientsLabel.text = ingredients
     }
 
     func updateWeight(_ weight: Int) {
@@ -60,19 +67,19 @@ final class IngredientsView: UIView {
         weightLabel.text = text
     }
 
+    func getButtonFrame() -> CGRect {
+        return infoButton.convert(infoButton.bounds, to: nil)
+    }
+
+    // MARK: - Private methods
     private func setupView() {
-        backgroundColor = .darkGray
+        backgroundColor = .darkGray.withAlphaComponent(0.4)
         layer.cornerRadius = 10
         layer.masksToBounds = true
 
-        addSubviews(infoLabel, infoButton, weightLabel)
+        addSubviews(ingredientsLabel, infoButton, weightLabel)
 
         setupLayout()
-
-    }
-
-    func getButtonFrame() -> CGRect {
-        return infoButton.frame
     }
 
     private func setupLayout() {
@@ -81,12 +88,11 @@ final class IngredientsView: UIView {
         setupWeightLabelConstraints()
     }
 
-
     private func setupInfoLabelConstraints() {
         NSLayoutConstraint.activate([
-            infoLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            infoLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            infoLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
+            ingredientsLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            ingredientsLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            ingredientsLabel.trailingAnchor.constraint(equalTo: infoButton.leadingAnchor, constant: -10),
         ])
     }
 
@@ -99,14 +105,10 @@ final class IngredientsView: UIView {
 
     private func setupWeightLabelConstraints() {
         NSLayoutConstraint.activate([
-            weightLabel.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 10),
+            weightLabel.topAnchor.constraint(equalTo: ingredientsLabel.bottomAnchor, constant: 10),
             weightLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             weightLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             weightLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
-    }
-
-    @objc private func infoButtonTapped() {
-        onInfoButtonTapped?()
     }
 }

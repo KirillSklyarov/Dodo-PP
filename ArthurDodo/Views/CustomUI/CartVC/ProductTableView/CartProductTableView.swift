@@ -16,8 +16,9 @@ final class CartProductTableView: UITableView {
     var onEmptyCart: ( () -> Void )?
     var onItemDeletedFromCart: ( () -> Void )?
     var onCountIncreased: ( () -> Void )?
+    var onChangeItem: ( () -> Void )?
 
-    private let tableRowHeight: CGFloat = 180
+    private let tableRowHeight: CGFloat = 160
     private var tableViewHeight: CGFloat = 0
     private var heightConstraint: NSLayoutConstraint?
 
@@ -57,9 +58,11 @@ final class CartProductTableView: UITableView {
         dataSource = self
         delegate = self
         register(CartProductCell.self, forCellReuseIdentifier: CartProductCell.identifier)
-        separatorStyle = .none
+        separatorStyle = .singleLine
+        separatorColor = .systemRed
         rowHeight = tableRowHeight
-        
+        estimatedRowHeight = UITableView.automaticDimension
+
         backgroundColor = .clear
     }
 }
@@ -77,6 +80,10 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
 
         cell.onValueIsNull = { [weak self] in
             self?.removeItemFromStorage(indexPath)
+        }
+
+        cell.onChangeButtonTapped = { [weak self] in
+            self?.onChangeItem?()
         }
 
         cell.onStepperValueChanged = { [weak self] value in
