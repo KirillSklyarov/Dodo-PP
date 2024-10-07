@@ -22,8 +22,6 @@ final class ItemsHeaderView: UICollectionViewCell {
         imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
         return imageView
     }()
-
-
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppFonts.bold20
@@ -56,9 +54,6 @@ final class ItemsHeaderView: UICollectionViewCell {
         imageView.isHidden = true
         return imageView
     }()
-
-    var gradientLayer: CAGradientLayer?
-
     private lazy var backView: UIView = {
         let view = UIView()
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -67,6 +62,8 @@ final class ItemsHeaderView: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+
+    var gradientLayer: CAGradientLayer?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -84,9 +81,9 @@ final class ItemsHeaderView: UICollectionViewCell {
         gradientLayer?.frame = bounds
     }
 
-    func setTitle(_ title: String) {
-        titleLabel.text = title
-    }
+//    func setTitle(_ title: String) {
+//        titleLabel.text = title
+//    }
 
     // MARK: - Public methods
     func configHeader(_ item: FoodItems) {
@@ -106,6 +103,19 @@ final class ItemsHeaderView: UICollectionViewCell {
         gradient.endPoint = CGPoint(x: 0, y: 1)
         backView.layer.insertSublayer(gradient, at: 0)
         gradientLayer = gradient
+    }
+
+    private func configUI() {
+        let container = setupContentContainer()
+
+        addSubviews(container)
+
+        NSLayoutConstraint.activate([
+            container.topAnchor.constraint(equalTo: topAnchor),
+            container.leadingAnchor.constraint(equalTo: leadingAnchor),
+            container.trailingAnchor.constraint(equalTo: trailingAnchor),
+            container.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
 
     private func setupContentContainer() -> UIView {
@@ -135,18 +145,5 @@ final class ItemsHeaderView: UICollectionViewCell {
         ])
 
         return container
-    }
-
-    private func configUI() {
-        let container = setupContentContainer()
-
-        addSubviews(container)
-
-        NSLayoutConstraint.activate([
-            container.topAnchor.constraint(equalTo: topAnchor),
-            container.leadingAnchor.constraint(equalTo: leadingAnchor),
-            container.trailingAnchor.constraint(equalTo: trailingAnchor),
-            container.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
     }
 }
