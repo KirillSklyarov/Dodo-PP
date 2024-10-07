@@ -23,7 +23,7 @@ final class ProductCollectionCell: UICollectionViewCell {
         imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
         return imageView
     }()
-    private lazy var titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.numberOfLines = 0
@@ -122,8 +122,6 @@ private extension ProductCollectionCell {
             stack.alignment = .leading
             return stack
         }()
-
-        stackView.setBorder()
 
         contentContainer.addSubviews(pizzaImageView, hitImageView, stackView)
 

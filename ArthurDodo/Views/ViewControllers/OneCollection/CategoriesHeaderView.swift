@@ -43,9 +43,6 @@ final class CategoriesHeaderView: UICollectionReusableView {
 
     // MARK: - Private methods
     private func setupConstraints() {
-        layer.borderColor = UIColor.white.cgColor
-        layer.borderWidth = 1
-
         addSubviews(headerCollectionView)
 
         NSLayoutConstraint.activate([

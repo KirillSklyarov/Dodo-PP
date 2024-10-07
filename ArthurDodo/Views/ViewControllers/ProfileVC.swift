@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ProfileVC.swift
 //  ArthutDodo
 //
 //  Created by Kirill Sklyarov on 17.09.2024.
@@ -183,7 +183,7 @@ final class ProfileVC: UIViewController {
 }
 
 // MARK: - SetupConstraints
-private extension MainViewController {
+private extension ProfileVC {
 
     func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -198,7 +198,7 @@ private extension MainViewController {
 }
 
 // MARK: - UIScrollViewDelegate
-extension MainViewController: UIScrollViewDelegate {
+extension ProfileVC: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if isNeedToFixHeader() { fixCategoryHeaderOnTop() }
         if isNeedToUnfixHeader() { setupInitialHeaderLayout() }

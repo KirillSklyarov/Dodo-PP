@@ -13,6 +13,8 @@ final class TestOneCollection: UICollectionView {
     var categoryHeaderView: CategoriesHeaderView?
     var isScrolling = false
 
+    var onItemCellTapped: ((FoodItems) -> Void)?
+
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let layout = UICollectionViewLayout()
@@ -121,19 +123,6 @@ extension TestOneCollection {
         return section
     }
 
-//    private func createItemsSection() -> NSCollectionLayoutSection {
-//        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(150))
-//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//
-//        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
-//        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-//
-//        let section = NSCollectionLayoutSection(group: group)
-//        section.orthogonalScrollingBehavior = .continuous
-//        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
-//
-//        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(300))
-
     private func createItemsSectionWithHeader() -> NSCollectionLayoutSection {
         var allGroups: [NSCollectionLayoutGroup] = []
         var totalHeight = CGFloat(0)
@@ -181,8 +170,6 @@ extension TestOneCollection {
 
     private func configCollectionView() {
         backgroundColor = AppColors.backgroundGray
-        layer.borderWidth = 1
-        layer.borderColor = UIColor.white.cgColor
         layer.cornerRadius = 14
         layer.masksToBounds = true
         register(StoriesCollectionCell.self, forCellWithReuseIdentifier: StoriesCollectionCell.identifier)
@@ -231,13 +218,9 @@ extension TestOneCollection: UICollectionViewDelegate, UICollectionViewDataSourc
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoriesCollectionCell.identifier, for: indexPath) as? StoriesCollectionCell else { return UICollectionViewCell() }
             let title = categories[indexPath.row].header.rawValue
             cell.configHeader(title)
-            cell.layer.borderWidth = 1
-            cell.layer.borderColor = UIColor.white.cgColor
             return cell
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SpecialOfferCollectionCell.identifier, for: indexPath) as? SpecialOfferCollectionCell else { return UICollectionViewCell() }
-            cell.layer.borderWidth = 1
-            cell.layer.borderColor = UIColor.white.cgColor
             return cell
         case 2:
             let item = allItems[indexPath.row]
@@ -263,7 +246,9 @@ extension TestOneCollection: UICollectionViewDelegate, UICollectionViewDataSourc
         switch section {
         case 0: print("Selected story at index \(indexPath.row)")
         case 1: print("Selected special offer at index \(indexPath.row)")
-        case 2: print("Selected item at index \(indexPath)")
+        case 2:
+            let item = allItems[indexPath.item]
+            onItemCellTapped?(item)
         default : return
         }
     }

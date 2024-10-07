@@ -65,6 +65,7 @@ struct AppFonts {
 struct AppColors {
     static let grayFont = UIColor.darkGray.withAlphaComponent(0.4)
     static let backgroundGray = UIColor(hex: "222222")
+    static let backgroundBlack = UIColor.black
     static let buttonGray = UIColor(hex: "#363636")
 
     let peach = UIColor(hex: "f7d794")

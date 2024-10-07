@@ -81,10 +81,6 @@ final class ItemsHeaderView: UICollectionViewCell {
         gradientLayer?.frame = bounds
     }
 
-//    func setTitle(_ title: String) {
-//        titleLabel.text = title
-//    }
-
     // MARK: - Public methods
     func configHeader(_ item: FoodItems) {
         let image = UIImage(named: item.imageName)

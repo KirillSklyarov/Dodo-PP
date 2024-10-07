@@ -16,15 +16,12 @@ final class CollectionHeaderView: UICollectionReusableView {
         label.font = AppFonts.semibold16
         label.textColor = .white
         label.textAlignment = .left
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         configUI()
-        layer.borderWidth = 1
-        layer.borderColor = UIColor.white.cgColor
     }
     
     required init?(coder: NSCoder) {
