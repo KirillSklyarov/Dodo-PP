@@ -25,10 +25,10 @@ struct WeightPrice {
 }
 
 struct CPFC {
-    let calories: String
-    let protein: String
-    let fat: String
-    let carbohydrates: String
+    let calories: Float
+    let protein: Float
+    let fat: Float
+    let carbohydrates: Float
 }
 
 enum CPFCData: String, CaseIterable {
@@ -48,8 +48,11 @@ struct AppConstants {
 struct AppFonts {
     static let basicFont = UIFont.systemFont(ofSize: 30)
 
-    static let regular16 = UIFont(name: "SFProRounded-Regular", size: 15) ?? basicFont
+    static let regular14 = UIFont(name: "SFProRounded-Regular", size: 14) ?? basicFont
+    static let regular16 = UIFont(name: "SFProRounded-Regular", size: 16) ?? basicFont
+
     static let semibold16 = UIFont(name: "SFProRounded-Semibold", size: 16) ?? basicFont
+
     static let medium16 = UIFont(name: "SFProRounded-Medium", size: 16) ?? basicFont
 
     static let bold14 = UIFont(name: "SFProRounded-Bold", size: 14) ?? basicFont

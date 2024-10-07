@@ -64,12 +64,12 @@ final class AddToCartCollectionView: UICollectionView {
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        romanPizzas.count
+        pizzas.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddToCartCollectionCell.identifier, for: indexPath) as? AddToCartCollectionCell else { return UICollectionViewCell() }
-        let pizzaToAdd = romanPizzas[indexPath.row]
+        let pizzaToAdd = pizzas[indexPath.row]
         cell.configCell(pizzaToAdd)
         return cell
     }
@@ -80,7 +80,7 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
     }
 
     private func getOrderFromIndexPath(_ indexPath: IndexPath) -> Order {
-        let pizzaToAdd = romanPizzas[indexPath.row]
+        let pizzaToAdd = pizzas[indexPath.row]
         let positionToAdd = Order(pizzaName: pizzaToAdd.name, imageName: pizzaToAdd.imageName, size: .small, dough: Dough.basic, price: pizzaToAdd.itemSize[.small]?.price ?? 0, isHit: pizzaToAdd.isHit)
         return positionToAdd
     }

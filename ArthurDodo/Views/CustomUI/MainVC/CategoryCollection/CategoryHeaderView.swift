@@ -35,7 +35,7 @@ final class CategoryHeaderView: UIView {
     private func setupUI() {
         for (index, category) in categories.enumerated() {
             let button = UIButton()
-            button.setTitle(category.header, for: .normal)
+            button.setTitle(category.header.rawValue, for: .normal)
             button.tag = index
             button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             buttons.append(button)

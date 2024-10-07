@@ -40,7 +40,7 @@ final class MainViewController: UIViewController {
     // MARK: - Private methods
     private func dataBinding() {
         setupProductsCollectionView()
-        scrollToProductsFromSelectedCategory()
+//        scrollToProductsFromSelectedCategory()
         productCellTapped()
         configCartButton()
 //        setupCartButtonCallbacks()
@@ -90,17 +90,17 @@ final class MainViewController: UIViewController {
         }
     }
 
-    private func scrollToProductsFromSelectedCategory() {
-        categoryHeaderCollectionView.onUpdateProductsCollectionView = { [weak self] section in
-            guard let self = self else { return }
-            let indexPath = IndexPath(item: 0, section: section)
-            productsCollectionView.setIsScrolling(true)
-            productsCollectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                self.productsCollectionView.setIsScrolling(false)
-            }
-        }
-    }
+//    private func scrollToProductsFromSelectedCategory() {
+//        categoryHeaderCollectionView.onUpdateProductsCollectionView = { [weak self] section in
+//            guard let self = self else { return }
+//            let indexPath = IndexPath(item: 0, section: section)
+//            productsCollectionView.setIsScrolling(true)
+//            productsCollectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+//                self.productsCollectionView.setIsScrolling(false)
+//            }
+//        }
+//    }
 
     private func setupUI() {
         view.backgroundColor = .black

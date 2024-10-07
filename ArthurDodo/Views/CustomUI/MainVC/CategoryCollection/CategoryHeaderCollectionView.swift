@@ -9,10 +9,10 @@ import UIKit
 
 final class CategoryHeaderCollectionView: UICollectionView {
 
-    var onUpdateProductsCollectionView: ( (Int) -> Void )?
+    var onUpdateProductsCollectionView: ( (CategoriesNames) -> Void )?
     private let viewHeight: CGFloat = 50
-    private let cornerRadius: CGFloat = 20
-    private var previousInd: IndexPath = []
+    private let cornerRadius: CGFloat = 0
+    private var previousInd = IndexPath(row: 0, section: 0)
 
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let layout = UICollectionViewFlowLayout()
@@ -46,6 +46,13 @@ final class CategoryHeaderCollectionView: UICollectionView {
             selectItem(at: indexPath, animated: false, scrollPosition: .centeredHorizontally)
             cell.setTitleColor(.white)
             setPreviousInd(indexPath)
+        }
+    }
+
+    func selectCat(_ categoryName: String) {
+        for (index, cat) in categories.enumerated() where cat.header.rawValue == categoryName {
+            let indexPath = IndexPath(row: index, section: 0)
+            selectCell(indexPath)
         }
     }
 
@@ -85,14 +92,15 @@ extension CategoryHeaderCollectionView: UICollectionViewDataSource, UICollection
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryViewCell.identifier, for: indexPath) as? CategoryViewCell else { return UICollectionViewCell() }
-        let title = categories[indexPath.row].header
+        let title = categories[indexPath.row].header.rawValue
         cell.configHeader(title, indexPath: indexPath)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        onUpdateProductsCollectionView?(indexPath.row)
         selectCell(indexPath)
+        let categoryName = categories[indexPath.row].header
+        onUpdateProductsCollectionView?(categoryName)
     }
 
     private func designChosenCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {

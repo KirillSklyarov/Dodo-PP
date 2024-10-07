@@ -9,6 +9,14 @@ import UIKit
 
 final class TestOneCollection: UICollectionView {
 
+<<<<<<< HEAD
+=======
+    // MARK: - Properties
+    var categoryHeaderView: CategoriesHeaderView?
+    var isScrolling = false
+
+    // MARK: - Init
+>>>>>>> testMy
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let layout = UICollectionViewLayout()
         super.init(frame: frame, collectionViewLayout: layout)
@@ -22,10 +30,38 @@ final class TestOneCollection: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
+<<<<<<< HEAD
+=======
+    // MARK: - Life cycle
+>>>>>>> testMy
     override func didMoveToSuperview() {
         setupLayout()
     }
 
+<<<<<<< HEAD
+=======
+    // MARK: - Data binding
+    private func dataBinding() {
+        categoryCellSelected()
+    }
+
+    private func categoryCellSelected() {
+        categoryHeaderView?.onCategorySelected = { [weak self] category in
+            guard let self else { return }
+            let selectedIndex = allItems.firstIndex{ $0.category == category } ?? 0
+            let indexPath = IndexPath(row: selectedIndex, section: 2)
+            isScrolling = true
+            scrollToItem(at: indexPath, at: .top, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
+                self?.isScrolling = false
+            }
+        }
+    }
+}
+
+// MARK: - Config Layout
+extension TestOneCollection {
+>>>>>>> testMy
     private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.interSectionSpacing = 10
@@ -34,8 +70,12 @@ final class TestOneCollection: UICollectionView {
             switch section {
             case 0: return self.createHorizontalSection()
             case 1: return self.createHorizontalSpecialOfferSection()
+<<<<<<< HEAD
             case 2: return self.createCategorySection()
             case 3: return self.createItemsSection()
+=======
+            case 2: return self.createItemsSectionWithHeader()
+>>>>>>> testMy
             default: return nil
             }
         }, configuration: config)
@@ -80,6 +120,7 @@ final class TestOneCollection: UICollectionView {
         return section
     }
 
+<<<<<<< HEAD
     private func createCategorySection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(40), heightDimension: .absolute(40))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -106,12 +147,50 @@ final class TestOneCollection: UICollectionView {
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
 
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(300))
+=======
+    private func createItemsSectionWithHeader() -> NSCollectionLayoutSection {
+        var allGroups: [NSCollectionLayoutGroup] = []
+        var totalHeight = CGFloat(0)
+
+        for cat in categories {
+            let firstItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(300))
+            let firstItem = NSCollectionLayoutItem(layoutSize: firstItemSize)
+
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(150))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+            let firstGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(300))
+            let firstGroup = NSCollectionLayoutGroup.vertical(layoutSize: firstGroupSize, subitems: [firstItem])
+
+            let groupHeight = itemSize.heightDimension.dimension * CGFloat(cat.items.count - 1)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(groupHeight))
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+
+            let comboGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(firstGroupSize.heightDimension.dimension + groupHeight))
+            let comboGroup = NSCollectionLayoutGroup.vertical(layoutSize: comboGroupSize, subitems: [firstGroup, group])
+
+            totalHeight += comboGroupSize.heightDimension.dimension
+            allGroups.append(comboGroup)
+        }
+
+        let superGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(totalHeight))
+        let superGroup = NSCollectionLayoutGroup.vertical(layoutSize: superGroupSize, subitems: allGroups)
+
+        let section = NSCollectionLayoutSection(group: superGroup)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
+
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
+>>>>>>> testMy
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .topLeading
         )
+<<<<<<< HEAD
 
+=======
+        sectionHeader.pinToVisibleBounds = true
+>>>>>>> testMy
         section.boundarySupplementaryItems = [sectionHeader]
 
         return section
@@ -126,9 +205,17 @@ final class TestOneCollection: UICollectionView {
         register(StoriesCollectionCell.self, forCellWithReuseIdentifier: StoriesCollectionCell.identifier)
         register(SpecialOfferCollectionCell.self, forCellWithReuseIdentifier: SpecialOfferCollectionCell.identifier)
         register(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CollectionHeaderView.identifier)
+<<<<<<< HEAD
         register(ItemsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ItemsHeaderView.identifier)
         register(CategoryViewCell.self, forCellWithReuseIdentifier: CategoryViewCell.identifier)
         register(ProductCollectionCell.self, forCellWithReuseIdentifier: ProductCollectionCell.identifier)
+=======
+        register(CategoriesHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategoriesHeaderView.identifier)
+
+        register(ItemsHeaderView.self, forCellWithReuseIdentifier: ItemsHeaderView.identifier)
+        register(ProductCollectionCell.self, forCellWithReuseIdentifier: ProductCollectionCell.identifier)
+
+>>>>>>> testMy
         delegate = self
         dataSource = self
         translatesAutoresizingMaskIntoConstraints = false
@@ -145,19 +232,30 @@ final class TestOneCollection: UICollectionView {
     }
 }
 
+<<<<<<< HEAD
 extension TestOneCollection: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         4
+=======
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
+extension TestOneCollection: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        3
+>>>>>>> testMy
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0: return categories.count
         case 1: return 4
+<<<<<<< HEAD
         case 2: return categories.count
         case 3:
             let totalCountOfItems = categories.map{ $0.items.count }.reduce(0, +)
             return totalCountOfItems
+=======
+        case 2: return allItems.count
+>>>>>>> testMy
         default : return 0
         }
     }
@@ -167,7 +265,11 @@ extension TestOneCollection: UICollectionViewDelegate, UICollectionViewDataSourc
         switch section {
         case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoriesCollectionCell.identifier, for: indexPath) as? StoriesCollectionCell else { return UICollectionViewCell() }
+<<<<<<< HEAD
             let title = categories[indexPath.row].header
+=======
+            let title = categories[indexPath.row].header.rawValue
+>>>>>>> testMy
             cell.configHeader(title)
             cell.layer.borderWidth = 1
             cell.layer.borderColor = UIColor.white.cgColor
@@ -178,6 +280,7 @@ extension TestOneCollection: UICollectionViewDelegate, UICollectionViewDataSourc
             cell.layer.borderColor = UIColor.white.cgColor
             return cell
         case 2:
+<<<<<<< HEAD
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryViewCell.identifier, for: indexPath) as? CategoryViewCell else { return UICollectionViewCell() }
             let title = categories[indexPath.row].header
             cell.configHeader(title, indexPath: indexPath)
@@ -190,6 +293,23 @@ extension TestOneCollection: UICollectionViewDelegate, UICollectionViewDataSourc
             cell.configureCell(pizza: item)
             return cell
         default : return UICollectionViewCell()
+=======
+            let item = allItems[indexPath.row]
+
+            if item.isHeader {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemsHeaderView.identifier, for: indexPath) as? ItemsHeaderView else {
+                    return UICollectionViewCell() }
+                let item = allItems[indexPath.row]
+                cell.configHeader(item)
+                return cell
+            } else {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionCell.identifier, for: indexPath) as? ProductCollectionCell else {
+                    return UICollectionViewCell() }
+                cell.configureCell(pizza: item)
+                return cell
+            }
+        default: return UICollectionViewCell()
+>>>>>>> testMy
         }
     }
 
@@ -198,7 +318,11 @@ extension TestOneCollection: UICollectionViewDelegate, UICollectionViewDataSourc
         switch section {
         case 0: print("Selected story at index \(indexPath.row)")
         case 1: print("Selected special offer at index \(indexPath.row)")
+<<<<<<< HEAD
         case 2: print("Selected category at index \(indexPath.row)")
+=======
+        case 2: print("Selected item at index \(indexPath)")
+>>>>>>> testMy
         default : return
         }
     }
@@ -212,11 +336,31 @@ extension TestOneCollection: UICollectionViewDelegate, UICollectionViewDataSourc
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CollectionHeaderView.identifier, for: indexPath) as! CollectionHeaderView
             header.setTitle("Вам понравится")
             return header
+<<<<<<< HEAD
         case 3:
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ItemsHeaderView.identifier, for: indexPath) as! ItemsHeaderView
 
             return header
         default : return UICollectionReusableView()
+=======
+        case 2:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CategoriesHeaderView.identifier, for: indexPath) as! CategoriesHeaderView
+            categoryHeaderView = header
+            dataBinding()
+            return header
+        default: return UICollectionReusableView()
+        }
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+extension TestOneCollection {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if !isScrolling {
+            guard let index = indexPathsForVisibleItems.sorted().first?.item else { return }
+            let catOnScreen = allItems[index].category.rawValue
+            categoryHeaderView?.getCategory(catOnScreen)
+>>>>>>> testMy
         }
     }
 }
