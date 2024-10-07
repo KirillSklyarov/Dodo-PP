@@ -39,6 +39,10 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+>>>>>>> testMy
             uuid = "4C3D0B92-82F6-4574-8D74-1FCC20C2345A"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -50,6 +54,38 @@
             endingLineNumber = "230"
             landmarkName = "TestOneCollection"
             landmarkType = "21">
+<<<<<<< HEAD
+=======
+=======
+            uuid = "4FDFA796-DC07-454D-BADA-74309D8E1B5F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ArthurDodo/Views/CustomUI/MainVC/ProductCollection/ProductCollectionView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "scrollViewDidScroll(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5FDF4253-BACE-4251-B8C6-5C646A8972C5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ArthurDodo/Views/CustomUI/MainVC/ProductCollection/ProductCollectionView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "scrollViewDidScroll(_:)"
+            landmarkType = "7">
+>>>>>>> Stashed changes
+>>>>>>> testMy
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

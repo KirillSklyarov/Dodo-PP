@@ -39,4 +39,4 @@ let breakfast: [BreakfastModel] = [
     BreakfastModel(name: "Омлет сырный", imageName: "breakf4", ingredients: "Горячий завтрак из омлета с поджаристой корочкой, моцарелла, кубики брынзы, сыры чеддер и пармезан", size: [.medium: WeightPrice(weight: 250, price: 250, cpfc: CPFC(calories: 10, protein: 10, fat: 10, carbohydrates: 10))]),
 
     BreakfastModel(name: "Додстер с ветчиной", imageName: "breakf5", ingredients: "Горячий завтрак с ветчиной, томатами, моцареллой, соусом ранч в тонкой пшеничной лепешке", size: [.medium: WeightPrice(weight: 300, price: 300, cpfc: CPFC(calories: 10, protein: 10, fat: 10, carbohydrates: 10))]),
-    ]
+]
