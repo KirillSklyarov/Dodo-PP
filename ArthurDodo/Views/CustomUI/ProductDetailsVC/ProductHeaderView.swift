@@ -23,7 +23,7 @@ final class ProductHeaderView: UIView {
         return label
     }()
 
-    private lazy var dismissButton = DismissProductView()
+    private lazy var dismissButton = DismissButtonView()
     private lazy var blurView = CustomBlurView()
 
     // MARK: - Init
