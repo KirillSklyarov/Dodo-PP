@@ -28,6 +28,8 @@ final class MainViewController: UIViewController {
 
     // MARK: - Other Properties
     var collectionHeaderTopConstraint: NSLayoutConstraint?
+    var collectionHeightConstraint: NSLayoutConstraint?
+
     var isCollectionFixed = false
 
     // MARK: - Life cycles
@@ -42,6 +44,8 @@ final class MainViewController: UIViewController {
         setupProductsCollectionView()
 //        scrollToProductsFromSelectedCategory()
         productCellTapped()
+//        updateCart()
+//        productCellTapped()
         configCartButton()
 //        setupCartButtonCallbacks()
 
@@ -81,14 +85,26 @@ final class MainViewController: UIViewController {
             productDetailVC.modalPresentationStyle = .overFullScreen
             productDetailVC.isModalInPresentation = false
             self?.present(productDetailVC, animated: true)
-
-            productDetailVC.onCartButtonTapped = { [weak self] orderPrice in
-                guard let self else { return }
-                self.cartButton.setNewPrice(orderPrice)
-                self.cartButton.isHidden = false
-            }
         }
     }
+
+    // MARK: - Private methods
+//    private func dataBinding() {
+//        setupProductsCollectionView()
+//        uploadProductsFromCategory()
+//    }
+//
+//    private func uploadProductsFromCategory() {
+//        categoryHeaderCollectionView.onUpdateProductsCollectionView = { [weak self] section in
+//            guard let self = self else { return }
+//            let indexPath = IndexPath(item: 0, section: section)
+//            productsCollectionView.setIsScrolling(true)
+//            productsCollectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+//                self.productsCollectionView.setIsScrolling(false)
+//            }
+//        }
+//    }
 
 //    private func scrollToProductsFromSelectedCategory() {
 //        categoryHeaderCollectionView.onUpdateProductsCollectionView = { [weak self] section in
@@ -99,6 +115,39 @@ final class MainViewController: UIViewController {
 //            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
 //                self.productsCollectionView.setIsScrolling(false)
 //            }
+//        }
+//    }
+//    private func updateCollectionViewHeight() {
+//        let collectionHeight = productsCollectionView.collectionViewLayout.collectionViewContentSize.height
+//        collectionHeightConstraint?.constant = collectionHeight
+//        print(collectionHeight)
+//        collectionHeightConstraint?.isActive = true
+//    }
+
+//    private func productCellTapped() {
+//        productTableView.onCellTapped = { [weak self] pizza in
+//            let productDetailVC = ProductDetailsViewController()
+//            productDetailVC.getPizzaData(pizza)
+//            productDetailVC.modalPresentationStyle = .overFullScreen
+//            productDetailVC.isModalInPresentation = false
+//            self?.present(productDetailVC, animated: true)
+//
+//            productDetailVC.onCartButtonTapped = { [weak self] orderPrice in
+//                guard let self else { return }
+//                self.cartButton.setNewPrice(orderPrice)
+//                self.cartButton.isHidden = false
+//            }
+//        }
+//    }
+//
+//    private func updateProductTableView(_ indexPath: IndexPath) {
+//        let products = categories[indexPath.row].items
+//        productTableView.uploadListOfProducts(products)
+//    }
+//
+//    private func updateCart() {
+//        productTableView.onUpdateCart = { [weak self] price in
+//            self?.cartButton.setNewPrice(price)
 //        }
 //    }
 
@@ -136,6 +185,7 @@ final class MainViewController: UIViewController {
 
 // MARK: - SetupConstraints
 private extension MainViewController {
+
     func setupConstraints() {
         NSLayoutConstraint.activate([
             backgroundView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 5),
@@ -184,7 +234,6 @@ extension MainViewController: UIScrollViewDelegate {
         isCollectionFixed = true
     }
 }
-
 
 //    private func setupCartButtonCallbacks() {
 //        productsCollectionView.onUpdateCart = { [weak self] price in

@@ -37,7 +37,7 @@ let categories: [Categories] = [ Categories(header: .breakfast, items: breakfast
                                  Categories(header: .starters, items: starters),
                                  Categories(header: .pizzas, items: pizzas),
                                  Categories(header: .cocktail, items: cocktails)
-]
+                                 ]
 
 private func convertToAllItems() -> [FoodItems] {
     var result: [FoodItems] = []

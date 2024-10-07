@@ -20,6 +20,7 @@ final class ProductCollectionView: UICollectionView {
 
     private var isCollectionScrolling = false
 
+
     // MARK: - Init
     override init(frame: CGRect = .zero,
                   collectionViewLayout layout: UICollectionViewLayout) {
@@ -76,10 +77,9 @@ extension ProductCollectionView: UICollectionViewDataSource, UICollectionViewDel
     }
 }
 
-// MARK: - ScrollViewDelegate
 extension ProductCollectionView {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        print(isCollectionScrolling)
+        print(isCollectionScrolling)
         if !isCollectionScrolling {
             let index = indexPathsForVisibleItems.sorted()
             let correctIndex = index[1]
@@ -87,3 +87,37 @@ extension ProductCollectionView {
         }
     }
 }
+
+
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        selectItem(at: indexPath, animated: false, scrollPosition: .centeredHorizontally)
+//
+//        deselectFirstCategory(collectionView, indexPath)
+//        designChosenCategory(collectionView, indexPath)
+//        onUpdateTableView?(indexPath)
+//    }
+//
+//    func selectFirstCategory(_ collectionView: UICollectionView) {
+//        let firstCategoryIndexPath = IndexPath(row: 0, section: 0)
+//        onUpdateTableView?(firstCategoryIndexPath)
+//        designChosenCategory(collectionView, firstCategoryIndexPath)
+//    }
+
+//    private func designChosenCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
+//        guard let cell = collectionView.cellForItem(at: indexPath) as? ProductCollectionCell else { print("Hey2"); return }
+//        cell.titleLabel.textColor = .white
+//    }
+//
+//    private func deselectFirstCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
+//        let firstIndexPath = IndexPath(row: 0, section: 0)
+//        if indexPath != firstIndexPath {
+//            guard let cell = collectionView.cellForItem(at: firstIndexPath) as? ProductCollectionCell else { return }
+//            cell.titleLabel.textColor = .darkGray.withAlphaComponent(0.4)
+//        }
+//    }
+
+//    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+//        guard let cell = collectionView.cellForItem(at: indexPath) as? ProductCollectionCell else { return }
+//        cell.titleLabel.textColor = .darkGray.withAlphaComponent(0.4)
+//    }
+//}

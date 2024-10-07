@@ -88,8 +88,7 @@ let pizzas: [Pizza] = [
                  .medium: WeightPrice(weight: 400, price: 600, cpfc: CPFC(calories: 200, protein: 14, fat: 16, carbohydrates: 44)),
                  .large: WeightPrice(weight: 500, price: 700, cpfc: CPFC(calories: 300, protein: 17, fat: 22, carbohydrates: 55))]),
 
-    Pizza(name: "Пепперони фреш", ingredients: "Бекон, сыры чеддер и пармезан, моцарелла, томаты, красный лук, чеснок, фирменный соус альфредо, итальянские травы",
-          imageName: "seafood",
+    Pizza(name: "Пепперони фреш", ingredients: "Бекон, сыры чеддер и пармезан, моцарелла, томаты, красный лук, чеснок, фирменный соус альфредо, итальянские травы", imageName: "seafood",
           size: [.small: WeightPrice(weight: 300, price: 500, cpfc: CPFC(calories: 110, protein: 12, fat: 14, carbohydrates: 30)),
                  .medium: WeightPrice(weight: 400, price: 600, cpfc: CPFC(calories: 200, protein: 14, fat: 16, carbohydrates: 44)),
                  .large: WeightPrice(weight: 500, price: 700, cpfc: CPFC(calories: 300, protein: 17, fat: 22, carbohydrates: 55))]),
