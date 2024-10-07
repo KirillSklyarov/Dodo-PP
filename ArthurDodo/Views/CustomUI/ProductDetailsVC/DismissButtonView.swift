@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DismissProductView: UIView {
+final class DismissButtonView: UIView {
 
     private let viewSize: CGFloat = 40
     var onCloseButtonTapped: (() -> Void)?
