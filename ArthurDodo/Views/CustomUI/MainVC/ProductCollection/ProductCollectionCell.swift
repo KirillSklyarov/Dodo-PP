@@ -14,11 +14,12 @@ final class ProductCollectionCell: UICollectionViewCell {
     private let imageSize: CGFloat = 130
     private let buttonWidth: CGFloat = 100
     private let hitImageSize: CGFloat = 30
+    private let padding: CGFloat = 10
 
     // MARK: - UI Properties
     private lazy var pizzaImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
+        imageView.contentMode = .scaleAspectFit
         imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
         return imageView
     }()
@@ -40,7 +41,9 @@ final class ProductCollectionCell: UICollectionViewCell {
         button.titleLabel?.font = AppFonts.bold14
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = AppColors.buttonGray
-        button.layer.cornerRadius = 16
+        button.layer.cornerRadius = 14
+        button.layer.masksToBounds = true
+        button.heightAnchor.constraint(equalToConstant: buttonWidth / 4).isActive = true
         button.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
         return button
     }()
@@ -64,7 +67,7 @@ final class ProductCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Public moethods
+    // MARK: - Public methods
     func configureCell(pizza: FoodItems) {
         pizzaImageView.image = UIImage(named: pizza.imageName)
         titleLabel.text = pizza.name
@@ -88,7 +91,6 @@ final class ProductCollectionCell: UICollectionViewCell {
 
 // MARK: - SetupLayout
 private extension ProductCollectionCell {
-
     func setupUI() {
         backgroundColor = .clear
 
@@ -113,27 +115,29 @@ private extension ProductCollectionCell {
         }()
 
         let stackView: UIStackView = {
-            let stack = UIStackView(arrangedSubviews: [titleLabel, ingredientsLabel])
+            let stack = UIStackView(arrangedSubviews: [titleLabel, ingredientsLabel, priceButton])
             stack.axis = .vertical
-            stack.spacing = 5
+            stack.spacing = 10
+            stack.distribution = .fill
+            stack.alignment = .leading
             return stack
         }()
 
-        contentContainer.addSubviews(pizzaImageView, hitImageView, stackView, priceButton)
+        stackView.setBorder()
+
+        contentContainer.addSubviews(pizzaImageView, hitImageView, stackView)
 
         NSLayoutConstraint.activate([
-            pizzaImageView.centerYAnchor.constraint(equalTo: contentContainer.centerYAnchor),
+            pizzaImageView.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: padding),
+            pizzaImageView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor, constant: -padding),
             pizzaImageView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
 
             hitImageView.trailingAnchor.constraint(equalTo: pizzaImageView.trailingAnchor),
             hitImageView.topAnchor.constraint(equalTo: pizzaImageView.topAnchor),
 
-            stackView.topAnchor.constraint(equalTo: pizzaImageView.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: pizzaImageView.trailingAnchor, constant: 10),
-            stackView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -10),
-
-            priceButton.leadingAnchor.constraint(equalTo: pizzaImageView.trailingAnchor, constant: 10),
-            priceButton.bottomAnchor.constraint(equalTo: pizzaImageView.bottomAnchor),
+            stackView.centerYAnchor.constraint(equalTo: contentContainer.centerYAnchor),
+            stackView.leadingAnchor.constraint(equalTo: pizzaImageView.trailingAnchor, constant: padding),
+            stackView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -padding),
         ])
         return contentContainer
     }
