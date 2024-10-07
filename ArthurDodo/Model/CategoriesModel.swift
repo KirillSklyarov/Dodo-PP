@@ -33,23 +33,17 @@ struct Categories {
 }
 
 <<<<<<< HEAD
-<<<<<<< HEAD
 let categories: [Categories] = [ Categories(header: "Завтрак", items: breakfast),
                                  Categories(header: "Римские пиццы", items: romanPizzas),
                                  Categories(header: "Пиццы", items: pizzas),
                                  Categories(header: "Комбо", items: combos),
                                  Categories(header: "Закуски", items: starters),
 =======
-=======
->>>>>>> testMy
 let categories: [Categories] = [ Categories(header: .breakfast, items: breakfast),
                                  Categories(header: .combos, items: combos),
                                  Categories(header: .starters, items: starters),
                                  Categories(header: .pizzas, items: pizzas),
                                  Categories(header: .cocktail, items: cocktails)
-<<<<<<< HEAD
->>>>>>> testMy
-=======
 >>>>>>> testMy
 ]
 
