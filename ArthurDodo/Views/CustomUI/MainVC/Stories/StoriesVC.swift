@@ -8,6 +8,7 @@
 import UIKit
 
 final class StoriesVC: UIViewController {
+<<<<<<< HEAD
 
 //    private lazy var backgroundView = BackgroundStoriesView()
 //
@@ -37,4 +38,7 @@ final class StoriesVC: UIViewController {
 //            backgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
 //        ])
 //    }
+=======
+    
+>>>>>>> b61bbb72aea99f9f609ee9c70df785984e4a7fff
 }
