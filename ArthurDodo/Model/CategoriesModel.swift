@@ -32,19 +32,11 @@ struct Categories {
     let items: [FoodItems]
 }
 
-<<<<<<< HEAD
-let categories: [Categories] = [ Categories(header: "Завтрак", items: breakfast),
-                                 Categories(header: "Римские пиццы", items: romanPizzas),
-                                 Categories(header: "Пиццы", items: pizzas),
-                                 Categories(header: "Комбо", items: combos),
-                                 Categories(header: "Закуски", items: starters),
-=======
 let categories: [Categories] = [ Categories(header: .breakfast, items: breakfast),
                                  Categories(header: .combos, items: combos),
                                  Categories(header: .starters, items: starters),
                                  Categories(header: .pizzas, items: pizzas),
                                  Categories(header: .cocktail, items: cocktails)
->>>>>>> testMy
 ]
 
 private func convertToAllItems() -> [FoodItems] {

@@ -19,13 +19,13 @@ struct StartersModel: FoodItems {
 
     init(id: UUID = UUID(), category: CategoriesNames = .starters, name: String, imageName: String, ingredients: String, isHit: Bool = false, itemSize: [Size: WeightPrice], isHeader: Bool = false) {
         self.id = id
+        self.category = category
         self.name = name
         self.imageName = imageName
         self.ingredients = ingredients
         self.isHit = isHit
         self.itemSize = itemSize
         self.isHeader = isHeader
-        self.category = category
     }
 }
 

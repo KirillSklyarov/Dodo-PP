@@ -33,9 +33,9 @@ struct ComboModel: FoodItems {
 }
 
 let combos = [
-    ComboModel(id: UUID(), name: "Детское комбо", imageName: "Combo1", ingredients: "Маленькая пицца на обед и милая игрушка для хорошего настроения. Пусть ребенок покажет Додозаврику как правильно кушать!", items: nil, size: [.medium: WeightPrice(weight: 100, price: 100, cpfc: CPFC(calories: 10, protein: 10, fat: 10, carbohydrates: 10))]),
+    ComboModel(name: "Детское комбо", imageName: "Combo1", ingredients: "Маленькая пицца на обед и милая игрушка для хорошего настроения. Пусть ребенок покажет Додозаврику как правильно кушать!", items: nil, size: [.medium: WeightPrice(weight: 100, price: 100, cpfc: CPFC(calories: 10, protein: 10, fat: 10, carbohydrates: 10))]),
 
-    ComboModel(id: UUID(), name: "Чикен бокс", imageName: "Combo2", ingredients: "Картошка без курицы, как курица без картошки — лучше вместе", items: nil, size: [.medium: WeightPrice(weight: 150, price: 150, cpfc: CPFC(calories: 10, protein: 10, fat: 10, carbohydrates: 10))]),
+    ComboModel( name: "Чикен бокс", imageName: "Combo2", ingredients: "Картошка без курицы, как курица без картошки — лучше вместе", items: nil, size: [.medium: WeightPrice(weight: 150, price: 150, cpfc: CPFC(calories: 10, protein: 10, fat: 10, carbohydrates: 10))]),
 
     ComboModel(name: "Комбо Завтрак на двоих", imageName: "Combo3", ingredients: "Горячий завтрак для двоих. 2 любые закуски и 2 напитка на выбор", items: nil, size: [.medium: WeightPrice(weight: 200, price: 200, cpfc: CPFC(calories: 10, protein: 10, fat: 10, carbohydrates: 10))]),
 
