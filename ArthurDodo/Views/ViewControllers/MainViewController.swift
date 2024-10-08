@@ -10,9 +10,9 @@ import UIKit
 final class MainViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var dismissButton = DismissButtonView()
-    private lazy var oneCollectionView = TestOneCollection()
+//    private lazy var dismissButton = DismissButtonView()
     private lazy var headerView = HeaderView()
+    private lazy var oneCollectionView = TestOneCollection()
 
     // MARK: - Life cycle
     override func viewDidLoad() {

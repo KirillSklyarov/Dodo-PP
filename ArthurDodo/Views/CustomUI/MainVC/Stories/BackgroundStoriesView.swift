@@ -121,6 +121,10 @@ final class BackgroundStoriesView: UIView {
         }
     }
 
+    private func showStoryImage() {
+        
+    }
+
     private func setupTapGesture(_ sender: UITapGestureRecognizer) {
         let location = sender.location(in: self)
         if location.x < bounds.width / 2 {
