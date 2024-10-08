@@ -10,7 +10,6 @@ import UIKit
 final class MainViewController: UIViewController {
 
     // MARK: - UI Properties
-//    private lazy var dismissButton = DismissButtonView()
     private lazy var headerView = HeaderView()
     private lazy var oneCollectionView = TestOneCollection()
 

@@ -245,9 +245,7 @@ extension TestOneCollection: UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let section = indexPath.section
         switch section {
-        case 0:
-            print("Selected story at index \(indexPath.row)")
-            onStoriesCellTapped?(indexPath)
+        case 0: onStoriesCellTapped?(indexPath)
         case 1: print("Selected special offer at index \(indexPath.row)")
         case 2:
             let item = allItems[indexPath.item]

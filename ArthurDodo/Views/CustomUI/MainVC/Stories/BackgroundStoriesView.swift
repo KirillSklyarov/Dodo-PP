@@ -11,25 +11,25 @@ final class BackgroundStoriesView: UIView {
 
     var onDismissButtonTapped: (() -> Void)?
     private let padding: CGFloat = 10
-    private let progressViewHeight: CGFloat = 4
+    private let progressViewHeight: CGFloat = 2
     var currentStoryIndex = 0
     var countSubStories = 0
+    var subStoryIndex = 0
+    var currentSubStoryIndex = 0
 
     // MARK: - Timer properties
     private var timer: Timer?
     private lazy var elapsedTime: TimeInterval = 0.0
     private lazy var interval: TimeInterval = 0.05
-    private lazy var durationOfStory: TimeInterval = 4.0
+    private lazy var durationOfStory: TimeInterval = 2.0
 
+    // MARK: - UI Properties
     private lazy var dismissButton = DismissButtonView(xColor: AppColors.buttonGray, backgroundColor: .white)
     private lazy var storiesImageView: UIImageView = {
         let imageView = UIImageView()
-        let image = UIImage(named: "1")
-        imageView.image = image
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
-
     private lazy var progressViewsStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -39,7 +39,6 @@ final class BackgroundStoriesView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-
     private lazy var progressViews: [UIProgressView] = []
 
     // MARK: - Init
@@ -47,7 +46,6 @@ final class BackgroundStoriesView: UIView {
         super.init(frame: frame)
         setupUI()
         dataBinding()
-        showStories()
     }
 
     deinit {
@@ -60,14 +58,17 @@ final class BackgroundStoriesView: UIView {
 
     // MARK: - IB Actions
     @objc private func updateProgress(_ timer: Timer) {
-        let index = timer.userInfo as? Int ?? 0
-        let progressView = progressViews[index]
+        guard let index = timer.userInfo as? Int,
+              index < progressViews.count else { return }
+
         elapsedTime += interval
-        progressView.progress = Float(elapsedTime / durationOfStory)
+        let progress = Float(elapsedTime / durationOfStory)
+        progressViews[index].setProgress(progress, animated: true)
 
         if elapsedTime >= durationOfStory {
             timer.invalidate()
-            showNextStory()
+            currentSubStoryIndex += 1
+            showSubStory(currentSubStoryIndex)
         }
     }
 
@@ -94,35 +95,30 @@ final class BackgroundStoriesView: UIView {
     }
 
     private func showStories() {
-        if countSubStories == 1 {
-            print("Here")
-            setupProgressViews()
-            let storyToShow = stories[currentStoryIndex]
-            let image = UIImage(named: storyToShow.storyImages.first!)
-            storiesImageView.image = image
-
-            elapsedTime = 0.0
-            guard let progressView = progressViews.first else { return }
-            progressView.progress = 0.0
-            timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(updateProgress), userInfo: progressView, repeats: true)
-        } else {
-            setupProgressViews()
-            for i in progressViews.indices {
-                let storyToShow = stories[currentStoryIndex].storyImages[i]
-                let image = UIImage(named: storyToShow)
-                storiesImageView.image = image
-                timer?.invalidate()
-
-                let progressView = progressViews[i]
-                elapsedTime = 0.0
-                progressView.progress = 0.0
-                timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
-            }
-        }
+        setupProgressViews()
+        print("YYYYYYYYYYYYYY")
+        print(progressViews.count)
+        currentSubStoryIndex = 0
+        timer?.invalidate()
+        setStoryImage(currentStoryIndex)
+        showSubStory(currentSubStoryIndex)
     }
 
-    private func showStoryImage() {
-        
+    private func showSubStory(_ index: Int = 0) {
+        guard index < countSubStories else { showNextStory(); return }
+        setStoryImage(index)
+        elapsedTime = 0.0
+        progressViews[index].progress = 0.0
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(updateProgress), userInfo: index, repeats: true)
+    }
+
+    private func setStoryImage(_ index: Int = 0) {
+        let storyToShow = stories[currentStoryIndex]
+        guard index < storyToShow.storyImages.count else { return }
+        let imageName = storyToShow.storyImages[index]
+        let image = UIImage(named: imageName)
+        storiesImageView.image = image
     }
 
     private func setupTapGesture(_ sender: UITapGestureRecognizer) {
@@ -147,7 +143,7 @@ final class BackgroundStoriesView: UIView {
         if currentStoryIndex != stories.count - 1 {
             currentStoryIndex += 1
             countSubStories = stories[currentStoryIndex].storyImages.count
-            startStory()
+            showStories()
         } else {
             onDismissButtonTapped?()
         }
@@ -165,9 +161,6 @@ private extension BackgroundStoriesView {
     func setupProgressViews() {
         progressViewsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         progressViews = []
-
-        let currentStory = stories[currentStoryIndex]
-        print(currentStory.storyImages.indices)
         for _ in 0..<countSubStories {
             let progressView = AppProgressView()
             progressViewsStack.addArrangedSubview(progressView)
