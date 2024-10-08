@@ -63,7 +63,7 @@ extension StoriesCollectionView: UICollectionViewDataSource, UICollectionViewDel
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoriesCollectionCell.identifier, for: indexPath) as? StoriesCollectionCell else { return UICollectionViewCell() }
-        let title = categories[indexPath.row].header
+        let title = categories[indexPath.row].header.rawValue
         cell.configHeader(title)
         return cell
     }

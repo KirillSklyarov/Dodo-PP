@@ -17,6 +17,8 @@ final class HeaderView: UIView {
     private let leftPadding: CGFloat = 20
     private let rightPadding: CGFloat = -20
 
+    var onProfileButtonTapped: (() -> Void)?
+
     // MARK: - UI Properties
     private lazy var courierImageView: UIImageView = {
         let imageView = UIImageView()
@@ -44,6 +46,7 @@ final class HeaderView: UIView {
         button.contentHorizontalAlignment = .fill
         button.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
         button.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
+        button.addTarget(self, action: #selector(profileButtonTapped), for: .touchUpInside)
         return button
     }()
     private lazy var contentContainer = UIView()
@@ -60,6 +63,10 @@ final class HeaderView: UIView {
 
     override func didMoveToSuperview() {
         setupLayout()
+    }
+
+    @objc private func profileButtonTapped() {
+        onProfileButtonTapped?()
     }
 
     // MARK: - Private methods

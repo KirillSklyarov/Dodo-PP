@@ -20,7 +20,7 @@ final class StoriesCollectionCell: UICollectionViewCell {
 
     var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
+        label.font = AppFonts.regular12
         label.textColor = .white
         label.textAlignment = .left
         label.numberOfLines = 0

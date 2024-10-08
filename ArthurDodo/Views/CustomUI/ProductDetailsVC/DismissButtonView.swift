@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DismissProductView: UIView {
+final class DismissButtonView: UIView {
 
     private let viewSize: CGFloat = 40
     var onCloseButtonTapped: (() -> Void)?
@@ -20,14 +20,22 @@ final class DismissProductView: UIView {
         return button
     }()
 
-    override init(frame: CGRect) {
+    init(frame: CGRect = .zero, xColor: UIColor = .white, backgroundColor: UIColor = AppColors.backgroundGray) {
         super.init(frame: frame)
         configUI()
+        setColors(xColor: xColor, backgroundColor: backgroundColor)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    private func setColors(xColor: UIColor, backgroundColor: UIColor) {
+        let image = UIImage(systemName: "xmark")?.withTintColor(xColor, renderingMode: .alwaysOriginal)
+        dismissButton.setImage(image, for: .normal)
+        self.backgroundColor = backgroundColor
+    }
+
 
     // MARK: - IB Actions
     @objc private func closeButtonTapped() {
