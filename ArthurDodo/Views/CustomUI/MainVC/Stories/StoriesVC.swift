@@ -22,6 +22,10 @@ final class StoriesVC: UIViewController {
             self?.dismiss(animated: true)
         }
     }
+
+    func showStories(_ indexPath: IndexPath) {
+        backgroundView.showStories(indexPath)
+    }
 }
 
 private extension StoriesVC {

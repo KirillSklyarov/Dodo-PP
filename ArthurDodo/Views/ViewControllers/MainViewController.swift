@@ -48,6 +48,7 @@ private extension MainViewController {
 
     func showStoriesVC(_ indexPath: IndexPath) {
         let storiesVC = StoriesVC()
+        storiesVC.showStories(indexPath)
         storiesVC.modalPresentationStyle = .overFullScreen
         storiesVC.isModalInPresentation = false
         present(storiesVC, animated: true)
