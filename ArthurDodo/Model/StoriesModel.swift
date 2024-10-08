@@ -13,7 +13,7 @@ struct StoriesModel {
 
 let stories: [StoriesModel] = [
     StoriesModel(storyImages: ["4","1","2"]),
+    StoriesModel(storyImages: ["3"]),
     StoriesModel(storyImages: ["2"]),
     StoriesModel(storyImages: ["1"]),
-    StoriesModel(storyImages: ["3"]),
 ]

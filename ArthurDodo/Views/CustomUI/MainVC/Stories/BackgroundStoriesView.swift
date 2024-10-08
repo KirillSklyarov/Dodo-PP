@@ -12,10 +12,10 @@ final class BackgroundStoriesView: UIView {
     var onDismissButtonTapped: (() -> Void)?
     private let padding: CGFloat = 10
     private let progressViewHeight: CGFloat = 2
-    var currentStoryIndex = 0
-    var countSubStories = 0
-    var subStoryIndex = 0
-    var currentSubStoryIndex = 0
+    private var currentStoryIndex = 0
+    private var countSubStories = 0
+    private var subStoryIndex = 0
+    private var currentSubStoryIndex = 0
 
     // MARK: - Timer properties
     private var timer: Timer?
@@ -58,15 +58,14 @@ final class BackgroundStoriesView: UIView {
 
     // MARK: - IB Actions
     @objc private func updateProgress(_ timer: Timer) {
-        guard let index = timer.userInfo as? Int,
-              index < progressViews.count else { return }
+        guard let subStoryIndex = timer.userInfo as? Int,
+              subStoryIndex < progressViews.count else { return }
 
         elapsedTime += interval
         let progress = Float(elapsedTime / durationOfStory)
-        progressViews[index].setProgress(progress, animated: true)
+        progressViews[subStoryIndex].setProgress(progress, animated: true)
 
         if elapsedTime >= durationOfStory {
-            timer.invalidate()
             currentSubStoryIndex += 1
             showSubStory(currentSubStoryIndex)
         }
@@ -75,45 +74,50 @@ final class BackgroundStoriesView: UIView {
     @objc private func onTap(_ sender: UITapGestureRecognizer) {
         setupTapGesture(sender)
     }
+}
 
-    // MARK: - Public methods
-    func showStories(_ indexPath: IndexPath) {
-        currentStoryIndex = indexPath.row
-        countSubStories = stories[currentStoryIndex].storyImages.count
-        showStories()
-    }
-
+// MARK: - Data binding
+extension BackgroundStoriesView {
     private func dataBinding() {
         dismissButtonTapped()
     }
 
     private func dismissButtonTapped() {
         dismissButton.onCloseButtonTapped = { [weak self] in
-            self?.onDismissButtonTapped?()
-            self?.timer?.invalidate()
+            guard let self else { return }
+            onDismissButtonTapped?()
+            timer?.invalidate()
         }
     }
+}
 
-    private func showStories() {
+// MARK: - Setup Stories
+extension BackgroundStoriesView {
+    func showSelectedStory(_ indexPath: IndexPath) {
+        currentStoryIndex = indexPath.row
+        countSubStories = stories[currentStoryIndex].storyImages.count
+        showStory()
+    }
+
+    private func showStory() {
         setupProgressViews()
-        print("YYYYYYYYYYYYYY")
-        print(progressViews.count)
         currentSubStoryIndex = 0
-        timer?.invalidate()
-        setStoryImage(currentStoryIndex)
         showSubStory(currentSubStoryIndex)
     }
 
-    private func showSubStory(_ index: Int = 0) {
-        guard index < countSubStories else { showNextStory(); return }
-        setStoryImage(index)
-        elapsedTime = 0.0
-        progressViews[index].progress = 0.0
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(updateProgress), userInfo: index, repeats: true)
+    private func showSubStory(_ subStoryIndex: Int) {
+        if subStoryIndex < countSubStories {
+            setStoryImage(subStoryIndex)
+            elapsedTime = 0.0
+            progressViews[subStoryIndex].progress = 0.0
+            timer?.invalidate()
+            timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(updateProgress), userInfo: subStoryIndex, repeats: true)
+        } else {
+            showNextStory()
+        }
     }
 
-    private func setStoryImage(_ index: Int = 0) {
+    private func setStoryImage(_ index: Int) {
         let storyToShow = stories[currentStoryIndex]
         guard index < storyToShow.storyImages.count else { return }
         let imageName = storyToShow.storyImages[index]
@@ -130,28 +134,64 @@ final class BackgroundStoriesView: UIView {
         }
     }
 
+    // Либо показываем предыдущую Мини-Историю, либо последнюю Мини-историю предыдущей истории, либо предыдущую историю
     private func showPreviousStory() {
-        if currentStoryIndex != 0 {
+        if currentSubStoryIndex != 0 {
+            clearProgressView()
+            currentSubStoryIndex -= 1
+            showSubStory(currentSubStoryIndex)
+        } else if currentStoryIndex != 0 {
             currentStoryIndex -= 1
-            startStory()
+            showLastSubStory()
         } else {
-            startStory()
+            showStory()
         }
     }
 
+    // Когда мы возвращаемся на предыдущую сторис, но тут делаем чтобы мы вернулись на последнюю Мини-Историю предыдущей истории
+    private func showLastSubStory() {
+        countSubStories = stories[currentStoryIndex].storyImages.count
+        currentSubStoryIndex = countSubStories - 1
+        setupProgressViews()
+        fillAllProgressViewsExceptLast()
+        showSubStory(currentSubStoryIndex)
+    }
+
+    // Либо показываем следующую Мини-Историю, либо следующую Историю, либо закрываем окно
     private func showNextStory() {
-        if currentStoryIndex != stories.count - 1 {
+        if currentSubStoryIndex < countSubStories - 1 {
+            fillProgressView()
+            currentSubStoryIndex += 1
+            showSubStory(currentSubStoryIndex)
+        } else if currentStoryIndex != stories.count - 1 {
             currentStoryIndex += 1
             countSubStories = stories[currentStoryIndex].storyImages.count
-            showStories()
+            showStory()
         } else {
             onDismissButtonTapped?()
         }
     }
 
-    private func startStory() {
+    // Мгновенно закрашиваем прогресс
+    private func fillProgressView() {
         timer?.invalidate()
-        showStories()
+        progressViews[currentSubStoryIndex].setProgress(1.0, animated: false)
+    }
+
+    // Мгновенно закрашиваем все прогрессы кроме последнего
+    private func fillAllProgressViewsExceptLast() {
+        for view in progressViews {
+            if view != progressViews.last {
+                timer?.invalidate()
+                view.setProgress(1.0, animated: false)
+            }
+        }
+    }
+
+    // Мгновенно обнуляем прогресс вью
+    private func clearProgressView() {
+        timer?.invalidate()
+        progressViews[currentSubStoryIndex].setProgress(0.0, animated: false)
     }
 }
 

@@ -24,7 +24,7 @@ final class StoriesVC: UIViewController {
     }
 
     func showStories(_ indexPath: IndexPath) {
-        backgroundView.showStories(indexPath)
+        backgroundView.showSelectedStory(indexPath)
     }
 }
 
