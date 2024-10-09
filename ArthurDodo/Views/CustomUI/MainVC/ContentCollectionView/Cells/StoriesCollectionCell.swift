@@ -15,7 +15,13 @@ final class StoriesCollectionCell: UICollectionViewCell {
         let view = UIView()
         view.layer.cornerRadius = 14
         view.clipsToBounds = true
+        view.backgroundColor = .black
         return view
+    }()
+    private lazy var coverImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        return imageView
     }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -45,8 +51,22 @@ final class StoriesCollectionCell: UICollectionViewCell {
     }
 
     // MARK: - Public methods
-    func configHeader(_ titleText: String? = nil) {
-        titleLabel.text = titleText
+    func configureCell(_ story: StoriesModel) {
+        let coverImage = UIImage(named: story.storyCoverImage)
+        coverImageView.image = coverImage
+        let storyDescription = story.storyDescription
+        titleLabel.text = storyDescription
+        designViewedStory(story)
+    }
+
+    func designViewedStory(_ story: StoriesModel) {
+        let storyID = story.id
+        let isViewed = UserDefaults.standard.isStoryViewed(storyID)
+        if isViewed {
+            containerView.alpha = 0.3
+        } else {
+            containerView.alpha = 1.0
+        }
     }
 }
 
@@ -54,9 +74,14 @@ final class StoriesCollectionCell: UICollectionViewCell {
 private extension StoriesCollectionCell {
     func setupConstraints() {
 
-        containerView.addSubviews(titleLabel)
+        containerView.addSubviews(coverImageView, titleLabel)
 
         NSLayoutConstraint.activate([
+            coverImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            coverImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            coverImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            coverImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+
             titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -5),
             titleLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)

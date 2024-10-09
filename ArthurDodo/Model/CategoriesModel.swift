@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FoodItems {
-    var id: UUID { get }
+    var id: String { get }
     var category: CategoriesNames { get set }
     var name: String { get set }
     var imageName: String { get set }

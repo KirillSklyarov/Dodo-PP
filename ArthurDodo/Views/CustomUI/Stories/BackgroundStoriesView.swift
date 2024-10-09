@@ -58,7 +58,7 @@ final class BackgroundStoriesView: UIView {
     // MARK: - Public methods
     func showSelectedStory(_ indexPath: IndexPath) {
         currentStoryIndex = indexPath.row
-        countSubStories = stories[currentStoryIndex].storyImages.count
+        countSubStories = stories[currentStoryIndex].subStoryImages.count
         showStory()
     }
 }
@@ -103,9 +103,18 @@ private extension BackgroundStoriesView {
         if elapsedTime >= durationOfStory {
             displayLink?.invalidate()
             displayLink = nil
+            markStoryAsViewed()
             subStoryIndex += 1
             showSubStory(subStoryIndex)
         }
+    }
+
+    func markStoryAsViewed() {
+        print("currentStoryIndex \(currentStoryIndex)")
+        let storyID = stories[currentStoryIndex].id
+        UserDefaults.standard.markStoryAsViewed(storyID)
+        let viewedStories = UserDefaults.standard.getArrayOfViewedStories()
+        print(viewedStories)
     }
 
     func showSubStory(_ subStoryIndex: Int) {
@@ -126,8 +135,8 @@ private extension BackgroundStoriesView {
 
     func setStoryImage(_ index: Int) {
         let storyToShow = stories[currentStoryIndex]
-        guard index < storyToShow.storyImages.count else { return }
-        let imageName = storyToShow.storyImages[index]
+        guard index < storyToShow.subStoryImages.count else { return }
+        let imageName = storyToShow.subStoryImages[index]
         let image = UIImage(named: imageName)
         storiesImageView.image = image
     }
@@ -148,7 +157,7 @@ private extension BackgroundStoriesView {
 
     // Когда мы возвращаемся на предыдущую сторис, но тут делаем чтобы мы вернулись на последнюю Мини-Историю предыдущей истории
     func showLastSubStory() {
-        countSubStories = stories[currentStoryIndex].storyImages.count
+        countSubStories = stories[currentStoryIndex].subStoryImages.count
         subStoryIndex = countSubStories - 1
         setupProgressViews()
         fillAllProgressViewsExceptLast()
@@ -163,7 +172,7 @@ private extension BackgroundStoriesView {
             showSubStory(subStoryIndex)
         } else if currentStoryIndex != stories.count - 1 {
             currentStoryIndex += 1
-            countSubStories = stories[currentStoryIndex].storyImages.count
+            countSubStories = stories[currentStoryIndex].subStoryImages.count
             showStory()
         } else {
             onDismissButtonTapped?()

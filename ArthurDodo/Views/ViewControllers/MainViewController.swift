@@ -18,6 +18,14 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         configUI()
         dataBinding()
+
+        let arrayOfViewedStories = UserDefaults.standard.getArrayOfViewedStories()
+        print("Массив просмотренных историй из UserDefaults \(arrayOfViewedStories)")
+
+//        print("Массив stories перед загрузкой коллекции:")
+//        for (index, story) in stories.enumerated() {
+//            print("\(index + 1). \(story.storyDescription)")
+//        }
     }
 }
 
@@ -43,6 +51,7 @@ private extension MainViewController {
         }
     }
 
+
     func showProductDetail(_ pizza: FoodItems) {
         let productDetailVC = ProductDetailsViewController()
         productDetailVC.getPizzaData(pizza)
@@ -57,6 +66,10 @@ private extension MainViewController {
         storiesVC.modalPresentationStyle = .overFullScreen
         storiesVC.isModalInPresentation = false
         present(storiesVC, animated: true)
+
+        storiesVC.onStoriesVCDismissed = { [weak self] in
+            self?.contentCollectionView.reloadData()
+        }
     }
 }
 

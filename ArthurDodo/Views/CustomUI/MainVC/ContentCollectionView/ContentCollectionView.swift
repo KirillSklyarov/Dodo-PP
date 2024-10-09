@@ -206,7 +206,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
-        case 0: return categories.count
+        case 0: return stories.count
         case 1: return specialOfferArray.count
         case 2: return allItems.count
         default : return 0
@@ -218,21 +218,22 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
         switch section {
         case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoriesCollectionCell.identifier, for: indexPath) as? StoriesCollectionCell else { return UICollectionViewCell() }
-            let title = categories[indexPath.row].header.rawValue
-            cell.configHeader(title)
+            let story = stories[indexPath.item]
+//            print("\(indexPath.item + 1). \(story.storyDescription)")
+            cell.configureCell(story)
             return cell
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SpecialOfferCollectionCell.identifier, for: indexPath) as? SpecialOfferCollectionCell else { return UICollectionViewCell() }
-            let item = specialOfferArray[indexPath.row]
+            let item = specialOfferArray[indexPath.item]
             cell.configureCell(item)
             return cell
         case 2:
-            let item = allItems[indexPath.row]
+            let item = allItems[indexPath.item]
 
             if item.isHeader {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemsHeaderView.identifier, for: indexPath) as? ItemsHeaderView else {
                     return UICollectionViewCell() }
-                let item = allItems[indexPath.row]
+                let item = allItems[indexPath.item]
                 cell.configHeader(item)
                 return cell
             } else {

@@ -10,6 +10,7 @@ import UIKit
 final class StoriesVC: UIViewController {
 
     private lazy var backgroundView = BackgroundStoriesView()
+    var onStoriesVCDismissed: (() -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +20,7 @@ final class StoriesVC: UIViewController {
 
     private func dataBinding() {
         backgroundView.onDismissButtonTapped = { [weak self] in
+            self?.onStoriesVCDismissed?()
             self?.dismiss(animated: true)
         }
     }
