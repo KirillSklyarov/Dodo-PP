@@ -13,8 +13,9 @@ final class ContentCollectionView: UICollectionView {
     var categoryHeaderView: CategoriesHeaderView?
     var isScrolling = false
 
-    var onItemCellTapped: ((FoodItems) -> Void)?
+    var onItemCellTapped: ((IndexPath) -> Void)?
     var onStoriesCellTapped: ((IndexPath) -> Void)?
+    var onSpecialOfferCellTapped: ((IndexPath) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -206,7 +207,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0: return categories.count
-        case 1: return 4
+        case 1: return specialOfferArray.count
         case 2: return allItems.count
         default : return 0
         }
@@ -222,6 +223,8 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
             return cell
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SpecialOfferCollectionCell.identifier, for: indexPath) as? SpecialOfferCollectionCell else { return UICollectionViewCell() }
+            let item = specialOfferArray[indexPath.row]
+            cell.configureCell(item)
             return cell
         case 2:
             let item = allItems[indexPath.row]
@@ -246,10 +249,8 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
         let section = indexPath.section
         switch section {
         case 0: onStoriesCellTapped?(indexPath)
-        case 1: print("Selected special offer at index \(indexPath.row)")
-        case 2:
-            let item = allItems[indexPath.item]
-            onItemCellTapped?(item)
+        case 1: onSpecialOfferCellTapped?(indexPath)
+        case 2: onItemCellTapped?(indexPath)
         default : return
         }
     }

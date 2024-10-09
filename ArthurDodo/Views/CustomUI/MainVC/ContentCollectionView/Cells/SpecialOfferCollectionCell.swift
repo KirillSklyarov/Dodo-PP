@@ -12,39 +12,31 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
     // MARK: - Properties
     static let identifier: String = "SpecialOfferCollectionCell"
     private let imageViewSize: CGFloat = 90
+    private let buttonWidthMultiplier: CGFloat = 0.85
 
     var onPriceButtonTapped: ( (String) -> Void )?
 
     // MARK: - UI Properties
     private lazy var pizzaImageView: UIImageView = {
         let imageView = UIImageView()
-        let image = UIImage(named: "pizza")
-        imageView.image = image
         imageView.heightAnchor.constraint(equalToConstant: imageViewSize).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: imageViewSize).isActive = true
         return imageView
     }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Карбонара"
         label.font = AppFonts.semibold16
         label.textColor = .white
+        label.numberOfLines = 0
         return label
     }()
     private lazy var priceButton: UIButton = {
         let button = UIButton()
-        button.setTitle("от 589 руб.", for: .normal)
         button.titleLabel?.font = AppFonts.regular14
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = AppColors.buttonGray
         button.layer.cornerRadius = 14
-        button.addTarget(self, action: #selector(didTapPriceButton), for: .touchUpInside)
         return button
-    }()
-    private lazy var contentContainer: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
     }()
 
     // MARK: - Init
@@ -57,30 +49,21 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - IB Action
-    @objc func didTapPriceButton(_ sender: UIButton) {
-        print("3344")
+    // MARK: - Public methods
+    func configureCell(_ item: FoodItems) {
+        pizzaImageView.image = UIImage(named: item.imageName)
+        titleLabel.text = item.name
+        let itemPrice = item.itemSize[.medium]?.price ?? 0
+        let priceString = "от \(itemPrice) ₽"
+        priceButton.setTitle(priceString, for: .normal)
     }
-
-    //    func configureCell(pizza: Pizza) {
-    //        pizzaImageView.image = UIImage(named: pizza.imageName)
-    //        titleLabel.text = pizza.name
-    //        ingredientsLabel.text = pizza.ingredients
-    //        let price = "от \(pizza.price) ₽"
-    //        priceButton.setTitle(price, for: .normal)
-    //        if pizza.isHit {
-    //            hitImageView.isHidden = false
-    //        } else {
-    //            hitImageView.isHidden = true
-    //        }
-    //    }
 }
 
 // MARK: - Setup UI
 private extension SpecialOfferCollectionCell {
     func setupSubviews() {
 
-        setupContentContainer()
+        let contentContainer = setupContentContainer()
 
         contentView.addSubviews(contentContainer)
 
@@ -92,7 +75,9 @@ private extension SpecialOfferCollectionCell {
         ])
     }
 
-    func setupContentContainer() {
+    func setupContentContainer() -> UIView {
+
+        let contentContainer = UIView()
 
         let stack = UIStackView(arrangedSubviews: [titleLabel, priceButton])
         stack.axis = .vertical
@@ -109,7 +94,9 @@ private extension SpecialOfferCollectionCell {
             stack.leadingAnchor.constraint(equalTo: pizzaImageView.trailingAnchor, constant: 10),
             stack.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
 
-            priceButton.widthAnchor.constraint(equalTo: stack.widthAnchor, multiplier: 0.85)
+            priceButton.widthAnchor.constraint(equalTo: stack.widthAnchor, multiplier: buttonWidthMultiplier)
         ])
+
+        return contentContainer
     }
 }

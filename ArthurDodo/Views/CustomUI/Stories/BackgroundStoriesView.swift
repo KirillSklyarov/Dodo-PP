@@ -87,6 +87,7 @@ private extension BackgroundStoriesView {
         showSubStory(subStoryIndex)
     }
 
+    // Устанавливаем таймер
     func startTimer() {
         displayLink = CADisplayLink(target: self, selector: #selector(updateProgress))
         displayLink?.add(to: .main, forMode: .default)
@@ -110,12 +111,17 @@ private extension BackgroundStoriesView {
     func showSubStory(_ subStoryIndex: Int) {
         if subStoryIndex < countSubStories {
             setStoryImage(subStoryIndex)
-            elapsedTime = 0.0
-            progressViews[subStoryIndex].progress = 0.0
+            resetTimerAndProgressView(subStoryIndex)
             startTimer()
         } else {
             showNextStory()
         }
+    }
+
+    // Сбрасываем таймер и прогресс-бар
+    func resetTimerAndProgressView(_ subStoryIndex: Int) {
+        elapsedTime = 0.0
+        progressViews[subStoryIndex].progress = 0.0
     }
 
     func setStoryImage(_ index: Int) {
@@ -206,7 +212,6 @@ private extension BackgroundStoriesView {
 
 // MARK: - SetupUI
 private extension BackgroundStoriesView {
-
     func setupProgressViews() {
         progressViewsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         progressViews = []

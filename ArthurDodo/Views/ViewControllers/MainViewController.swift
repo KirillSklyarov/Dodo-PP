@@ -28,12 +28,18 @@ private extension MainViewController {
     }
 
     func setupCollectionView() {
-        contentCollectionView.onItemCellTapped = { [weak self] item in
+        contentCollectionView.onItemCellTapped = { [weak self] IndexPath in
+            let item = allItems[IndexPath.item]
             self?.showProductDetail(item)
         }
 
         contentCollectionView.onStoriesCellTapped = { [weak self] IndexPath in
             self?.showStoriesVC(IndexPath)
+        }
+
+        contentCollectionView.onSpecialOfferCellTapped = { [weak self] IndexPath in
+            let item = specialOfferArray[IndexPath.item]
+            self?.showProductDetail(item)
         }
     }
 
