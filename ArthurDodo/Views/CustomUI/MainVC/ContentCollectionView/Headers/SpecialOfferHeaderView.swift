@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CollectionHeaderView: UICollectionReusableView {
+final class SpecialOfferHeaderView: UICollectionReusableView {
 
     static let identifier: String = "CollectionHeaderView"
 

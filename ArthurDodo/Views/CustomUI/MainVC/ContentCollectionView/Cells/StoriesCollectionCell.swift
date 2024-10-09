@@ -9,16 +9,15 @@ import UIKit
 
 final class StoriesCollectionCell: UICollectionViewCell {
 
+    // MARK: - Properties
     static let identifier: String = "StoriesCollectionCell"
-
-    var containerView: UIView = {
+    private lazy var containerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 14
         view.clipsToBounds = true
         return view
     }()
-
-    var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppFonts.regular12
         label.textColor = .white
@@ -27,8 +26,9 @@ final class StoriesCollectionCell: UICollectionViewCell {
         return label
     }()
 
-    var gradientLayer: CAGradientLayer?
+    private var gradientLayer: CAGradientLayer?
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupConstraints()
@@ -44,7 +44,15 @@ final class StoriesCollectionCell: UICollectionViewCell {
         gradientLayer?.frame = bounds
     }
 
-    private func setupConstraints() {
+    // MARK: - Public methods
+    func configHeader(_ titleText: String? = nil) {
+        titleLabel.text = titleText
+    }
+}
+
+// MARK: - Setup UI
+private extension StoriesCollectionCell {
+    func setupConstraints() {
 
         containerView.addSubviews(titleLabel)
 
@@ -64,11 +72,7 @@ final class StoriesCollectionCell: UICollectionViewCell {
         ])
     }
 
-    func configHeader(_ titleText: String? = nil) {
-        titleLabel.text = titleText
-    }
-
-    private func configGradient() {
+    func configGradient() {
         let colors = AppColors()
         let randomColor = colors.getRandomColor()
 

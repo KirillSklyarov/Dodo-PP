@@ -175,11 +175,11 @@ extension ContentCollectionView {
         layer.masksToBounds = true
         register(StoriesCollectionCell.self, forCellWithReuseIdentifier: StoriesCollectionCell.identifier)
         register(SpecialOfferCollectionCell.self, forCellWithReuseIdentifier: SpecialOfferCollectionCell.identifier)
-        register(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CollectionHeaderView.identifier)
+        register(SpecialOfferHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SpecialOfferHeaderView.identifier)
         register(CategoriesHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategoriesHeaderView.identifier)
 
         register(ItemsHeaderView.self, forCellWithReuseIdentifier: ItemsHeaderView.identifier)
-        register(ProductCollectionCell.self, forCellWithReuseIdentifier: ProductCollectionCell.identifier)
+        register(ItemsCollectionCell.self, forCellWithReuseIdentifier: ItemsCollectionCell.identifier)
 
         delegate = self
         dataSource = self
@@ -233,7 +233,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
                 cell.configHeader(item)
                 return cell
             } else {
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionCell.identifier, for: indexPath) as? ProductCollectionCell else {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemsCollectionCell.identifier, for: indexPath) as? ItemsCollectionCell else {
                     return UICollectionViewCell() }
                 cell.configureCell(pizza: item)
                 return cell
@@ -260,7 +260,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
 
         switch section {
         case 1:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CollectionHeaderView.identifier, for: indexPath) as! CollectionHeaderView
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SpecialOfferHeaderView.identifier, for: indexPath) as! SpecialOfferHeaderView
             header.setTitle("Вам понравится")
             return header
         case 2:

@@ -9,6 +9,7 @@ import UIKit
 
 final class BackgroundStoriesView: UIView {
 
+    // MARK: - Properties
     var onDismissButtonTapped: (() -> Void)?
     private let padding: CGFloat = 10
     private let progressViewHeight: CGFloat = 2
@@ -17,9 +18,8 @@ final class BackgroundStoriesView: UIView {
     private var subStoryIndex = 0
 
     // MARK: - Timer properties
-    private var timer: Timer?
+    private var displayLink: CADisplayLink?
     private lazy var elapsedTime: TimeInterval = 0.0
-    private lazy var interval: TimeInterval = 0.05
     private lazy var durationOfStory: TimeInterval = 2.0
 
     // MARK: - UI Properties
@@ -48,7 +48,7 @@ final class BackgroundStoriesView: UIView {
     }
 
     deinit {
-        timer?.invalidate()
+        displayLink?.invalidate()
     }
 
     required init?(coder: NSCoder) {
@@ -73,7 +73,7 @@ private extension BackgroundStoriesView {
         dismissButton.onCloseButtonTapped = { [weak self] in
             guard let self else { return }
             onDismissButtonTapped?()
-            timer?.invalidate()
+            displayLink?.invalidate()
         }
     }
 }
@@ -87,29 +87,34 @@ private extension BackgroundStoriesView {
         showSubStory(subStoryIndex)
     }
 
+    func startTimer() {
+        displayLink = CADisplayLink(target: self, selector: #selector(updateProgress))
+        displayLink?.add(to: .main, forMode: .default)
+    }
+
+    @objc func updateProgress() {
+        guard subStoryIndex < progressViews.count else { return }
+
+        elapsedTime += displayLink?.duration ?? 0
+        let progress = Float(elapsedTime / durationOfStory)
+        progressViews[subStoryIndex].setProgress(progress, animated: true)
+
+        if elapsedTime >= durationOfStory {
+            displayLink?.invalidate()
+            displayLink = nil
+            subStoryIndex += 1
+            showSubStory(subStoryIndex)
+        }
+    }
+
     func showSubStory(_ subStoryIndex: Int) {
         if subStoryIndex < countSubStories {
             setStoryImage(subStoryIndex)
             elapsedTime = 0.0
             progressViews[subStoryIndex].progress = 0.0
-            timer?.invalidate()
-            timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(updateProgress), userInfo: subStoryIndex, repeats: true)
+            startTimer()
         } else {
             showNextStory()
-        }
-    }
-
-    @objc func updateProgress(_ timer: Timer) {
-        guard let subStoryIndex = timer.userInfo as? Int,
-              subStoryIndex < progressViews.count else { return }
-
-        elapsedTime += interval
-        let progress = Float(elapsedTime / durationOfStory)
-        progressViews[subStoryIndex].setProgress(progress, animated: true)
-
-        if elapsedTime >= durationOfStory {
-            self.subStoryIndex += 1
-            showSubStory(subStoryIndex)
         }
     }
 
@@ -161,7 +166,7 @@ private extension BackgroundStoriesView {
 
     // Мгновенно закрашиваем прогресс
     func fillProgressView() {
-        timer?.invalidate()
+        displayLink?.invalidate()
         progressViews[subStoryIndex].setProgress(1.0, animated: false)
     }
 
@@ -169,7 +174,7 @@ private extension BackgroundStoriesView {
     func fillAllProgressViewsExceptLast() {
         for view in progressViews {
             if view != progressViews.last {
-                timer?.invalidate()
+                displayLink?.invalidate()
                 view.setProgress(1.0, animated: false)
             }
         }
@@ -177,7 +182,7 @@ private extension BackgroundStoriesView {
 
     // Мгновенно обнуляем прогресс вью
     func clearProgressView() {
-        timer?.invalidate()
+        displayLink?.invalidate()
         progressViews[subStoryIndex].setProgress(0.0, animated: false)
     }
 }

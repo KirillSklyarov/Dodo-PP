@@ -30,7 +30,6 @@ final class ItemsHeaderView: UICollectionViewCell {
     }()
     private lazy var ingredientsLabel: UILabel = {
         let label = UILabel()
-        label.text = "Бекон, сыры чеддер и пармезан, моцарелла, томаты, красный лук, чеснок, фирменный соус альфредо, итальянские травы"
         label.textColor = .gray
         label.font = AppFonts.regular14
         label.numberOfLines = 0

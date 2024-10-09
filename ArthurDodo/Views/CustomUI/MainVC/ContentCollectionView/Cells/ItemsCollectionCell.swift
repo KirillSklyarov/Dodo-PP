@@ -1,5 +1,5 @@
 //
-//  ProductCollectionCell.swift
+//  ItemsCollectionCell.swift
 //  ArthurDodo
 //
 //  Created by Kirill Sklyarov on 02.10.2024.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ProductCollectionCell: UICollectionViewCell {
+final class ItemsCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
     static let identifier: String = "ProductCollectionCell"
@@ -90,7 +90,7 @@ final class ProductCollectionCell: UICollectionViewCell {
 }
 
 // MARK: - SetupLayout
-private extension ProductCollectionCell {
+private extension ItemsCollectionCell {
     func setupUI() {
         backgroundColor = .clear
 
