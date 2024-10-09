@@ -52,6 +52,7 @@ struct AppFonts {
     static let regular14 = UIFont(name: "SFProRounded-Regular", size: 14) ?? basicFont
     static let regular16 = UIFont(name: "SFProRounded-Regular", size: 16) ?? basicFont
 
+    static let semibold14 = UIFont(name: "SFProRounded-Semibold", size: 14) ?? basicFont
     static let semibold16 = UIFont(name: "SFProRounded-Semibold", size: 16) ?? basicFont
 
     static let medium16 = UIFont(name: "SFProRounded-Medium", size: 16) ?? basicFont

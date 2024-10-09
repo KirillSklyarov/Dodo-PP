@@ -13,16 +13,20 @@ final class ProductHeaderView: UIView {
     var onCloseButtonTapped: (() -> Void)?
 
     private let buttonSize: CGFloat = 40
-    private let viewHeight: CGFloat = 100
+    private let viewHeight: CGFloat = 110
+    private let titleLabelPadding: CGFloat = 60
+    private let buttonLeftPadding: CGFloat = 20
+    private let buttonBottomPadding: CGFloat = 10
 
     // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.font = AppFonts.bold20
+        label.numberOfLines = 0
+        label.textAlignment = .center
         return label
     }()
-
     private lazy var dismissButton = DismissButtonView()
     private lazy var blurView = CustomBlurView()
 
@@ -76,15 +80,16 @@ final class ProductHeaderView: UIView {
 
     private func setupDismissButtonConstraints() {
         NSLayoutConstraint.activate([
-            dismissButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-            dismissButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            dismissButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -buttonBottomPadding),
+            dismissButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: buttonLeftPadding),
         ])
     }
 
     private func setupTitleLabelConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor),
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: titleLabelPadding),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -titleLabelPadding)
         ])
     }
 }

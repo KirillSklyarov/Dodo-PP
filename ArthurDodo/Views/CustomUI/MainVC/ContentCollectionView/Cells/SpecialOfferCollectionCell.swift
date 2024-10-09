@@ -9,44 +9,45 @@ import UIKit
 
 final class SpecialOfferCollectionCell: UICollectionViewCell {
 
+    // MARK: - Properties
     static let identifier: String = "SpecialOfferCollectionCell"
+    private let imageViewSize: CGFloat = 90
 
     var onPriceButtonTapped: ( (String) -> Void )?
 
+    // MARK: - UI Properties
     private lazy var pizzaImageView: UIImageView = {
         let imageView = UIImageView()
         let image = UIImage(named: "pizza")
         imageView.image = image
-        imageView.heightAnchor.constraint(equalToConstant: 90).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 90).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: imageViewSize).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: imageViewSize).isActive = true
         return imageView
     }()
-
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Карбонара"
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.font = AppFonts.semibold16
         label.textColor = .white
         return label
     }()
-
     private lazy var priceButton: UIButton = {
         let button = UIButton()
         button.setTitle("от 589 руб.", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.titleLabel?.font = AppFonts.regular14
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .darkGray.withAlphaComponent(0.4)
+        button.backgroundColor = AppColors.buttonGray
         button.layer.cornerRadius = 14
         button.addTarget(self, action: #selector(didTapPriceButton), for: .touchUpInside)
         return button
     }()
-
     private lazy var contentContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view
     }()
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -56,8 +57,28 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - IB Action
+    @objc func didTapPriceButton(_ sender: UIButton) {
+        print("3344")
+    }
 
-    private func setupSubviews() {
+    //    func configureCell(pizza: Pizza) {
+    //        pizzaImageView.image = UIImage(named: pizza.imageName)
+    //        titleLabel.text = pizza.name
+    //        ingredientsLabel.text = pizza.ingredients
+    //        let price = "от \(pizza.price) ₽"
+    //        priceButton.setTitle(price, for: .normal)
+    //        if pizza.isHit {
+    //            hitImageView.isHidden = false
+    //        } else {
+    //            hitImageView.isHidden = true
+    //        }
+    //    }
+}
+
+// MARK: - Setup UI
+private extension SpecialOfferCollectionCell {
+    func setupSubviews() {
 
         setupContentContainer()
 
@@ -71,7 +92,7 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
         ])
     }
 
-    private func setupContentContainer() {
+    func setupContentContainer() {
 
         let stack = UIStackView(arrangedSubviews: [titleLabel, priceButton])
         stack.axis = .vertical
@@ -91,27 +112,4 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
             priceButton.widthAnchor.constraint(equalTo: stack.widthAnchor, multiplier: 0.85)
         ])
     }
-
-    @objc func didTapPriceButton(_ sender: UIButton) {
-        print("3344")
-//        guard let price = sender.title(for: .normal)?.components(separatedBy: " ")[1] else { return }
-//        onPriceButtonTapped?(price)
-    }
 }
-
-
-//    func configureCell(pizza: Pizza) {
-//        pizzaImageView.image = UIImage(named: pizza.imageName)
-//        titleLabel.text = pizza.name
-//        ingredientsLabel.text = pizza.ingredients
-//        let price = "от \(pizza.price) ₽"
-//        priceButton.setTitle(price, for: .normal)
-//        if pizza.isHit {
-//            hitImageView.isHidden = false
-//        } else {
-//            hitImageView.isHidden = true
-//        }
-//    }
-
-
-//

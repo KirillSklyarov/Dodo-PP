@@ -9,6 +9,7 @@ import UIKit
 
 final class InfoPopupView: UIView {
 
+    // MARK: - Properties
     private let viewHeight: CGFloat = 300
     private let viewWidth: CGFloat = 300
     private let cellHeight: CGFloat = 30
@@ -18,10 +19,11 @@ final class InfoPopupView: UIView {
     private var pizza: FoodItems?
     private var selectedSize: Size = .medium
 
+    // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.font = AppFonts.bold18
         label.text = "Сырная"
         label.numberOfLines = 0
         return label
@@ -29,7 +31,7 @@ final class InfoPopupView: UIView {
     private lazy var subLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = .systemFont(ofSize: 14)
+        label.font = AppFonts.regular14
         label.text = "Пищевая ценность на 100 г"
         label.numberOfLines = 0
         return label
@@ -55,22 +57,28 @@ final class InfoPopupView: UIView {
         return label
     }()
 
+    // MARK: - Init
     init(frame: CGRect = .zero, pizza: FoodItems?) {
         super.init(frame: frame)
         self.pizza = pizza
         setupView()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Public methods
     func setSelectedSize(_ size: Size) {
         selectedSize = size
         cpfcTableView.reloadData()
     }
+}
 
-    private func setupView() {
+// MARK: - Setup UI
+private extension InfoPopupView {
+
+    func setupView() {
         isHidden = true
         backgroundColor = .black
         layer.cornerRadius = 20
@@ -81,7 +89,7 @@ final class InfoPopupView: UIView {
         setupLayout()
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         let stack = UIStackView(arrangedSubviews: [titleLabel, subLabel, cpfcTableView, infoLabel])
         stack.axis = .vertical
         stack.distribution = .equalSpacing
@@ -97,6 +105,7 @@ final class InfoPopupView: UIView {
     }
 }
 
+// MARK: - UITableViewDataSource, UITableViewDelegate
 extension InfoPopupView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         data.count
