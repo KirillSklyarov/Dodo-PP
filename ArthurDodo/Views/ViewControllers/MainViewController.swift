@@ -11,7 +11,7 @@ final class MainViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = HeaderView()
-    private lazy var oneCollectionView = TestOneCollection()
+    private lazy var contentCollectionView = ContentCollectionView()
 
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -21,18 +21,18 @@ final class MainViewController: UIViewController {
     }
 }
 
-// MARK: - SetupDataBinding
+// MARK: - Setup DataBinding
 private extension MainViewController {
     func dataBinding() {
         setupCollectionView()
     }
 
     func setupCollectionView() {
-        oneCollectionView.onItemCellTapped = { [weak self] item in
+        contentCollectionView.onItemCellTapped = { [weak self] item in
             self?.showProductDetail(item)
         }
 
-        oneCollectionView.onStoriesCellTapped = { [weak self] IndexPath in
+        contentCollectionView.onStoriesCellTapped = { [weak self] IndexPath in
             self?.showStoriesVC(IndexPath)
         }
     }
@@ -58,13 +58,13 @@ private extension MainViewController {
 private extension MainViewController {
     func configUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(headerView, oneCollectionView)
+        view.addSubviews(headerView, contentCollectionView)
         setupLayout()
     }
 
     func setupLayout() {
         NSLayoutConstraint.activate([
-            oneCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10)
+            contentCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10)
         ])
     }
 }

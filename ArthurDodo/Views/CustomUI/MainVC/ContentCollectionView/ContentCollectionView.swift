@@ -1,5 +1,5 @@
 //
-//  TestOneCollection.swift
+//  ContentCollectionView.swift
 //  ArthurDodo
 //
 //  Created by Kirill Sklyarov on 05.10.2024.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TestOneCollection: UICollectionView {
+final class ContentCollectionView: UICollectionView {
 
     // MARK: - Properties
     var categoryHeaderView: CategoriesHeaderView?
@@ -55,7 +55,7 @@ final class TestOneCollection: UICollectionView {
 }
 
 // MARK: - Config Layout
-extension TestOneCollection {
+extension ContentCollectionView {
     private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.interSectionSpacing = 10
@@ -198,7 +198,7 @@ extension TestOneCollection {
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-extension TestOneCollection: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         3
     }
@@ -274,7 +274,7 @@ extension TestOneCollection: UICollectionViewDelegate, UICollectionViewDataSourc
 }
 
 // MARK: - UIScrollViewDelegate
-extension TestOneCollection {
+extension ContentCollectionView {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if !isScrolling {
             guard let index = indexPathsForVisibleItems.sorted().first?.item else { return }
