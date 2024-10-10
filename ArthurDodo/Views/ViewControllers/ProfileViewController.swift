@@ -11,6 +11,7 @@ final class ProfileViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = ProfileHeaderView()
+    private lazy var coinsOrdersCollectionView = CoinsOrdersCollectionView()
 
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -45,10 +46,15 @@ private extension ProfileViewController {
 private extension ProfileViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
+        view.addSubviews(headerView, coinsOrdersCollectionView)
         setupLayout()
     }
 
     func setupLayout() {
-        view.addSubviews(headerView)
+        NSLayoutConstraint.activate([
+            coinsOrdersCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
+            coinsOrdersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            coinsOrdersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+        ])
     }
 }

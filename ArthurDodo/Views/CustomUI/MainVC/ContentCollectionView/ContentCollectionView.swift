@@ -63,7 +63,7 @@ extension ContentCollectionView {
 
         return UICollectionViewCompositionalLayout(sectionProvider:  { (section, _) -> NSCollectionLayoutSection? in
             switch section {
-            case 0: return self.createHorizontalSection()
+            case 0: return self.createStoriesSection()
             case 1: return self.createHorizontalSpecialOfferSection()
             case 2: return self.createItemsSectionWithHeader()
 
@@ -72,7 +72,7 @@ extension ContentCollectionView {
         }, configuration: config)
     }
 
-    private func createHorizontalSection() -> NSCollectionLayoutSection {
+    private func createStoriesSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(90), heightDimension: .absolute(120))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
