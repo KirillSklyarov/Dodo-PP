@@ -51,7 +51,6 @@ private extension MainViewController {
         }
     }
 
-
     func showProductDetail(_ pizza: FoodItems) {
         let productDetailVC = ProductDetailsViewController()
         productDetailVC.getPizzaData(pizza)
