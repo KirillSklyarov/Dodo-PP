@@ -36,13 +36,13 @@ final class CartViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        dataBinding()
+        setupActions()
 
         loadOrderFromStorage()
     }
 
     // MARK: - Private methods
-    private func dataBinding() {
+    private func setupActions() {
         setupCartHeader()
         setupCartProductTableView()
         setupSpecialOfferCollectionView()

@@ -44,7 +44,7 @@ final class BackgroundStoriesView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        dataBinding()
+        setupActions()
     }
 
     deinit {
@@ -63,9 +63,9 @@ final class BackgroundStoriesView: UIView {
     }
 }
 
-// MARK: - Data binding
+// MARK: - setup Actions
 private extension BackgroundStoriesView {
-    func dataBinding() {
+    func setupActions() {
         dismissButtonTapped()
     }
 

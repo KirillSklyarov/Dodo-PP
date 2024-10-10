@@ -15,10 +15,10 @@ final class StoriesVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        dataBinding()
+        setupActions()
     }
 
-    private func dataBinding() {
+    private func setupActions() {
         backgroundView.onDismissButtonTapped = { [weak self] in
             self?.onStoriesVCDismissed?()
             self?.dismiss(animated: true)

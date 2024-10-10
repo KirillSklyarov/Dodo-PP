@@ -36,8 +36,8 @@ final class ContentCollectionView: UICollectionView {
         setupLayout()
     }
 
-    // MARK: - Data binding
-    private func dataBinding() {
+    // MARK: - setup Actions
+    private func setupActions() {
         categoryCellSelected()
     }
 
@@ -268,7 +268,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
         case 2:
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CategoriesHeaderView.identifier, for: indexPath) as! CategoriesHeaderView
             categoryHeaderView = header
-            dataBinding()
+            setupActions()
             return header
         default: return UICollectionReusableView()
         }

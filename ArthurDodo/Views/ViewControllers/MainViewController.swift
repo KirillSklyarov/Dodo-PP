@@ -17,10 +17,10 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
-        dataBinding()
+        setupActions()
 
-        let arrayOfViewedStories = UserDefaults.standard.getArrayOfViewedStories()
-        print("Массив просмотренных историй из UserDefaults \(arrayOfViewedStories)")
+//        let arrayOfViewedStories = UserDefaults.standard.getArrayOfViewedStories()
+//        print("Массив просмотренных историй из UserDefaults \(arrayOfViewedStories)")
 
 //        print("Массив stories перед загрузкой коллекции:")
 //        for (index, story) in stories.enumerated() {
@@ -29,10 +29,11 @@ final class MainViewController: UIViewController {
     }
 }
 
-// MARK: - Setup DataBinding
+// MARK: - Setup Actions
 private extension MainViewController {
-    func dataBinding() {
+    func setupActions() {
         setupCollectionView()
+        setupHeaderView()
     }
 
     func setupCollectionView() {
@@ -49,6 +50,17 @@ private extension MainViewController {
             let item = specialOfferArray[IndexPath.item]
             self?.showProductDetail(item)
         }
+    }
+
+    func setupHeaderView() {
+        headerView.onProfileButtonTapped = { [weak self] in
+            self?.showProfileVC()
+        }
+    }
+
+    func showProfileVC() {
+        let profileVC = ProfileViewController()
+        present(profileVC, animated: true)
     }
 
     func showProductDetail(_ pizza: FoodItems) {
