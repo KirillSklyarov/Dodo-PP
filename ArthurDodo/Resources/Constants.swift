@@ -72,8 +72,9 @@ struct AppColors {
     static let grayFont = UIColor.darkGray.withAlphaComponent(0.4)
     static let backgroundGray = UIColor(hex: "222222")
     static let backgroundBlack = UIColor.black
-    static let buttonGray = UIColor(hex: "#363636")
+    static let buttonGray = UIColor(hex: "363636")
     static let dodoCoinsBlue =  UIColor(hex: "5f4eca")
+    static let buttonOrange =  UIColor(hex: "ff6400")
 
     let peach = UIColor(hex: "f7d794")
     let blue = UIColor(hex: "778beb")

@@ -22,10 +22,11 @@ final class CustomPageControl: UIPageControl {
 
     private func setupPageControl() {
         numberOfPages = 2
+        isUserInteractionEnabled = false
         currentPageIndicatorTintColor = .white
         pageIndicatorTintColor = .lightGray
         addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
-        let config = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold)
+        let config = UIImage.SymbolConfiguration(pointSize: 26, weight: .bold)
         preferredIndicatorImage = UIImage(systemName: "minus", withConfiguration: config)
     }
 

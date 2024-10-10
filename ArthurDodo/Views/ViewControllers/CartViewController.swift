@@ -110,7 +110,7 @@ final class CartViewController: UIViewController {
     }
 
     private func setupSpecialOfferCollectionView() {
-        specialOfferCollectionView.onUpdateTableView = { [weak self] pageNumber in
+        specialOfferCollectionView.onShowNewCell = { [weak self] pageNumber in
             self?.pageControl.currentPage = pageNumber
         }
     }

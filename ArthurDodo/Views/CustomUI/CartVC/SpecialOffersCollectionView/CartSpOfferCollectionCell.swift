@@ -9,26 +9,59 @@ import UIKit
 
 final class CartSpOfferCollectionCell: UICollectionViewCell {
 
-    static let identifier: String = "CartSpOfferCollectionCell"
+    // MARK: - Properties
+    static let identifier: String = "CoinsOrdersCollectionViewCell"
+    private let spOfferImageSize: CGFloat = 70
+    private let leftPadding: CGFloat = 10
+    private let rightPadding: CGFloat = -10
+    private let topPadding: CGFloat = 10
+    private let bottomPadding: CGFloat = -10
+    private var halfWidth: CGFloat { self.frame.size.width / 2 - leftPadding + rightPadding }
 
-    private let imageSize: CGFloat = 100
+    private let subTitleButtonWidth: CGFloat = 70
+    private let subTitleButtonHeight: CGFloat = 30
 
-    var onPriceButtonTapped: ( (String) -> Void )?
-
-    private lazy var contentContainer: UIView = {
-        let container = UIView()
-        return container
+    // MARK: - UI Properties
+    private lazy var containerView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 14
+        view.clipsToBounds = true
+        view.backgroundColor = AppColors.backgroundGray
+        return view
     }()
-
-    private lazy var titleLabel: UILabel = {
+    private lazy var specialOfferImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleToFill
+        imageView.layer.cornerRadius = 14
+        imageView.layer.masksToBounds = true
+        imageView.widthAnchor.constraint(equalToConstant: halfWidth).isActive = true
+        return imageView
+    }()
+    private lazy var nameOfOfferLabel: UILabel = {
         let label = UILabel()
-        label.text = "Скидка 30% при заказе от 749 руб."
-        label.font = .systemFont(ofSize: 20, weight: .semibold)
-        label.textColor = .white
+        label.font = AppFonts.semibold14
+        label.textColor = AppColors.grayFont
+        label.textAlignment = .left
+        label.widthAnchor.constraint(equalToConstant: halfWidth).isActive = true
         label.numberOfLines = 0
         return label
     }()
-
+    private lazy var detailsOfOfferLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFonts.semibold16
+        label.textColor = .white
+        label.textAlignment = .left
+        label.widthAnchor.constraint(equalToConstant: halfWidth).isActive = true
+        label.numberOfLines = 0
+        return label
+    }()
+    private lazy var dateLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFonts.regular14
+        label.textColor = AppColors.grayFont
+        label.textAlignment = .left
+        return label
+    }()
     private lazy var applyButton: UIButton = {
         let button = UIButton()
         let title = "Применить"
@@ -38,77 +71,169 @@ final class CartSpOfferCollectionCell: UICollectionViewCell {
             .font: UIFont.systemFont(ofSize: 14, weight: .bold)]
         ))
         config.baseForegroundColor = .white
-        config.baseBackgroundColor = .red
+        config.baseBackgroundColor = AppColors.buttonOrange
         config.cornerStyle = .capsule
-        config.contentInsets = .init(top: 5, leading: 15, bottom: 5, trailing: 15)
         button.configuration = config
         return button
     }()
 
-    private lazy var offerImageView: UIImageView = {
-        let imageView = UIImageView()
-        let image = UIImage(named: "sale")
-        imageView.image = image
-        imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
-        return imageView
-    }()
-
-
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupUI()
+        setupConstraints()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupUI() {
-        backgroundColor = .darkGray.withAlphaComponent(0.4)
-        layer.cornerRadius = 20
-        layer.masksToBounds = true
-
-        setupSubviews()
-    }
-
-    private func setupSubviews() {
-        setupContentContainer()
-
-        contentView.addSubviews(contentContainer)
-
-        NSLayoutConstraint.activate([
-            contentContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
-            contentContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
-    }
-
-    private func setupContentContainer() {
-
-        contentContainer.addSubviews(titleLabel, applyButton, offerImageView)
-
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 20),
-            titleLabel.widthAnchor.constraint(equalTo: contentContainer.widthAnchor, multiplier: 0.5),
-
-            applyButton.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor, constant: -10),
-            applyButton.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 20),
-
-            offerImageView.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: 10),
-            offerImageView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -10),
-            offerImageView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor, constant: -10),
-
-        ])
-    }
-
-    @objc func didTapPriceButton(_ sender: UIButton) {
-        print("3344")
-//        guard let price = sender.title(for: .normal)?.components(separatedBy: " ")[1] else { return }
-//        onPriceButtonTapped?(price)
+    // MARK: - Public methods
+    func configureCell(_ item: SpecialOfferProfileModel) {
+        nameOfOfferLabel.text = item.name.uppercased()
+        detailsOfOfferLabel.text = item.details
+        dateLabel.text = item.date
+        let image = UIImage(named: item.imageName)
+        specialOfferImageView.image = image
     }
 }
+
+// MARK: - Setup UI
+private extension CartSpOfferCollectionCell {
+    func setupConstraints() {
+
+        containerView.addSubviews(specialOfferImageView, nameOfOfferLabel, detailsOfOfferLabel, dateLabel, applyButton)
+
+        NSLayoutConstraint.activate([
+            specialOfferImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: topPadding),
+            specialOfferImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: bottomPadding),
+
+            specialOfferImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: rightPadding),
+
+            nameOfOfferLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: topPadding),
+            nameOfOfferLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: leftPadding),
+
+            detailsOfOfferLabel.topAnchor.constraint(equalTo: nameOfOfferLabel.bottomAnchor, constant: topPadding),
+            detailsOfOfferLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: leftPadding),
+
+            dateLabel.topAnchor.constraint(equalTo: detailsOfOfferLabel.bottomAnchor, constant: topPadding),
+            dateLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: leftPadding),
+
+            applyButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: bottomPadding),
+            applyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: leftPadding),
+        ])
+
+        contentView.addSubviews(containerView)
+
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+    }
+}
+
+//final class CartSpOfferCollectionCell: UICollectionViewCell {
+//
+//    static let identifier: String = "CartSpOfferCollectionCell"
+//
+//    private let imageSize: CGFloat = 100
+//
+//    var onPriceButtonTapped: ( (String) -> Void )?
+//
+//    private lazy var contentContainer: UIView = {
+//        let container = UIView()
+//        return container
+//    }()
+//
+//    private lazy var titleLabel: UILabel = {
+//        let label = UILabel()
+//        label.text = "Скидка 30% при заказе от 749 руб."
+//        label.font = .systemFont(ofSize: 20, weight: .semibold)
+//        label.textColor = .white
+//        label.numberOfLines = 0
+//        return label
+//    }()
+//
+//    private lazy var applyButton: UIButton = {
+//        let button = UIButton()
+//        let title = "Применить"
+//        var config = UIButton.Configuration.filled()
+//        config.title = title
+//        config.attributedTitle = AttributedString(title, attributes: AttributeContainer([
+//            .font: UIFont.systemFont(ofSize: 14, weight: .bold)]
+//        ))
+//        config.baseForegroundColor = .white
+//        config.baseBackgroundColor = .red
+//        config.cornerStyle = .capsule
+//        config.contentInsets = .init(top: 5, leading: 15, bottom: 5, trailing: 15)
+//        button.configuration = config
+//        return button
+//    }()
+//
+//    private lazy var offerImageView: UIImageView = {
+//        let imageView = UIImageView()
+//        let image = UIImage(named: "sale")
+//        imageView.image = image
+//        imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
+//        return imageView
+//    }()
+//
+//
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        setupUI()
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//
+//    private func setupUI() {
+//        backgroundColor = .darkGray.withAlphaComponent(0.4)
+//        layer.cornerRadius = 20
+//        layer.masksToBounds = true
+//
+//        setupSubviews()
+//    }
+//
+//    private func setupSubviews() {
+//        setupContentContainer()
+//
+//        contentView.addSubviews(contentContainer)
+//
+//        NSLayoutConstraint.activate([
+//            contentContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
+//            contentContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+//            contentContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+//            contentContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+//        ])
+//    }
+//
+//    private func setupContentContainer() {
+//
+//        contentContainer.addSubviews(titleLabel, applyButton, offerImageView)
+//
+//        NSLayoutConstraint.activate([
+//            titleLabel.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: 10),
+//            titleLabel.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 20),
+//            titleLabel.widthAnchor.constraint(equalTo: contentContainer.widthAnchor, multiplier: 0.5),
+//
+//            applyButton.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor, constant: -10),
+//            applyButton.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 20),
+//
+//            offerImageView.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: 10),
+//            offerImageView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -10),
+//            offerImageView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor, constant: -10),
+//        ])
+//    }
+//
+//    @objc func didTapPriceButton(_ sender: UIButton) {
+//        print("3344")
+////        guard let price = sender.title(for: .normal)?.components(separatedBy: " ")[1] else { return }
+////        onPriceButtonTapped?(price)
+//    }
+//}
 
 
 //    func configureCell(pizza: Pizza) {

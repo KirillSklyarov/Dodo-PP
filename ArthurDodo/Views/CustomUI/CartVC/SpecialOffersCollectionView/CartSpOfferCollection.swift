@@ -10,9 +10,8 @@ import UIKit
 final class CartSpOfferCollection: UICollectionView {
 
     // MARK: - Properties
-    private let collectionHeight: CGFloat = 120
-
-    var onUpdateTableView: ( (Int) -> Void )?
+    private let collectionHeight: CGFloat = 180
+    var onShowNewCell: ( (Int) -> Void )?
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -50,6 +49,8 @@ extension CartSpOfferCollection: UICollectionViewDataSource, UICollectionViewDel
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CartSpOfferCollectionCell.identifier, for: indexPath) as? CartSpOfferCollectionCell else { return UICollectionViewCell() }
+        let item = specialOffersProfile[indexPath.item]
+        cell.configureCell(item)
         return cell
     }
 
@@ -64,6 +65,6 @@ extension CartSpOfferCollection: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let pageWidth = scrollView.frame.width
         let page = Int((scrollView.contentOffset.x + (0.5 * pageWidth)) / pageWidth)
-        onUpdateTableView?(page)
+        onShowNewCell?(page)
     }
 }
