@@ -13,6 +13,8 @@ final class SpecialOfferStackView: UIStackView {
     private let leftPadding: CGFloat = 0
     private let rightPadding: CGFloat = 0
 
+    var onSpecialOfferSelected: ((SpecialOfferProfileModel) -> Void)?
+
     private lazy var specialOfferHeaderView = OrderView(title: "Акции")
     private lazy var specialOfferCollectionView = CartSpOfferCollection()
     private lazy var pageControl = CustomPageControl()
@@ -41,6 +43,10 @@ extension SpecialOfferStackView {
     func setupSpecialOfferCollectionViewActions() {
         specialOfferCollectionView.onShowNewCell = { [weak self] pageNumber in
             self?.pageControl.currentPage = pageNumber
+        }
+
+        specialOfferCollectionView.onCellSelected = { [weak self] specialOffer in
+            self?.onSpecialOfferSelected?(specialOffer)
         }
     }
 }

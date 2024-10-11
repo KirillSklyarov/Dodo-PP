@@ -36,6 +36,7 @@ final class ProfileViewController: UIViewController {
 private extension ProfileViewController {
     func setupActions() {
         setupHeaderViewActions()
+        setupSpecialOfferActions()
     }
 
     func setupHeaderViewActions() {
@@ -49,6 +50,17 @@ private extension ProfileViewController {
 
         headerView.onProfileButtonTapped = { [weak self] in
             print("ProfileButtonTapped")
+        }
+    }
+
+    func setupSpecialOfferActions() {
+        specialOfferStackView.onSpecialOfferSelected = { [weak self] specialOffer in
+            let vc = ApplyOfferViewController()
+            guard let configureSheet = vc.sheetPresentationController else { return }
+            configureSheet.detents = [.medium()]
+            configureSheet.prefersGrabberVisible = true
+            vc.configureViewController(specialOffer)
+            self?.present(vc, animated: true)
         }
     }
 }

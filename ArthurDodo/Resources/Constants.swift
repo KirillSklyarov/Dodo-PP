@@ -54,6 +54,7 @@ struct AppFonts {
 
     static let semibold14 = UIFont(name: "SFProRounded-Semibold", size: 14) ?? basicFont
     static let semibold16 = UIFont(name: "SFProRounded-Semibold", size: 16) ?? basicFont
+    static let semibold20 = UIFont(name: "SFProRounded-Semibold", size: 20) ?? basicFont
 
     static let medium16 = UIFont(name: "SFProRounded-Medium", size: 16) ?? basicFont
 
@@ -69,12 +70,12 @@ struct AppFonts {
 }
 
 struct AppColors {
-    static let grayFont = UIColor.darkGray.withAlphaComponent(0.4)
     static let backgroundGray = UIColor(hex: "222222")
     static let backgroundBlack = UIColor.black
     static let buttonGray = UIColor(hex: "363636")
-    static let dodoCoinsBlue =  UIColor(hex: "5f4eca")
-    static let buttonOrange =  UIColor(hex: "ff6400")
+    static let dodoCoinsBlue = UIColor(hex: "5f4eca")
+    static let buttonOrange = UIColor(hex: "ff6400")
+    static let grayFont = UIColor(hex: "959595")
 
     let peach = UIColor(hex: "f7d794")
     let blue = UIColor(hex: "778beb")

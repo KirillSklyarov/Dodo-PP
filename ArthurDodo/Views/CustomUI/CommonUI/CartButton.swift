@@ -16,10 +16,14 @@ final class CartButton: UIButton {
     private let dataStorage = OrderDataStorage.shared
 
     // MARK: - Init
-    init(frame: CGRect = .zero, isHidden: Bool) {
+    init(frame: CGRect = .zero, isHidden: Bool, title: String? = nil, isCart: Bool? = nil) {
         super.init(frame: frame)
         configButton(isHidden: isHidden)
         setupLayout()
+        if let title { setNewTitle(title) }
+        if let isCart {
+            if !isCart { self.configuration?.image = nil }
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -65,7 +69,7 @@ final class CartButton: UIButton {
             .foregroundColor: UIColor.white,
             .font: AppFonts.bold18]
         ))
-        config.background.backgroundColor = .systemOrange
+        config.background.backgroundColor = AppColors.buttonOrange
         config.cornerStyle = .capsule
         configuration = config
 
