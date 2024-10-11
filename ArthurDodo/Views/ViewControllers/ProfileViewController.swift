@@ -45,12 +45,16 @@ private extension ProfileViewController {
         }
 
         headerView.onChatButtonTapped = { [weak self] in
-            print("ChatButtonTapped")
+            self?.showChatAlert()
         }
 
         headerView.onProfileButtonTapped = { [weak self] in
             print("ProfileButtonTapped")
         }
+    }
+
+    func showChatAlert() {
+        AlertHelper.showChatAlert(in: self)
     }
 
     func setupSpecialOfferActions() {
