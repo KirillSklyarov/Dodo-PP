@@ -81,13 +81,13 @@ final class SpecialOfferProfileCell: UICollectionViewCell {
 
     // MARK: - Public methods
     func configureCell(_ indexPath: IndexPath) {
-        let data = testCoinsOrdersModel
-        let item = indexPath.item
+//        let data = testCoinsOrdersModel
+//        let item = indexPath.item
 
         containerView.backgroundColor = AppColors.dodoCoinsBlue
         let image = UIImage(named: "dodoCoinsImage")
         specialOfferImageView.image = image
-        let dodoCoins = data.dodoCoins.description
+//        let dodoCoins = data.dodoCoins.description
 //        titleLabel.text = dodoCoins
         setButtonTitle("додокоины")
     }

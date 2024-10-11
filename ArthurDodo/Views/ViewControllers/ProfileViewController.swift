@@ -49,12 +49,18 @@ private extension ProfileViewController {
         }
 
         headerView.onProfileButtonTapped = { [weak self] in
-            print("ProfileButtonTapped")
+            self?.showPersonalVC()
         }
     }
 
     func showChatAlert() {
         AlertHelper.showChatAlert(in: self)
+    }
+
+    func showPersonalVC() {
+        let vc = PersonalViewController()
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true)
     }
 
     func setupSpecialOfferActions() {
