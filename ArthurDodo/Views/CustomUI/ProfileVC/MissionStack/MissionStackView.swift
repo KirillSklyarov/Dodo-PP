@@ -9,8 +9,8 @@ import UIKit
 
 final class MissionStackView: UIStackView {
 
-    private let leftPadding: CGFloat = 10
-    private let rightPadding: CGFloat = -10
+    private let leftPadding: CGFloat = 0
+    private let rightPadding: CGFloat = 0
 
     private lazy var missionHeaderView = OrderView(title: "Миссии")
     private lazy var missionView = MissionView()
@@ -18,6 +18,7 @@ final class MissionStackView: UIStackView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        missionView.setBorder()
     }
     
     required init(coder: NSCoder) {
@@ -34,7 +35,6 @@ final class MissionStackView: UIStackView {
     func setupUI() {
         addArrangedSubview(missionHeaderView)
         addArrangedSubview(missionView)
-
         axis = .vertical
         spacing = 10
     }
@@ -45,7 +45,7 @@ final class MissionStackView: UIStackView {
         NSLayoutConstraint.activate([
             leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: leftPadding),
             trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: rightPadding),
-            bottomAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.bottomAnchor)
+//            bottomAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 

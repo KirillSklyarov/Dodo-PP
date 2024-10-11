@@ -13,6 +13,7 @@ final class MissionView: UIView {
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
     private let bottomPadding: CGFloat = -10
+    private let viewHeight: CGFloat = 250
 
     // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
@@ -70,7 +71,8 @@ private extension MissionView {
         NSLayoutConstraint.activate([
             leadingAnchor.constraint(equalTo: superview.leadingAnchor),
             trailingAnchor.constraint(equalTo: superview.trailingAnchor),
-            bottomAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.bottomAnchor)
+
+            heightAnchor.constraint(equalToConstant: viewHeight)
         ])
     }
 }

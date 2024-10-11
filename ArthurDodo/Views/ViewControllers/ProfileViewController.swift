@@ -15,6 +15,15 @@ final class ProfileViewController: UIViewController {
     private lazy var specialOfferStackView = SpecialOfferStackView()
     private lazy var missionStackView = MissionStackView()
 
+    private lazy var contentStackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [coinsOrdersCollectionView, specialOfferStackView, missionStackView])
+        stack.axis = .vertical
+        stack.spacing = 10
+        return stack
+    }()
+
+    private lazy var scrollView = UIScrollView()
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,20 +57,31 @@ private extension ProfileViewController {
 private extension ProfileViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(headerView, coinsOrdersCollectionView, specialOfferStackView, missionStackView)
+        view.addSubviews(headerView, scrollView)
 
         setupLayout()
+
+        setupScrollView()
     }
 
     func setupLayout() {
         NSLayoutConstraint.activate([
-            coinsOrdersCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
-            coinsOrdersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            coinsOrdersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ])
+    }
 
-            specialOfferStackView.topAnchor.constraint(equalTo: coinsOrdersCollectionView.bottomAnchor, constant: 10),
+    func setupScrollView() {
+        scrollView.addSubviews(contentStackView)
 
-            missionStackView.topAnchor.constraint(equalTo: specialOfferStackView.bottomAnchor, constant: 10),
+        NSLayoutConstraint.activate([
+            contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
         ])
     }
 }

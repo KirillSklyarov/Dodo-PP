@@ -10,8 +10,8 @@ import UIKit
 final class SpecialOfferStackView: UIStackView {
 
     // MARK: - Properties
-    private let leftPadding: CGFloat = 10
-    private let rightPadding: CGFloat = -10
+    private let leftPadding: CGFloat = 0
+    private let rightPadding: CGFloat = 0
 
     private lazy var specialOfferHeaderView = OrderView(title: "Акции")
     private lazy var specialOfferCollectionView = CartSpOfferCollection()
