@@ -18,6 +18,7 @@ final class HeaderView: UIView {
     private let rightPadding: CGFloat = -20
 
     var onProfileButtonTapped: (() -> Void)?
+    var onAddressTapped: (() -> Void)?
 
     // MARK: - UI Properties
     private lazy var courierImageView: UIImageView = {
@@ -38,6 +39,17 @@ final class HeaderView: UIView {
         imageView.image = UIImage(systemName: "chevron.down")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         return imageView
     }()
+
+    private lazy var addressStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [courierImageView, addressLabel, chevronImageView])
+        stackView.axis = .horizontal
+        stackView.spacing = 5
+        stackView.alignment = .center
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addressTapped))
+        stackView.addGestureRecognizer(tapGesture)
+        return stackView
+    }()
+
     private lazy var profileButton: UIButton = {
         let button = UIButton()
         let image = UIImage(systemName: "person.circle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -69,6 +81,10 @@ final class HeaderView: UIView {
         onProfileButtonTapped?()
     }
 
+    @objc private func addressTapped() {
+        onAddressTapped?()
+    }
+
     // MARK: - Private methods
     private func setupLayout() {
         guard let superview else { print("You must add HeaderView to a view before setting up layout"); return }
@@ -97,17 +113,11 @@ final class HeaderView: UIView {
     }
 
     private func setupContentContainer() {
-        contentContainer.addSubviews(courierImageView, addressLabel, chevronImageView, profileButton)
+        contentContainer.addSubviews(addressStackView, profileButton)
 
         NSLayoutConstraint.activate([
-            courierImageView.topAnchor.constraint(equalTo: contentContainer.topAnchor),
-            courierImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-
-            addressLabel.centerYAnchor.constraint(equalTo: courierImageView.centerYAnchor),
-            addressLabel.leadingAnchor.constraint(equalTo: courierImageView.trailingAnchor, constant: 10),
-
-            chevronImageView.topAnchor.constraint(equalTo: addressLabel.topAnchor),
-            chevronImageView.leadingAnchor.constraint(equalTo: addressLabel.trailingAnchor, constant: 10),
+            addressStackView.topAnchor.constraint(equalTo: contentContainer.topAnchor),
+            addressStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
 
             profileButton.topAnchor.constraint(equalTo: contentContainer.topAnchor),
             profileButton.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor)

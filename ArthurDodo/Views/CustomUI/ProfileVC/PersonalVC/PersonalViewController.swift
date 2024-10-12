@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 final class PersonalViewController: UIViewController {
 
@@ -15,6 +16,22 @@ final class PersonalViewController: UIViewController {
         super.viewDidLoad()
         setupNavigationBar()
         setupUI()
+        setupActions()
+    }
+}
+
+// MARK: - Setup Actions
+private extension PersonalViewController {
+    func setupActions() {
+        personalTableView.onShowURL = { [weak self] in
+            self?.showURL()
+        }
+    }
+
+    func showURL() {
+        guard let url = URL(string: "https://www.dodopizza.ru") else { return }
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true)
     }
 }
 

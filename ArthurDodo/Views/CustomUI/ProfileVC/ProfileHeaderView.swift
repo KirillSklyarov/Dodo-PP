@@ -50,7 +50,7 @@ final class ProfileHeaderView: UIView {
     }
 
     private func setupActions() {
-        dismissButton.onCloseButtonTapped = { [weak self] in
+        dismissButton.onDismissButtonTapped = { [weak self] in
             self?.onDismissButtonTapped?()
         }
 

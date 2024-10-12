@@ -18,14 +18,6 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         configUI()
         setupActions()
-
-//        let arrayOfViewedStories = UserDefaults.standard.getArrayOfViewedStories()
-//        print("Массив просмотренных историй из UserDefaults \(arrayOfViewedStories)")
-
-//        print("Массив stories перед загрузкой коллекции:")
-//        for (index, story) in stories.enumerated() {
-//            print("\(index + 1). \(story.storyDescription)")
-//        }
     }
 }
 
@@ -56,6 +48,10 @@ private extension MainViewController {
         headerView.onProfileButtonTapped = { [weak self] in
             self?.showProfileVC()
         }
+
+        headerView.onAddressTapped = { [weak self] in
+            self?.showAddressVC()
+        }
     }
 
     func showProfileVC() {
@@ -81,6 +77,13 @@ private extension MainViewController {
         storiesVC.onStoriesVCDismissed = { [weak self] in
             self?.contentCollectionView.reloadData()
         }
+    }
+
+    func showAddressVC() {
+        let addressVC = AddressViewController()
+        addressVC.modalPresentationStyle = .fullScreen
+        addressVC.isModalInPresentation = true
+        present(addressVC, animated: true)
     }
 }
 

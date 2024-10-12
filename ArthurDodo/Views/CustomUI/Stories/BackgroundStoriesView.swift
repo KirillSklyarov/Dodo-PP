@@ -70,7 +70,7 @@ private extension BackgroundStoriesView {
     }
 
     func dismissButtonTapped() {
-        dismissButton.onCloseButtonTapped = { [weak self] in
+        dismissButton.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
             onDismissButtonTapped?()
             displayLink?.invalidate()

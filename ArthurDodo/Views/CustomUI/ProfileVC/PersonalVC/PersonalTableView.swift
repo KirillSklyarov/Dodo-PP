@@ -31,6 +31,8 @@ final class PersonalTableView: UITableView {
     private let tableRowHeightSection1: CGFloat = 80
     private let tableRowHeightSection2: CGFloat = 60
 
+    var onShowURL: (() -> Void)?
+
     // MARK: - Init
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
@@ -110,6 +112,15 @@ extension PersonalTableView: UITableViewDataSource, UITableViewDelegate {
         case .email: return data.email
         case .dateOfBirth: return data.dateOfBirth
         case .agreeOfSending: return data.agreeOfSending.description
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let section = indexPath.section
+
+        switch section {
+        case 1: onShowURL?()
+        default: break
         }
     }
 
