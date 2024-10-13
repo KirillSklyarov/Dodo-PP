@@ -14,7 +14,7 @@ final class DeliveryAddressSheetView: UIViewController {
     private let rightPadding: CGFloat = -10
     private let topPadding: CGFloat = 30
     private let bottomPadding: CGFloat = -10
-    private let buttonWight: CGFloat = 150
+    private let buttonWidth: CGFloat = 150
 
     // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
@@ -35,7 +35,7 @@ final class DeliveryAddressSheetView: UIViewController {
         config.baseBackgroundColor = AppColors.buttonGray
         config.cornerStyle = .capsule
         button.configuration = config
-        button.widthAnchor.constraint(equalToConstant: buttonWight).isActive = true
+        button.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
         return button
     }()
     private lazy var headerStackView: UIStackView = {
@@ -44,11 +44,39 @@ final class DeliveryAddressSheetView: UIViewController {
         return stackView
     }()
     private lazy var deliveryButton = CartButton(isHidden: false, title: "Доставить сюда")
+    private lazy var addressTableView = AddressListTableView()
+    private lazy var contentStackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [headerStackView, addressTableView, deliveryButton])
+        stack.axis = .vertical
+        stack.spacing = 10
+        return stack
+    }()
 
-    // MARK: - Init
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupActions()
+    }
+}
+
+// MARK: - Setup Actions
+private extension DeliveryAddressSheetView {
+    func setupActions() {
+        setupAddressTableViewActions()
+    }
+
+    func setupAddressTableViewActions() {
+        addressTableView.onEditAddressButtonTapped = { [weak self] indexPath in
+            let address = myAddresses[indexPath.row]
+            self?.showEditAddressVC(address)
+        }
+    }
+
+    func showEditAddressVC(_ address: AddressModel) {
+        let vc = EditAddressViewController(addressToEdit: address)
+        vc.sheetPresentationController?.detents = [.medium()]
+        present(vc, animated: true)
     }
 }
 
@@ -56,20 +84,16 @@ final class DeliveryAddressSheetView: UIViewController {
 private extension DeliveryAddressSheetView {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(headerStackView, deliveryButton)
-
+        view.addSubviews(contentStackView)
         setupLayout()
     }
 
     func setupLayout() {
         NSLayoutConstraint.activate([
-            headerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topPadding),
-            headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftPadding),
-            headerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightPadding),
-
-            deliveryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftPadding),
-            deliveryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightPadding),
-            deliveryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomPadding)
+            contentStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topPadding),
+            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftPadding),
+            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightPadding),
+            contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomPadding)
         ])
     }
 }

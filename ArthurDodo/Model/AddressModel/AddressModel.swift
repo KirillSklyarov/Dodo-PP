@@ -9,12 +9,14 @@ import Foundation
 
 struct AddressModel {
     let name: String
-    let city: String
-    let street: String
-    let house: String
-    let apartment: Int
+    let cityStreetHouse: String
+    let apartment: Int?
+    let floor: Int?
+    let entrance: Int?
+    let entranceCode: String?
+    let comments: String?
 }
 
 let myAddresses = [
-    AddressModel(name: "Дом", city: "Москва", street: "Первое шоссе", house: "45", apartment: 50)
+    AddressModel(name: "Дом", cityStreetHouse: "Москва, Первое шоссе, 45", apartment: 90, floor: 5, entrance: 1, entranceCode: "f1234", comments: "Не звонить")
 ]

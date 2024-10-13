@@ -16,8 +16,8 @@ extension UIView {
 
     }
 
-    func setBorder() {
-        layer.borderColor = UIColor.white.cgColor
+    func setBorder(_ color: UIColor = .white) {
+        layer.borderColor = color.cgColor
         layer.borderWidth = 1
     }
 }

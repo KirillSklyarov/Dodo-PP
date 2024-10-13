@@ -10,9 +10,10 @@ import UIKit
 final class AddressListTableView: UITableView {
 
     // MARK: - Properties&Callbacks
-    private let tableRowHeight: CGFloat = 80
+    private let tableRowHeight: CGFloat = 70
 
     var onShowURL: (() -> Void)?
+    var onEditAddressButtonTapped: ( (IndexPath) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect, style: UITableView.Style) {
@@ -52,9 +53,13 @@ extension AddressListTableView: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AddressListTableViewCell.identifier, for: indexPath) as? AddressListTableViewCell else { print("rrrr"); return UITableViewCell() }
         let addressName = myAddresses[indexPath.row].name
         cell.configureCell(title: addressName)
+
+        cell.onEditAddressButtonTapped = { [weak self] in
+            self?.onEditAddressButtonTapped?(indexPath)
+        }
+
         return cell
     }
-
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
