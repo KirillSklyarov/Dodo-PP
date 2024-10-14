@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class AddressTextFieldView: UIView {
+final class EditAddressTextFieldView: UIView {
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 10
@@ -43,6 +43,7 @@ final class AddressTextFieldView: UIView {
     init(_ title: AddressTextFieldType) {
         super.init(frame: .zero)
         titleLabel.text = title.rawValue
+        textField.placeholder = title.rawValue
         setupUI()
     }
     
@@ -50,13 +51,19 @@ final class AddressTextFieldView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureView(_ textFieldText: String) {
-        textField.text = textFieldText
+    // MARK: - Public methods
+    func configureView(_ textFieldText: String?) {
+        if textFieldText != nil {
+            textField.text = textFieldText
+        } else {
+            titleLabel.isHidden = true
+            textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "", attributes: [.foregroundColor: AppColors.grayFont])
+        }
     }
 }
 
 // MARK: - Setup UI
-private extension AddressTextFieldView {
+private extension EditAddressTextFieldView {
     func setupUI() {
         layer.cornerRadius = 14
         layer.masksToBounds = true

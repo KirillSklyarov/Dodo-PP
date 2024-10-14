@@ -31,14 +31,12 @@ final class AddressListTableViewCell: UITableViewCell {
         imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
         return imageView
     }()
-
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = AppColors.grayFont
         label.font = AppFonts.semibold20
         return label
     }()
-
     private lazy var editAddressButton: UIButton = {
         let button = UIButton()
         let image = UIImage(systemName: "pencil")?.withTintColor(AppColors.buttonGray, renderingMode: .alwaysOriginal)
@@ -62,7 +60,7 @@ final class AddressListTableViewCell: UITableViewCell {
 
     // MARK: - Public methods
     func configureCell(title: String) {
-        titleLabel.text = myAddresses.first?.name
+        titleLabel.text = title
     }
 
     @objc private func editAddressButtonTapped() {

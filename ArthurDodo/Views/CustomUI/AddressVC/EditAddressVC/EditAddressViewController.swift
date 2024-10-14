@@ -29,10 +29,10 @@ final class EditAddressViewController: UIViewController {
     var addressToEdit: AddressModel
 
     // MARK: - UI Properties
-    private lazy var editStreetAndFlatAddressView = AddressTextFieldView(.streetAndFlat)
-    private lazy var editNameOfAddressView = AddressTextFieldView(.nameOfAddress)
-    private lazy var editEntranceOfAddressView = AddressTextFieldView(.entrance)
-    private lazy var editCodeOfAddressView = AddressTextFieldView(.codeOfEntrance)
+    private lazy var editStreetAndFlatAddressView = EditAddressTextFieldView(.streetAndFlat)
+    private lazy var editNameOfAddressView = EditAddressTextFieldView(.nameOfAddress)
+    private lazy var editEntranceOfAddressView = EditAddressTextFieldView(.entrance)
+    private lazy var editCodeOfAddressView = EditAddressTextFieldView(.codeOfEntrance)
     private lazy var entranceAndCodeStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [editEntranceOfAddressView, editCodeOfAddressView])
         stack.axis = .horizontal
@@ -40,8 +40,8 @@ final class EditAddressViewController: UIViewController {
         stack.spacing = 10
         return stack
     }()
-    private lazy var editFloorOfAddressView = AddressTextFieldView(.floor)
-    private lazy var editFlatOfAddressView = AddressTextFieldView(.flat)
+    private lazy var editFloorOfAddressView = EditAddressTextFieldView(.floor)
+    private lazy var editFlatOfAddressView = EditAddressTextFieldView(.flat)
     private lazy var floorAndFlatStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [editFloorOfAddressView, editFlatOfAddressView])
         stack.axis = .horizontal
@@ -49,7 +49,7 @@ final class EditAddressViewController: UIViewController {
         stack.spacing = 10
         return stack
     }()
-    private lazy var editCommentToAddressView = AddressTextFieldView(.comment)
+    private lazy var editCommentToAddressView = EditAddressTextFieldView(.comment)
     private lazy var saveAddressButton = CartButton(isHidden: false, title: "Сохранить")
     private lazy var contentStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [editStreetAndFlatAddressView, editNameOfAddressView, entranceAndCodeStackView, floorAndFlatStackView, editCommentToAddressView, saveAddressButton])
@@ -79,11 +79,11 @@ final class EditAddressViewController: UIViewController {
         print(self.addressToEdit)
         editStreetAndFlatAddressView.configureView(addressToEdit.cityStreetHouse)
         editNameOfAddressView.configureView(addressToEdit.name)
-        editEntranceOfAddressView.configureView(addressToEdit.entrance?.description ?? "")
-        editCodeOfAddressView.configureView(addressToEdit.entranceCode ?? "")
-        editFloorOfAddressView.configureView(addressToEdit.floor?.description ?? "")
-        editFlatOfAddressView.configureView(addressToEdit.apartment?.description ?? "")
-        editCommentToAddressView.configureView(addressToEdit.comments ?? "")
+        editEntranceOfAddressView.configureView(addressToEdit.entrance?.description)
+        editCodeOfAddressView.configureView(addressToEdit.entranceCode)
+        editFloorOfAddressView.configureView(addressToEdit.floor?.description)
+        editFlatOfAddressView.configureView(addressToEdit.apartment?.description)
+        editCommentToAddressView.configureView(addressToEdit.comments)
     }
 }
 

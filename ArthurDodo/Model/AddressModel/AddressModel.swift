@@ -18,5 +18,6 @@ struct AddressModel {
 }
 
 let myAddresses = [
-    AddressModel(name: "Дом", cityStreetHouse: "Москва, Первое шоссе, 45", apartment: 90, floor: 5, entrance: 1, entranceCode: "f1234", comments: "Не звонить")
+    AddressModel(name: "Дом", cityStreetHouse: "Москва, Первое шоссе, 45", apartment: 90, floor: 5, entrance: 1, entranceCode: "f1234", comments: "Не звонить"),
+    AddressModel(name: "Работа", cityStreetHouse: "Москва, Второе шоссе, 4", apartment: 4, floor: 1, entrance: 1, entranceCode: "к2345", comments: nil)
 ]
