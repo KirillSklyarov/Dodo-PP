@@ -21,7 +21,7 @@ final class CustomStepperView: UIView {
     var onValueIsNull: (() -> Void)?
     var onStepperValueChanged: ( (Int) -> Void)?
 
-    private let dataStorage = OrderDataStorage.shared
+    private let dataStorage = DataStorage.shared
 
     // MARK: - UI properties
     private lazy var decrementButton: UIButton = {

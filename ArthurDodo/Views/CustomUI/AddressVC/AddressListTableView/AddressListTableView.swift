@@ -41,23 +41,22 @@ final class AddressListTableView: UITableView {
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension AddressListTableView: UITableViewDataSource, UITableViewDelegate {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        1
-    }
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        1
+//    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        myAddresses.count
+        DataStorage.shared.fetchedUserAddresses.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AddressListTableViewCell.identifier, for: indexPath) as? AddressListTableViewCell else { print("rrrr"); return UITableViewCell() }
-        let addressName = myAddresses[indexPath.row].name
+        let addressName = DataStorage.shared.fetchedUserAddresses[indexPath.row].name
         cell.configureCell(title: addressName)
 
         cell.onEditAddressButtonTapped = { [weak self] in
             self?.onEditAddressButtonTapped?(indexPath)
         }
-
         return cell
     }
 

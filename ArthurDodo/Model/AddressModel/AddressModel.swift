@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AddressModel {
+struct AddressModel: Encodable, Decodable {
     let name: String
     let cityStreetHouse: String
     let apartment: Int?

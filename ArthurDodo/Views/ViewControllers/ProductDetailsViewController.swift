@@ -21,7 +21,7 @@ final class ProductDetailsViewController: UIViewController {
     private lazy var contentView = UIView()
 
     // MARK: - Other Properties
-    private let dataStorage = OrderDataStorage.shared
+    private let dataStorage = DataStorage.shared
     private var tapGesture: UITapGestureRecognizer?
     private var pizza: FoodItems?
     private var order: Order?

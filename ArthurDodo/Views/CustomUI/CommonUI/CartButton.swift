@@ -13,7 +13,7 @@ final class CartButton: UIButton {
     private var totalPrice = 0
     var onCartButtonTapped: (() -> Void)?
     private let buttonHeight: CGFloat = 50
-    private let dataStorage = OrderDataStorage.shared
+    private let dataStorage = DataStorage.shared
 
     // MARK: - Init
     init(frame: CGRect = .zero, isHidden: Bool, title: String? = nil, isCart: Bool? = nil) {

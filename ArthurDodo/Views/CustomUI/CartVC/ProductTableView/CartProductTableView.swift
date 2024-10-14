@@ -22,7 +22,7 @@ final class CartProductTableView: UITableView {
     private var tableViewHeight: CGFloat = 0
     private var heightConstraint: NSLayoutConstraint?
 
-    private let dataStorage = OrderDataStorage.shared
+    private let dataStorage = DataStorage.shared
 
     // MARK: - Init
     override init(frame: CGRect, style: UITableView.Style) {

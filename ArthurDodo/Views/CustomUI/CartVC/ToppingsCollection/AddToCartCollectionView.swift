@@ -20,7 +20,7 @@ final class AddToCartCollectionView: UICollectionView {
         (UIScreen.main.bounds.width - (cellSpacing * 2) - leftAndRightPadding) / countOfCellsInRow
     }
 
-    private let dataStorage = OrderDataStorage.shared
+    private let dataStorage = DataStorage.shared
 
     var onToppingSelected: ( (Int) -> Void )?
     var onNewItemToAddToCart: ( () -> Void )?

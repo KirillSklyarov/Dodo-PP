@@ -39,7 +39,6 @@ private extension AddressViewController {
 
         contentStackView.onDeliveryButtonTapped = { [weak self] in
             self?.showDeliveryAddressVC()
-
         }
     }
 

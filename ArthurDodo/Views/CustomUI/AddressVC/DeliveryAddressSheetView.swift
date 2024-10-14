@@ -30,7 +30,7 @@ final class DeliveryAddressSheetView: UIViewController {
         var config = UIButton.Configuration.filled()
         config.title = title
         config.attributedTitle = AttributedString(title, attributes:
-        AttributeContainer([ .font: AppFonts.bold14]))
+                                                    AttributeContainer([ .font: AppFonts.bold14]))
         config.baseForegroundColor = .white
         config.baseBackgroundColor = AppColors.buttonGray
         config.cornerStyle = .capsule
@@ -55,8 +55,19 @@ final class DeliveryAddressSheetView: UIViewController {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchData()
         setupUI()
         setupActions()
+    }
+}
+
+// MARK: - Fetch data from Network
+extension DeliveryAddressSheetView {
+    func fetchData() {
+        DataStorage.shared.fetchUserAddresses()
+        DataStorage.shared.onDataFetchedSuccessfully = { [weak self] in
+            self?.addressTableView.reloadData()
+        }
     }
 }
 
@@ -68,7 +79,7 @@ private extension DeliveryAddressSheetView {
 
     func setupAddressTableViewActions() {
         addressTableView.onEditAddressButtonTapped = { [weak self] indexPath in
-            let address = myAddresses[indexPath.row]
+            let address = DataStorage.shared.fetchedUserAddresses[indexPath.row]
             self?.showEditAddressVC(address)
         }
     }

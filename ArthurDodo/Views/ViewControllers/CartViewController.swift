@@ -27,7 +27,7 @@ final class CartViewController: UIViewController {
     private lazy var contentView = UIView()
 
     // MARK: - Other Properties
-    private let dataStorage = OrderDataStorage.shared
+    private let dataStorage = DataStorage.shared
     private var order: [Order]?
     var onEmptyCart: (() -> Void)?
     var onRefreshCart: (() -> Void)?
