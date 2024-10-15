@@ -75,6 +75,7 @@ extension DeliveryAddressSheetView {
 private extension DeliveryAddressSheetView {
     func setupActions() {
         setupAddressTableViewActions()
+        setupDeliveryButtonAction()
     }
 
     func setupAddressTableViewActions() {
@@ -88,6 +89,13 @@ private extension DeliveryAddressSheetView {
         let vc = EditAddressViewController(addressToEdit: address)
         vc.sheetPresentationController?.detents = [.medium()]
         present(vc, animated: true)
+    }
+
+    func setupDeliveryButtonAction() {
+        deliveryButton.onButtonTapped = { [weak self] in
+            guard let self else { return }
+            print("We're here")
+        }
     }
 }
 

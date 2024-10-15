@@ -73,6 +73,7 @@ final class EditAddressViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         updateUIWithData()
+        setupActions()
     }
 
     func updateUIWithData() {
@@ -84,6 +85,27 @@ final class EditAddressViewController: UIViewController {
         editFloorOfAddressView.configureView(addressToEdit.floor?.description)
         editFlatOfAddressView.configureView(addressToEdit.apartment?.description)
         editCommentToAddressView.configureView(addressToEdit.comments)
+    }
+}
+
+// MARK: - Setup Actions
+private extension EditAddressViewController {
+    func setupActions() {
+        setupButtonAction()
+    }
+
+    func setupButtonAction() {
+        saveAddressButton.onButtonTapped = { [weak self] in
+            guard let self else { return }
+            NetworkManager.shared.updateUserAddress(addressToEdit) { result in
+                switch result {
+                case .success(let address):
+                    print("Данные успешно обновлены: \(address)")
+                case .failure(let error):
+                    print("Данные НЕ обновлены: \(error)")
+                }
+            }
+        }
     }
 }
 

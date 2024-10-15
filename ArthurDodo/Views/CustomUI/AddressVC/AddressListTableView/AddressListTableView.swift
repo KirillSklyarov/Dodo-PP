@@ -41,10 +41,6 @@ final class AddressListTableView: UITableView {
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension AddressListTableView: UITableViewDataSource, UITableViewDelegate {
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        1
-//    }
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         DataStorage.shared.fetchedUserAddresses.count
     }
@@ -58,9 +54,6 @@ extension AddressListTableView: UITableViewDataSource, UITableViewDelegate {
             self?.onEditAddressButtonTapped?(indexPath)
         }
         return cell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

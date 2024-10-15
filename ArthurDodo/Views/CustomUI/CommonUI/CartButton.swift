@@ -11,7 +11,7 @@ final class CartButton: UIButton {
 
     // MARK: - Properties
     private var totalPrice = 0
-    var onCartButtonTapped: (() -> Void)?
+    var onButtonTapped: (() -> Void)?
     private let buttonHeight: CGFloat = 50
     private let dataStorage = DataStorage.shared
 
@@ -82,6 +82,6 @@ final class CartButton: UIButton {
     }
 
     @objc private func cartButtonTapped() {
-        onCartButtonTapped?()
+        onButtonTapped?()
     }
 }

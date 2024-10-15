@@ -87,7 +87,7 @@ extension ApplyOfferViewController {
     }
 
     func setupButtonActions() {
-        applyButton.onCartButtonTapped = { [weak self] in
+        applyButton.onButtonTapped = { [weak self] in
             guard let self else { return }
             applyButton.setNewTitle("Акция применена")
             applyButton.configuration?.background.backgroundColor = AppColors.buttonGray
