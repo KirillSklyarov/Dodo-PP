@@ -9,15 +9,17 @@ import Foundation
 
 final class DataStorage {
 
+    // MARK: - Singleton
     static var shared = DataStorage()
-
     private init() {}
 
+    // MARK: - Properties
     var fetchedUserAddresses: [AddressModel] = []
+    var fetchedToppings: [Topping] = []
 
     var order: [Order] = []
-
     var onDataFetchedSuccessfully: (() -> Void)?
+    var onToppingsFetchedSuccessfully: (([Topping]) -> Void)?
 }
 
 // MARK: - User Addresses
@@ -29,6 +31,22 @@ extension DataStorage {
             case .success(let addresses):
                 fetchedUserAddresses = addresses
                 onDataFetchedSuccessfully?()
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+}
+
+// MARK: - Toppings
+extension DataStorage {
+    func fetchToppings() {
+        NetworkManager.shared.fetchData(.toppings) { [weak self] (result: Result<[Topping], NetworkError>) in
+            guard let self else { return }
+            switch result {
+            case .success(let topping):
+                fetchedToppings = topping
+                onToppingsFetchedSuccessfully?(fetchedToppings)
             case .failure(let error):
                 print(error)
             }

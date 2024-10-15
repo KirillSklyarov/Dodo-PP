@@ -32,13 +32,8 @@ final class ProductDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupInfoButtonTapped()
-        setupHeader()
-
+        setupActions()
         updatePizzaData()
-        setupSizeSegment()
-        setupToppingsCollectionView()
-        setupCartView()
     }
 
     // MARK: - IB Actions
@@ -72,15 +67,18 @@ final class ProductDetailsViewController: UIViewController {
             cartButtonView.updatePrice(pizza.itemSize[.medium]?.price ?? 0)
         }
     }
+}
 
-    private func setupUI() {
+// MARK: - Setup UI
+private extension ProductDetailsViewController {
+    func setupUI() {
         view.backgroundColor = .black
 
         configScrollView()
         setupConstraints()
     }
 
-    private func configScrollView() {
+    func configScrollView() {
         view.addSubviews(scrollView, cartButtonView)
 
         scrollView.backgroundColor = .black
@@ -92,14 +90,25 @@ final class ProductDetailsViewController: UIViewController {
 
         contentView.addSubviews(backgroundView, headerView, infoView, toppingsCollectionView)
     }
+}
 
-    private func setupHeader() {
+// MARK: - Setup Actions
+private extension ProductDetailsViewController {
+    func setupActions() {
+        setupHeaderAction()
+        setupToppingsCollectionViewActions()
+        setupCartViewAction()
+        setupSizeSegmentAction()
+        setupInfoButtonAction()
+    }
+
+    func setupHeaderAction() {
         headerView.onCloseButtonTapped = { [weak self] in
             self?.dismiss(animated: true)
         }
     }
 
-    private func setupToppingsCollectionView() {
+    func setupToppingsCollectionViewActions() {
         toppingsCollectionView.onToppingSelected = { [weak self] toppingPrice in
             guard let self else { return }
             var currentPrice = self.cartButtonView.getCurrentPrice()
@@ -107,9 +116,15 @@ final class ProductDetailsViewController: UIViewController {
             print(currentPrice)
             self.cartButtonView.updatePrice(currentPrice)
         }
+
+        toppingsCollectionView.onDataFetchedSuccessfully = { [weak self] in
+            DispatchQueue.main.async {
+                self?.toppingsCollectionView.reloadSections(IndexSet(integer: 0))
+            }
+        }
     }
 
-    private func setupCartView() {
+    func setupCartViewAction() {
         cartButtonView.isHidden = false
         cartButtonView.onCloseButtonTapped = { [weak self] finalPrice in
             guard let self,
@@ -130,23 +145,8 @@ final class ProductDetailsViewController: UIViewController {
             self.dismiss(animated: true)
         }
     }
-}
 
-// MARK: - Setup PopUpIngredientsView
-extension ProductDetailsViewController {
-
-    private func setupInfoButtonTapped() {
-        infoView.onInfoButtonTapped = { [weak self] in
-            guard let self else { return }
-            if self.infoPopupView.isHidden {
-                self.showPopupView()
-            } else {
-                self.hidePopupView()
-            }
-        }
-    }
-
-    private func setupSizeSegment() {
+    func setupSizeSegmentAction() {
         backgroundView.onSegmentValueChanged = { [weak self] index in
             guard let self else { return }
 
@@ -165,21 +165,36 @@ extension ProductDetailsViewController {
         }
     }
 
-    private func showPopupView() {
+    func setupInfoButtonAction() {
+        infoView.onInfoButtonTapped = { [weak self] in
+            guard let self else { return }
+            if self.infoPopupView.isHidden {
+                self.showPopupView()
+            } else {
+                self.hidePopupView()
+            }
+        }
+    }
+}
+
+// MARK: - Setup PopUpIngredientsView
+private extension ProductDetailsViewController {
+
+    func showPopupView() {
         showAnimatedPopupView()
         turningOffUserInteractionSegments()
         addGesture()
     }
 
-    private func turningOffUserInteractionSegments() {
+    func turningOffUserInteractionSegments() {
         backgroundView.turningOffUserInteractionSegments()
     }
 
-    private func turningOnUserInteractionSegments() {
+    func turningOnUserInteractionSegments() {
         backgroundView.turningOnUserInteractionSegments()
     }
 
-    private func showAnimatedPopupView() {
+    func showAnimatedPopupView() {
         view.addSubviews(infoPopupView)
         setupInfoPopupViewConstraints()
 
@@ -192,14 +207,14 @@ extension ProductDetailsViewController {
         }
     }
 
-    private func addGesture() {
+    func addGesture() {
         tapGesture = UITapGestureRecognizer(target: self, action: #selector(hidePopupViewByTap))
         if let tapGesture {
             view.addGestureRecognizer(tapGesture)
         }
     }
 
-    private func removeGesture() {
+    func removeGesture() {
         if let tapGesture {
             view.removeGestureRecognizer(tapGesture)
         }

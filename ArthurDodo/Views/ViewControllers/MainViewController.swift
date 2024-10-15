@@ -31,6 +31,7 @@ private extension MainViewController {
     func setupCollectionView() {
         contentCollectionView.onItemCellTapped = { [weak self] IndexPath in
             let item = allItems[IndexPath.item]
+            DataStorage.shared.fetchToppings()
             self?.showProductDetail(item)
         }
 

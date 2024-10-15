@@ -16,7 +16,6 @@ protocol FoodItems {
     var isHit: Bool { get set }
     var itemSize: [Size: WeightPrice] { get set }
     var isHeader: Bool { get set }
-
 }
 
 enum CategoriesNames: String {

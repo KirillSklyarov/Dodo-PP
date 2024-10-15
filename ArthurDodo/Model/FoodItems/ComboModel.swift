@@ -18,7 +18,6 @@ struct ComboModel: FoodItems {
     var itemSize: [Size: WeightPrice]
     var isHeader: Bool
 
-
     init(id: String, category: CategoriesNames = .combos, name: String, imageName: String, ingredients: String, isHit: Bool = false, items: [Pizza?]?, size: [Size: WeightPrice], isHeader: Bool = false) {
         self.id = id
         self.category = category

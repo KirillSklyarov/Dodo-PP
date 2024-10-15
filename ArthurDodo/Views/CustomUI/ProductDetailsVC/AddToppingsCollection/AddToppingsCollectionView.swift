@@ -9,32 +9,61 @@ import UIKit
 
 final class AddToppingsCollectionView: UICollectionView {
 
+    // MARK: - Properties
     var onToppingSelected: ( (Int) -> Void )?
+    var onDataFetchedSuccessfully: (() -> Void)?
+
+    var toppings: [Topping] = []
 
     private let cellHeight: CGFloat = 100
     private let lineSpacing: CGFloat = 5
-    private var collectionHeight: CGFloat {
+    var collectionHeight: CGFloat {
         let rowCount = CGFloat(toppings.count / 3)
         return rowCount * cellHeight + lineSpacing
     }
 
+    // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         let customLayout = configLayout()
         collectionViewLayout = customLayout
+        uploadDataFromServer()
         configCollectionView()
-        setupLayout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    private func setupLayout() {
+// MARK: - Upload Data from Storage
+private extension AddToppingsCollectionView {
+    // Загружаем начинки только один раз, потом они не меняются
+    func uploadDataFromServer() {
+        if toppings.isEmpty {
+            loadDataFromStorage()
+        }
+    }
+
+    // Загружаем начинки
+    func loadDataFromStorage() {
+        DataStorage.shared.fetchToppings()
+        DataStorage.shared.onToppingsFetchedSuccessfully = { [weak self] fetchedToppings in
+            guard let self else { return }
+            toppings = fetchedToppings
+            setupCollectionHeight()
+            onDataFetchedSuccessfully?()
+        }
+    }
+}
+
+// MARK: - Setup UI
+private extension AddToppingsCollectionView {
+    func setupCollectionHeight() {
         heightAnchor.constraint(equalToConstant: collectionHeight).isActive = true
     }
 
-    private func configLayout() -> UICollectionViewFlowLayout {
+    func configLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let correctWidth = (UIScreen.main.bounds.width - (15 * 2) - 20) / 3
@@ -44,11 +73,10 @@ final class AddToppingsCollectionView: UICollectionView {
         return layout
     }
 
-    private func configCollectionView() {
+    func configCollectionView() {
         backgroundColor = .clear
         allowsMultipleSelection = true
         isScrollEnabled = false
-
         register(AddToppingsCollectionViewCell.self, forCellWithReuseIdentifier: AddToppingsCollectionViewCell.identifier)
         dataSource = self
         delegate = self

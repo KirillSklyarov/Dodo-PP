@@ -35,4 +35,5 @@ enum HttpMethod: String {
 
 enum endPoint: String {
     case userAddress = "http://localhost:3001/userAddress"
+    case toppings = "http://localhost:3001/toppings"
 }
