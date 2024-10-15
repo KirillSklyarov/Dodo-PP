@@ -20,7 +20,7 @@ final class BackgroundStoriesView: UIView {
     // MARK: - Timer properties
     private var displayLink: CADisplayLink?
     private lazy var elapsedTime: TimeInterval = 0.0
-    private lazy var durationOfStory: TimeInterval = 2.0
+    private lazy var durationOfStory: TimeInterval = 5.0
 
     // MARK: - UI Properties
     private lazy var dismissButton = DismissButtonView(xColor: AppColors.buttonGray, backgroundColor: .white)
