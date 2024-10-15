@@ -27,7 +27,7 @@ final class CartViewController: UIViewController {
     private lazy var contentView = UIView()
 
     // MARK: - Other Properties
-    private let dataStorage = OrderDataStorage.shared
+    private let dataStorage = DataStorage.shared
     private var order: [Order]?
     var onEmptyCart: (() -> Void)?
     var onRefreshCart: (() -> Void)?
@@ -36,13 +36,13 @@ final class CartViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        dataBinding()
+        setupActions()
 
         loadOrderFromStorage()
     }
 
     // MARK: - Private methods
-    private func dataBinding() {
+    private func setupActions() {
         setupCartHeader()
         setupCartProductTableView()
         setupSpecialOfferCollectionView()
@@ -110,7 +110,7 @@ final class CartViewController: UIViewController {
     }
 
     private func setupSpecialOfferCollectionView() {
-        specialOfferCollectionView.onUpdateTableView = { [weak self] pageNumber in
+        specialOfferCollectionView.onShowNewCell = { [weak self] pageNumber in
             self?.pageControl.currentPage = pageNumber
         }
     }

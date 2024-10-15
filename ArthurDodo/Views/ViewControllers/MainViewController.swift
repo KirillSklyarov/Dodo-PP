@@ -17,27 +17,21 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
-        dataBinding()
-
-        let arrayOfViewedStories = UserDefaults.standard.getArrayOfViewedStories()
-        print("Массив просмотренных историй из UserDefaults \(arrayOfViewedStories)")
-
-//        print("Массив stories перед загрузкой коллекции:")
-//        for (index, story) in stories.enumerated() {
-//            print("\(index + 1). \(story.storyDescription)")
-//        }
+        setupActions()
     }
 }
 
-// MARK: - Setup DataBinding
+// MARK: - Setup Actions
 private extension MainViewController {
-    func dataBinding() {
+    func setupActions() {
         setupCollectionView()
+        setupHeaderView()
     }
 
     func setupCollectionView() {
         contentCollectionView.onItemCellTapped = { [weak self] IndexPath in
             let item = allItems[IndexPath.item]
+            DataStorage.shared.fetchToppings()
             self?.showProductDetail(item)
         }
 
@@ -51,6 +45,20 @@ private extension MainViewController {
         }
     }
 
+    func setupHeaderView() {
+        headerView.onProfileButtonTapped = { [weak self] in
+            self?.showProfileVC()
+        }
+
+        headerView.onAddressTapped = { [weak self] in
+            self?.showAddressVC()
+        }
+    }
+
+    func showProfileVC() {
+        let profileVC = ProfileViewController()
+        present(profileVC, animated: true)
+    }
 
     func showProductDetail(_ pizza: FoodItems) {
         let productDetailVC = ProductDetailsViewController()
@@ -70,6 +78,13 @@ private extension MainViewController {
         storiesVC.onStoriesVCDismissed = { [weak self] in
             self?.contentCollectionView.reloadData()
         }
+    }
+
+    func showAddressVC() {
+        let addressVC = AddressViewController()
+        addressVC.modalPresentationStyle = .fullScreen
+        addressVC.isModalInPresentation = true
+        present(addressVC, animated: true)
     }
 }
 

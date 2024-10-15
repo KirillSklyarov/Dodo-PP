@@ -41,7 +41,7 @@ enum CPFCData: String, CaseIterable {
 
 struct AppConstants {
     static let sizeCases = ["25 cм", "30 см", "35 см"]
-    static let doughCases = ["Обычное", "Тонкое"]
+    static let doughCases = ["Традиционное", "Тонкое"]
     static let appBuild = "1"
 }
 
@@ -51,23 +51,35 @@ struct AppFonts {
     static let regular12 = UIFont(name: "SFProRounded-Regular", size: 12) ?? basicFont
     static let regular14 = UIFont(name: "SFProRounded-Regular", size: 14) ?? basicFont
     static let regular16 = UIFont(name: "SFProRounded-Regular", size: 16) ?? basicFont
+    static let regular18 = UIFont(name: "SFProRounded-Regular", size: 18) ?? basicFont
+    static let regular20 = UIFont(name: "SFProRounded-Regular", size: 20) ?? basicFont
+
 
     static let semibold14 = UIFont(name: "SFProRounded-Semibold", size: 14) ?? basicFont
     static let semibold16 = UIFont(name: "SFProRounded-Semibold", size: 16) ?? basicFont
+    static let semibold18 = UIFont(name: "SFProRounded-Semibold", size: 18) ?? basicFont
+    static let semibold20 = UIFont(name: "SFProRounded-Semibold", size: 20) ?? basicFont
 
     static let medium16 = UIFont(name: "SFProRounded-Medium", size: 16) ?? basicFont
 
     static let bold14 = UIFont(name: "SFProRounded-Bold", size: 14) ?? basicFont
     static let bold16 = UIFont(name: "SFProRounded-Bold", size: 16) ?? basicFont
-    static let bold18 = UIFont(name: "SFProRounded-Bold", size: 16) ?? basicFont
+    static let bold18 = UIFont(name: "SFProRounded-Bold", size: 18) ?? basicFont
     static let bold20 = UIFont(name: "SFProRounded-Bold", size: 20) ?? basicFont
+    static let bold22 = UIFont(name: "SFProRounded-Bold", size: 22) ?? basicFont
+    static let bold24 = UIFont(name: "SFProRounded-Bold", size: 24) ?? basicFont
+    static let bold26 = UIFont(name: "SFProRounded-Bold", size: 26) ?? basicFont
+    static let bold30 = UIFont(name: "SFProRounded-Bold", size: 30) ?? basicFont
+    static let bold40 = UIFont(name: "SFProRounded-Bold", size: 40) ?? basicFont
 }
 
 struct AppColors {
-    static let grayFont = UIColor.darkGray.withAlphaComponent(0.4)
     static let backgroundGray = UIColor(hex: "222222")
     static let backgroundBlack = UIColor.black
-    static let buttonGray = UIColor(hex: "#363636")
+    static let buttonGray = UIColor(hex: "363636")
+    static let dodoCoinsBlue = UIColor(hex: "5f4eca")
+    static let buttonOrange = UIColor(hex: "ff6400")
+    static let grayFont = UIColor(hex: "959595")
 
     let peach = UIColor(hex: "f7d794")
     let blue = UIColor(hex: "778beb")

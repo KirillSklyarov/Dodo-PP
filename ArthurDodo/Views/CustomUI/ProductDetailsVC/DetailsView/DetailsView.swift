@@ -12,10 +12,13 @@ final class DetailsView: UIView {
     // MARK: - Size Properties
     private let pizzaImageSize: CGFloat = 350
     private let viewHeight: CGFloat = 580
+    private let blurHeaderHeight: CGFloat = 110
 
     var onSegmentValueChanged: ( (Int) -> Void )?
     private var chosenSize: Size = .medium
     private var chosenDough: Dough = .basic
+
+    var imageCenterY: NSLayoutConstraint?
 
     // MARK: - UI Properties
     private lazy var pizzaImageView: UIImageView = {
@@ -26,9 +29,7 @@ final class DetailsView: UIView {
         imageView.widthAnchor.constraint(equalToConstant: pizzaImageSize).isActive = true
         return imageView
     }()
-
     private lazy var sizeSegmentControl = SegmentControlView(items: AppConstants.sizeCases, defaultSelection: 1)
-
     private lazy var doughSegmentControl = SegmentControlView(items: AppConstants.doughCases, defaultSelection: 0)
 
     // MARK: - Init
@@ -38,9 +39,34 @@ final class DetailsView: UIView {
         setupSizeSegmentControl()
         setupDoughSegmentControl()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func hideDoughSegment() {
+        doughSegmentControl.isHidden = true
+        placeImageInCenter()
+    }
+
+
+    func hideSizeSegment() {
+        sizeSegmentControl.isHidden = true
+        placeImageInCenter()
+    }
+
+    // Если сегменты скрыты, то помещаем картинку в центре
+    func placeImageInCenter() {
+        imageCenterY?.isActive = false
+        imageCenterY = pizzaImageView.topAnchor.constraint(equalTo: topAnchor)
+
+        if doughSegmentControl.isHidden && sizeSegmentControl.isHidden {
+            let topPadding = viewHeight - blurHeaderHeight - pizzaImageSize
+            imageCenterY?.constant = blurHeaderHeight + topPadding / 2
+        } else {
+            imageCenterY?.constant = 120
+        }
+        imageCenterY?.isActive = true
     }
 
     // MARK: - Public methods
@@ -87,8 +113,8 @@ final class DetailsView: UIView {
     }
 
     private func setupPizzaImageViewConstraints() {
+        placeImageInCenter()
         NSLayoutConstraint.activate([
-            pizzaImageView.topAnchor.constraint(equalTo: topAnchor, constant: 120),
             pizzaImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
         ])
     }

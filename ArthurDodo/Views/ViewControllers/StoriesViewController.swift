@@ -9,27 +9,34 @@ import UIKit
 
 final class StoriesVC: UIViewController {
 
+    // MARK: - Properties
     private lazy var backgroundView = BackgroundStoriesView()
     var onStoriesVCDismissed: (() -> Void)?
 
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        dataBinding()
+        setupActions()
     }
 
-    private func dataBinding() {
-        backgroundView.onDismissButtonTapped = { [weak self] in
-            self?.onStoriesVCDismissed?()
-            self?.dismiss(animated: true)
-        }
-    }
-
+    // MARK: - Public methods
     func showStories(_ indexPath: IndexPath) {
         backgroundView.showSelectedStory(indexPath)
     }
 }
 
+// MARK: - Setup Actions
+extension StoriesVC {
+    private func setupActions() {
+        backgroundView.onDismissButtonTapped = { [weak self] in
+            self?.onStoriesVCDismissed?()
+            self?.dismiss(animated: true)
+        }
+    }
+}
+
+// MARK: - Setup UI
 private extension StoriesVC {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack

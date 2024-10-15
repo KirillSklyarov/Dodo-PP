@@ -10,7 +10,7 @@ import UIKit
 final class DismissButtonView: UIView {
 
     private let viewSize: CGFloat = 40
-    var onCloseButtonTapped: (() -> Void)?
+    var onDismissButtonTapped: (() -> Void)?
 
     private lazy var dismissButton: UIButton = {
         let button = UIButton()
@@ -39,7 +39,7 @@ final class DismissButtonView: UIView {
 
     // MARK: - IB Actions
     @objc private func closeButtonTapped() {
-        onCloseButtonTapped?()
+        onDismissButtonTapped?()
     }
 
     private func configUI() {

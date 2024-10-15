@@ -52,7 +52,7 @@ final class ProductHeaderView: UIView {
 
     // MARK: - Private methods
     private func closeButtonTapped() {
-        dismissButton.onCloseButtonTapped = { [weak self] in
+        dismissButton.onDismissButtonTapped = { [weak self] in
             self?.onCloseButtonTapped?()
         }
     }

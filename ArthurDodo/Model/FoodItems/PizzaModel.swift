@@ -12,6 +12,7 @@ struct Pizza: FoodItems {
     var category: CategoriesNames
     var name: String
     var ingredients: String
+    var toppings: [ToppingEnum]
     var imageName: String
     var isHit: Bool
     var itemSize: [Size: WeightPrice]
@@ -19,10 +20,11 @@ struct Pizza: FoodItems {
     var weight: Int?
     var isHeader: Bool
 
-    init(id: String, category: CategoriesNames = .pizzas, name: String, ingredients: String, imageName: String, size: [Size: WeightPrice], isHit: Bool = false, weight: Int? = nil, price: Int? = nil, isHeader: Bool = false) {
+    init(id: String, category: CategoriesNames = .pizzas, name: String, ingredients: String, toppings: [ToppingEnum] = [], imageName: String, size: [Size: WeightPrice], isHit: Bool = false, weight: Int? = nil, price: Int? = nil, isHeader: Bool = false) {
         self.id = id
         self.name = name
         self.ingredients = ingredients
+        self.toppings = toppings
         self.imageName = imageName
         self.itemSize = size
         self.isHit = isHit
@@ -33,6 +35,7 @@ struct Pizza: FoodItems {
 
 let pizzas: [Pizza] = [
     Pizza(id: "6D7E8F90-A1B2-C3D4-E5F6-A7B8C9D0E1F2", name: "Карбонара", ingredients: "Бекон, сыры чеддер и пармезан, моцарелла, томаты, красный лук, чеснок, фирменный соус альфредо, итальянские травы",
+          toppings: [.cheese, .jalapeno],
           imageName: "pizza",
           size: [.small: WeightPrice(weight: 300, price: 500, cpfc: CPFC(calories: 110, protein: 12, fat: 14, carbohydrates: 30)),
                  .medium: WeightPrice(weight: 400, price: 600, cpfc: CPFC(calories: 200, protein: 14, fat: 16, carbohydrates: 44)),

@@ -13,17 +13,34 @@ final class ProductDetailsViewController: UIViewController {
     private lazy var headerView = ProductHeaderView()
     private lazy var backgroundView = DetailsView()
     private lazy var infoView = IngredientsView()
-    private lazy var infoPopupView = InfoPopupView(pizza: pizza)
+    private lazy var infoPopupView = InfoPopupView(pizza: item)
     private lazy var toppingsCollectionView = AddToppingsCollectionView()
     private lazy var cartButtonView = CartButtonViewFooter()
 
+    private lazy var infoAndToppingsStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [infoView, toppingsCollectionView])
+        stack.axis = .vertical
+        stack.spacing = 5
+        return stack
+    }()
+    private lazy var infoAndToppingsContainer: UIView = {
+        let view = UIView()
+        view.addSubviews(infoAndToppingsStack)
+        view.backgroundColor = AppColors.backgroundGray
+        return view
+    }()
+    private lazy var contentStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [backgroundView, infoAndToppingsContainer])
+        stack.axis = .vertical
+        stack.spacing = 5
+        return stack
+    }()
     private lazy var scrollView = UIScrollView()
-    private lazy var contentView = UIView()
 
     // MARK: - Other Properties
-    private let dataStorage = OrderDataStorage.shared
+    private let dataStorage = DataStorage.shared
     private var tapGesture: UITapGestureRecognizer?
-    private var pizza: FoodItems?
+    private var item: FoodItems?
     private var order: Order?
 
     var onCartButtonTapped: ( (Int) -> Void )?
@@ -32,13 +49,10 @@ final class ProductDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupInfoButtonTapped()
-        setupHeader()
-
-        updatePizzaData()
-        setupSizeSegment()
-        setupToppingsCollectionView()
-        setupCartView()
+        setupActions()
+        updateItemData()
+        isItemPizza()
+        isOneSize()
     }
 
     // MARK: - IB Actions
@@ -56,50 +70,74 @@ final class ProductDetailsViewController: UIViewController {
     }
 
     // MARK: - Public methods
-    func getPizzaData(_ pizza: FoodItems) {
-        self.pizza = pizza
+    func getPizzaData(_ item: FoodItems) {
+        self.item = item
+        toppingsCollectionView.getItem(item)
     }
 
-    // MARK: - Private methods
-    private func updatePizzaData() {
-        guard let pizza else { return }
-        headerView.updateTitle(pizza.name)
-        backgroundView.updatePizzaImage(pizza.imageName)
-        infoView.updateIngredients(pizza.ingredients)
-
-        if let pizza = pizza as? Pizza {
-            infoView.updateWeight(pizza.itemSize[.medium]?.weight ?? 0)
-            cartButtonView.updatePrice(pizza.itemSize[.medium]?.price ?? 0)
+    func isItemPizza() {
+        if !(item is Pizza) {
+            backgroundView.hideDoughSegment()
         }
     }
 
-    private func setupUI() {
-        view.backgroundColor = .black
+    func isOneSize() {
+        if item?.itemSize.count == 1 {
+            backgroundView.hideSizeSegment()
+        }
+    }
+
+    // MARK: - Private methods
+    private func updateItemData() {
+        guard let item else { return }
+        headerView.updateTitle(item.name)
+        backgroundView.updatePizzaImage(item.imageName)
+        infoView.updateIngredients(item.ingredients)
+        infoView.updateWeight(item.itemSize[.medium]?.weight ?? 0)
+        cartButtonView.updatePrice(item.itemSize[.medium]?.price ?? 0)
+    }
+}
+
+// MARK: - Setup UI
+private extension ProductDetailsViewController {
+    func setupUI() {
+        view.backgroundColor = AppColors.backgroundGray
 
         configScrollView()
         setupConstraints()
     }
 
-    private func configScrollView() {
-        view.addSubviews(scrollView, cartButtonView)
+    func configScrollView() {
+        view.addSubviews(scrollView, headerView, cartButtonView)
 
-        scrollView.backgroundColor = .black
+        scrollView.backgroundColor = AppColors.backgroundGray
         scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.showsVerticalScrollIndicator = false
         let bottomHeight = cartButtonView.getHeight() + 10
         scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: bottomHeight, right: 0)
 
-        scrollView.addSubviews(contentView)
+        scrollView.addSubviews(contentStack)
+    }
+}
 
-        contentView.addSubviews(backgroundView, headerView, infoView, toppingsCollectionView)
+// MARK: - Setup Actions
+private extension ProductDetailsViewController {
+    func setupActions() {
+        setupHeaderAction()
+        setupToppingsCollectionViewActions()
+        setupCartViewAction()
+        setupSizeSegmentAction()
+        setupInfoButtonAction()
+        setupInfoAndToppingsStackConstraints()
     }
 
-    private func setupHeader() {
+    func setupHeaderAction() {
         headerView.onCloseButtonTapped = { [weak self] in
             self?.dismiss(animated: true)
         }
     }
 
-    private func setupToppingsCollectionView() {
+    func setupToppingsCollectionViewActions() {
         toppingsCollectionView.onToppingSelected = { [weak self] toppingPrice in
             guard let self else { return }
             var currentPrice = self.cartButtonView.getCurrentPrice()
@@ -107,46 +145,37 @@ final class ProductDetailsViewController: UIViewController {
             print(currentPrice)
             self.cartButtonView.updatePrice(currentPrice)
         }
+
+        toppingsCollectionView.onDataFetchedSuccessfully = { [weak self] in
+            DispatchQueue.main.async {
+                self?.toppingsCollectionView.reloadSections(IndexSet(integer: 0))
+            }
+        }
     }
 
-    private func setupCartView() {
+    func setupCartViewAction() {
         cartButtonView.isHidden = false
         cartButtonView.onCloseButtonTapped = { [weak self] finalPrice in
             guard let self,
-                  let pizza else { return }
+                  let item else { return }
             let chosenSize = backgroundView.getChosenSize()
             let chosenDough = backgroundView.getChosenDough()
 
-            var price = pizza.itemSize[.medium]?.price ?? 0
+            var price = item.itemSize[.medium]?.price ?? 0
 
-            if let pizza = pizza as? Pizza {
+            if let pizza = item as? Pizza {
                 price = pizza.itemSize[chosenSize]?.price ?? 0
             }
 
-            order = Order(pizzaName: pizza.name, imageName: pizza.imageName, size: chosenSize, dough: chosenDough, price: price, isHit: pizza.isHit)
+            order = Order(pizzaName: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, price: price, isHit: item.isHit)
             guard let order else { return }
             dataStorage.sendToOrderStorage(order)
             self.onCartButtonTapped?(finalPrice)
             self.dismiss(animated: true)
         }
     }
-}
 
-// MARK: - Setup PopUpIngredientsView
-extension ProductDetailsViewController {
-
-    private func setupInfoButtonTapped() {
-        infoView.onInfoButtonTapped = { [weak self] in
-            guard let self else { return }
-            if self.infoPopupView.isHidden {
-                self.showPopupView()
-            } else {
-                self.hidePopupView()
-            }
-        }
-    }
-
-    private func setupSizeSegment() {
+    func setupSizeSegmentAction() {
         backgroundView.onSegmentValueChanged = { [weak self] index in
             guard let self else { return }
 
@@ -157,29 +186,44 @@ extension ProductDetailsViewController {
             case 2: size = .large
             default: break }
 
-            let weight = self.pizza?.itemSize[size]?.weight ?? 0
-            let price = self.pizza?.itemSize[size]?.price ?? 0
+            let weight = self.item?.itemSize[size]?.weight ?? 0
+            let price = self.item?.itemSize[size]?.price ?? 0
             self.infoView.updateWeight(weight)
             self.cartButtonView.updatePrice(price)
             self.infoPopupView.setSelectedSize(size)
         }
     }
 
-    private func showPopupView() {
+    func setupInfoButtonAction() {
+        infoView.onInfoButtonTapped = { [weak self] in
+            guard let self else { return }
+            if self.infoPopupView.isHidden {
+                self.showPopupView()
+            } else {
+                self.hidePopupView()
+            }
+        }
+    }
+}
+
+// MARK: - Setup PopUpIngredientsView
+private extension ProductDetailsViewController {
+
+    func showPopupView() {
         showAnimatedPopupView()
         turningOffUserInteractionSegments()
         addGesture()
     }
 
-    private func turningOffUserInteractionSegments() {
+    func turningOffUserInteractionSegments() {
         backgroundView.turningOffUserInteractionSegments()
     }
 
-    private func turningOnUserInteractionSegments() {
+    func turningOnUserInteractionSegments() {
         backgroundView.turningOnUserInteractionSegments()
     }
 
-    private func showAnimatedPopupView() {
+    func showAnimatedPopupView() {
         view.addSubviews(infoPopupView)
         setupInfoPopupViewConstraints()
 
@@ -192,14 +236,14 @@ extension ProductDetailsViewController {
         }
     }
 
-    private func addGesture() {
+    func addGesture() {
         tapGesture = UITapGestureRecognizer(target: self, action: #selector(hidePopupViewByTap))
         if let tapGesture {
             view.addGestureRecognizer(tapGesture)
         }
     }
 
-    private func removeGesture() {
+    func removeGesture() {
         if let tapGesture {
             view.removeGestureRecognizer(tapGesture)
         }
@@ -212,12 +256,7 @@ extension ProductDetailsViewController {
     private func setupConstraints() {
         setupScrollViewConstraints()
         setupContentViewConstraints()
-
-        setupBackgroundViewConstraints()
         setupProductHeaderViewConstraints()
-        setupInfoViewConstraints()
-        setupToppingsCollectionViewConstraints()
-
         setupCartButtonConstraints()
     }
 
@@ -232,36 +271,20 @@ extension ProductDetailsViewController {
 
     private func setupContentViewConstraints() {
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentStack.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
 
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
         ])
     }
 
     private func setupProductHeaderViewConstraints() {
         NSLayoutConstraint.activate([
             headerView.topAnchor.constraint(equalTo: view.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-        ])
-    }
-
-    private func setupBackgroundViewConstraints() {
-        NSLayoutConstraint.activate([
-            backgroundView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            backgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-        ])
-    }
-
-    private func setupInfoViewConstraints() {
-        NSLayoutConstraint.activate([
-            infoView.topAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: 5),
-            infoView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            infoView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
     }
 
@@ -269,17 +292,8 @@ extension ProductDetailsViewController {
         let buttonFrame = infoView.getButtonFrame()
 
         NSLayoutConstraint.activate([
-            infoPopupView.trailingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: buttonFrame.origin.x - 10),
-            infoPopupView.centerYAnchor.constraint(equalTo: contentView.topAnchor, constant: buttonFrame.origin.y)
-        ])
-    }
-
-    private func setupToppingsCollectionViewConstraints() {
-        NSLayoutConstraint.activate([
-            toppingsCollectionView.topAnchor.constraint(equalTo: infoView.bottomAnchor, constant: 5),
-            toppingsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            toppingsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            toppingsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            infoPopupView.trailingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonFrame.origin.x - 10),
+            infoPopupView.centerYAnchor.constraint(equalTo: view.topAnchor, constant: buttonFrame.origin.y)
         ])
     }
 
@@ -288,6 +302,15 @@ extension ProductDetailsViewController {
             cartButtonView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             cartButtonView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             cartButtonView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+
+    private func setupInfoAndToppingsStackConstraints() {
+        NSLayoutConstraint.activate([
+            infoAndToppingsStack.topAnchor.constraint(equalTo: infoAndToppingsContainer.topAnchor),
+            infoAndToppingsStack.leadingAnchor.constraint(equalTo: infoAndToppingsContainer.leadingAnchor, constant: 10),
+            infoAndToppingsStack.trailingAnchor.constraint(equalTo: infoAndToppingsContainer.trailingAnchor, constant: -10),
+            infoAndToppingsStack.bottomAnchor.constraint(equalTo: infoAndToppingsContainer.bottomAnchor)
         ])
     }
 }

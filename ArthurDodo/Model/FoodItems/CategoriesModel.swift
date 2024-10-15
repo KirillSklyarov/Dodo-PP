@@ -13,10 +13,10 @@ protocol FoodItems {
     var name: String { get set }
     var imageName: String { get set }
     var ingredients: String { get set }
+    var toppings: [ToppingEnum] { get set }
     var isHit: Bool { get set }
     var itemSize: [Size: WeightPrice] { get set }
     var isHeader: Bool { get set }
-
 }
 
 enum CategoriesNames: String {

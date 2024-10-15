@@ -32,7 +32,7 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
     }()
     private lazy var priceButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = AppFonts.regular14
+        button.titleLabel?.font = AppFonts.semibold14
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = AppColors.buttonGray
         button.layer.cornerRadius = 14

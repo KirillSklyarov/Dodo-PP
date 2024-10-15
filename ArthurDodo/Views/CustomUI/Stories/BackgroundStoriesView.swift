@@ -44,7 +44,7 @@ final class BackgroundStoriesView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        dataBinding()
+        setupActions()
     }
 
     deinit {
@@ -63,14 +63,14 @@ final class BackgroundStoriesView: UIView {
     }
 }
 
-// MARK: - Data binding
+// MARK: - setup Actions
 private extension BackgroundStoriesView {
-    func dataBinding() {
+    func setupActions() {
         dismissButtonTapped()
     }
 
     func dismissButtonTapped() {
-        dismissButton.onCloseButtonTapped = { [weak self] in
+        dismissButton.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
             onDismissButtonTapped?()
             displayLink?.invalidate()
@@ -91,6 +91,11 @@ private extension BackgroundStoriesView {
     func startTimer() {
         displayLink = CADisplayLink(target: self, selector: #selector(updateProgress))
         displayLink?.add(to: .main, forMode: .default)
+    }
+
+    func stopTimer() {
+        displayLink?.invalidate()
+        displayLink = nil
     }
 
     @objc func updateProgress() {
@@ -121,6 +126,7 @@ private extension BackgroundStoriesView {
         if subStoryIndex < countSubStories {
             setStoryImage(subStoryIndex)
             resetTimerAndProgressView(subStoryIndex)
+            stopTimer()
             startTimer()
         } else {
             showNextStory()
