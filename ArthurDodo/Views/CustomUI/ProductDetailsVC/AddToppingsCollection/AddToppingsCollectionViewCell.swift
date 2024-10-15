@@ -98,7 +98,7 @@ final class AddToppingsCollectionViewCell: UICollectionViewCell {
 
     func configCell(_ topping: Topping) {
         toppingImageView.image = UIImage(named: topping.imageName)
-        titleLabel.text = topping.name
+        titleLabel.text = topping.name.rawValue
         priceLabel.text = "\(topping.price) ₽"
     }
 }

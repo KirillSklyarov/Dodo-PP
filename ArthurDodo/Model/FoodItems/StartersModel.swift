@@ -13,16 +13,18 @@ struct StartersModel: FoodItems {
     var name: String
     var imageName: String
     var ingredients: String
+    var toppings: [ToppingEnum]
     var itemSize: [Size: WeightPrice]
     var isHit: Bool
     var isHeader: Bool
 
-    init(id: String, category: CategoriesNames = .starters, name: String, imageName: String, ingredients: String, isHit: Bool = false, itemSize: [Size: WeightPrice], isHeader: Bool = false) {
+    init(id: String, category: CategoriesNames = .starters, name: String, imageName: String, ingredients: String, toppings: [ToppingEnum] = [], isHit: Bool = false, itemSize: [Size: WeightPrice], isHeader: Bool = false) {
         self.id = id
         self.category = category
         self.name = name
         self.imageName = imageName
         self.ingredients = ingredients
+        self.toppings = toppings
         self.isHit = isHit
         self.itemSize = itemSize
         self.isHeader = isHeader

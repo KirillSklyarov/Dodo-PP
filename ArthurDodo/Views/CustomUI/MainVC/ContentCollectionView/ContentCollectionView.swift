@@ -63,8 +63,8 @@ extension ContentCollectionView {
 
         return UICollectionViewCompositionalLayout(sectionProvider:  { (section, _) -> NSCollectionLayoutSection? in
             switch section {
-            case 0: return self.createStoriesSection()
-            case 1: return self.createHorizontalSpecialOfferSection()
+            case 0: return self.configureStoriesSection()
+            case 1: return self.configureSpecialOfferSection()
             case 2: return self.createItemsSectionWithHeader()
 
             default: return nil
@@ -72,7 +72,7 @@ extension ContentCollectionView {
         }, configuration: config)
     }
 
-    private func createStoriesSection() -> NSCollectionLayoutSection {
+    private func configureStoriesSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(90), heightDimension: .absolute(120))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
@@ -87,11 +87,11 @@ extension ContentCollectionView {
         return section
     }
 
-    private func createHorizontalSpecialOfferSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(210), heightDimension: .absolute(90))
+    private func configureSpecialOfferSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(225), heightDimension: .absolute(90))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.6), heightDimension: .absolute(90))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.65), heightDimension: .absolute(90))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.interItemSpacing = NSCollectionLayoutSpacing.fixed(10)
 
@@ -219,7 +219,6 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
         case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoriesCollectionCell.identifier, for: indexPath) as? StoriesCollectionCell else { return UICollectionViewCell() }
             let story = stories[indexPath.item]
-//            print("\(indexPath.item + 1). \(story.storyDescription)")
             cell.configureCell(story)
             return cell
         case 1:

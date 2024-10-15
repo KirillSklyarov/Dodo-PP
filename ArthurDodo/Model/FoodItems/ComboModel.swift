@@ -13,17 +13,19 @@ struct ComboModel: FoodItems {
     var name: String
     var imageName: String
     var ingredients: String
+    var toppings: [ToppingEnum]
     var isHit: Bool
     let items: [Pizza?]?
     var itemSize: [Size: WeightPrice]
     var isHeader: Bool
 
-    init(id: String, category: CategoriesNames = .combos, name: String, imageName: String, ingredients: String, isHit: Bool = false, items: [Pizza?]?, size: [Size: WeightPrice], isHeader: Bool = false) {
+    init(id: String, category: CategoriesNames = .combos, name: String, imageName: String, ingredients: String, toppings: [ToppingEnum] = [], isHit: Bool = false, items: [Pizza?]?, size: [Size: WeightPrice], isHeader: Bool = false) {
         self.id = id
         self.category = category
         self.name = name
         self.imageName = imageName
         self.ingredients = ingredients
+        self.toppings = toppings
         self.isHit = isHit
         self.items = items
         self.itemSize = size
