@@ -35,13 +35,15 @@ final class ContentCollectionView: UICollectionView {
     override func didMoveToSuperview() {
         setupLayout()
     }
+}
 
-    // MARK: - setup Actions
-    private func setupActions() {
+// MARK: - Setup Actions
+private extension ContentCollectionView {
+    func setupActions() {
         categoryCellSelected()
     }
 
-    private func categoryCellSelected() {
+    func categoryCellSelected() {
         categoryHeaderView?.onCategorySelected = { [weak self] category in
             guard let self else { return }
             let selectedIndex = allItems.firstIndex{ $0.category == category } ?? 0
@@ -56,8 +58,8 @@ final class ContentCollectionView: UICollectionView {
 }
 
 // MARK: - Config Layout
-extension ContentCollectionView {
-    private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
+private extension ContentCollectionView {
+    func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.interSectionSpacing = 10
 
@@ -72,7 +74,7 @@ extension ContentCollectionView {
         }, configuration: config)
     }
 
-    private func configureStoriesSection() -> NSCollectionLayoutSection {
+    func configureStoriesSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(90), heightDimension: .absolute(120))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
@@ -87,7 +89,7 @@ extension ContentCollectionView {
         return section
     }
 
-    private func configureSpecialOfferSection() -> NSCollectionLayoutSection {
+    func configureSpecialOfferSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(225), heightDimension: .absolute(90))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
@@ -111,7 +113,7 @@ extension ContentCollectionView {
         return section
     }
 
-    private func createCategorySection() -> NSCollectionLayoutSection {
+    func createCategorySection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(40), heightDimension: .absolute(40))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
@@ -125,7 +127,7 @@ extension ContentCollectionView {
         return section
     }
 
-    private func createItemsSectionWithHeader() -> NSCollectionLayoutSection {
+    func createItemsSectionWithHeader() -> NSCollectionLayoutSection {
         var allGroups: [NSCollectionLayoutGroup] = []
         var totalHeight = CGFloat(0)
 
@@ -170,7 +172,7 @@ extension ContentCollectionView {
         return section
     }
 
-    private func configCollectionView() {
+    func configCollectionView() {
         backgroundColor = AppColors.backgroundGray
         layer.cornerRadius = 14
         layer.masksToBounds = true
@@ -187,7 +189,7 @@ extension ContentCollectionView {
         translatesAutoresizingMaskIntoConstraints = false
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         guard let superview else { return }
 
         NSLayoutConstraint.activate([

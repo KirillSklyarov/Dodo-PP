@@ -12,6 +12,7 @@ final class MainViewController: UIViewController {
     // MARK: - UI Properties
     private lazy var headerView = HeaderView()
     private lazy var contentCollectionView = ContentCollectionView()
+    private lazy var cartButton = CartButton(isHidden: false, isCart: true)
 
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -26,6 +27,7 @@ private extension MainViewController {
     func setupActions() {
         setupCollectionView()
         setupHeaderView()
+        setupCartButtonActions()
     }
 
     func setupCollectionView() {
@@ -66,6 +68,11 @@ private extension MainViewController {
         productDetailVC.modalPresentationStyle = .overFullScreen
         productDetailVC.isModalInPresentation = false
         present(productDetailVC, animated: true)
+
+        productDetailVC.onCartButtonTapped = { [weak self] price in
+            guard let self else { return }
+            cartButton.setNewPrice(price)
+        }
     }
 
     func showStoriesVC(_ indexPath: IndexPath) {
@@ -86,19 +93,35 @@ private extension MainViewController {
         addressVC.isModalInPresentation = true
         present(addressVC, animated: true)
     }
+
+    func setupCartButtonActions() {
+        cartButton.onButtonTapped = { [weak self] in
+            self?.showCartVC()
+        }
+    }
+
+    func showCartVC() {
+        let cartVC = CartViewController()
+        cartVC.modalPresentationStyle = .fullScreen
+        cartVC.isModalInPresentation = true
+        present(cartVC, animated: true)
+    }
 }
 
 // MARK: - SetupLayout
 private extension MainViewController {
     func configUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(headerView, contentCollectionView)
+        view.addSubviews(headerView, contentCollectionView, cartButton)
         setupLayout()
     }
 
     func setupLayout() {
         NSLayoutConstraint.activate([
-            contentCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10)
+            contentCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
+
+            cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
 }
