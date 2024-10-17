@@ -59,7 +59,8 @@ final class CartProductTableView: UITableView {
         delegate = self
         register(CartProductCell.self, forCellReuseIdentifier: CartProductCell.identifier)
         separatorStyle = .singleLine
-        separatorColor = .systemRed
+        separatorColor = AppColors.backgroundGray
+        separatorInset = .zero
         rowHeight = tableRowHeight
         estimatedRowHeight = UITableView.automaticDimension
 

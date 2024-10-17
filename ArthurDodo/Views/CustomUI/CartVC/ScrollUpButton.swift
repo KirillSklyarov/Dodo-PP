@@ -24,17 +24,17 @@ final class ScrollUpButton: UIButton {
     
     private func configButton() {
         let image = UIImage(systemName: "chevron.up")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        backgroundColor = .darkGray
+        backgroundColor = AppColors.buttonGray
         setImage(image, for: .normal)
         addTarget(self, action: #selector(scrollUpButtonTapped), for: .touchUpInside)
         widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
         heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
         layer.cornerRadius = 20
         layer.masksToBounds = true
+        isHidden = true
     }
 
     @objc private func scrollUpButtonTapped() {
         onScrollUpButtonTapped?()
     }
-
 }

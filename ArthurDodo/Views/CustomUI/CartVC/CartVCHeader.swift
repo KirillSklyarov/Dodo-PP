@@ -18,14 +18,14 @@ final class CartVCHeader: UIView {
         let label = UILabel()
         label.text = "Корзина"
         label.textColor = .white
-        label.font = .systemFont(ofSize: 18, weight: .semibold)
+        label.font = AppFonts.semibold18
         return label
     }()
 
     private lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("Закрыть", for: .normal)
-        button.setTitleColor(.systemOrange, for: .normal)
+        button.setTitleColor(AppColors.buttonOrange, for: .normal)
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -51,21 +51,23 @@ final class CartVCHeader: UIView {
     func getViewHeight() -> CGFloat {
         viewHeight
     }
+}
 
-    // MARK: - Private methods
-    private func configUI() {
+// MARK: - Setup UI
+private extension CartVCHeader {
+    func configUI() {
         addSubviews(blurView, dismissButton, titleLabel)
         setupLayout()
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
         setupBlurLayout()
         setupDismissButtonConstraints()
         setupTitleLabelConstraints()
     }
 
-    private func setupBlurLayout() {
+    func setupBlurLayout() {
         NSLayoutConstraint.activate([
             blurView.topAnchor.constraint(equalTo: topAnchor),
             blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -74,14 +76,14 @@ final class CartVCHeader: UIView {
         ])
     }
 
-    private func setupDismissButtonConstraints() {
+    func setupDismissButtonConstraints() {
         NSLayoutConstraint.activate([
             dismissButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             dismissButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
         ])
     }
 
-    private func setupTitleLabelConstraints() {
+    func setupTitleLabelConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)

@@ -12,7 +12,7 @@ final class MainViewController: UIViewController {
     // MARK: - UI Properties
     private lazy var headerView = HeaderView()
     private lazy var contentCollectionView = ContentCollectionView()
-    private lazy var cartButton = CartButton(isHidden: false, isCart: true)
+    private lazy var cartButton = CartButton(isHidden: true, isCart: true)
 
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -71,6 +71,7 @@ private extension MainViewController {
 
         productDetailVC.onCartButtonTapped = { [weak self] price in
             guard let self else { return }
+            cartButton.isHidden = false
             cartButton.setNewPrice(price)
         }
     }
@@ -102,9 +103,8 @@ private extension MainViewController {
 
     func showCartVC() {
         let cartVC = CartViewController()
-        cartVC.modalPresentationStyle = .fullScreen
-        cartVC.isModalInPresentation = true
-        present(cartVC, animated: true)
+        let navVC = UINavigationController(rootViewController: cartVC)
+        present(navVC, animated: true)
     }
 }
 

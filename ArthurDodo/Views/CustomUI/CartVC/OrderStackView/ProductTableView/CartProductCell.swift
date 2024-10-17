@@ -57,7 +57,7 @@ final class CartProductCell: UITableViewCell {
     private lazy var changeNumbersButton: UIButton = {
         let button = UIButton()
         button.setTitle("Изменить", for: .normal)
-        button.setTitleColor(.systemOrange, for: .normal)
+        button.setTitleColor(AppColors.buttonOrange, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
         button.addTarget(self, action: #selector (changeButtonTapped), for: .touchUpInside)
         return button

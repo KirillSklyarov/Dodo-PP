@@ -44,7 +44,7 @@ final class AddToppingsCollectionViewCell: UICollectionViewCell {
 
     private lazy var chosenImageView: UIImageView = {
         let imageView = UIImageView()
-        let image = UIImage(systemName: "checkmark.circle.fill")?.withTintColor(.systemOrange, renderingMode: .alwaysOriginal)
+        let image = UIImage(systemName: "checkmark.circle.fill")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
         imageView.image = image
         imageView.isHidden = true
         return imageView
