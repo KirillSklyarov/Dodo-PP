@@ -54,7 +54,10 @@ private extension ProfileViewController {
     }
 
     func showChatAlert() {
-        AlertHelper.showChatAlert(in: self)
+        let alertVC = CustomActionSheet()
+        alertVC.modalPresentationStyle = .overFullScreen
+        alertVC.modalTransitionStyle = .crossDissolve
+        present(alertVC, animated: false)
     }
 
     func showPersonalVC() {

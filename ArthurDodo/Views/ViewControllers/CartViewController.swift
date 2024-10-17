@@ -16,16 +16,17 @@ final class CartViewController: UIViewController {
     private lazy var promoButton = PromoButton()
     private lazy var dodoCoinsView = DodoCoinsStackView()
 
-    private lazy var cartButtonView = CartButtonViewFooter()
-    private lazy var scrollUpButton = ScrollUpButton()
-
-    private lazy var scrollView = UIScrollView()
     private lazy var contentStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [orderStackView, toppingsStackView, specialOfferStackView, promoButton, dodoCoinsView])
         stackView.axis = .vertical
         stackView.spacing = 10
         return stackView
     }()
+
+    private lazy var cartButtonView = CartButtonViewFooter()
+    private lazy var scrollUpButton = ScrollUpButton()
+
+    private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties
     private let dataStorage = DataStorage.shared
@@ -120,7 +121,7 @@ private extension CartViewController {
 private extension CartViewController {
     func setupUI() {
         setupNavigationBar()
-        view.backgroundColor = AppColors.backgroundBlack
+        view.backgroundColor = AppColors.backgroundGray
         view.addSubviews(scrollView, cartButtonView)
 
         setupScrollView()
@@ -199,23 +200,25 @@ extension CartViewController {
 // MARK: - UIScrollViewDelegate
 extension CartViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentSize.height == 0 {
-            scrollUpButton.isHidden = true
-        } else {
-            setupScrollUpButton()
-        }
+        setupScrollUpButton()
     }
 
+    // Метод определяет когда показывать кнопку скролла наверх в зависимости от прокрученного контента
     func setupScrollUpButton() {
         let contentHeight = scrollView.contentSize.height
         let scrollOffset = scrollView.contentOffset.y + scrollView.adjustedContentInset.top
         let visibleHeight = scrollView.frame.height
 
+        // Срабатывает когда по каким-то причинам контент еще не загрузился
+        if contentHeight == 0 {
+            scrollUpButton.isHidden = true
+            return
+        }
+
+        // Срабатывает когда прокрутили больше половины контента
         if scrollOffset > (contentHeight - visibleHeight) / 2 {
-            print("Here1")
             scrollUpButton.isHidden = false
         } else {
-            print("Here2")
             scrollUpButton.isHidden = true
         }
     }
