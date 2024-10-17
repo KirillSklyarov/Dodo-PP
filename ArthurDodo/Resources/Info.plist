@@ -9,12 +9,10 @@
 		<string>SF-Pro-Rounded-Regular.otf</string>
 		<string>SF-Pro-Rounded-Medium.otf</string>
 	</array>
-
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Мы используем ваше местоположение для показа карты.</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Мы используем ваше местоположение для отображения его на карте даже в фоновом режиме.</string>
-
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Мы используем ваше местоположение для показа карты.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Мы используем ваше местоположение для отображения его на карте даже в фоновом режиме.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

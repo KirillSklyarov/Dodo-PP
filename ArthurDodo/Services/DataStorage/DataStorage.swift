@@ -16,10 +16,12 @@ final class DataStorage {
     // MARK: - Properties
     var fetchedUserAddresses: [AddressModel] = []
     var fetchedToppings: [Topping] = []
+    var fetchedStories: [Story] = []
 
     var order: [Order] = []
     var onDataFetchedSuccessfully: (() -> Void)?
     var onToppingsFetchedSuccessfully: (([Topping]) -> Void)?
+    var onStoriesFetchedSuccessfully: (([Story]) -> Void)?
 }
 
 // MARK: - User Addresses
@@ -38,7 +40,22 @@ extension DataStorage {
     }
 }
 
-// MARK: - Toppings
+// MARK: - Stories
+extension DataStorage {
+    func fetchStories() {
+        NetworkManager.shared.fetchData(.stories) { [weak self] (result: Result<[Story], NetworkError>) in
+            guard let self else { return }
+            switch result {
+            case .success(let stories):
+                fetchedStories = stories
+                onStoriesFetchedSuccessfully?(fetchedStories)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+}
+
 extension DataStorage {
     func fetchToppings() {
         NetworkManager.shared.fetchData(.toppings) { [weak self] (result: Result<[Topping], NetworkError>) in

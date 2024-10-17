@@ -56,7 +56,6 @@ final class CustomActionSheet: UIViewController {
     }
 
     func showActionSheet() {
-        print("Boom")
         UIView.animate(withDuration: 0.3) {
             self.bottomConstraint.constant = 0
             self.view.layoutIfNeeded()
@@ -73,13 +72,11 @@ private extension CustomActionSheet {
             dismiss(animated: true)
         }
 
-        chatButton.onButtonTapped = { [weak self] in
-            guard let self else { return }
+        chatButton.onButtonTapped = {
             print(#function)
         }
 
-        callButton.onButtonTapped = { [weak self] in
-            guard let self else { return }
+        callButton.onButtonTapped = { 
             print(#function)
         }
     }

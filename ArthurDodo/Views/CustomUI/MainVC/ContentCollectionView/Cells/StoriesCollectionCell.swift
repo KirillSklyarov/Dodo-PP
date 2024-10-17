@@ -51,15 +51,15 @@ final class StoriesCollectionCell: UICollectionViewCell {
     }
 
     // MARK: - Public methods
-    func configureCell(_ story: StoriesModel) {
-        let coverImage = UIImage(named: story.storyCoverImage)
+    func configureCell(_ story: Story) {
+        let coverImage = UIImage(named: story.coverImage)
         coverImageView.image = coverImage
-        let storyDescription = story.storyDescription
+        let storyDescription = story.description
         titleLabel.text = storyDescription
         designViewedStory(story)
     }
 
-    func designViewedStory(_ story: StoriesModel) {
+    func designViewedStory(_ story: Story) {
         let storyID = story.id
         let isViewed = UserDefaults.standard.isStoryViewed(storyID)
         if isViewed {

@@ -10,12 +10,15 @@ import UIKit
 final class BackgroundStoriesView: UIView {
 
     // MARK: - Properties
-    var onDismissButtonTapped: (() -> Void)?
     private let padding: CGFloat = 10
     private let progressViewHeight: CGFloat = 2
     private var currentStoryIndex = 0
     private var countSubStories = 0
     private var subStoryIndex = 0
+
+    private let stories = DataStorage.shared.fetchedStories
+
+    var onDismissButtonTapped: (() -> Void)?
 
     // MARK: - Timer properties
     private var displayLink: CADisplayLink?

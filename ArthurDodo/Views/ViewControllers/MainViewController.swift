@@ -14,11 +14,24 @@ final class MainViewController: UIViewController {
     private lazy var contentCollectionView = ContentCollectionView()
     private lazy var cartButton = CartButton(isHidden: true, isCart: true)
 
+    private let storage = DataStorage.shared
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
         setupActions()
+        getStoriesFromServer()
+    }
+
+    private func getStoriesFromServer() {
+        storage.fetchStories()
+
+        storage.onStoriesFetchedSuccessfully = { [weak self] stories in
+            guard let self else { return }
+            contentCollectionView.uploadStoriesData()
+//            contentCollectionView.reloadSections(IndexSet(integer: 0))
+        }
     }
 }
 

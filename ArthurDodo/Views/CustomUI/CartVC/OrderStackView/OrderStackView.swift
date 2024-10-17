@@ -9,6 +9,7 @@ import UIKit
 
 final class OrderStackView: UIStackView {
 
+    // MARK: - Properties&Callbacks
     private lazy var orderView = OrderView()
     private lazy var cartProductTableView = CartProductTableView()
 
@@ -17,6 +18,7 @@ final class OrderStackView: UIStackView {
     var onCountIncreased: (() -> Void)?
     var onChangeItem: (() -> Void)?
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -26,6 +28,7 @@ final class OrderStackView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Methods
     func setNewData(_ countOfItems: Int, totalPrice: Int) {
         orderView.setNewData(countOfItems, totalPrice: totalPrice)
     }
@@ -35,6 +38,7 @@ final class OrderStackView: UIStackView {
     }
 }
 
+// MARK: - Setup UI
 private extension OrderStackView {
     func setupUI() {
         [orderView, cartProductTableView].forEach(addArrangedSubview)
@@ -43,6 +47,7 @@ private extension OrderStackView {
     }
 }
 
+// MARK: - Setup Actions
 private extension OrderStackView {
     func setupActions() {
         cartProductTableView.onEmptyCart = { [weak self] in

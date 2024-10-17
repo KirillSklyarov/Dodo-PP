@@ -92,8 +92,7 @@ private extension DeliveryAddressSheetView {
     }
 
     func setupDeliveryButtonAction() {
-        deliveryButton.onButtonTapped = { [weak self] in
-            guard let self else { return }
+        deliveryButton.onButtonTapped = {
             print("We're here")
         }
     }

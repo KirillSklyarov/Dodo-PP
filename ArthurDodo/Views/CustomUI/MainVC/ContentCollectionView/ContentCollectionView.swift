@@ -10,8 +10,9 @@ import UIKit
 final class ContentCollectionView: UICollectionView {
 
     // MARK: - Properties
-    var categoryHeaderView: CategoriesHeaderView?
-    var isScrolling = false
+    private var categoryHeaderView: CategoriesHeaderView?
+    private var isScrolling = false
+    private var stories: [Story] = []
 
     var onItemCellTapped: ((IndexPath) -> Void)?
     var onStoriesCellTapped: ((IndexPath) -> Void)?
@@ -29,6 +30,12 @@ final class ContentCollectionView: UICollectionView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func uploadStoriesData() {
+        stories = DataStorage.shared.fetchedStories
+        print("stories: \(stories)")
+        reloadSections(IndexSet(integer: 0))
     }
 
     // MARK: - Life cycle
@@ -207,6 +214,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+
         switch section {
         case 0: return stories.count
         case 1: return specialOfferArray.count
