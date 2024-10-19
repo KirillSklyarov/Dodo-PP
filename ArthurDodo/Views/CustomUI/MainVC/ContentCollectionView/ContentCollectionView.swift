@@ -13,10 +13,17 @@ final class ContentCollectionView: UICollectionView {
     private var categoryHeaderView: CategoriesHeaderView?
     private var isScrolling = false
     private var stories: [Story] = []
+    private var specialOffersArray: [Item] = []
+    private var catalog: [Item] = []
+
+    private let sectionsNumber = 3
 
     var onItemCellTapped: ((IndexPath) -> Void)?
     var onStoriesCellTapped: ((IndexPath) -> Void)?
     var onSpecialOfferCellTapped: ((IndexPath) -> Void)?
+
+    private let storage = DataStorage.shared
+    private var categories: [CategoryName] = []
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -32,15 +39,30 @@ final class ContentCollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func uploadStoriesData() {
-        stories = DataStorage.shared.fetchedStories
-        print("stories: \(stories)")
-        reloadSections(IndexSet(integer: 0))
-    }
-
     // MARK: - Life cycle
     override func didMoveToSuperview() {
         setupLayout()
+    }
+}
+
+// MARK: - Fetch data
+extension ContentCollectionView {
+    // Забираем данные из хранилища и обновляем секцию со сторис
+    func uploadDataFromStorage() {
+        fetchData()
+        updateUI()
+    }
+
+    func fetchData() {
+        stories = storage.fetchedStories
+        specialOffersArray = storage.getSpecialOffersArray()
+        catalog = storage.getCatalog()
+        categories = storage.getCategories()
+    }
+
+    func updateUI() {
+        categoryHeaderView?.updateUI()
+        reloadData()
     }
 }
 
@@ -53,7 +75,7 @@ private extension ContentCollectionView {
     func categoryCellSelected() {
         categoryHeaderView?.onCategorySelected = { [weak self] category in
             guard let self else { return }
-            let selectedIndex = allItems.firstIndex{ $0.category == category } ?? 0
+            let selectedIndex = catalog.firstIndex{ $0.category == category } ?? 0
             let indexPath = IndexPath(row: selectedIndex, section: 2)
             isScrolling = true
             scrollToItem(at: indexPath, at: .top, animated: true)
@@ -75,9 +97,7 @@ private extension ContentCollectionView {
             case 0: return self.configureStoriesSection()
             case 1: return self.configureSpecialOfferSection()
             case 2: return self.createItemsSectionWithHeader()
-
-            default: return nil
-            }
+            default: return nil }
         }, configuration: config)
     }
 
@@ -120,43 +140,42 @@ private extension ContentCollectionView {
         return section
     }
 
-    func createCategorySection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(40), heightDimension: .absolute(40))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.85), heightDimension: .absolute(40))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
-
-        return section
-    }
-
     func createItemsSectionWithHeader() -> NSCollectionLayoutSection {
         var allGroups: [NSCollectionLayoutGroup] = []
         var totalHeight = CGFloat(0)
 
-        for cat in categories {
-            let firstItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(300))
-            let firstItem = NSCollectionLayoutItem(layoutSize: firstItemSize)
+        if categories.isEmpty {
+            let placeholderItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
+            let placeholderItem = NSCollectionLayoutItem(layoutSize: placeholderItemSize)
 
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(150))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            let placeholderGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
+            let placeholderGroup = NSCollectionLayoutGroup.vertical(layoutSize: placeholderGroupSize, subitems: [placeholderItem])
 
-            let firstGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(300))
-            let firstGroup = NSCollectionLayoutGroup.vertical(layoutSize: firstGroupSize, subitems: [firstItem])
+            allGroups.append(placeholderGroup)
+            totalHeight += placeholderGroupSize.heightDimension.dimension
+        } else {
+            for cat in categories {
+                let firstItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(300))
+                let firstItem = NSCollectionLayoutItem(layoutSize: firstItemSize)
 
-            let groupHeight = itemSize.heightDimension.dimension * CGFloat(cat.items.count - 1)
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(groupHeight))
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(150))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-            let comboGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(firstGroupSize.heightDimension.dimension + groupHeight))
-            let comboGroup = NSCollectionLayoutGroup.vertical(layoutSize: comboGroupSize, subitems: [firstGroup, group])
+                let firstGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(300))
+                let firstGroup = NSCollectionLayoutGroup.vertical(layoutSize: firstGroupSize, subitems: [firstItem])
 
-            totalHeight += comboGroupSize.heightDimension.dimension
-            allGroups.append(comboGroup)
+                let itemsInCategory = catalog.filter { $0.category == cat }.count
+
+                let groupHeight = itemSize.heightDimension.dimension * CGFloat(itemsInCategory - 1)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(groupHeight))
+                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+
+                let comboGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(firstGroupSize.heightDimension.dimension + groupHeight))
+                let comboGroup = NSCollectionLayoutGroup.vertical(layoutSize: comboGroupSize, subitems: [firstGroup, group])
+
+                totalHeight += comboGroupSize.heightDimension.dimension
+                allGroups.append(comboGroup)
+            }
         }
 
         let superGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(totalHeight))
@@ -210,15 +229,14 @@ private extension ContentCollectionView {
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        3
+        sectionsNumber
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-
         switch section {
         case 0: return stories.count
-        case 1: return specialOfferArray.count
-        case 2: return allItems.count
+        case 1: return specialOffersArray.count
+        case 2: return catalog.count
         default : return 0
         }
     }
@@ -233,16 +251,16 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
             return cell
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SpecialOfferCollectionCell.identifier, for: indexPath) as? SpecialOfferCollectionCell else { return UICollectionViewCell() }
-            let item = specialOfferArray[indexPath.item]
+            let item = specialOffersArray[indexPath.item]
             cell.configureCell(item)
             return cell
         case 2:
-            let item = allItems[indexPath.item]
+            let item = catalog[indexPath.item]
 
             if item.isHeader {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemsHeaderView.identifier, for: indexPath) as? ItemsHeaderView else {
                     return UICollectionViewCell() }
-                let item = allItems[indexPath.item]
+                let item = catalog[indexPath.item]
                 cell.configHeader(item)
                 return cell
             } else {
@@ -289,7 +307,7 @@ extension ContentCollectionView {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if !isScrolling {
             guard let index = indexPathsForVisibleItems.sorted().first?.item else { return }
-            let catOnScreen = allItems[index].category.rawValue
+            let catOnScreen = catalog[index].category.rawValue
             categoryHeaderView?.getCategory(catOnScreen)
         }
     }

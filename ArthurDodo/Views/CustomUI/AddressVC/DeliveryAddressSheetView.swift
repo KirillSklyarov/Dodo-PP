@@ -85,7 +85,7 @@ private extension DeliveryAddressSheetView {
         }
     }
 
-    func showEditAddressVC(_ address: AddressModel) {
+    func showEditAddressVC(_ address: Address) {
         let vc = EditAddressViewController(addressToEdit: address)
         vc.sheetPresentationController?.detents = [.medium()]
         present(vc, animated: true)

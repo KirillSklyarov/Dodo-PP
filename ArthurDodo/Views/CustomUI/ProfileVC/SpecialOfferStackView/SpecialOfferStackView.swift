@@ -13,7 +13,7 @@ final class SpecialOfferStackView: UIStackView {
     private let leftPadding: CGFloat = 0
     private let rightPadding: CGFloat = 0
 
-    var onSpecialOfferSelected: ((SpecialOfferProfileModel) -> Void)?
+    var onSpecialOfferSelected: ((SpecialOfferProfile) -> Void)?
 
     private lazy var specialOfferHeaderView = OrderView(title: "Акции")
     private lazy var specialOfferCollectionView = CartSpOfferCollection()

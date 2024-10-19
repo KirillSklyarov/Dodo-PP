@@ -7,36 +7,17 @@
 
 import UIKit
 
-enum Size: String {
-    case small = "Маленькая 25 см"
-    case medium = "Средняя 30 см"
-    case large = "Большая 35 см"
-}
-
-enum Dough: String {
-    case basic = "Традиционное тесто"
-    case thin = "Тонкое тесто"
-}
-
-struct WeightPrice {
+struct WeightPrice: Codable {
     let weight: Int
     let price: Int
     let cpfc: CPFC
 }
 
-struct CPFC {
+struct CPFC: Codable {
     let calories: Float
     let protein: Float
     let fat: Float
     let carbohydrates: Float
-}
-
-enum CPFCData: String, CaseIterable {
-    case weight = "Вес"
-    case calories = "Пищевая ценность"
-    case proteins = "Белки"
-    case fats = "Жиры"
-    case carbohydrates = "Углеводы"
 }
 
 struct AppConstants {
@@ -53,7 +34,6 @@ struct AppFonts {
     static let regular16 = UIFont(name: "SFProRounded-Regular", size: 16) ?? basicFont
     static let regular18 = UIFont(name: "SFProRounded-Regular", size: 18) ?? basicFont
     static let regular20 = UIFont(name: "SFProRounded-Regular", size: 20) ?? basicFont
-
 
     static let semibold14 = UIFont(name: "SFProRounded-Semibold", size: 14) ?? basicFont
     static let semibold16 = UIFont(name: "SFProRounded-Semibold", size: 16) ?? basicFont

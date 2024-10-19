@@ -105,7 +105,7 @@ extension PersonalTableView: UITableViewDataSource, UITableViewDelegate {
         }
     }
 
-    func getRowDataFromModel(_ row: PersonalData, _ data: UserModel) -> String {
+    func getRowDataFromModel(_ row: PersonalData, _ data: User) -> String {
         switch row {
         case .name: return data.name
         case .phone: return data.phone

@@ -50,10 +50,11 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
     }
 
     // MARK: - Public methods
-    func configureCell(_ item: FoodItems) {
+    func configureCell(_ item: Item) {
         pizzaImageView.image = UIImage(named: item.imageName)
         titleLabel.text = item.name
-        let itemPrice = item.itemSize[.medium]?.price ?? 0
+        let itemPrice = item.itemSize.medium?.price ?? 0
+//            .itemSize[.medium]?.price ?? 0
         let priceString = "от \(itemPrice) ₽"
         priceButton.setTitle(priceString, for: .normal)
     }

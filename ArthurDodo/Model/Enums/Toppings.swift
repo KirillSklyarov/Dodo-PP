@@ -1,8 +1,8 @@
 //
-//  Toppings.swift
-//  ArthutDodo
+//  ToppingsEnum.swift
+//  ArthurDodo
 //
-//  Created by Kirill Sklyarov on 20.09.2024.
+//  Created by Kirill Sklyarov on 19.10.2024.
 //
 
 import Foundation
@@ -14,10 +14,4 @@ enum ToppingEnum: String, Codable {
     case sausage = "sausage"
     case tomato = "tomato"
     case mushrooms = "mushrooms"
-}
-
-struct Topping: Codable {
-    let name: ToppingEnum
-    let imageName: String
-    let price: Int
 }

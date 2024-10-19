@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UserModel {
+struct User {
     let name: String
     let phone: String
     let email: String
@@ -15,4 +15,4 @@ struct UserModel {
     let agreeOfSending: Bool
 }
 
-let testUser = UserModel(name: "Кирилл", phone: "+7999999999", email: "aaa@mail.ru", dateOfBirth: "01.01.01", agreeOfSending: true)
+let testUser = User(name: "Кирилл", phone: "+7999999999", email: "aaa@mail.ru", dateOfBirth: "01.01.01", agreeOfSending: true)

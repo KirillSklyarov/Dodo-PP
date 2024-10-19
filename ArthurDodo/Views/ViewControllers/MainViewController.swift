@@ -13,6 +13,7 @@ final class MainViewController: UIViewController {
     private lazy var headerView = HeaderView()
     private lazy var contentCollectionView = ContentCollectionView()
     private lazy var cartButton = CartButton(isHidden: true, isCart: true)
+    private lazy var loadingIndicator = UIActivityIndicatorView(style: .large)
 
     private let storage = DataStorage.shared
 
@@ -21,17 +22,57 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         configUI()
         setupActions()
+        fetchAllData()
+    }
+}
+
+// MARK: - Fetch data from server
+private extension MainViewController {
+    func fetchAllData() {
+        showLoadingIndicator()
         getStoriesFromServer()
+        getCatalogAndSpecialOffersFromServer()
     }
 
-    private func getStoriesFromServer() {
+    // Мы обращаемся к хранилищу за сторисами, инициируем сетевой запрос и забираем результаты
+    func getStoriesFromServer() {
         storage.fetchStories()
+    }
 
-        storage.onStoriesFetchedSuccessfully = { [weak self] stories in
+    // Мы обращаемся к хранилищу за каталогом, инициируем сетевой запрос и забираем результаты. Так как спецпредложения это рандомная выборка из каталога, то можно делать это тут же.
+    func getCatalogAndSpecialOffersFromServer() {
+        storage.fetchItems()
+
+        storage.onItemsFetchedSuccessfully = { [weak self] items in
             guard let self else { return }
-            contentCollectionView.uploadStoriesData()
-//            contentCollectionView.reloadSections(IndexSet(integer: 0))
+            DispatchQueue.main.async {
+                self.updateSpecialOffersUI()
+                self.hideLoadingIndicator()
+            }
         }
+    }
+
+    // Вызываем обновление UI всех секций
+    func updateSpecialOffersUI() {
+        contentCollectionView.uploadDataFromStorage()
+    }
+}
+
+// MARK: - Setup Loading Indicator
+private extension MainViewController {
+
+    func setupLoadingIndicator() {
+        loadingIndicator.color = UIColor.white
+    }
+
+    func showLoadingIndicator() {
+        loadingIndicator.startAnimating()
+        contentCollectionView.isHidden = true
+    }
+
+    func hideLoadingIndicator() {
+        loadingIndicator.stopAnimating()
+        contentCollectionView.isHidden = false
     }
 }
 
@@ -45,9 +86,11 @@ private extension MainViewController {
 
     func setupCollectionView() {
         contentCollectionView.onItemCellTapped = { [weak self] IndexPath in
-            let item = allItems[IndexPath.item]
-            DataStorage.shared.fetchToppings()
-            self?.showProductDetail(item)
+            guard let self else { return }
+            let catalog = storage.getCatalog()
+            let item = catalog[IndexPath.item]
+            storage.fetchToppings()
+            showProductDetail(item)
         }
 
         contentCollectionView.onStoriesCellTapped = { [weak self] IndexPath in
@@ -55,8 +98,10 @@ private extension MainViewController {
         }
 
         contentCollectionView.onSpecialOfferCellTapped = { [weak self] IndexPath in
+            guard let self else { return }
+            let specialOfferArray = storage.getSpecialOffersArray()
             let item = specialOfferArray[IndexPath.item]
-            self?.showProductDetail(item)
+            showProductDetail(item)
         }
     }
 
@@ -75,7 +120,7 @@ private extension MainViewController {
         present(profileVC, animated: true)
     }
 
-    func showProductDetail(_ pizza: FoodItems) {
+    func showProductDetail(_ pizza: Item) {
         let productDetailVC = ProductDetailsViewController()
         productDetailVC.getPizzaData(pizza)
         productDetailVC.modalPresentationStyle = .overFullScreen
@@ -125,8 +170,9 @@ private extension MainViewController {
 private extension MainViewController {
     func configUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(headerView, contentCollectionView, cartButton)
+        view.addSubviews(headerView, contentCollectionView, cartButton, loadingIndicator)
         setupLayout()
+        setupLoadingIndicator()
     }
 
     func setupLayout() {
@@ -134,7 +180,10 @@ private extension MainViewController {
             contentCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
 
             cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 }

@@ -12,7 +12,7 @@ final class CartProductTableView: UITableView {
     // MARK: - Properties&Callbacks
     var order: [Order] = []
     var onUpdateCart: ( (Int) -> Void )?
-    var onCellTapped: ( (Pizza) -> Void )?
+    var onCellTapped: ( (Item) -> Void )?
     var onEmptyCart: ( () -> Void )?
     var onItemDeletedFromCart: ( () -> Void )?
     var onCountIncreased: ( () -> Void )?

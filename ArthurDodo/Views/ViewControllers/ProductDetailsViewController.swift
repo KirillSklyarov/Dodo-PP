@@ -40,7 +40,7 @@ final class ProductDetailsViewController: UIViewController {
     // MARK: - Other Properties
     private let dataStorage = DataStorage.shared
     private var tapGesture: UITapGestureRecognizer?
-    private var item: FoodItems?
+    private var item: Item?
     private var order: Order?
 
     var onCartButtonTapped: ( (Int) -> Void )?
@@ -70,19 +70,20 @@ final class ProductDetailsViewController: UIViewController {
     }
 
     // MARK: - Public methods
-    func getPizzaData(_ item: FoodItems) {
+    func getPizzaData(_ item: Item) {
         self.item = item
         toppingsCollectionView.getItem(item)
     }
 
     func isItemPizza() {
-        if !(item is Pizza) {
+        if item?.category != .pizzas {
             backgroundView.hideDoughSegment()
         }
     }
 
     func isOneSize() {
-        if item?.itemSize.count == 1 {
+        let countOfSizes = item?.itemSize.countOfSizes()
+        if countOfSizes == 1 {
             backgroundView.hideSizeSegment()
         }
     }
@@ -93,8 +94,8 @@ final class ProductDetailsViewController: UIViewController {
         headerView.updateTitle(item.name)
         backgroundView.updatePizzaImage(item.imageName)
         infoView.updateIngredients(item.ingredients)
-        infoView.updateWeight(item.itemSize[.medium]?.weight ?? 0)
-        cartButtonView.updatePrice(item.itemSize[.medium]?.price ?? 0)
+        infoView.updateWeight(item.itemSize.medium?.weight ?? 0)
+        cartButtonView.updatePrice(item.itemSize.medium?.price ?? 0)
     }
 }
 
@@ -161,11 +162,11 @@ private extension ProductDetailsViewController {
             let chosenSize = backgroundView.getChosenSize()
             let chosenDough = backgroundView.getChosenDough()
 
-            var price = item.itemSize[.medium]?.price ?? 0
+            let price = item.itemSize.medium?.price ?? 0
 
-            if let pizza = item as? Pizza {
-                price = pizza.itemSize[chosenSize]?.price ?? 0
-            }
+//            if let pizza = item as? Pizza {
+//                price = pizza.itemSize[chosenSize]?.price ?? 0
+//            }
 
             order = Order(pizzaName: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, price: price, isHit: item.isHit)
             guard let order else { return }
@@ -179,18 +180,22 @@ private extension ProductDetailsViewController {
         backgroundView.onSegmentValueChanged = { [weak self] index in
             guard let self else { return }
 
-            var size: Size = .small
-            switch index {
-            case 0: size = .small
-            case 1: size = .medium
-            case 2: size = .large
-            default: break }
+//            var size: String = "small"
+//            switch index {
+//            case 0: size = "small"
+//            case 1: size = "medium"
+//            case 2: size = "large"
+//            default: break }
 
-            let weight = self.item?.itemSize[size]?.weight ?? 0
-            let price = self.item?.itemSize[size]?.price ?? 0
+            guard let productDetails = item?.itemSize.getWeightAndPriceViaIndex(index) else { return }
+
+            let weight = productDetails.weight
+//            self.item?.itemSize.size .size?.weight ?? 0
+            let price = productDetails.price
+//            self.item?.itemSize[size]?.price ?? 0
             self.infoView.updateWeight(weight)
             self.cartButtonView.updatePrice(price)
-            self.infoPopupView.setSelectedSize(size)
+            self.infoPopupView.setProductDetails(productDetails)
         }
     }
 

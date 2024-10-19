@@ -37,4 +37,5 @@ enum endPoint: String {
     case userAddress = "http://localhost:3001/userAddress"
     case toppings = "http://localhost:3001/toppings"
     case stories = "http://localhost:3001/stories"
+    case products = "http://localhost:3001/products"
 }

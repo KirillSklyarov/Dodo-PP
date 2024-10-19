@@ -12,7 +12,7 @@ final class NetworkManager {
     static let shared = NetworkManager()
     private init() {}
 
-    var addresses: [AddressModel]?
+    var addresses: [Address]?
 }
 
 // MARK: - CRUD
@@ -71,7 +71,7 @@ extension NetworkManager {
         task.resume()
     }
 
-    func updateUserAddress(_ address: AddressModel, completion: @escaping (Result<AddressModel, NetworkError>) -> Void) {
+    func updateUserAddress(_ address: Address, completion: @escaping (Result<Address, NetworkError>) -> Void) {
         guard let url = URL(string: "\(endPoint.userAddress.rawValue)/\(address.userId)") else {
             DispatchQueue.main.async {
                 completion(.failure(.invalidURL))
@@ -122,7 +122,7 @@ extension NetworkManager {
 
             do {
                 let decoder = JSONDecoder()
-                let fetchedData = try decoder.decode(AddressModel.self, from: data)
+                let fetchedData = try decoder.decode(Address.self, from: data)
                 DispatchQueue.main.async {
                     completion(.success(fetchedData))
                 }

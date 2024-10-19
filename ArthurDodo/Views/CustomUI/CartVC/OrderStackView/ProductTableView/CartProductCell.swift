@@ -85,7 +85,7 @@ final class CartProductCell: UITableViewCell {
     func configureCell(pizzaInOrder: Order) {
         pizzaImageView.image = UIImage(named: pizzaInOrder.imageName)
         titleLabel.text = pizzaInOrder.pizzaName
-        let text = "\(pizzaInOrder.size.rawValue), \(pizzaInOrder.dough.rawValue)"
+        let text = "\(pizzaInOrder.size.displayName), \(pizzaInOrder.dough.rawValue)"
         sizeDoughLabel.text = text
         priceLabel.text = "\(pizzaInOrder.price) ₽"
         isPizzaHit(pizzaInOrder)

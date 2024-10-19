@@ -71,7 +71,7 @@ final class ApplyOfferViewController: UIViewController {
     }
 
     // MARK: - Public methods
-    func configureViewController(_ offer: SpecialOfferProfileModel) {
+    func configureViewController(_ offer: SpecialOfferProfile) {
         let image = UIImage(named: offer.imageName)
         specialOfferImageView.image = image
 

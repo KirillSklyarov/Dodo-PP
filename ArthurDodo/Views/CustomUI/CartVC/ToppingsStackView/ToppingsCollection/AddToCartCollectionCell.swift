@@ -68,13 +68,13 @@ final class AddToCartCollectionCell: UICollectionViewCell {
     }
 
     // MARK: - Public methods
-    func configCell(_ pizzaToAdd: Pizza) {
+    func configCell(_ pizzaToAdd: Item) {
         itemImageView.image = UIImage(named: pizzaToAdd.imageName)
         titleLabel.text = pizzaToAdd.name
         let dough = Dough.basic.rawValue
-        let size = Size.small.rawValue.components(separatedBy: " ").dropFirst().joined(separator: " ")
+        let size = Size.small.displayName.components(separatedBy: " ").dropFirst().joined(separator: " ")
         weightLabel.text = "\(dough), \(size)"
-        let price = pizzaToAdd.itemSize[.small]?.price ?? 0
+        let price = pizzaToAdd.itemSize.small?.price ?? 0
         let title = "\(price) ₽"
         priceLabel.text = title
     }

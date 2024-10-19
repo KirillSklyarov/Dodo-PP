@@ -12,7 +12,7 @@ final class CartSpOfferCollection: UICollectionView {
     // MARK: - Properties
     private let collectionHeight: CGFloat = 180
     var onShowNewCell: ( (Int) -> Void )?
-    var onCellSelected: ( (SpecialOfferProfileModel) -> Void )?
+    var onCellSelected: ( (SpecialOfferProfile) -> Void )?
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {

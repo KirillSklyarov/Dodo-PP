@@ -14,7 +14,7 @@ final class AddToppingsCollectionView: UICollectionView {
     var onDataFetchedSuccessfully: (() -> Void)?
 
     private var toppings: [Topping] = []
-    private var item: FoodItems?
+    private var item: Item?
 
     private let cellHeight: CGFloat = 100
     private let lineSpacing: CGFloat = 5
@@ -33,7 +33,7 @@ final class AddToppingsCollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func getItem(_ item: FoodItems) {
+    func getItem(_ item: Item) {
         self.item = item
     }
 }

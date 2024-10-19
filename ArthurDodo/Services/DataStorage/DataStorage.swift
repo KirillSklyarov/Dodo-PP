@@ -14,20 +14,25 @@ final class DataStorage {
     private init() {}
 
     // MARK: - Properties
-    var fetchedUserAddresses: [AddressModel] = []
+    var fetchedUserAddresses: [Address] = []
     var fetchedToppings: [Topping] = []
     var fetchedStories: [Story] = []
+    private var fetchedItems: [Item] = []
+    var category: [CategoryName] = []
 
     var order: [Order] = []
+    private var specialOfferArray: [Item] = []
+
     var onDataFetchedSuccessfully: (() -> Void)?
     var onToppingsFetchedSuccessfully: (([Topping]) -> Void)?
     var onStoriesFetchedSuccessfully: (([Story]) -> Void)?
+    var onItemsFetchedSuccessfully: (([Item]) -> Void)?
 }
 
 // MARK: - User Addresses
 extension DataStorage {
     func fetchUserAddresses() {
-        NetworkManager.shared.fetchData(.userAddress) { [weak self] (result: Result<[AddressModel], NetworkError>) in
+        NetworkManager.shared.fetchData(.userAddress) { [weak self] (result: Result<[Address], NetworkError>) in
             guard let self else { return }
             switch result {
             case .success(let addresses):
@@ -56,6 +61,7 @@ extension DataStorage {
     }
 }
 
+// MARK: - Toppings
 extension DataStorage {
     func fetchToppings() {
         NetworkManager.shared.fetchData(.toppings) { [weak self] (result: Result<[Topping], NetworkError>) in
@@ -68,6 +74,41 @@ extension DataStorage {
                 print(error)
             }
         }
+    }
+}
+
+// MARK: - Items
+extension DataStorage {
+    func fetchItems() {
+        NetworkManager.shared.fetchData(.products) { [weak self] (result: Result<[Item], NetworkError>) in
+            guard let self else { return }
+            switch result {
+            case .success(let items):
+                fetchedItems = items.sorted { $0.category.rawValue < $1.category.rawValue }
+                getArrayOfRandomItems(4)
+                getCategoriesFromCatalog()
+                onItemsFetchedSuccessfully?(items)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
+    func getCatalog() -> [Item] {
+        fetchedItems
+    }
+}
+
+// MARK: - Categories
+extension DataStorage {
+    func getCategoriesFromCatalog() {
+        let set = Set(fetchedItems.compactMap(\.category))
+        let sorted = Array(set).sorted { $0.rawValue < $1.rawValue }
+        category = sorted
+    }
+
+    func getCategories() -> [CategoryName] {
+        category
     }
 }
 
@@ -92,5 +133,21 @@ extension DataStorage {
 
     func getTotalOrderPrice() -> Int {
         order.compactMap{ $0.price * $0.count }.reduce(0, +)
+    }
+}
+
+// MARK: - Special Offers
+extension DataStorage {
+    func getSpecialOffersArray() -> [Item] {
+        specialOfferArray
+    }
+
+    func getArrayOfRandomItems(_ countOfElements: Int) {
+        specialOfferArray = SpecialOffer.configRandomOffer(fetchedItems, countOfElements)
+    }
+
+    func getRandomItems(_ countOfElements: Int) -> [Item] {
+        let result = SpecialOffer.configRandomOffer(fetchedItems, countOfElements)
+        return result
     }
 }

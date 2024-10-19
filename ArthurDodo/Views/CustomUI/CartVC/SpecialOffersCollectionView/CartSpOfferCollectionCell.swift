@@ -89,7 +89,7 @@ final class CartSpOfferCollectionCell: UICollectionViewCell {
     }
 
     // MARK: - Public methods
-    func configureCell(_ item: SpecialOfferProfileModel) {
+    func configureCell(_ item: SpecialOfferProfile) {
         nameOfOfferLabel.text = item.name.uppercased()
         detailsOfOfferLabel.text = item.details
         dateLabel.text = item.date

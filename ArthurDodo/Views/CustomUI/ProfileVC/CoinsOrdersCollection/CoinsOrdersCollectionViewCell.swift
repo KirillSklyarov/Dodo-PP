@@ -64,7 +64,7 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Public methods
     func configureCell(_ indexPath: IndexPath) {
-        let data = testCoinsOrdersModel
+        let data = testCoinsOrders
         let item = indexPath.item
 
         switch item {
@@ -75,7 +75,7 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    func designDodoCoinsCell(_ data: DodoCoinsOrdersModel) {
+    func designDodoCoinsCell(_ data: DodoCoinsOrders) {
         containerView.backgroundColor = AppColors.dodoCoinsBlue
         let image = UIImage(named: "dodoCoinsImage")
         coverImageView.image = image
@@ -84,7 +84,7 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
         setButtonTitle("додокоины")
     }
 
-    func designOrdersCell(_ data: DodoCoinsOrdersModel) {
+    func designOrdersCell(_ data: DodoCoinsOrders) {
         let image = UIImage(named: "dodoCoinsImage")
         coverImageView.image = image
         titleLabel.text = "Mои заказы"
@@ -93,7 +93,7 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
         setButtonTitle("\(countOfOrders) заказов")
     }
 
-    func designAddressCell(_ data: DodoCoinsOrdersModel) {
+    func designAddressCell(_ data: DodoCoinsOrders) {
         let image = UIImage(named: "mapPin")
         coverImageView.image = image
         titleLabel.text = "Адреса доставки"

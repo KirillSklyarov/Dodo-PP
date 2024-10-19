@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AddressModel: Codable {
+struct Address: Codable {
     let userId: String
     let addressId: String
     let name: String

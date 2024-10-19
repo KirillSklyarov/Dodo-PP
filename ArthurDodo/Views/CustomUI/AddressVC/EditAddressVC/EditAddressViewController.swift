@@ -26,7 +26,7 @@ final class EditAddressViewController: UIViewController {
     private let bottomPadding: CGFloat = -10
     private let buttonWight: CGFloat = 150
 
-    var addressToEdit: AddressModel
+    var addressToEdit: Address
 
     // MARK: - UI Properties
     private lazy var editStreetAndFlatAddressView = EditAddressTextFieldView(.streetAndFlat)
@@ -59,7 +59,7 @@ final class EditAddressViewController: UIViewController {
     }()
 
     // MARK: - Init
-    init(addressToEdit: AddressModel) {
+    init(addressToEdit: Address) {
         self.addressToEdit = addressToEdit
         super.init(nibName: nil, bundle: nil)
     }

@@ -26,6 +26,8 @@ final class ItemsHeaderView: UICollectionViewCell {
         let label = UILabel()
         label.font = AppFonts.bold20
         label.textColor = .white
+        label.adjustsFontSizeToFitWidth = true
+        label.numberOfLines = 1
         return label
     }()
     private lazy var ingredientsLabel: UILabel = {
@@ -81,12 +83,12 @@ final class ItemsHeaderView: UICollectionViewCell {
     }
 
     // MARK: - Public methods
-    func configHeader(_ item: FoodItems) {
+    func configHeader(_ item: Item) {
         let image = UIImage(named: item.imageName)
         pizzaImageView.image = image
         titleLabel.text = item.name
         ingredientsLabel.text = item.ingredients
-        let price = item.itemSize[.medium]?.price ?? 0
+        let price = item.itemSize.medium?.price ?? 0
         priceButton.setTitle("\(price) ₽", for: .normal)
     }
 
