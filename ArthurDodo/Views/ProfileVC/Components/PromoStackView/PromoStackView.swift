@@ -7,23 +7,23 @@
 
 import UIKit
 
-final class SpecialOfferStackView: UIStackView {
+final class PromoStackView: UIStackView {
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 0
     private let rightPadding: CGFloat = 0
 
-    var onSpecialOfferSelected: ((SpecialOfferProfile) -> Void)?
+    var onPromoSelected: ((Promo) -> Void)?
 
-    private lazy var specialOfferHeaderView = OrderView(title: "Акции")
-    private lazy var specialOfferCollectionView = CartSpOfferCollection()
+    private lazy var promoHeaderView = OrderView(title: "Акции")
+    private lazy var promoCollectionView = PromoCollectionView()
     private lazy var pageControl = CustomPageControl()
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        setupSpecialOfferCollectionViewActions()
+        setupPromoCollectionViewActions()
     }
 
     required init(coder: NSCoder) {
@@ -36,26 +36,30 @@ final class SpecialOfferStackView: UIStackView {
             setupLayout()
         }
     }
+
+    func updateUI(_ promo: [Promo]) {
+        promoCollectionView.updateUI(promo)
+    }
 }
 
 // MARK: - Setup Actions
-extension SpecialOfferStackView {
-    func setupSpecialOfferCollectionViewActions() {
-        specialOfferCollectionView.onShowNewCell = { [weak self] pageNumber in
+extension PromoStackView {
+    func setupPromoCollectionViewActions() {
+        promoCollectionView.onShowNewCell = { [weak self] pageNumber in
             self?.pageControl.currentPage = pageNumber
         }
 
-        specialOfferCollectionView.onCellSelected = { [weak self] specialOffer in
-            self?.onSpecialOfferSelected?(specialOffer)
+        promoCollectionView.onCellSelected = { [weak self] specialOffer in
+            self?.onPromoSelected?(specialOffer)
         }
     }
 }
 
 // MARK: - Setup UI
-extension SpecialOfferStackView {
+extension PromoStackView {
     func setupUI() {
-        addArrangedSubview(specialOfferHeaderView)
-        addArrangedSubview(specialOfferCollectionView)
+        addArrangedSubview(promoHeaderView)
+        addArrangedSubview(promoCollectionView)
         addArrangedSubview(pageControl)
 
         axis = .vertical

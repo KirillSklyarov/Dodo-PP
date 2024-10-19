@@ -7,12 +7,14 @@
 
 import UIKit
 
-final class CartSpOfferCollection: UICollectionView {
+final class PromoCollectionView: UICollectionView {
 
     // MARK: - Properties
     private let collectionHeight: CGFloat = 180
     var onShowNewCell: ( (Int) -> Void )?
-    var onCellSelected: ( (SpecialOfferProfile) -> Void )?
+    var onCellSelected: ( (Promo) -> Void )?
+
+    private var promo: [Promo] = []
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -28,11 +30,16 @@ final class CartSpOfferCollection: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func updateUI(_ promo: [Promo]) {
+        self.promo = promo
+        reloadData()
+    }
+
     // MARK: - Private methods
     private func configCollectionView() {
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
-        register(CartSpOfferCollectionCell.self, forCellWithReuseIdentifier: CartSpOfferCollectionCell.identifier)
+        register(PromoCollectionCell.self, forCellWithReuseIdentifier: PromoCollectionCell.identifier)
         dataSource = self
         delegate = self
     }
@@ -43,20 +50,20 @@ final class CartSpOfferCollection: UICollectionView {
 }
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
-extension CartSpOfferCollection: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension PromoCollectionView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        2
+        promo.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CartSpOfferCollectionCell.identifier, for: indexPath) as? CartSpOfferCollectionCell else { return UICollectionViewCell() }
-        let item = specialOffersProfile[indexPath.item]
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PromoCollectionCell.identifier, for: indexPath) as? PromoCollectionCell else { return UICollectionViewCell() }
+        let item = promo[indexPath.item]
         cell.configureCell(item)
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item = specialOffersProfile[indexPath.item]
+        let item = promo[indexPath.item]
         onCellSelected?(item)
     }
 
@@ -68,7 +75,7 @@ extension CartSpOfferCollection: UICollectionViewDataSource, UICollectionViewDel
 }
 
 // Настройка page control - что переключался при скролле
-extension CartSpOfferCollection: UIScrollViewDelegate {
+extension PromoCollectionView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let pageWidth = scrollView.frame.width
         let page = Int((scrollView.contentOffset.x + (0.5 * pageWidth)) / pageWidth)

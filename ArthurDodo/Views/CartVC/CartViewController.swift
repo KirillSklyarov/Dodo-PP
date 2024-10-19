@@ -12,7 +12,7 @@ final class CartViewController: UIViewController {
     // MARK: - UI Properties
     private lazy var orderStackView = OrderStackView()
     private lazy var toppingsStackView = ToppingsStackView()
-    private lazy var specialOfferStackView = SpecialOfferStackView()
+    private lazy var specialOfferStackView = PromoStackView()
     private lazy var promoButton = PromoButton()
     private lazy var dodoCoinsView = DodoCoinsStackView()
 
@@ -98,7 +98,7 @@ private extension CartViewController {
     }
 
     func setupSpecialViewActions() {
-        specialOfferStackView.onSpecialOfferSelected = { [weak self] specialOffer in
+        specialOfferStackView.onPromoSelected = { [weak self] specialOffer in
             let vc = ApplyOfferViewController()
             guard let configureSheet = vc.sheetPresentationController else { return }
             configureSheet.detents = [.medium()]

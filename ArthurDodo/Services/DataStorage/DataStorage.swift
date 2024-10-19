@@ -18,6 +18,8 @@ final class DataStorage {
     var fetchedToppings: [Topping] = []
     var fetchedStories: [Story] = []
     private var fetchedItems: [Item] = []
+    private var fetchedPromo: [Promo] = []
+
     var category: [CategoryName] = []
 
     var order: [Order] = []
@@ -27,6 +29,7 @@ final class DataStorage {
     var onToppingsFetchedSuccessfully: (([Topping]) -> Void)?
     var onStoriesFetchedSuccessfully: (([Story]) -> Void)?
     var onItemsFetchedSuccessfully: (([Item]) -> Void)?
+    var onPromoFetchedSuccessfully: (([Promo]) -> Void)?
 }
 
 // MARK: - User Addresses
@@ -96,6 +99,22 @@ extension DataStorage {
 
     func getCatalog() -> [Item] {
         fetchedItems
+    }
+}
+
+// MARK: - Promo
+extension DataStorage {
+    func fetchPromo() {
+        NetworkManager.shared.fetchData(.promo) { [weak self] (result: Result<[Promo], NetworkError>) in
+            guard let self else { return }
+            switch result {
+            case .success(let promo):
+                fetchedPromo = promo
+                onPromoFetchedSuccessfully?(fetchedPromo)
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
 

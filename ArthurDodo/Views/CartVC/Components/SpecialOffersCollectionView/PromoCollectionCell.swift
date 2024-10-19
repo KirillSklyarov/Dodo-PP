@@ -1,21 +1,22 @@
 //
-//  SpecialOfferProfileCell.swift
-//  ArthurDodo
+//  PromoCollectionCell.swift
+//  ArthutDodo
 //
-//  Created by Kirill Sklyarov on 10.10.2024.
+//  Created by Kirill Sklyarov on 24.09.2024.
 //
 
 import UIKit
 
-final class SpecialOfferProfileCell: UICollectionViewCell {
+final class PromoCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "CoinsOrdersCollectionViewCell"
-    private let coinsImageSize: CGFloat = 70
+    static let identifier: String = "PromoCollectionCell"
+    private let spOfferImageSize: CGFloat = 70
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
     private let topPadding: CGFloat = 10
     private let bottomPadding: CGFloat = -10
+    private var halfWidth: CGFloat { self.frame.size.width / 2 - leftPadding + rightPadding }
 
     private let subTitleButtonWidth: CGFloat = 70
     private let subTitleButtonHeight: CGFloat = 30
@@ -30,42 +31,50 @@ final class SpecialOfferProfileCell: UICollectionViewCell {
     }()
     private lazy var specialOfferImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.heightAnchor.constraint(equalToConstant: coinsImageSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: coinsImageSize).isActive = true
+        imageView.contentMode = .scaleToFill
+        imageView.layer.cornerRadius = 14
+        imageView.layer.masksToBounds = true
+        imageView.widthAnchor.constraint(equalToConstant: halfWidth).isActive = true
         return imageView
     }()
     private lazy var nameOfOfferLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFonts.bold40
-        label.textColor = .white
+        label.font = AppFonts.semibold14
+        label.textColor = AppColors.grayFont
         label.textAlignment = .left
+        label.widthAnchor.constraint(equalToConstant: halfWidth).isActive = true
+        label.numberOfLines = 0
         return label
     }()
-
     private lazy var detailsOfOfferLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFonts.bold40
+        label.font = AppFonts.semibold16
         label.textColor = .white
         label.textAlignment = .left
+        label.widthAnchor.constraint(equalToConstant: halfWidth).isActive = true
+        label.numberOfLines = 0
         return label
     }()
-
     private lazy var dateLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFonts.bold40
-        label.textColor = .white
+        label.font = AppFonts.regular14
+        label.textColor = AppColors.grayFont
         label.textAlignment = .left
         return label
     }()
-
     private lazy var applyButton: UIButton = {
         let button = UIButton()
+        let title = "Применить"
         var config = UIButton.Configuration.filled()
+        config.title = title
+        config.attributedTitle = AttributedString(title, attributes: AttributeContainer([
+            .font: UIFont.systemFont(ofSize: 14, weight: .bold)]
+        ))
         config.baseForegroundColor = .white
-        config.baseBackgroundColor = .white.withAlphaComponent(0.2)
+        config.baseBackgroundColor = AppColors.buttonOrange
         config.cornerStyle = .capsule
         button.configuration = config
+        button.isUserInteractionEnabled = false
         return button
     }()
 
@@ -80,41 +89,37 @@ final class SpecialOfferProfileCell: UICollectionViewCell {
     }
 
     // MARK: - Public methods
-    func configureCell(_ indexPath: IndexPath) {
-        containerView.backgroundColor = AppColors.dodoCoinsBlue
-        let image = UIImage(named: "dodoCoinsImage")
+    func configureCell(_ item: Promo) {
+        nameOfOfferLabel.text = item.name.uppercased()
+        detailsOfOfferLabel.text = item.details
+        dateLabel.text = item.date
+        let image = UIImage(named: item.imageName)
         specialOfferImageView.image = image
-        setButtonTitle("додокоины")
-    }
-
-    func setButtonTitle(_ title: String) {
-        applyButton.configuration?.attributedTitle = AttributedString(title, attributes: AttributeContainer([
-            .foregroundColor: UIColor.white,
-            .font: AppFonts.bold14])
-        )
     }
 }
 
 // MARK: - Setup UI
-private extension SpecialOfferProfileCell {
+private extension PromoCollectionCell {
     func setupConstraints() {
 
         containerView.addSubviews(specialOfferImageView, nameOfOfferLabel, detailsOfOfferLabel, dateLabel, applyButton)
 
         NSLayoutConstraint.activate([
             specialOfferImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: topPadding),
+            specialOfferImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: bottomPadding),
+
             specialOfferImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: rightPadding),
 
             nameOfOfferLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: topPadding),
-            nameOfOfferLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: leftPadding),
+            nameOfOfferLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: leftPadding),
 
-            detailsOfOfferLabel.topAnchor.constraint(equalTo: nameOfOfferLabel.topAnchor, constant: topPadding),
+            detailsOfOfferLabel.topAnchor.constraint(equalTo: nameOfOfferLabel.bottomAnchor, constant: topPadding),
             detailsOfOfferLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: leftPadding),
 
-            dateLabel.topAnchor.constraint(equalTo: detailsOfOfferLabel.topAnchor, constant: topPadding),
-            dateLabel.leadingAnchor.constraint(equalTo: detailsOfOfferLabel.leadingAnchor, constant: leftPadding),
+            dateLabel.topAnchor.constraint(equalTo: detailsOfOfferLabel.bottomAnchor, constant: topPadding),
+            dateLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: leftPadding),
 
-            applyButton.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: bottomPadding),
+            applyButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: bottomPadding),
             applyButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: leftPadding),
         ])
 
@@ -128,4 +133,3 @@ private extension SpecialOfferProfileCell {
         ])
     }
 }
-

@@ -12,27 +12,42 @@ final class ProfileViewController: UIViewController {
     // MARK: - UI Properties
     private lazy var headerView = ProfileHeaderView()
     private lazy var coinsOrdersCollectionView = CoinsOrdersCollectionView()
-    private lazy var specialOfferStackView = SpecialOfferStackView()
+    private lazy var promoStackView = PromoStackView()
     private lazy var missionStackView = MissionStackView()
-
     private lazy var contentStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [coinsOrdersCollectionView, specialOfferStackView, missionStackView])
+        let stack = UIStackView(arrangedSubviews: [coinsOrdersCollectionView, promoStackView, missionStackView])
         stack.axis = .vertical
         stack.spacing = 10
         return stack
     }()
-
     private lazy var scrollView = UIScrollView()
+
+    // MARK: - Other Properties
+    private let storage = DataStorage.shared
 
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
+        fetchData()
     }
 }
 
-// MARK: - setupActions
+// MARK: - Fetch Data
+private extension ProfileViewController {
+    func fetchData() {
+        storage.fetchPromo()
+
+        storage.onPromoFetchedSuccessfully = { [weak self] promo in
+            DispatchQueue.main.async {
+                self?.promoStackView.updateUI(promo)
+            }
+        }
+    }
+}
+
+// MARK: - Setup Actions
 private extension ProfileViewController {
     func setupActions() {
         setupHeaderViewActions()
@@ -67,7 +82,7 @@ private extension ProfileViewController {
     }
 
     func setupSpecialOfferActions() {
-        specialOfferStackView.onSpecialOfferSelected = { [weak self] specialOffer in
+        promoStackView.onPromoSelected = { [weak self] specialOffer in
             let vc = ApplyOfferViewController()
             guard let configureSheet = vc.sheetPresentationController else { return }
             configureSheet.detents = [.medium()]
@@ -79,7 +94,7 @@ private extension ProfileViewController {
 
 }
 
-// MARK: - SetupUI
+// MARK: - Setup UI
 private extension ProfileViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
