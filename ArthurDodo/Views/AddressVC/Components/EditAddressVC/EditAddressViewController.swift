@@ -7,55 +7,28 @@
 
 import UIKit
 
-enum AddressTextFieldType: String {
-    case streetAndFlat = "Город, улица и дом"
-    case nameOfAddress = "Название места"
-    case entrance = "Подъезд"
-    case codeOfEntrance = "Код на двери"
-    case floor = "Этаж"
-    case flat = "Квартира"
-    case comment = "Комментарий к адресу"
-}
-
 final class EditAddressViewController: UIViewController {
 
     // MARK: - Properties
-    private let leftPadding: CGFloat = 10
-    private let rightPadding: CGFloat = -10
-    private let topPadding: CGFloat = 30
+    private let leftPadding: CGFloat = 0
+    private let rightPadding: CGFloat = -0
+    private let topPadding: CGFloat = 0
     private let bottomPadding: CGFloat = -10
     private let buttonWight: CGFloat = 150
 
     var addressToEdit: Address
 
     // MARK: - UI Properties
-    private lazy var editStreetAndFlatAddressView = EditAddressTextFieldView(.streetAndFlat)
-    private lazy var editNameOfAddressView = EditAddressTextFieldView(.nameOfAddress)
-    private lazy var editEntranceOfAddressView = EditAddressTextFieldView(.entrance)
-    private lazy var editCodeOfAddressView = EditAddressTextFieldView(.codeOfEntrance)
-    private lazy var entranceAndCodeStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [editEntranceOfAddressView, editCodeOfAddressView])
-        stack.axis = .horizontal
-        stack.distribution = .fillEqually
-        stack.spacing = 10
-        return stack
-    }()
-    private lazy var editFloorOfAddressView = EditAddressTextFieldView(.floor)
-    private lazy var editFlatOfAddressView = EditAddressTextFieldView(.flat)
-    private lazy var floorAndFlatStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [editFloorOfAddressView, editFlatOfAddressView])
-        stack.axis = .horizontal
-        stack.distribution = .fillEqually
-        stack.spacing = 10
-        return stack
-    }()
-    private lazy var editCommentToAddressView = EditAddressTextFieldView(.comment)
-    private lazy var saveAddressButton = CartButton(isHidden: false, title: "Сохранить")
+    private lazy var mapView = MapView()
+    private lazy var addressStackView = EditAddressStackView()
+
     private lazy var contentStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [editStreetAndFlatAddressView, editNameOfAddressView, entranceAndCodeStackView, floorAndFlatStackView, editCommentToAddressView, saveAddressButton])
-        stack.axis = .vertical
-        stack.distribution = .equalSpacing
-        return stack
+        let stackView = UIStackView(arrangedSubviews: [mapView, addressStackView])
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = -5
+        addressStackView.backgroundColor = AppColors.backgroundBlack
+        return stackView
     }()
 
     // MARK: - Init
@@ -78,13 +51,7 @@ final class EditAddressViewController: UIViewController {
 
     func updateUIWithData() {
         print(self.addressToEdit)
-        editStreetAndFlatAddressView.configureView(addressToEdit.cityStreetHouse)
-        editNameOfAddressView.configureView(addressToEdit.name)
-        editEntranceOfAddressView.configureView(addressToEdit.entrance?.description)
-        editCodeOfAddressView.configureView(addressToEdit.entranceCode)
-        editFloorOfAddressView.configureView(addressToEdit.floor?.description)
-        editFlatOfAddressView.configureView(addressToEdit.apartment?.description)
-        editCommentToAddressView.configureView(addressToEdit.comments)
+        addressStackView.updateUIWithData(addressToEdit)
     }
 }
 
@@ -95,17 +62,7 @@ private extension EditAddressViewController {
     }
 
     func setupButtonAction() {
-        saveAddressButton.onButtonTapped = { [weak self] in
-            guard let self else { return }
-            NetworkManager.shared.updateUserAddress(addressToEdit) { result in
-                switch result {
-                case .success(let address):
-                    print("Данные успешно обновлены: \(address)")
-                case .failure(let error):
-                    print("Данные НЕ обновлены: \(error)")
-                }
-            }
-        }
+        addressStackView.setupButtonAction(addressToEdit)
     }
 }
 
@@ -119,7 +76,7 @@ private extension EditAddressViewController {
 
     func setupLayout() {
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topPadding),
+            contentStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: topPadding),
             contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftPadding),
             contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightPadding),
             contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomPadding)

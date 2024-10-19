@@ -43,7 +43,7 @@ final class DeliveryAddressSheetView: UIViewController {
         stackView.axis = .horizontal
         return stackView
     }()
-    private lazy var deliveryButton = CartButton(isHidden: false, title: "Доставить сюда")
+    private lazy var deliveryButton = CartButton(title: "Доставить сюда", isCart: false)
     private lazy var addressTableView = AddressListTableView()
     private lazy var contentStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [headerStackView, addressTableView, deliveryButton])
@@ -87,8 +87,9 @@ private extension DeliveryAddressSheetView {
 
     func showEditAddressVC(_ address: Address) {
         let vc = EditAddressViewController(addressToEdit: address)
-        vc.sheetPresentationController?.detents = [.medium()]
-        present(vc, animated: true)
+        let navVC = UINavigationController(rootViewController: vc)
+        navVC.modalPresentationStyle = .fullScreen
+        present(navVC, animated: true)
     }
 
     func setupDeliveryButtonAction() {

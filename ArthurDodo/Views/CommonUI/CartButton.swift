@@ -16,7 +16,7 @@ final class CartButton: UIButton {
     private let dataStorage = DataStorage.shared
 
     // MARK: - Init
-    init(frame: CGRect = .zero, isHidden: Bool, title: String? = nil, isCart: Bool? = nil) {
+    init(frame: CGRect = .zero, isHidden: Bool = false, title: String? = nil, isCart: Bool? = nil) {
         super.init(frame: frame)
         configButton(isHidden: isHidden)
         setupLayout()
