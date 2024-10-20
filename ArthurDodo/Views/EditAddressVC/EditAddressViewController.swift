@@ -10,24 +10,16 @@ import UIKit
 final class EditAddressViewController: UIViewController {
 
     // MARK: - Properties
-    private let leftPadding: CGFloat = 0
-    private let rightPadding: CGFloat = -0
-    private let topPadding: CGFloat = 0
-    private let bottomPadding: CGFloat = -10
-    private let buttonWight: CGFloat = 150
-
     var addressToEdit: Address
 
     // MARK: - UI Properties
     private lazy var mapView = MapView()
-    private lazy var addressStackView = EditAddressStackView()
-
+    private lazy var addressContainerView = EditAddressView()
     private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [mapView, addressStackView])
+        let stackView = UIStackView(arrangedSubviews: [mapView, addressContainerView])
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         stackView.spacing = -5
-        addressStackView.backgroundColor = AppColors.backgroundBlack
         return stackView
     }()
 
@@ -51,7 +43,7 @@ final class EditAddressViewController: UIViewController {
 
     func updateUIWithData() {
         print(self.addressToEdit)
-        addressStackView.updateUIWithData(addressToEdit)
+        addressContainerView.updateUIWithAddress(addressToEdit)
     }
 }
 
@@ -62,7 +54,7 @@ private extension EditAddressViewController {
     }
 
     func setupButtonAction() {
-        addressStackView.setupButtonAction(addressToEdit)
+        addressContainerView.setupButtonAction(addressToEdit)
     }
 }
 
@@ -76,10 +68,10 @@ private extension EditAddressViewController {
 
     func setupLayout() {
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: topPadding),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftPadding),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightPadding),
-            contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomPadding)
+            contentStackView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 }
