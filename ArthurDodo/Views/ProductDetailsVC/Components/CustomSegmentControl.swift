@@ -12,7 +12,7 @@ final class CustomSegmentControl: UISegmentedControl {
     // MARK: - Properties&Callbacks
     var onSegmentControllerValueChanged: ((Int) -> Void)?
 
-    private let viewHeight: CGFloat = 40
+//    private let viewHeight: CGFloat = 40
     private var leadingConstraint: NSLayoutConstraint?
     private lazy var selectedSegmentOval = UIView()
 
@@ -48,7 +48,7 @@ final class CustomSegmentControl: UISegmentedControl {
         setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
         setBackgroundImage(UIImage(), for: .selected, barMetrics: .default)
 
-        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
+//        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
 
         addTarget(self, action: #selector(sizeSegmentControlValueChanged), for: .valueChanged)
 

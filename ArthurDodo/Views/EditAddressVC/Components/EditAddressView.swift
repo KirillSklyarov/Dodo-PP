@@ -31,6 +31,10 @@ final class EditAddressView: UIView {
     func setupButtonAction(_ addressToEdit: Address) {
         addressStackView.setupButtonAction(addressToEdit)
     }
+
+    func updateBasicAddress(_ basicAddress: String) {
+        addressStackView.updateUIBasicAddress(basicAddress)
+    }
 }
 
 // MARK: - Setup UI

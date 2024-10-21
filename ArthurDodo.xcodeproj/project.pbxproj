@@ -101,6 +101,8 @@
 			);
 			mainGroup = 737D0DCC2C99BF7000B7D739;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+			);
 			productRefGroup = 737D0DD62C99BF7000B7D739 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

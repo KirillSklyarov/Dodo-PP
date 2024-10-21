@@ -34,9 +34,15 @@ enum HttpMethod: String {
 }
 
 enum endPoint: String {
-    case userAddress = "http://localhost:3001/userAddress"
-    case toppings = "http://localhost:3001/toppings"
-    case stories = "http://localhost:3001/stories"
-    case products = "http://localhost:3001/products"
-    case promo = "http://localhost:3001/promo"
+    private static let baseURL = "https://a81a-213-183-59-146.ngrok-free.app"
+
+    case userAddress = "/userAddress"
+    case toppings = "/toppings"
+    case stories = "/stories"
+    case products = "/products"
+    case promo = "/promo"
+
+    var url: String {
+        return endPoint.baseURL + self.rawValue
+    }
 }

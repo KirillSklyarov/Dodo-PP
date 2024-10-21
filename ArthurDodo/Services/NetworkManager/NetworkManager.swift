@@ -18,7 +18,7 @@ final class NetworkManager {
 // MARK: - CRUD
 extension NetworkManager {
     func fetchData<T: Codable>(_ typeOfData: endPoint, completion: @escaping (Result<T, NetworkError>) -> Void) {
-        guard let url = URL(string: typeOfData.rawValue) else {
+        guard let url = URL(string: typeOfData.url) else {
             DispatchQueue.main.async {
                 completion(.failure(.invalidURL))
             }

@@ -51,10 +51,17 @@ final class EditAddressViewController: UIViewController {
 private extension EditAddressViewController {
     func setupActions() {
         setupButtonAction()
+        setupMapViewAction()
     }
 
     func setupButtonAction() {
         addressContainerView.setupButtonAction(addressToEdit)
+    }
+
+    func setupMapViewAction() {
+        mapView.onChangeAddress = { [weak self] address in
+            self?.addressContainerView.updateBasicAddress(address)
+        }
     }
 }
 

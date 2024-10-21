@@ -11,16 +11,20 @@ import CoreLocation
 
 final class MapView: UIView {
 
+    // MARK: - Properties
     private let rightInset: CGFloat = -20
     private let bottomInset: CGFloat = -20
     private let pinImageSize: CGFloat = 50
 
     private var isAnimating = false
+    private let geocoder = CLGeocoder()
 
+    var onChangeAddress: ((String) -> Void)?
+
+    // MARK: - UI Properties
     private lazy var mapView = MKMapView()
     private lazy var locationManager = CLLocationManager()
     private lazy var userTrackingButton = MKUserTrackingButton(mapView: mapView)
-
     private lazy var pinView: UIImageView = {
         let image = UIImage(systemName: "mappin")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
         let view = UIImageView(image: image)
@@ -30,6 +34,7 @@ final class MapView: UIView {
         return view
     }()
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -68,9 +73,6 @@ private extension MapView {
 private extension MapView {
     func setupMapView() {
         mapView.delegate = self
-//        mapView.backgroundColor = .darkGray
-//        mapView.showsUserLocation = true
-        mapView.userTrackingMode = .none
         configureLocationManager()
     }
 
@@ -82,6 +84,7 @@ private extension MapView {
     }
 }
 
+// MARK: - Setup Animation
 private extension MapView {
     func showPinAnimation() {
         DispatchQueue.main.async {
@@ -130,5 +133,26 @@ extension MapView: MKMapViewDelegate {
         let mapCenter = mapView.centerCoordinate
         showPinAnimation()
         print("New coordinates: \(mapCenter.latitude), \(mapCenter.longitude)")
+        getAddress(mapCenter)
+    }
+}
+
+// MARK: - Get Address from coordinates
+private extension MapView {
+    func getAddress(_ coordinates: CLLocationCoordinate2D) {
+        geocoder.reverseGeocodeLocation(CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)) { placemarks, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)"); return }
+
+            guard let placemark = placemarks?.first else {
+                print("No placemark found"); return }
+
+            let city = placemark.locality ?? ""
+            let street = placemark.thoroughfare ?? ""
+            let apart = placemark.subThoroughfare ?? ""
+
+            let newAddress = "\(city),\(street),\(apart)"
+            self.onChangeAddress?(newAddress)
+        }
     }
 }

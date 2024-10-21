@@ -53,6 +53,11 @@ final class EditAddressStackView: UIStackView {
         editFlatOfAddressView.configureView(addressToEdit.apartment?.description)
         editCommentToAddressView.configureView(addressToEdit.comments)
     }
+
+    // Обновляем только улицу и дом
+    func updateUIBasicAddress(_ newBasicAddress: String) {
+        editStreetAndFlatAddressView.configureView(newBasicAddress)
+    }
 }
 
 // MARK: - Setup UI
