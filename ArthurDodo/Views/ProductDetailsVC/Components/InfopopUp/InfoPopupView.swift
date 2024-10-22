@@ -113,18 +113,19 @@ extension InfoPopupView: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cpfcTableViewCell.identifier, for: indexPath) as? cpfcTableViewCell else { return UITableViewCell() }
-        guard let item = productDetails else { return cell }
+        guard let item = productDetails else { print("Jopa"); return cell }
 
 //        guard let item = selectedSize
 //        else { print("Jopa"); return cell }
         let title = data[indexPath.row]
-        var valueString = ""
+        print("title \(title)")
+        let valueString: String =
         switch title {
-        case .weight: valueString = item.weight.description
-        case .calories: valueString = item.cpfc.calories.description
-        case .proteins: valueString = item.cpfc.protein.description
-        case .fats: valueString = item.cpfc.fat.description
-        case .carbohydrates: valueString = item.cpfc.carbohydrates.description
+        case .weight: item.weight.description
+        case .calories: item.cpfc.calories.description
+        case .proteins: item.cpfc.protein.description
+        case .fats: item.cpfc.fat.description
+        case .carbohydrates: item.cpfc.carbohydrates.description
         }
         cell.configureCell(title: title.rawValue, cpfcValue: valueString)
         return cell

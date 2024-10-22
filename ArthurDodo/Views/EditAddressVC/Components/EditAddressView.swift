@@ -11,6 +11,10 @@ final class EditAddressView: UIView {
 
     // MARK: - Properties
     private let topInset: CGFloat = 10
+    private let bottomInset: CGFloat = -10
+    private let leftInset: CGFloat = 10
+    private let rightInset: CGFloat = -10
+
     private lazy var addressStackView = EditAddressStackView()
 
     // MARK: - Init
@@ -28,7 +32,7 @@ final class EditAddressView: UIView {
         addressStackView.updateUIWithData(addressToEdit)
     }
 
-    func setupButtonAction(_ addressToEdit: Address) {
+    func setupSaveButtonAction(_ addressToEdit: Address) {
         addressStackView.setupButtonAction(addressToEdit)
     }
 
@@ -40,7 +44,7 @@ final class EditAddressView: UIView {
 // MARK: - Setup UI
 private extension EditAddressView {
     func setupUI() {
-        backgroundColor = AppColors.backgroundBlack
+        backgroundColor = AppColors.backgroundGray
         layer.cornerRadius = 10
         clipsToBounds = true
         addSubviews(addressStackView)
@@ -51,8 +55,8 @@ private extension EditAddressView {
     func setupLayout() {
         NSLayoutConstraint.activate([
             addressStackView.topAnchor.constraint(equalTo: topAnchor, constant: topInset),
-            addressStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            addressStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            addressStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
+            addressStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
             addressStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }

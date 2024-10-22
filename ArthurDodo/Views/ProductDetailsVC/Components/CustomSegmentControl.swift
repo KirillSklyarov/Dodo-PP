@@ -31,6 +31,10 @@ final class CustomSegmentControl: UISegmentedControl {
         moveOval(selectedSegmentIndex)
     }
 
+    func setSegmentColor(_ color: UIColor) {
+        selectedSegmentOval.backgroundColor = color
+    }
+
     // MARK: - IB Action
     @objc private func sizeSegmentControlValueChanged(_ sender: UISegmentedControl) {
         let index = sender.selectedSegmentIndex

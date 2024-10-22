@@ -9,6 +9,7 @@ import UIKit
 
 final class AddressHeaderView: UIStackView {
 
+    // MARK: - Properties
     private let leftPadding: CGFloat = 20
     private let rightPadding: CGFloat = -20
     private let topPadding: CGFloat = 10
@@ -16,13 +17,16 @@ final class AddressHeaderView: UIStackView {
     var onDismissButtonTapped: (() -> Void)?
     var onDeliveryButtonTapped: (() -> Void)?
 
+    // MARK: - UI Properties
     private lazy var dismissButton = DismissButtonView()
     private lazy var segmentControl: SegmentControlView = {
-        let view = SegmentControlView(items: ["Доставка", "В пиццерии"], defaultSelection: 1)
+        let view = SegmentControlView(items: ["Доставка", "В пиццерии"], defaultSelection: 0)
+        view.setSegmentColor(AppColors.buttonOrange)
         view.backgroundColor = AppColors.backgroundBlack
         return view
     }()
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -33,20 +37,20 @@ final class AddressHeaderView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Life cycle
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         if superview != nil {
             setupLayout()
         }
-
     }
 }
 
+// MARK: - Setup UI
 private extension AddressHeaderView {
     func setupUI() {
         axis = .horizontal
         spacing = 20
-
         addArrangedSubview(dismissButton)
         addArrangedSubview(segmentControl)
     }
@@ -62,6 +66,7 @@ private extension AddressHeaderView {
     }
 }
 
+// MARK: - Setup Actions
 private extension AddressHeaderView {
     func setupActions() {
         setupDismissButtonAction()
@@ -77,10 +82,8 @@ private extension AddressHeaderView {
     func setupSegmentControlAction() {
         segmentControl.onSegmentControllerValueChanged = { [weak self] segmentControlIndex in
             switch segmentControlIndex {
-                case 0:
-                self?.onDeliveryButtonTapped?()
-            case 1:
-                self?.onDismissButtonTapped?()
+            case 0: self?.onDeliveryButtonTapped?()
+            case 1: print(#function)
             default: break
             }
         }

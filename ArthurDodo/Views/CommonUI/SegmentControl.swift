@@ -28,8 +28,14 @@ final class SegmentControlView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Private methods
-    private func setupUI() {
+    func setSegmentColor(_ color: UIColor) {
+        segmentControl?.setSegmentColor(color)
+    }
+}
+
+// MARK: - Setup UI
+private extension SegmentControlView {
+     func setupUI() {
         backgroundColor = .black.withAlphaComponent(0.6)
         layer.cornerRadius = viewHeight / 2
         clipsToBounds = true
@@ -44,8 +50,11 @@ final class SegmentControlView: UIView {
             segmentControl.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2)
         ])
     }
+}
 
-    private func setupActions() {
+// MARK: - Setup Actions
+private extension SegmentControlView {
+     func setupActions() {
         segmentControl?.onSegmentControllerValueChanged = { [weak self] index in
             self?.onSegmentControllerValueChanged?(index)
         }

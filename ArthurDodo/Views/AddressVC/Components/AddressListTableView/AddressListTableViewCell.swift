@@ -12,7 +12,7 @@ final class AddressListTableViewCell: UITableViewCell {
     // MARK: - Properties
     static let identifier = "AddressListTableViewCell"
 
-    private let leftPadding: CGFloat = 10
+    private let leftPadding: CGFloat = 0
     private let rightPadding: CGFloat = -10
     private let topPadding: CGFloat = 10
     private let bottomPadding: CGFloat = -10

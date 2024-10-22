@@ -20,10 +20,11 @@ final class DismissButtonView: UIView {
         return button
     }()
 
-    init(frame: CGRect = .zero, xColor: UIColor = .white, backgroundColor: UIColor = AppColors.backgroundGray) {
+    init(frame: CGRect = .zero, xColor: UIColor = .white, backgroundColor: UIColor = AppColors.backgroundGray, isChevron: Bool = false) {
         super.init(frame: frame)
         configUI()
         setColors(xColor: xColor, backgroundColor: backgroundColor)
+        if isChevron { setChevron() }
     }
 
     required init?(coder: NSCoder) {
@@ -36,6 +37,10 @@ final class DismissButtonView: UIView {
         self.backgroundColor = backgroundColor
     }
 
+    private func setChevron() {
+        let image = UIImage(systemName: "chevron.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        dismissButton.setImage(image, for: .normal)
+    }
 
     // MARK: - IB Actions
     @objc private func closeButtonTapped() {

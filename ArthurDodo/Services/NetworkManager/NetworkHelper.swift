@@ -34,7 +34,7 @@ enum HttpMethod: String {
 }
 
 enum endPoint: String {
-    private static let baseURL = "https://a81a-213-183-59-146.ngrok-free.app"
+    private static let baseURL = "https://f2d4-2a00-1370-8180-197c-3883-6327-c94-a0a8.ngrok-free.app"
 
     case userAddress = "/userAddress"
     case toppings = "/toppings"

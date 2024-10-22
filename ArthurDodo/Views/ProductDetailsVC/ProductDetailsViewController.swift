@@ -187,7 +187,7 @@ private extension ProductDetailsViewController {
 //            case 2: size = "large"
 //            default: break }
 
-            guard let productDetails = item?.itemSize.getWeightAndPriceViaIndex(index) else { return }
+            guard let productDetails = item?.itemSize.getWeightAndPriceViaIndex(index) else {print("1231231231313"); return }
 
             let weight = productDetails.weight
 //            self.item?.itemSize.size .size?.weight ?? 0

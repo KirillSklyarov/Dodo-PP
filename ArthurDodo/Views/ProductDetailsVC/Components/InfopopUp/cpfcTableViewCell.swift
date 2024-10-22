@@ -53,6 +53,7 @@ final class cpfcTableViewCell: UITableViewCell {
     }
 
     func configureCell(title: String, cpfcValue: String) {
+        print("title \(title)")
         titleLabel.text = title
         cpfcValueLabel.text = cpfcValue
     }

@@ -11,6 +11,7 @@ final class EditAddressViewController: UIViewController {
 
     // MARK: - Properties
     var addressToEdit: Address
+    private let leftInset: CGFloat = 20
 
     // MARK: - UI Properties
     private lazy var mapView = MapView()
@@ -22,17 +23,24 @@ final class EditAddressViewController: UIViewController {
         stackView.spacing = -5
         return stackView
     }()
+    private lazy var dismissButton = DismissButtonView(isChevron: true)
 
     // MARK: - Init
     init(addressToEdit: Address) {
         self.addressToEdit = addressToEdit
         super.init(nibName: nil, bundle: nil)
+        getCoord()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    func getCoord() {
+        let shortAddress = addressToEdit.cityStreetHouse
+        mapView.getCoordinates(from: shortAddress)
+    }
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,29 +55,11 @@ final class EditAddressViewController: UIViewController {
     }
 }
 
-// MARK: - Setup Actions
-private extension EditAddressViewController {
-    func setupActions() {
-        setupButtonAction()
-        setupMapViewAction()
-    }
-
-    func setupButtonAction() {
-        addressContainerView.setupButtonAction(addressToEdit)
-    }
-
-    func setupMapViewAction() {
-        mapView.onChangeAddress = { [weak self] address in
-            self?.addressContainerView.updateBasicAddress(address)
-        }
-    }
-}
-
 // MARK: - Setup UI
 private extension EditAddressViewController {
     func setupUI() {
-        view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(contentStackView)
+        view.backgroundColor = AppColors.backgroundGray
+        view.addSubviews(contentStackView, dismissButton)
         setupLayout()
     }
 
@@ -78,7 +68,38 @@ private extension EditAddressViewController {
             contentStackView.topAnchor.constraint(equalTo: view.topAnchor),
             contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+
+            dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            dismissButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
         ])
+    }
+}
+
+// MARK: - Setup Actions
+private extension EditAddressViewController {
+    func setupActions() {
+        setupDismissButtonAction()
+        setupSaveButtonAction()
+        setupMapViewAction()
+    }
+
+    // Настраиваем кнопку Сохранить
+    func setupSaveButtonAction() {
+        addressContainerView.setupSaveButtonAction(addressToEdit)
+    }
+
+    // Настраиваем когда двигается карта, то двигается и адрес в таблице
+    func setupMapViewAction() {
+        mapView.onChangeAddress = { [weak self] address in
+            self?.addressContainerView.updateBasicAddress(address)
+        }
+    }
+
+    // Настраиваем кнопку Закрыть
+    func setupDismissButtonAction() {
+        dismissButton.onDismissButtonTapped = { [weak self] in
+            self?.dismiss(animated: true)
+        }
     }
 }
