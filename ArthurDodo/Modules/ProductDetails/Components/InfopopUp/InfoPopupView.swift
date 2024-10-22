@@ -13,10 +13,14 @@ final class InfoPopupView: UIView {
     private let viewHeight: CGFloat = 300
     private let viewWidth: CGFloat = 300
     private let cellHeight: CGFloat = 30
-    private var tableViewHeight: CGFloat { cellHeight * CGFloat(data.count) }
+    private var tableViewHeight: CGFloat { cellHeight * CGFloat(cpfcNames.count) }
+    private let leftInsets: CGFloat = 10
+    private let rightInsets: CGFloat = -10
+    private let topInsets: CGFloat = 10
+    private let cornerRadius: CGFloat = 20
 
-    private let data = CPFCData.allCases
-    private var pizza: Item?
+    private let cpfcNames = CPFCData.allCases
+    private var item: Item?
     private var productDetails: WeightPrice?
 
     // MARK: - UI Properties
@@ -24,7 +28,6 @@ final class InfoPopupView: UIView {
         let label = UILabel()
         label.textColor = .white
         label.font = AppFonts.bold18
-        label.text = "Сырная"
         label.numberOfLines = 0
         return label
     }()
@@ -56,12 +59,20 @@ final class InfoPopupView: UIView {
         label.numberOfLines = 0
         return label
     }()
+    private lazy var contentStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [titleLabel, subLabel, cpfcTableView, infoLabel])
+        stack.axis = .vertical
+        stack.distribution = .equalSpacing
+        stack.spacing = 5
+        return stack
+    }()
 
     // MARK: - Init
-    init(frame: CGRect = .zero, pizza: Item?) {
+    init(frame: CGRect = .zero, item: Item?) {
         super.init(frame: frame)
-        self.pizza = pizza
-        setupView()
+        self.item = item
+        setupUI()
+        updateUI()
     }
 
     required init?(coder: NSCoder) {
@@ -77,11 +88,10 @@ final class InfoPopupView: UIView {
 
 // MARK: - Setup UI
 private extension InfoPopupView {
-
-    func setupView() {
+    func setupUI() {
         isHidden = true
-        backgroundColor = .black
-        layer.cornerRadius = 20
+        backgroundColor = AppColors.backgroundBlack
+        layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
         heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
         widthAnchor.constraint(equalToConstant: viewWidth).isActive = true
@@ -90,44 +100,52 @@ private extension InfoPopupView {
     }
 
     func setupLayout() {
-        let stack = UIStackView(arrangedSubviews: [titleLabel, subLabel, cpfcTableView, infoLabel])
-        stack.axis = .vertical
-        stack.distribution = .equalSpacing
-        stack.spacing = 5
-
-        addSubviews(stack)
+        addSubviews(contentStack)
 
         NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            contentStack.topAnchor.constraint(equalTo: topAnchor, constant: topInsets),
+            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInsets),
+            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInsets)
         ])
+    }
+}
+
+// MARK: - Update UI
+private extension InfoPopupView {
+    func updateUI() {
+        titleLabel.text = item?.name
+        isOneSize()
+    }
+
+    // Если есть 1 размер, то показывай его
+    func isOneSize() {
+        if let oneSize = item?.itemSize.oneSize {
+            productDetails = oneSize
+        }
     }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension InfoPopupView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        data.count
+        cpfcNames.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cpfcTableViewCell.identifier, for: indexPath) as? cpfcTableViewCell else { return UITableViewCell() }
         guard let item = productDetails else { print("Jopa"); return cell }
 
-//        guard let item = selectedSize
-//        else { print("Jopa"); return cell }
-        let title = data[indexPath.row]
-        print("title \(title)")
-        let valueString: String =
-        switch title {
-        case .weight: item.weight.description
-        case .calories: item.cpfc.calories.description
-        case .proteins: item.cpfc.protein.description
-        case .fats: item.cpfc.fat.description
-        case .carbohydrates: item.cpfc.carbohydrates.description
-        }
-        cell.configureCell(title: title.rawValue, cpfcValue: valueString)
+        let title = cpfcNames[indexPath.row]
+        let value: String =
+            switch title {
+            case .weight: item.weight.description
+            case .calories: item.cpfc.calories.description
+            case .proteins: item.cpfc.protein.description
+            case .fats: item.cpfc.fat.description
+            case .carbohydrates: item.cpfc.carbohydrates.description
+            }
+
+        cell.configureCell(title: title.rawValue, cpfcValue: value)
         return cell
     }
 }

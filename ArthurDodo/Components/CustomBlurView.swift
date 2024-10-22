@@ -9,8 +9,10 @@ import UIKit
 
 final class CustomBlurView: UIVisualEffectView {
 
-    override init(effect: UIVisualEffect? = nil) {
-        super.init(effect: effect ?? UIBlurEffect(style: .systemUltraThinMaterialDark))
+    private let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+
+    override init(effect: UIVisualEffect?) {
+        super.init(effect: blurEffect)
     }
 
     required init?(coder: NSCoder) {

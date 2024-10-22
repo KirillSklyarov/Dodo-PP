@@ -33,8 +33,13 @@ enum HttpMethod: String {
     case delete = "DELETE"
 }
 
+enum endPoints: String {
+    case ngrok = "https://795f-213-183-59-146.ngrok-free.app"
+    case mockoon = "http://localhost:3001"
+}
+
 enum endPoint: String {
-    private static let baseURL = "https://f2d4-2a00-1370-8180-197c-3883-6327-c94-a0a8.ngrok-free.app"
+    private static let baseURL: endPoints = .mockoon
 
     case userAddress = "/userAddress"
     case toppings = "/toppings"
@@ -43,6 +48,6 @@ enum endPoint: String {
     case promo = "/promo"
 
     var url: String {
-        return endPoint.baseURL + self.rawValue
+        return endPoint.baseURL.rawValue + self.rawValue
     }
 }

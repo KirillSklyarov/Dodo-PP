@@ -83,6 +83,8 @@ private extension ProfileViewController {
 
     func setupSpecialOfferActions() {
         promoStackView.onPromoSelected = { [weak self] specialOffer in
+//            screenRouter.goToScreen(.ApplyOfferViewController)
+
             let vc = ApplyOfferViewController()
             guard let configureSheet = vc.sheetPresentationController else { return }
             configureSheet.detents = [.medium()]

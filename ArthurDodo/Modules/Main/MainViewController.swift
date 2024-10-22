@@ -26,53 +26,25 @@ final class MainViewController: UIViewController {
     }
 }
 
-// MARK: - Fetch data from server
+// MARK: - Setup UI
 private extension MainViewController {
-    func fetchAllData() {
-        showLoadingIndicator()
-        getStoriesFromServer()
-        getCatalogAndSpecialOffersFromServer()
+    func configUI() {
+        view.backgroundColor = AppColors.backgroundBlack
+        view.addSubviews(headerView, contentCollectionView, cartButton, loadingIndicator)
+        setupLayout()
+        setupLoadingIndicator()
     }
 
-    // Мы обращаемся к хранилищу за сторисами, инициируем сетевой запрос и забираем результаты
-    func getStoriesFromServer() {
-        storage.fetchStories()
-    }
+    func setupLayout() {
+        NSLayoutConstraint.activate([
+            contentCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
 
-    // Мы обращаемся к хранилищу за каталогом, инициируем сетевой запрос и забираем результаты. Так как спецпредложения это рандомная выборка из каталога, то можно делать это тут же.
-    func getCatalogAndSpecialOffersFromServer() {
-        storage.fetchItems()
+            cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
-        storage.onItemsFetchedSuccessfully = { [weak self] items in
-            guard let self else { return }
-            DispatchQueue.main.async {
-                self.updateSpecialOffersUI()
-                self.hideLoadingIndicator()
-            }
-        }
-    }
-
-    // Вызываем обновление UI всех секций
-    func updateSpecialOffersUI() {
-        contentCollectionView.uploadDataFromStorage()
-    }
-}
-
-// MARK: - Setup Loading Indicator
-private extension MainViewController {
-
-    func setupLoadingIndicator() {
-        loadingIndicator.color = UIColor.white
-    }
-
-    func showLoadingIndicator() {
-        loadingIndicator.startAnimating()
-        contentCollectionView.isHidden = true
-    }
-
-    func hideLoadingIndicator() {
-        loadingIndicator.stopAnimating()
-        contentCollectionView.isHidden = false
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 }
 
@@ -121,8 +93,9 @@ private extension MainViewController {
     }
 
     func showProductDetail(_ pizza: Item) {
+        storage.sendSelectedItemToStorage(pizza)
+
         let productDetailVC = ProductDetailsViewController()
-        productDetailVC.getPizzaData(pizza)
         productDetailVC.modalPresentationStyle = .overFullScreen
         productDetailVC.isModalInPresentation = false
         present(productDetailVC, animated: true)
@@ -166,24 +139,52 @@ private extension MainViewController {
     }
 }
 
-// MARK: - SetupLayout
+// MARK: - Fetch data from server
 private extension MainViewController {
-    func configUI() {
-        view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(headerView, contentCollectionView, cartButton, loadingIndicator)
-        setupLayout()
-        setupLoadingIndicator()
+    func fetchAllData() {
+        showLoadingIndicator()
+        getStoriesFromServer()
+        getCatalogAndSpecialOffersFromServer()
     }
 
-    func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
+    // Мы обращаемся к хранилищу за сторисами, инициируем сетевой запрос и забираем результаты
+    func getStoriesFromServer() {
+        storage.fetchStories()
+    }
 
-            cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+    // Мы обращаемся к хранилищу за каталогом, инициируем сетевой запрос и забираем результаты. Так как спецпредложения это рандомная выборка из каталога, то можно делать это тут же.
+    func getCatalogAndSpecialOffersFromServer() {
+        storage.fetchItems()
 
-            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+        storage.onItemsFetchedSuccessfully = { [weak self] items in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                self.updateSpecialOffersUI()
+                self.hideLoadingIndicator()
+            }
+        }
+    }
+
+    // Вызываем обновление UI всех секций
+    func updateSpecialOffersUI() {
+        contentCollectionView.uploadDataFromStorage()
+    }
+}
+
+// MARK: - Setup Loading Indicator
+private extension MainViewController {
+
+    func setupLoadingIndicator() {
+        loadingIndicator.color = UIColor.white
+    }
+
+    func showLoadingIndicator() {
+        loadingIndicator.startAnimating()
+        contentCollectionView.isHidden = true
+    }
+
+    func hideLoadingIndicator() {
+        loadingIndicator.stopAnimating()
+        contentCollectionView.isHidden = false
     }
 }

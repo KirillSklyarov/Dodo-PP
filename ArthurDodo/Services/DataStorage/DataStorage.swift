@@ -24,7 +24,9 @@ final class DataStorage {
 
     var order: [Order] = []
     private var specialOfferArray: [Item] = []
+    private var selectedItem: Item?
 
+    // MARK: - Callbacks
     var onDataFetchedSuccessfully: (() -> Void)?
     var onToppingsFetchedSuccessfully: (([Topping]) -> Void)?
     var onStoriesFetchedSuccessfully: (([Story]) -> Void)?
@@ -99,6 +101,14 @@ extension DataStorage {
 
     func getCatalog() -> [Item] {
         fetchedItems
+    }
+
+    func sendSelectedItemToStorage(_ item: Item) {
+        selectedItem = item
+    }
+
+    func getSelectedItemFromStorage() -> Item? {
+        selectedItem
     }
 }
 

@@ -11,10 +11,10 @@ import UIKit
 final class SegmentControlView: UIView {
 
     // MARK: - Properties&Callbacks
-    var onSegmentControllerValueChanged: ((Int) -> Void)?
-
     private let viewHeight: CGFloat = 40
     private var segmentControl: CustomSegmentControl?
+
+    var onSegmentControllerValueChanged: ((Int) -> Void)?
 
     // MARK: - Init
     init(frame: CGRect = .zero, items: [Any]?, defaultSelection: Int) {
@@ -36,7 +36,7 @@ final class SegmentControlView: UIView {
 // MARK: - Setup UI
 private extension SegmentControlView {
      func setupUI() {
-        backgroundColor = .black.withAlphaComponent(0.6)
+        backgroundColor = AppColors.backgroundGray
         layer.cornerRadius = viewHeight / 2
         clipsToBounds = true
 
@@ -47,7 +47,9 @@ private extension SegmentControlView {
             segmentControl.topAnchor.constraint(equalTo: topAnchor, constant: 2),
             segmentControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
             segmentControl.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -2),
-            segmentControl.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2)
+            segmentControl.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
+
+            heightAnchor.constraint(equalToConstant: viewHeight)
         ])
     }
 }

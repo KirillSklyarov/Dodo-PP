@@ -15,17 +15,14 @@ final class CartViewController: UIViewController {
     private lazy var specialOfferStackView = PromoStackView()
     private lazy var promoButton = PromoButton()
     private lazy var dodoCoinsView = DodoCoinsStackView()
-
     private lazy var contentStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [orderStackView, toppingsStackView, specialOfferStackView, promoButton, dodoCoinsView])
         stackView.axis = .vertical
         stackView.spacing = 10
         return stackView
     }()
-
-    private lazy var cartButtonView = CartButtonViewFooter()
+    private lazy var cartButtonView = CartButtonView()
     private lazy var scrollUpButton = ScrollUpButton()
-
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties
@@ -34,86 +31,12 @@ final class CartViewController: UIViewController {
     var onEmptyCart: (() -> Void)?
     var onRefreshCart: (() -> Void)?
 
-    // MARK: - Init
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
-
-        loadOrderFromStorage()
-    }
-
-    // MARK: - Private methods
-    private func loadOrderFromStorage() {
-        order = dataStorage.getOrderFromStorage()
-        updateUI()
-    }
-
-    private func updateUI() {
-        let countOfItems = order?.compactMap{ $0.count }.reduce(0, +) ?? 0
-        let totalPrice = order?.compactMap{ $0.price * $0.count }.reduce(0, +) ?? 0
-        let dodoCoins = totalPrice / 10
-        orderStackView.setNewData(countOfItems, totalPrice: totalPrice)
-        dodoCoinsView.setCountOfItems(countOfItems)
-        dodoCoinsView.setTotalPrice(totalPrice)
-        dodoCoinsView.setDodoCoins(dodoCoins)
-        cartButtonView.updatePrice(totalPrice)
-    }
-}
-
-// MARK: - Setup Actions
-private extension CartViewController {
-    func setupActions() {
-        setupCartProductTableViewAction()
-        setupToppingsCollectionView()
-        setupSpecialViewActions()
-        setupScrollUpButtonAction()
-    }
-
-    func setupCartProductTableViewAction() {
-        orderStackView.onEmptyCart = { [weak self] in
-            guard let self else { return }
-            dismiss(animated: true)
-            onEmptyCart?()
-        }
-        orderStackView.onItemDeletedFromCart = { [weak self] in
-            self?.loadOrderFromStorage()
-        }
-        orderStackView.onCountIncreased = { [weak self] in
-            self?.loadOrderFromStorage()
-        }
-
-        orderStackView.onChangeItem = { [weak self] in
-            let productVC = ProductDetailsViewController()
-            self?.present(productVC, animated: true)
-        }
-    }
-
-    func setupScrollUpButtonAction() {
-        scrollUpButton.onScrollUpButtonTapped = { [weak self] in
-            guard let self else { return }
-            let topInset = scrollView.adjustedContentInset.top
-            self.scrollView.setContentOffset(CGPoint(x: 0, y: -topInset), animated: true)
-        }
-    }
-
-    func setupSpecialViewActions() {
-        specialOfferStackView.onPromoSelected = { [weak self] specialOffer in
-            let vc = ApplyOfferViewController()
-            guard let configureSheet = vc.sheetPresentationController else { return }
-            configureSheet.detents = [.medium()]
-            configureSheet.prefersGrabberVisible = true
-            vc.configureViewController(specialOffer)
-            self?.present(vc, animated: true)
-        }
-    }
-
-    func setupToppingsCollectionView() {
-        toppingsStackView.onNewItemToAddToCart = { [weak self] in
-            guard let self else { return }
-            loadOrderFromStorage()
-            orderStackView.uploadOrder()
-        }
+        fetchDataFromStorage()
     }
 }
 
@@ -149,6 +72,81 @@ private extension CartViewController {
         let bottomInset = cartButtonView.getHeight()
         scrollView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: bottomInset, right: 0)
         scrollView.delegate = self
+    }
+}
+
+// MARK: - Setup Actions
+private extension CartViewController {
+    func setupActions() {
+        setupCartProductTableViewAction()
+        setupToppingsCollectionView()
+        setupSpecialViewActions()
+        setupScrollUpButtonAction()
+    }
+
+    func setupCartProductTableViewAction() {
+        orderStackView.onEmptyCart = { [weak self] in
+            guard let self else { return }
+            dismiss(animated: true)
+            onEmptyCart?()
+        }
+        orderStackView.onItemDeletedFromCart = { [weak self] in
+            self?.fetchDataFromStorage()
+        }
+        orderStackView.onCountIncreased = { [weak self] in
+            self?.fetchDataFromStorage()
+        }
+
+        orderStackView.onChangeItem = { [weak self] in
+            let productVC = ProductDetailsViewController()
+            self?.present(productVC, animated: true)
+        }
+    }
+
+    func setupScrollUpButtonAction() {
+        scrollUpButton.onScrollUpButtonTapped = { [weak self] in
+            guard let self else { return }
+            let topInset = scrollView.adjustedContentInset.top
+            self.scrollView.setContentOffset(CGPoint(x: 0, y: -topInset), animated: true)
+        }
+    }
+
+    func setupSpecialViewActions() {
+        specialOfferStackView.onPromoSelected = { [weak self] specialOffer in
+            let vc = ApplyOfferViewController()
+            guard let configureSheet = vc.sheetPresentationController else { return }
+            configureSheet.detents = [.medium()]
+            configureSheet.prefersGrabberVisible = true
+            vc.configureViewController(specialOffer)
+            self?.present(vc, animated: true)
+        }
+    }
+
+    func setupToppingsCollectionView() {
+        toppingsStackView.onNewItemToAddToCart = { [weak self] in
+            guard let self else { return }
+            fetchDataFromStorage()
+            orderStackView.uploadOrder()
+        }
+    }
+}
+
+// MARK: - Fetch Data
+private extension CartViewController {
+    func fetchDataFromStorage() {
+        order = dataStorage.getOrderFromStorage()
+        updateUI()
+    }
+
+    func updateUI() {
+        let countOfItems = order?.compactMap{ $0.count }.reduce(0, +) ?? 0
+        let totalPrice = order?.compactMap{ $0.price * $0.count }.reduce(0, +) ?? 0
+        let dodoCoins = totalPrice / 10
+        orderStackView.setNewData(countOfItems, totalPrice: totalPrice)
+        dodoCoinsView.setCountOfItems(countOfItems)
+        dodoCoinsView.setTotalPrice(totalPrice)
+        dodoCoinsView.setDodoCoins(dodoCoins)
+        cartButtonView.updatePrice(totalPrice)
     }
 }
 

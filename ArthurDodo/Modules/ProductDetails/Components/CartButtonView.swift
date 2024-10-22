@@ -7,22 +7,27 @@
 
 import UIKit
 
-final class CartButtonViewFooter: UIView {
+final class CartButtonView: UIView {
 
     // MARK: - Properties
-    var onCloseButtonTapped: ( (Int) -> Void )?
     private let viewHeight: CGFloat = 90
+    private let topInset: CGFloat = 10
+    private let leftInset: CGFloat = 20
+    private let rightInset: CGFloat = -20
+
     private var currentPrice = 0
 
+    var onCartButtonTapped: ( (Int) -> Void )?
+
     // MARK: - UI Properties
-    private lazy var cartButton = CartButton(isHidden: false)
+    private lazy var cartButton = CartButton(isHidden: false, isCart: false)
     private lazy var blurView = CustomBlurView()
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         configUI()
-        configureCartButton()
+        setupActions()
     }
 
     required init?(coder: NSCoder) {
@@ -43,33 +48,22 @@ final class CartButtonViewFooter: UIView {
         let title = "В корзину за \(price) ₽"
         cartButton.setNewTitle(title)
     }
+}
 
-    // MARK: - Private methods
-    private func configureCartButton() {
-        let title = "В корзину за 0 ₽"
-        cartButton.setNewTitle(title)
-        let image = UIImage()
-        cartButton.setImage(image, for: .normal)
-
-        cartButton.addTarget(self, action: #selector(cartButtonTapped), for: .touchUpInside)
-    }
-
-    @objc private func cartButtonTapped() {
-        onCloseButtonTapped?(currentPrice)
-    }
-
-    private func configUI() {
+// MARK: - Setup UI
+private extension CartButtonView {
+    func configUI() {
         addSubviews(blurView, cartButton)
         setupLayout()
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
         setupBlurConstraints()
         setupCartButtonConstraints()
     }
 
-    private func setupBlurConstraints() {
+    func setupBlurConstraints() {
         NSLayoutConstraint.activate([
             blurView.topAnchor.constraint(equalTo: topAnchor),
             blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -78,11 +72,21 @@ final class CartButtonViewFooter: UIView {
         ])
     }
 
-    private func setupCartButtonConstraints() {
+    func setupCartButtonConstraints() {
         NSLayoutConstraint.activate([
-            cartButton.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            cartButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            cartButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            cartButton.topAnchor.constraint(equalTo: topAnchor, constant: topInset),
+            cartButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
+            cartButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset)
         ])
+    }
+}
+
+// MARK: - Setup Actions
+private extension CartButtonView {
+    func setupActions() {
+        cartButton.onButtonTapped = { [weak self] in
+            guard let self else { return }
+            onCartButtonTapped?(currentPrice)
+        }
     }
 }
