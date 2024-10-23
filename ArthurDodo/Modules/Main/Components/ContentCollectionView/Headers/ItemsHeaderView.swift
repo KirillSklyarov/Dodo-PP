@@ -12,7 +12,6 @@ final class ItemsHeaderView: UICollectionViewCell {
     // MARK: - Properties
     static let identifier: String = "ItemsHeaderView"
     private let imageSize: CGFloat = 160
-    private let buttonWidth: CGFloat = 100
     private let hitImageSize: CGFloat = 130
 
     // MARK: - UI Properties
@@ -37,15 +36,7 @@ final class ItemsHeaderView: UICollectionViewCell {
         label.numberOfLines = 0
         return label
     }()
-    private lazy var priceButton: UIButton = {
-        let button = UIButton()
-        button.titleLabel?.font = AppFonts.bold14
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .darkGray.withAlphaComponent(0.4)
-        button.layer.cornerRadius = 16
-        button.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
-        return button
-    }()
+    private lazy var priceButton = PriceGrayButton()
     private lazy var hitImageView: UIImageView = {
         let imageView = UIImageView()
         let image = UIImage(named: "hit2")
@@ -60,7 +51,6 @@ final class ItemsHeaderView: UICollectionViewCell {
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.layer.cornerRadius = frame.height / 2
         view.clipsToBounds = true
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
@@ -69,7 +59,7 @@ final class ItemsHeaderView: UICollectionViewCell {
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configUI()
+        setupUI()
     }
 
     required init?(coder: NSCoder) {
@@ -88,46 +78,38 @@ final class ItemsHeaderView: UICollectionViewCell {
         pizzaImageView.image = image
         titleLabel.text = item.name
         ingredientsLabel.text = item.ingredients
-        let price = item.itemSize.medium?.price ?? 0
-        priceButton.setTitle("\(price) ₽", for: .normal)
+        priceButton.setPrice(item)
     }
+}
 
-    // MARK: - Private methods
-    private func configGradient() {
-        let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.white.cgColor, UIColor.systemPurple.cgColor, AppColors.backgroundGray.cgColor]
-        gradient.startPoint = CGPoint(x: 0, y: 0)
-        gradient.endPoint = CGPoint(x: 0, y: 1)
-        backView.layer.insertSublayer(gradient, at: 0)
-        gradientLayer = gradient
-    }
+// MARK: - Setup UI
+private extension ItemsHeaderView {
+    func setupUI() {
+        let contentContainer = setupContentContainer()
 
-    private func configUI() {
-        let container = setupContentContainer()
-
-        addSubviews(container)
+        addSubviews(contentContainer)
 
         NSLayoutConstraint.activate([
-            container.topAnchor.constraint(equalTo: topAnchor),
-            container.leadingAnchor.constraint(equalTo: leadingAnchor),
-            container.trailingAnchor.constraint(equalTo: trailingAnchor),
-            container.bottomAnchor.constraint(equalTo: bottomAnchor)
+            contentContainer.topAnchor.constraint(equalTo: topAnchor),
+            contentContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
+            contentContainer.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 
-    private func setupContentContainer() -> UIView {
-        let container = UIView()
+    func setupContentContainer() -> UIView {
+        let contentContainer = UIView()
 
-        container.addSubviews(backView, pizzaImageView, titleLabel, ingredientsLabel, priceButton)
+        contentContainer.addSubviews(backView, pizzaImageView, titleLabel, ingredientsLabel, priceButton)
 
         NSLayoutConstraint.activate([
-            backView.topAnchor.constraint(equalTo: container.topAnchor, constant: 10),
-            backView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
-            backView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
-            backView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+            backView.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: 10),
+            backView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 10),
+            backView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -10),
+            backView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
 
-            pizzaImageView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            pizzaImageView.topAnchor.constraint(equalTo: container.topAnchor, constant: 30),
+            pizzaImageView.centerXAnchor.constraint(equalTo: contentContainer.centerXAnchor),
+            pizzaImageView.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: 30),
 
             titleLabel.topAnchor.constraint(equalTo: pizzaImageView.bottomAnchor, constant: 5),
             titleLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 10),
@@ -141,6 +123,18 @@ final class ItemsHeaderView: UICollectionViewCell {
             priceButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -10),
         ])
 
-        return container
+        return contentContainer
+    }
+}
+
+// MARK: - Setup gradient
+private extension ItemsHeaderView {
+    func configGradient() {
+        let gradient = CAGradientLayer()
+        gradient.colors = [UIColor.white.cgColor, UIColor.systemPurple.cgColor, AppColors.backgroundGray.cgColor]
+        gradient.startPoint = CGPoint(x: 0, y: 0)
+        gradient.endPoint = CGPoint(x: 0, y: 1)
+        backView.layer.insertSublayer(gradient, at: 0)
+        gradientLayer = gradient
     }
 }

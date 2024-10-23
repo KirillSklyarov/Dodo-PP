@@ -73,9 +73,8 @@
 		73B969982CC7C78700A2415A /* AddToppingsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969272CC7C78700A2415A /* AddToppingsCollectionView.swift */; };
 		73B969992CC7C78700A2415A /* AddToppingsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969282CC7C78700A2415A /* AddToppingsCollectionViewCell.swift */; };
 		73B9699A2CC7C78700A2415A /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9692A2CC7C78700A2415A /* DetailsView.swift */; };
-		73B9699B2CC7C78700A2415A /* InfoAndToppingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9692C2CC7C78700A2415A /* InfoAndToppingsView.swift */; };
+		73B9699B2CC7C78700A2415A /* InfoAndToppingsStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9692C2CC7C78700A2415A /* InfoAndToppingsStack.swift */; };
 		73B9699C2CC7C78700A2415A /* cpfcTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9692E2CC7C78700A2415A /* cpfcTableViewCell.swift */; };
-		73B9699D2CC7C78700A2415A /* InfoPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9692F2CC7C78700A2415A /* InfoPopupView.swift */; };
 		73B9699E2CC7C78700A2415A /* IngredientsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969312CC7C78700A2415A /* IngredientsView.swift */; };
 		73B9699F2CC7C78700A2415A /* CartButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969332CC7C78700A2415A /* CartButtonView.swift */; };
 		73B969A02CC7C78700A2415A /* CustomSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969342CC7C78700A2415A /* CustomSegmentControl.swift */; };
@@ -119,6 +118,10 @@
 		73B969DA2CC7C7C000A2415A /* UserDefaults+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969D52CC7C7C000A2415A /* UserDefaults+Ext.swift */; };
 		73B969DE2CC7C7C500A2415A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969DB2CC7C7C500A2415A /* AppDelegate.swift */; };
 		73B969DF2CC7C7C500A2415A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969DC2CC7C7C500A2415A /* SceneDelegate.swift */; };
+		73E6EB3F2CC8D99C006831F2 /* PriceGrayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB3E2CC8D99C006831F2 /* PriceGrayButton.swift */; };
+		73E6EB422CC92FC5006831F2 /* CpfcPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB412CC92FC5006831F2 /* CpfcPopupView.swift */; };
+		73E6EB442CC948F2006831F2 /* CustomTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB432CC948F2006831F2 /* CustomTableView.swift */; };
+		73E6EB462CC97741006831F2 /* Info&ToppingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB452CC97741006831F2 /* Info&ToppingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -201,9 +204,8 @@
 		73B969272CC7C78700A2415A /* AddToppingsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToppingsCollectionView.swift; sourceTree = "<group>"; };
 		73B969282CC7C78700A2415A /* AddToppingsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToppingsCollectionViewCell.swift; sourceTree = "<group>"; };
 		73B9692A2CC7C78700A2415A /* DetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
-		73B9692C2CC7C78700A2415A /* InfoAndToppingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoAndToppingsView.swift; sourceTree = "<group>"; };
+		73B9692C2CC7C78700A2415A /* InfoAndToppingsStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoAndToppingsStack.swift; sourceTree = "<group>"; };
 		73B9692E2CC7C78700A2415A /* cpfcTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cpfcTableViewCell.swift; sourceTree = "<group>"; };
-		73B9692F2CC7C78700A2415A /* InfoPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupView.swift; sourceTree = "<group>"; };
 		73B969312CC7C78700A2415A /* IngredientsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientsView.swift; sourceTree = "<group>"; };
 		73B969332CC7C78700A2415A /* CartButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartButtonView.swift; sourceTree = "<group>"; };
 		73B969342CC7C78700A2415A /* CustomSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentControl.swift; sourceTree = "<group>"; };
@@ -236,6 +238,10 @@
 		73B969D52CC7C7C000A2415A /* UserDefaults+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Ext.swift"; sourceTree = "<group>"; };
 		73B969DB2CC7C7C500A2415A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		73B969DC2CC7C7C500A2415A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		73E6EB3E2CC8D99C006831F2 /* PriceGrayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceGrayButton.swift; sourceTree = "<group>"; };
+		73E6EB412CC92FC5006831F2 /* CpfcPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CpfcPopupView.swift; sourceTree = "<group>"; };
+		73E6EB432CC948F2006831F2 /* CustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableView.swift; sourceTree = "<group>"; };
+		73E6EB452CC97741006831F2 /* Info&ToppingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Info&ToppingsView.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -540,6 +546,8 @@
 				73B9690D2CC7C78700A2415A /* CustomStepperView.swift */,
 				73B9690E2CC7C78700A2415A /* HeaderUIView.swift */,
 				73B9690F2CC7C78700A2415A /* SegmentControl.swift */,
+				73E6EB432CC948F2006831F2 /* CustomTableView.swift */,
+				73E6EB3E2CC8D99C006831F2 /* PriceGrayButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -640,18 +648,10 @@
 		73B9692D2CC7C78700A2415A /* Info&ToppingsView */ = {
 			isa = PBXGroup;
 			children = (
-				73B9692C2CC7C78700A2415A /* InfoAndToppingsView.swift */,
+				73B9692C2CC7C78700A2415A /* InfoAndToppingsStack.swift */,
+				73E6EB452CC97741006831F2 /* Info&ToppingsView.swift */,
 			);
 			path = "Info&ToppingsView";
-			sourceTree = "<group>";
-		};
-		73B969302CC7C78700A2415A /* InfopopUp */ = {
-			isa = PBXGroup;
-			children = (
-				73B9692E2CC7C78700A2415A /* cpfcTableViewCell.swift */,
-				73B9692F2CC7C78700A2415A /* InfoPopupView.swift */,
-			);
-			path = InfopopUp;
 			sourceTree = "<group>";
 		};
 		73B969322CC7C78700A2415A /* IngredientsView */ = {
@@ -668,8 +668,8 @@
 				73B969292CC7C78700A2415A /* AddToppingsCollection */,
 				73B9692B2CC7C78700A2415A /* DetailsView */,
 				73B9692D2CC7C78700A2415A /* Info&ToppingsView */,
-				73B969302CC7C78700A2415A /* InfopopUp */,
 				73B969322CC7C78700A2415A /* IngredientsView */,
+				73E6EB472CC981A2006831F2 /* CpfcPopupView */,
 				73B969332CC7C78700A2415A /* CartButtonView.swift */,
 				73B969342CC7C78700A2415A /* CustomSegmentControl.swift */,
 				73B969352CC7C78700A2415A /* DismissButtonView.swift */,
@@ -681,8 +681,8 @@
 		73B969392CC7C78700A2415A /* ProductDetails */ = {
 			isa = PBXGroup;
 			children = (
-				73B969372CC7C78700A2415A /* Components */,
 				73B969382CC7C78700A2415A /* ProductDetailsViewController.swift */,
+				73B969372CC7C78700A2415A /* Components */,
 			);
 			path = ProductDetails;
 			sourceTree = "<group>";
@@ -825,6 +825,15 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		73E6EB472CC981A2006831F2 /* CpfcPopupView */ = {
+			isa = PBXGroup;
+			children = (
+				73B9692E2CC7C78700A2415A /* cpfcTableViewCell.swift */,
+				73E6EB412CC92FC5006831F2 /* CpfcPopupView.swift */,
+			);
+			path = CpfcPopupView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -937,6 +946,7 @@
 				73B969722CC7C78700A2415A /* AddressViewController.swift in Sources */,
 				73B969732CC7C78700A2415A /* DodoCoinsStackView.swift in Sources */,
 				73B969742CC7C78700A2415A /* DodoCoinsView.swift in Sources */,
+				73E6EB3F2CC8D99C006831F2 /* PriceGrayButton.swift in Sources */,
 				73B969752CC7C78700A2415A /* CartProductCell.swift in Sources */,
 				73B969762CC7C78700A2415A /* CartProductTableView.swift in Sources */,
 				73B969772CC7C78700A2415A /* OrderStackView.swift in Sources */,
@@ -946,10 +956,12 @@
 				73B9697B2CC7C78700A2415A /* AddToCartCollectionView.swift in Sources */,
 				73B9697C2CC7C78700A2415A /* ToppingsStackView.swift in Sources */,
 				73B9697D2CC7C78700A2415A /* CartVCHeader.swift in Sources */,
+				73E6EB422CC92FC5006831F2 /* CpfcPopupView.swift in Sources */,
 				73B9697E2CC7C78700A2415A /* CustomPageControl.swift in Sources */,
 				73B9697F2CC7C78700A2415A /* OrderView.swift in Sources */,
 				73B969802CC7C78700A2415A /* PromoButton.swift in Sources */,
 				73B969812CC7C78700A2415A /* ScrollUpButton.swift in Sources */,
+				73E6EB462CC97741006831F2 /* Info&ToppingsView.swift in Sources */,
 				73B969822CC7C78700A2415A /* CartViewController.swift in Sources */,
 				73B969832CC7C78700A2415A /* MapView.swift in Sources */,
 				73B969842CC7C78700A2415A /* PinAnnotation.swift in Sources */,
@@ -977,14 +989,14 @@
 				73B969982CC7C78700A2415A /* AddToppingsCollectionView.swift in Sources */,
 				73B969992CC7C78700A2415A /* AddToppingsCollectionViewCell.swift in Sources */,
 				73B9699A2CC7C78700A2415A /* DetailsView.swift in Sources */,
-				73B9699B2CC7C78700A2415A /* InfoAndToppingsView.swift in Sources */,
+				73B9699B2CC7C78700A2415A /* InfoAndToppingsStack.swift in Sources */,
 				73B9699C2CC7C78700A2415A /* cpfcTableViewCell.swift in Sources */,
-				73B9699D2CC7C78700A2415A /* InfoPopupView.swift in Sources */,
 				73B9699E2CC7C78700A2415A /* IngredientsView.swift in Sources */,
 				73B9699F2CC7C78700A2415A /* CartButtonView.swift in Sources */,
 				73B969A02CC7C78700A2415A /* CustomSegmentControl.swift in Sources */,
 				73B969A12CC7C78700A2415A /* DismissButtonView.swift in Sources */,
 				73B969A22CC7C78700A2415A /* ProductHeaderView.swift in Sources */,
+				73E6EB442CC948F2006831F2 /* CustomTableView.swift in Sources */,
 				73B969A32CC7C78700A2415A /* ProductDetailsViewController.swift in Sources */,
 				73B969A42CC7C78700A2415A /* CoinsOrdersCollectionView.swift in Sources */,
 				73B969A52CC7C78700A2415A /* CoinsOrdersCollectionViewCell.swift in Sources */,

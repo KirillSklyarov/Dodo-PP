@@ -25,7 +25,7 @@ final class AddToppingsCollectionViewCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "cheese"
-        label.font = .systemFont(ofSize: 14, weight: .bold)
+        label.font = AppFonts.bold14
         label.textAlignment = .center
         label.numberOfLines = 1
         label.textColor = .white
@@ -35,7 +35,7 @@ final class AddToppingsCollectionViewCell: UICollectionViewCell {
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
         label.text = "100 ₽"
-        label.font = .systemFont(ofSize: 14, weight: .bold)
+        label.font = AppFonts.bold14
         label.textAlignment = .center
         label.numberOfLines = 1
         label.textColor = .white

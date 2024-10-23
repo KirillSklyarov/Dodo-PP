@@ -10,15 +10,15 @@ import UIKit
 final class AddToppingsCollectionView: UICollectionView {
 
     // MARK: - Properties
-    var onToppingSelected: ( (Int) -> Void )?
-    var onDataFetchedSuccessfully: (() -> Void)?
+    private let cellHeight: CGFloat = 100
+    private let lineSpacing: CGFloat = 5
+    private var collectionHeight: CGFloat?
 
     private var toppings: [Topping] = []
     private var item: Item?
 
-    private let cellHeight: CGFloat = 100
-    private let lineSpacing: CGFloat = 5
-    private var collectionHeight: CGFloat?
+    var onToppingSelected: ( (Int) -> Void )?
+    var onDataFetchedSuccessfully: (() -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {

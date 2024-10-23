@@ -15,15 +15,15 @@ final class ContentCollectionView: UICollectionView {
     private var stories: [Story] = []
     private var specialOffersArray: [Item] = []
     private var catalog: [Item] = []
+    private var categories: [CategoryName] = []
 
-    private let sectionsNumber = 3
+    private let countOfSections = 3
 
     var onItemCellTapped: ((IndexPath) -> Void)?
     var onStoriesCellTapped: ((IndexPath) -> Void)?
     var onSpecialOfferCellTapped: ((IndexPath) -> Void)?
 
     private let storage = DataStorage.shared
-    private var categories: [CategoryName] = []
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -229,7 +229,7 @@ private extension ContentCollectionView {
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        sectionsNumber
+        countOfSections
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -266,7 +266,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
             } else {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemsCollectionCell.identifier, for: indexPath) as? ItemsCollectionCell else {
                     return UICollectionViewCell() }
-                cell.configureCell(pizza: item)
+                cell.configureCell(item)
                 return cell
             }
         default: return UICollectionViewCell()

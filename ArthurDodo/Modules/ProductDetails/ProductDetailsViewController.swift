@@ -12,22 +12,8 @@ final class ProductDetailsViewController: UIViewController {
     // MARK: - UI Properties
     private lazy var headerView = ProductHeaderView()
     private lazy var itemDetailsView = DetailsView()
-    private lazy var ingredientsView = IngredientsView()
-    private lazy var toppingsCollectionView = AddToppingsCollectionView()
-    private lazy var infoAndToppingsStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [ingredientsView, toppingsCollectionView])
-        stack.axis = .vertical
-        stack.spacing = 5
-        return stack
-    }()
-    private lazy var infoAndToppingsContainer: UIView = {
-        let view = UIView()
-        view.addSubviews(infoAndToppingsStack)
-        view.backgroundColor = AppColors.backgroundGray
-        return view
-    }()
+    private lazy var infoAndToppingsContainer = InfoAndToppingsView()
     private lazy var cartButtonView = CartButtonView()
-    private lazy var infoPopupView = InfoPopupView(item: item)
 
     private lazy var contentStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [itemDetailsView, infoAndToppingsContainer])
@@ -39,7 +25,6 @@ final class ProductDetailsViewController: UIViewController {
 
     // MARK: - Other Properties
     private let storage = DataStorage.shared
-    private var tapGesture: UITapGestureRecognizer?
     private var item: Item?
     private var order: Order?
 
@@ -58,7 +43,6 @@ final class ProductDetailsViewController: UIViewController {
 private extension ProductDetailsViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundGray
-
         configScrollView()
         setupConstraints()
     }
@@ -69,8 +53,7 @@ private extension ProductDetailsViewController {
         scrollView.backgroundColor = AppColors.backgroundGray
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.showsVerticalScrollIndicator = false
-        let bottomHeight = cartButtonView.getHeight() + 10
-        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: bottomHeight, right: 0)
+        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
 
         scrollView.addSubviews(contentStack)
     }
@@ -87,7 +70,7 @@ private extension ProductDetailsViewController {
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            scrollView.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor)
         ])
     }
 
@@ -110,29 +93,11 @@ private extension ProductDetailsViewController {
         ])
     }
 
-    func setupInfoPopupViewConstraints() {
-        let buttonFrame = ingredientsView.getButtonFrame()
-
-        NSLayoutConstraint.activate([
-            infoPopupView.trailingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonFrame.origin.x - 10),
-            infoPopupView.centerYAnchor.constraint(equalTo: view.topAnchor, constant: buttonFrame.origin.y)
-        ])
-    }
-
     func setupCartButtonConstraints() {
         NSLayoutConstraint.activate([
             cartButtonView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             cartButtonView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             cartButtonView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-    }
-
-    func setupInfoAndToppingsStackConstraints() {
-        NSLayoutConstraint.activate([
-            infoAndToppingsStack.topAnchor.constraint(equalTo: infoAndToppingsContainer.topAnchor),
-            infoAndToppingsStack.leadingAnchor.constraint(equalTo: infoAndToppingsContainer.leadingAnchor, constant: 10),
-            infoAndToppingsStack.trailingAnchor.constraint(equalTo: infoAndToppingsContainer.trailingAnchor, constant: -10),
-            infoAndToppingsStack.bottomAnchor.constraint(equalTo: infoAndToppingsContainer.bottomAnchor)
         ])
     }
 }
@@ -141,11 +106,10 @@ private extension ProductDetailsViewController {
 private extension ProductDetailsViewController {
     func setupActions() {
         setupHeaderAction()
-        setupToppingsCollectionViewActions()
+        sendCartToInfoView()
         setupCartViewAction()
         setupSizeSegmentAction()
         setupInfoButtonAction()
-        setupInfoAndToppingsStackConstraints()
     }
 
     func setupHeaderAction() {
@@ -154,22 +118,10 @@ private extension ProductDetailsViewController {
         }
     }
 
-    func setupToppingsCollectionViewActions() {
-        toppingsCollectionView.onToppingSelected = { [weak self] toppingPrice in
-            guard let self else { return }
-            var currentPrice = self.cartButtonView.getCurrentPrice()
-            currentPrice += toppingPrice
-            print(currentPrice)
-            self.cartButtonView.updatePrice(currentPrice)
-        }
-
-        toppingsCollectionView.onDataFetchedSuccessfully = { [weak self] in
-            DispatchQueue.main.async {
-                self?.toppingsCollectionView.reloadSections(IndexSet(integer: 0))
-            }
-        }
+    func sendCartToInfoView() {
+        infoAndToppingsContainer.getCartView(cartButtonView)
     }
-
+    
     func setupCartViewAction() {
         cartButtonView.isHidden = false
         cartButtonView.onCartButtonTapped = { [weak self] finalPrice in
@@ -179,11 +131,6 @@ private extension ProductDetailsViewController {
             let chosenDough = itemDetailsView.getChosenDough()
 
             let price = item.itemSize.medium?.price ?? 0
-
-//            if let pizza = item as? Pizza {
-//                price = pizza.itemSize[chosenSize]?.price ?? 0
-//            }
-
             order = Order(pizzaName: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, price: price, isHit: item.isHit)
             guard let order else { return }
             storage.sendToOrderStorage(order)
@@ -195,34 +142,20 @@ private extension ProductDetailsViewController {
     func setupSizeSegmentAction() {
         itemDetailsView.onSegmentValueChanged = { [weak self] index in
             guard let self else { return }
-
-//            var size: String = "small"
-//            switch index {
-//            case 0: size = "small"
-//            case 1: size = "medium"
-//            case 2: size = "large"
-//            default: break }
-
-            guard let productDetails = item?.itemSize.getWeightAndPriceViaIndex(index) else {print("1231231231313"); return }
-
-            let weight = productDetails.weight
-//            self.item?.itemSize.size .size?.weight ?? 0
-            let price = productDetails.price
-//            self.item?.itemSize[size]?.price ?? 0
-            self.ingredientsView.updateWeight(weight)
-            self.cartButtonView.updatePrice(price)
-            self.infoPopupView.setProductDetails(productDetails)
+            updateUIWithChosenSize(index)
         }
     }
 
+    func updateUIWithChosenSize(_ index: Int) {
+        guard let productDetails = item?.itemSize.getWeightAndPriceViaIndex(index) else {print("We have some problems here"); return }
+        infoAndToppingsContainer.updateUI(productDetails: productDetails)
+        let price = productDetails.price
+        cartButtonView.updatePrice(price)
+    }
+
     func setupInfoButtonAction() {
-        ingredientsView.onInfoButtonTapped = { [weak self] in
-            guard let self else { return }
-            if self.infoPopupView.isHidden {
-                self.showPopupView()
-            } else {
-                self.hidePopupView()
-            }
+        infoAndToppingsContainer.onShowPopupVC = { [weak self] popupVC in
+            self?.present(popupVC, animated: true)
         }
     }
 }
@@ -232,7 +165,7 @@ private extension ProductDetailsViewController {
     func fetchSelectedItem() {
         guard let item = storage.getSelectedItemFromStorage() else { print("No item selected"); return }
         self.item = item
-        toppingsCollectionView.getItem(item)
+        infoAndToppingsContainer.getItem(item)
         updateUIWithSelectedItem()
     }
 }
@@ -256,7 +189,7 @@ private extension ProductDetailsViewController {
     func isOneSize() {
         if let oneSize = item?.itemSize.oneSize {
             itemDetailsView.hideSizeSegment()
-            ingredientsView.updateWeight(oneSize.weight)
+            infoAndToppingsContainer.updateWeight(oneSize.weight)
             cartButtonView.updatePrice(oneSize.price)
         }
     }
@@ -265,65 +198,7 @@ private extension ProductDetailsViewController {
         guard let item else { return }
         headerView.updateTitle(item.name)
         itemDetailsView.updatePizzaImage(item.imageName)
-        ingredientsView.updateIngredients(item.ingredients)
-        ingredientsView.updateWeight(item.itemSize.medium?.weight ?? 0)
+        infoAndToppingsContainer.updateIngredientsAndWeight(item)
         cartButtonView.updatePrice(item.itemSize.medium?.price ?? 0)
-    }
-}
-
-// MARK: - Setup PopUpIngredientsView
-private extension ProductDetailsViewController {
-
-    func showPopupView() {
-        showAnimatedPopupView()
-        turningOffUserInteractionSegments()
-        addGesture()
-    }
-
-    func turningOffUserInteractionSegments() {
-        itemDetailsView.turningOffUserInteractionSegments()
-    }
-
-    func turningOnUserInteractionSegments() {
-        itemDetailsView.turningOnUserInteractionSegments()
-    }
-
-    func showAnimatedPopupView() {
-        view.addSubviews(infoPopupView)
-        setupInfoPopupViewConstraints()
-
-        let buttonFrame = ingredientsView.getButtonFrame()
-        infoPopupView.frame = buttonFrame
-        infoPopupView.isHidden = false
-
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            self?.view.layoutIfNeeded()
-        }
-    }
-
-    func addGesture() {
-        tapGesture = UITapGestureRecognizer(target: self, action: #selector(hidePopupViewByTap))
-        if let tapGesture {
-            view.addGestureRecognizer(tapGesture)
-        }
-    }
-
-    func removeGesture() {
-        if let tapGesture {
-            view.removeGestureRecognizer(tapGesture)
-        }
-    }
-
-    @objc private func hidePopupViewByTap(_ sender: UIGestureRecognizer) {
-        let location = sender.location(in: self.view)
-        if !infoPopupView.frame.contains(location) {
-            hidePopupView()
-        }
-    }
-
-    @objc private func hidePopupView() {
-        turningOnUserInteractionSegments()
-        infoPopupView.isHidden = true
-        removeGesture()
     }
 }

@@ -12,7 +12,6 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
     // MARK: - Properties
     static let identifier: String = "SpecialOfferCollectionCell"
     private let imageViewSize: CGFloat = 90
-    private let buttonWidthMultiplier: CGFloat = 0.85
 
     var onPriceButtonTapped: ( (String) -> Void )?
 
@@ -27,22 +26,31 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
         let label = UILabel()
         label.font = AppFonts.semibold16
         label.textColor = .white
-        label.numberOfLines = 0
+        label.numberOfLines = 3
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
-    private lazy var priceButton: UIButton = {
-        let button = UIButton()
-        button.titleLabel?.font = AppFonts.semibold14
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = AppColors.buttonGray
-        button.layer.cornerRadius = 14
-        return button
+    private lazy var priceButton = PriceGrayButton()
+    private lazy var textStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [titleLabel, priceButton])
+        stack.axis = .vertical
+        stack.spacing = 5
+        stack.alignment = .leading
+        return stack
+    }()
+
+    private lazy var contentStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [pizzaImageView, textStack])
+        stack.axis = .horizontal
+        stack.spacing = 10
+        stack.alignment = .center
+        return stack
     }()
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupSubviews()
+        setupUI()
     }
 
     required init?(coder: NSCoder) {
@@ -53,51 +61,23 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
     func configureCell(_ item: Item) {
         pizzaImageView.image = UIImage(named: item.imageName)
         titleLabel.text = item.name
-        let itemPrice = item.itemSize.medium?.price ?? 0
-//            .itemSize[.medium]?.price ?? 0
-        let priceString = "от \(itemPrice) ₽"
-        priceButton.setTitle(priceString, for: .normal)
+        priceButton.setPrice(item)
     }
 }
 
 // MARK: - Setup UI
 private extension SpecialOfferCollectionCell {
-    func setupSubviews() {
-
-        let contentContainer = setupContentContainer()
-
-        contentView.addSubviews(contentContainer)
-
-        NSLayoutConstraint.activate([
-            contentContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
-            contentContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+    func setupUI() {
+        contentView.addSubviews(contentStack)
+        setupLayout()
     }
 
-    func setupContentContainer() -> UIView {
-
-        let contentContainer = UIView()
-
-        let stack = UIStackView(arrangedSubviews: [titleLabel, priceButton])
-        stack.axis = .vertical
-        stack.spacing = 5
-        stack.alignment = .leading
-
-        contentContainer.addSubviews(pizzaImageView, stack)
-
+    func setupLayout() {
         NSLayoutConstraint.activate([
-            pizzaImageView.centerYAnchor.constraint(equalTo: contentContainer.centerYAnchor),
-            pizzaImageView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
-
-            stack.centerYAnchor.constraint(equalTo: pizzaImageView.centerYAnchor),
-            stack.leadingAnchor.constraint(equalTo: pizzaImageView.trailingAnchor, constant: 10),
-            stack.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
-
-            priceButton.widthAnchor.constraint(equalTo: stack.widthAnchor, multiplier: buttonWidthMultiplier)
+            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor),
+            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
-
-        return contentContainer
     }
 }

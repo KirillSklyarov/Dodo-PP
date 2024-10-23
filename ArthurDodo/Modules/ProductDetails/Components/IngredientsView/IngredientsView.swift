@@ -10,8 +10,17 @@ import UIKit
 final class IngredientsView: UIView {
 
     // MARK: - Properties&Callbacks
-    var onInfoButtonTapped: (() -> Void)?
     private let buttonSize: CGFloat = 24
+    private let cornerRadius: CGFloat = 10
+    private let topInset: CGFloat = 10
+    private let leftInset: CGFloat = 10
+    private let rightInset: CGFloat = -10
+    private let bottomInset: CGFloat = -10
+
+    private var item: Item?
+    private let storage = DataStorage.shared
+
+    var onShowPopupVC: ((UIViewController) -> Void)?
 
     // MARK: - UI Properties
     private lazy var ingredientsLabel: UILabel = {
@@ -41,23 +50,44 @@ final class IngredientsView: UIView {
         label.numberOfLines = 0
         return label
     }()
+    private lazy var ingredientsAndInfoStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [ingredientsLabel, infoButton])
+        stack.axis = .horizontal
+        stack.spacing = 10
+        stack.alignment = .leading
+        return stack
+    }()
+
+    private lazy var contentStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [ingredientsAndInfoStack, weightLabel])
+        stack.axis = .vertical
+        stack.spacing = 10
+        return stack
+    }()
+
+    private lazy var cpfcPopupView = CpfcPopupView(item: item)
 
     // MARK: - Init
-    override init(frame: CGRect) {
+    override init(frame: CGRect = .zero) {
         super.init(frame: frame)
-        setupView()
+        setupUI()
+        fetchData()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // MARK: - IB Action
-    @objc private func infoButtonTapped() {
-        onInfoButtonTapped?()
+// MARK: - Fetch data from storage
+private extension IngredientsView {
+    func fetchData() {
+        self.item = storage.getSelectedItemFromStorage()
     }
+}
 
-    // MARK: - Public methods
+// MARK: - Public methods
+extension IngredientsView {
     func updateIngredients(_ ingredients: String) {
         ingredientsLabel.text = ingredients
     }
@@ -71,44 +101,62 @@ final class IngredientsView: UIView {
         return infoButton.convert(infoButton.bounds, to: nil)
     }
 
-    // MARK: - Private methods
-    private func setupView() {
-        backgroundColor = .darkGray.withAlphaComponent(0.4)
-        layer.cornerRadius = 10
+    func setProductDetails(_ details: WeightPrice) {
+        cpfcPopupView.setProductDetails(details)
+    }
+}
+
+// MARK: - Setup UI
+private extension IngredientsView {
+    func setupUI() {
+        backgroundColor = AppColors.buttonGray
+        layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
 
-        addSubviews(ingredientsLabel, infoButton, weightLabel)
+        addSubviews(contentStack)
 
         setupLayout()
     }
 
-    private func setupLayout() {
-        setupInfoLabelConstraints()
-        setupInfoButtonConstraints()
-        setupWeightLabelConstraints()
-    }
-
-    private func setupInfoLabelConstraints() {
+    func setupLayout() {
         NSLayoutConstraint.activate([
-            ingredientsLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            ingredientsLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            ingredientsLabel.trailingAnchor.constraint(equalTo: infoButton.leadingAnchor, constant: -10),
+            contentStack.topAnchor.constraint(equalTo: topAnchor, constant: topInset),
+            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
+            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
+            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomInset)
         ])
     }
+}
 
-    private func setupInfoButtonConstraints() {
-        NSLayoutConstraint.activate([
-            infoButton.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            infoButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
-        ])
+// MARK: - Setup actions
+private extension IngredientsView {
+    @objc private func infoButtonTapped() {
+        showTestPopupView()
+    }
+}
+
+// MARK: - Setup PopUpIngredientsView
+private extension IngredientsView {
+    func showTestPopupView() {
+        setupPopupView(cpfcPopupView)
+        onShowPopupVC?(cpfcPopupView)
     }
 
-    private func setupWeightLabelConstraints() {
-        NSLayoutConstraint.activate([
-            weightLabel.topAnchor.constraint(equalTo: ingredientsLabel.bottomAnchor, constant: 10),
-            weightLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-            weightLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            weightLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
+    func setupPopupView(_ view: CpfcPopupView) {
+        view.modalPresentationStyle = .popover
+        view.preferredContentSize = CGSize(width: 300, height: 310)
+        view.popoverPresentationController?.sourceView = self
+        view.popoverPresentationController?.sourceRect = CGRect(
+            origin: CGPoint(x: infoButton.frame.minX - rightInset,
+                            y: infoButton.frame.midY + topInset),
+            size: .zero)
+        view.popoverPresentationController?.permittedArrowDirections = .right
+        view.popoverPresentationController?.delegate = self
+    }
+}
+
+extension IngredientsView: UIPopoverPresentationControllerDelegate {
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        .none
     }
 }

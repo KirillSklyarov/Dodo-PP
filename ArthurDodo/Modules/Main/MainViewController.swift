@@ -92,8 +92,8 @@ private extension MainViewController {
         present(profileVC, animated: true)
     }
 
-    func showProductDetail(_ pizza: Item) {
-        storage.sendSelectedItemToStorage(pizza)
+    func showProductDetail(_ item: Item) {
+        storage.sendSelectedItemToStorage(item)
 
         let productDetailVC = ProductDetailsViewController()
         productDetailVC.modalPresentationStyle = .overFullScreen
