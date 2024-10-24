@@ -23,7 +23,6 @@ final class ProductDetailsViewController: UIViewController {
     }()
     private lazy var scrollView = UIScrollView()
 
-
     // MARK: - Other Properties
     private let storage = DataStorage.shared
     private lazy var router = Router(baseVC: self)
@@ -127,20 +126,53 @@ private extension ProductDetailsViewController {
     }
     
     func setupCartViewAction() {
-        cartButtonView.isHidden = false
         cartButtonView.onCartButtonTapped = { [weak self] finalPrice in
-            guard let self,
-                  let item else { return }
-            let chosenSize = itemDetailsView.getChosenSize()
-            let chosenDough = itemDetailsView.getChosenDough()
-
-            let price = item.itemSize.medium?.price ?? 0
-            order = Order(pizzaName: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, price: price, isHit: item.isHit)
+            guard let self else { return }
+            configureOrder()
             guard let order else { return }
             storage.sendToOrderStorage(order)
             self.onCartButtonTapped?(finalPrice)
             self.dismiss(animated: true)
         }
+    }
+
+    func configureOrder() {
+        guard let item else { return }
+        let chosenSize = getCorrectSize()
+        let chosenDough = getCorrectDough()
+        let weight = getCorrectWeight()
+        let price = item.getCorrectPrice(size: chosenSize)
+
+        order = Order(pizzaName: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, weight: weight, price: price, isHit: item.isHit)
+    }
+
+    func getCorrectWeight() -> Int {
+        guard let item else { return 0 }
+        var weight: Int?
+        if item.hasOneSize() {
+            weight = item.itemSize.oneSize?.weight
+        } else {
+            weight = item.itemSize.medium?.weight
+        }
+        return weight ?? 0
+    }
+
+    // Если есть размер oneSize, то берем его, если нет - выбранный размер
+    func getCorrectSize() -> Size {
+        guard let item else { return .oneSize }
+        let correctSize: Size = if item.hasOneSize() {
+            .oneSize
+        } else { itemDetailsView.getChosenSize() }
+        return correctSize
+    }
+
+    // Если товар - пицца, то берем тесто, если нет - ничего
+    func getCorrectDough() -> Dough? {
+        guard let item else { return nil }
+        let chosenDough: Dough? = if item.category == .pizza {
+            itemDetailsView.getChosenDough()
+        } else { nil }
+        return chosenDough
     }
 
     func setupSizeSegmentAction() {
@@ -187,7 +219,7 @@ private extension ProductDetailsViewController {
 
     // Если это не пицца, то не нужно показывать поле с тестом
     func isItemPizza() {
-        if item?.category != .pizzas {
+        if item?.category != .pizza {
             itemDetailsView.hideDoughSegment()
         }
     }

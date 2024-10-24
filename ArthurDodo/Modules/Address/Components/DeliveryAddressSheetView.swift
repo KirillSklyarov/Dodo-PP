@@ -88,7 +88,7 @@ private extension DeliveryAddressSheetView {
     }
 
     func showEditAddressVC(_ address: Address) {
-        router.navigate(to: .editAddress) { [weak self] editAddressVC in
+        router.navigate(to: .editAddress) { editAddressVC in
             guard let editAddressVC = editAddressVC as? EditAddressViewController else { print("We can't cast to EditAddressViewController"); return }
             editAddressVC.addressToEdit = address
 

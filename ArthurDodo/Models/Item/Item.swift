@@ -16,11 +16,9 @@ struct Item: Codable {
     var imageName: String
     var isHit: Bool
     var itemSize: ItemSize
-    var price: Int?
-    var weight: Int?
     var isHeader: Bool
 
-    init(id: String, category: CategoryName = .pizzas, name: String, ingredients: String, toppings: [ToppingEnum] = [], imageName: String, itemSize: ItemSize, isHit: Bool = false, weight: Int? = nil, price: Int? = nil, isHeader: Bool = false) {
+    init(id: String, category: CategoryName = .pizza, name: String, ingredients: String, toppings: [ToppingEnum] = [], imageName: String, itemSize: ItemSize, isHit: Bool = false, isHeader: Bool = false) {
         self.id = id
         self.name = name
         self.ingredients = ingredients
@@ -30,5 +28,20 @@ struct Item: Codable {
         self.isHit = isHit
         self.isHeader = isHeader
         self.category = category
+    }
+
+    func hasOneSize() -> Bool {
+        itemSize.oneSize != nil
+    }
+
+    func getCorrectPrice(size: Size) -> Int {
+        let price =
+            switch size {
+            case .oneSize: itemSize.oneSize?.price
+            case .small: itemSize.small?.price
+            case .medium: itemSize.medium?.price
+            case .large: itemSize.large?.price
+            }
+        return price ?? 0
     }
 }

@@ -12,11 +12,11 @@ final class CartViewController: UIViewController {
     // MARK: - UI Properties
     private lazy var orderStackView = OrderStackView()
     private lazy var toppingsStackView = ToppingsStackView()
-    private lazy var specialOfferStackView = PromoStackView()
+    private lazy var promoStackView = PromoStackView()
     private lazy var promoButton = PromoButton()
     private lazy var dodoCoinsView = DodoCoinsStackView()
     private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [orderStackView, toppingsStackView, specialOfferStackView, promoButton, dodoCoinsView])
+        let stackView = UIStackView(arrangedSubviews: [orderStackView, toppingsStackView, promoStackView, promoButton, dodoCoinsView])
         stackView.axis = .vertical
         stackView.spacing = 10
         return stackView
@@ -26,9 +26,16 @@ final class CartViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties
-    private let dataStorage = DataStorage.shared
+    private let storage = DataStorage.shared
     private lazy var router = Router(baseVC: self)
+
+    private let leftInset: CGFloat = 10
+    private let rightInset: CGFloat = -10
+    private let topInset: CGFloat = 10
+
     private var order: [Order]?
+    private var promo: [Promo] = []
+
     var onEmptyCart: (() -> Void)?
     var onRefreshCart: (() -> Void)?
 
@@ -38,6 +45,50 @@ final class CartViewController: UIViewController {
         setupUI()
         setupActions()
         fetchDataFromStorage()
+    }
+}
+
+// MARK: - Fetch Data
+private extension CartViewController {
+    func fetchDataFromStorage() {
+        fetchOrders()
+        fetchPromo()
+    }
+
+    func fetchOrders() {
+        order = storage.getOrderFromStorage()
+        print(order)
+        updateUI()
+    }
+
+    func updateUI() {
+        let countOfItems = order?.compactMap{ $0.count }.reduce(0, +) ?? 0
+        let totalPrice = order?.compactMap{ $0.price * $0.count }.reduce(0, +) ?? 0
+        let dodoCoins = totalPrice / 10
+        orderStackView.setNewData(countOfItems, totalPrice: totalPrice)
+        dodoCoinsView.setCountOfItems(countOfItems)
+        dodoCoinsView.setTotalPrice(totalPrice)
+        dodoCoinsView.setDodoCoins(dodoCoins)
+        cartButtonView.updatePrice(totalPrice)
+    }
+
+    func fetchPromo() {
+        promo = storage.getPromoFromStorage()
+
+        if promo.isEmpty {
+            fetchPromoFromServer()
+        } else {
+            promoStackView.updateUI(promo)
+        }
+    }
+
+    func fetchPromoFromServer() {
+        storage.fetchPromo()
+        storage.onPromoFetchedSuccessfully = { [weak self] fetchedPromo in
+            guard let self else { return }
+            promo = fetchedPromo
+            promoStackView.updateUI(promo)
+        }
     }
 }
 
@@ -71,7 +122,7 @@ private extension CartViewController {
     func setupScrollView() {
         scrollView.addSubviews(contentStackView, scrollUpButton)
         let bottomInset = cartButtonView.getHeight()
-        scrollView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: bottomInset, right: 0)
+        scrollView.contentInset = UIEdgeInsets(top: topInset, left: 0, bottom: bottomInset, right: 0)
         scrollView.delegate = self
     }
 }
@@ -112,8 +163,9 @@ private extension CartViewController {
     }
 
     func setupSpecialViewActions() {
-        specialOfferStackView.onPromoSelected = { [weak self] specialOffer in
-            self?.router.navigate(to: .applySpecialOffer) { [weak self] applyOfferVC in
+        promoStackView.onPromoSelected = { [weak self] specialOffer in
+            guard let self else { return }
+            router.navigate(to: .applySpecialOffer) { applyOfferVC in
                 guard let applyOfferVC = applyOfferVC as? ApplyOfferViewController else { print("We can't cast applyOfferVC"); return }
                 applyOfferVC.configureViewController(specialOffer)
             }
@@ -126,25 +178,6 @@ private extension CartViewController {
             fetchDataFromStorage()
             orderStackView.uploadOrder()
         }
-    }
-}
-
-// MARK: - Fetch Data
-private extension CartViewController {
-    func fetchDataFromStorage() {
-        order = dataStorage.getOrderFromStorage()
-        updateUI()
-    }
-
-    func updateUI() {
-        let countOfItems = order?.compactMap{ $0.count }.reduce(0, +) ?? 0
-        let totalPrice = order?.compactMap{ $0.price * $0.count }.reduce(0, +) ?? 0
-        let dodoCoins = totalPrice / 10
-        orderStackView.setNewData(countOfItems, totalPrice: totalPrice)
-        dodoCoinsView.setCountOfItems(countOfItems)
-        dodoCoinsView.setTotalPrice(totalPrice)
-        dodoCoinsView.setDodoCoins(dodoCoins)
-        cartButtonView.updatePrice(totalPrice)
     }
 }
 
@@ -169,8 +202,8 @@ extension CartViewController {
     private func setupContentViewConstraints() {
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 10),
-            contentStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -10),
+            contentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: leftInset),
+            contentStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: rightInset),
             contentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
 
             contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -20),
@@ -180,7 +213,7 @@ extension CartViewController {
     private func setupScrollUpButtonConstraints() {
         NSLayoutConstraint.activate([
             scrollUpButton.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor, constant: -5),
-            scrollUpButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            scrollUpButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
         ])
     }
 
@@ -193,7 +226,7 @@ extension CartViewController {
     }
 }
 
-// MARK: - UIScrollViewDelegate
+// MARK: - UIScrollViewDelegate - настройка кнопки scrollToTop
 extension CartViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         setupScrollUpButton()
@@ -219,3 +252,4 @@ extension CartViewController: UIScrollViewDelegate {
         }
     }
 }
+

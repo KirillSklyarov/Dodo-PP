@@ -11,7 +11,8 @@ struct Order {
     let pizzaName: String
     let imageName: String
     let size: Size
-    let dough: Dough
+    let dough: Dough?
+    let weight: Int
     let price: Int
     let isHit: Bool
     var count: Int = 1

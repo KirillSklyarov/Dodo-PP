@@ -21,6 +21,9 @@ struct ItemSize: Codable {
         default: return nil
         }
     }
+}
+
+
 
 //    func countOfSizes() -> Int {
 //        var count = 0
@@ -29,5 +32,5 @@ struct ItemSize: Codable {
 //        if large != nil { count += 1 }
 //        return count
 //    }
-}
+//}
 

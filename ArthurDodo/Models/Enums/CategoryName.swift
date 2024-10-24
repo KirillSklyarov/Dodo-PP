@@ -9,8 +9,8 @@ import Foundation
 
 enum CategoryName: String, Codable {
     case breakfast = "Завтрак"
-    case combos = "Комбо"
-    case starters = "Закуски"
-    case pizzas = "Пицца"
+    case combo = "Комбо"
+    case starter = "Закуски"
+    case pizza = "Пицца"
     case cocktail = "Коктейль"
 }

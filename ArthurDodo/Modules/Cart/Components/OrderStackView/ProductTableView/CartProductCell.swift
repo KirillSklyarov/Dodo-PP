@@ -45,20 +45,20 @@ final class CartProductCell: UITableViewCell {
     private lazy var sizeDoughLabel: UILabel = {
         let label = UILabel()
         label.textColor = .gray
-        label.font = .systemFont(ofSize: 12)
+        label.font = AppFonts.regular14
         return label
     }()
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.font = AppFonts.bold20
         return label
     }()
     private lazy var changeNumbersButton: UIButton = {
         let button = UIButton()
         button.setTitle("Изменить", for: .normal)
         button.setTitleColor(AppColors.buttonOrange, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
+        button.titleLabel?.font = AppFonts.semibold16
         button.addTarget(self, action: #selector (changeButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -85,7 +85,14 @@ final class CartProductCell: UITableViewCell {
     func configureCell(pizzaInOrder: Order) {
         pizzaImageView.image = UIImage(named: pizzaInOrder.imageName)
         titleLabel.text = pizzaInOrder.pizzaName
-        let text = "\(pizzaInOrder.size.displayName), \(pizzaInOrder.dough.rawValue)"
+        let detailText =
+            if pizzaInOrder.dough != nil {
+                "\(pizzaInOrder.size.displayName), \(pizzaInOrder.dough!.rawValue)"
+            } else {
+                "\(pizzaInOrder.weight) г"
+            }
+
+        let text = detailText
         sizeDoughLabel.text = text
         priceLabel.text = "\(pizzaInOrder.price) ₽"
         isPizzaHit(pizzaInOrder)

@@ -75,7 +75,7 @@ private extension EditAddressStackView {
 extension EditAddressStackView {
     func setupButtonAction(_ addressToEdit: Address) {
         saveAddressButton.onButtonTapped = { [weak self] in
-            guard let self else { return }
+            guard self != nil else { return }
             NetworkManager.shared.updateUserAddress(addressToEdit) { result in
                 switch result {
                 case .success(let address):

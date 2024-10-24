@@ -523,8 +523,8 @@
 		73B969072CC7C78700A2415A /* Cart */ = {
 			isa = PBXGroup;
 			children = (
-				73B969052CC7C78700A2415A /* Components */,
 				73B969062CC7C78700A2415A /* CartViewController.swift */,
+				73B969052CC7C78700A2415A /* Components */,
 			);
 			path = Cart;
 			sourceTree = "<group>";
@@ -753,8 +753,8 @@
 		73B969512CC7C78700A2415A /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				73B9694F2CC7C78700A2415A /* Components */,
 				73B969502CC7C78700A2415A /* ProfileViewController.swift */,
+				73B9694F2CC7C78700A2415A /* Components */,
 			);
 			path = Profile;
 			sourceTree = "<group>";

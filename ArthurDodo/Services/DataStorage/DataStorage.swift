@@ -126,6 +126,10 @@ extension DataStorage {
             }
         }
     }
+
+    func getPromoFromStorage() -> [Promo] {
+        fetchedPromo
+    }
 }
 
 // MARK: - Categories

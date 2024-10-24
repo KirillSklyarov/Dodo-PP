@@ -79,7 +79,9 @@ private extension ProfileViewController {
 
     func setupSpecialOfferActions() {
         promoStackView.onPromoSelected = { [weak self] specialOffer in
-            self?.router.navigate(to: .applySpecialOffer) { [weak self] applyOfferVC in
+            guard let self else { return }
+            
+            router.navigate(to: .applySpecialOffer) { applyOfferVC in
                 guard let applyOfferVC = applyOfferVC as? ApplyOfferViewController else { print("We can't cast to ApplyOfferViewController"); return }
                 applyOfferVC.configureViewController(specialOffer)
             }

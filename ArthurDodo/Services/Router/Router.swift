@@ -32,7 +32,10 @@ final class Router {
     }
 
     // Показываем новый экран, там где нужно настраиваем коллбэки 
-    func navigate(to screen: Screens, popUpView: CpfcPopupView? = nil, animated: Bool = true, callback: ( (UIViewController) -> Void)? = nil) {
+    func navigate(to screen: Screens,
+                  popUpView: CpfcPopupView? = nil,
+                  animated: Bool = true,
+                  callback: ( (UIViewController) -> Void)? = nil) {
         var vc: UIViewController
 
         switch screen {
