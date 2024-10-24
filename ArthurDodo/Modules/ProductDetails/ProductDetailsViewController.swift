@@ -23,8 +23,11 @@ final class ProductDetailsViewController: UIViewController {
     }()
     private lazy var scrollView = UIScrollView()
 
+
     // MARK: - Other Properties
     private let storage = DataStorage.shared
+    private lazy var router = Router(baseVC: self)
+
     private var item: Item?
     private var order: Order?
 
@@ -36,6 +39,7 @@ final class ProductDetailsViewController: UIViewController {
         setupUI()
         setupActions()
         fetchSelectedItem()
+        setupSwipe()
     }
 }
 
@@ -155,7 +159,10 @@ private extension ProductDetailsViewController {
 
     func setupInfoButtonAction() {
         infoAndToppingsContainer.onShowPopupVC = { [weak self] popupVC in
-            self?.present(popupVC, animated: true)
+            guard let self else { print("Self is nil"); return }
+            guard let popupVC = popupVC as? CpfcPopupView else {
+                print("No popupVC"); return }
+            router.navigate(to: .cpfcPopup, popUpView: popupVC)
         }
     }
 }
@@ -200,5 +207,18 @@ private extension ProductDetailsViewController {
         itemDetailsView.updatePizzaImage(item.imageName)
         infoAndToppingsContainer.updateIngredientsAndWeight(item)
         cartButtonView.updatePrice(item.itemSize.medium?.price ?? 0)
+    }
+}
+
+// MARK: - Setup dismiss by swipe
+private extension ProductDetailsViewController {
+    func setupSwipe() {
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(vcSwiped))
+        swipe.direction = .down
+        view.addGestureRecognizer(swipe)
+    }
+
+    @objc private func vcSwiped() {
+        dismiss(animated: true)
     }
 }

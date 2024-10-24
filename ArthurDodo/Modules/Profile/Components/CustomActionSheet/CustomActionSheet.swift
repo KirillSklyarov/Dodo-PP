@@ -56,7 +56,7 @@ final class CustomActionSheet: UIViewController {
     }
 
     func showActionSheet() {
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.2) {
             self.bottomConstraint.constant = 0
             self.view.layoutIfNeeded()
         }

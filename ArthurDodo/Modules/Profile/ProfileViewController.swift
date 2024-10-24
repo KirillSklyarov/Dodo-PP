@@ -24,6 +24,7 @@ final class ProfileViewController: UIViewController {
 
     // MARK: - Other Properties
     private let storage = DataStorage.shared
+    private lazy var router = Router(baseVC: self)
 
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -69,28 +70,19 @@ private extension ProfileViewController {
     }
 
     func showChatAlert() {
-        let alertVC = CustomActionSheet()
-        alertVC.modalPresentationStyle = .overFullScreen
-        alertVC.modalTransitionStyle = .crossDissolve
-        present(alertVC, animated: false)
+        router.navigate(to: .supportAlert, animated: false)
     }
 
     func showPersonalVC() {
-        let vc = PersonalViewController()
-        let navVC = UINavigationController(rootViewController: vc)
-        present(navVC, animated: true)
+        router.navigate(to: .personalData)
     }
 
     func setupSpecialOfferActions() {
         promoStackView.onPromoSelected = { [weak self] specialOffer in
-//            screenRouter.goToScreen(.ApplyOfferViewController)
-
-            let vc = ApplyOfferViewController()
-            guard let configureSheet = vc.sheetPresentationController else { return }
-            configureSheet.detents = [.medium()]
-            configureSheet.prefersGrabberVisible = true
-            vc.configureViewController(specialOffer)
-            self?.present(vc, animated: true)
+            self?.router.navigate(to: .applySpecialOffer) { [weak self] applyOfferVC in
+                guard let applyOfferVC = applyOfferVC as? ApplyOfferViewController else { print("We can't cast to ApplyOfferViewController"); return }
+                applyOfferVC.configureViewController(specialOffer)
+            }
         }
     }
 

@@ -16,6 +16,7 @@ final class MainViewController: UIViewController {
     private lazy var loadingIndicator = UIActivityIndicatorView(style: .large)
 
     private let storage = DataStorage.shared
+    private lazy var router = Router(baseVC: self)
 
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -62,7 +63,8 @@ private extension MainViewController {
             let catalog = storage.getCatalog()
             let item = catalog[IndexPath.item]
             storage.fetchToppings()
-            showProductDetail(item)
+            sendSelectedItemToStorage(item)
+            showProductDetail()
         }
 
         contentCollectionView.onStoriesCellTapped = { [weak self] IndexPath in
@@ -73,7 +75,8 @@ private extension MainViewController {
             guard let self else { return }
             let specialOfferArray = storage.getSpecialOffersArray()
             let item = specialOfferArray[IndexPath.item]
-            showProductDetail(item)
+            sendSelectedItemToStorage(item)
+            showProductDetail()
         }
     }
 
@@ -88,42 +91,44 @@ private extension MainViewController {
     }
 
     func showProfileVC() {
-        let profileVC = ProfileViewController()
-        present(profileVC, animated: true)
+        router.navigate(to: .profile)
     }
 
-    func showProductDetail(_ item: Item) {
+    func sendSelectedItemToStorage(_ item: Item) {
         storage.sendSelectedItemToStorage(item)
+    }
 
-        let productDetailVC = ProductDetailsViewController()
-        productDetailVC.modalPresentationStyle = .overFullScreen
-        productDetailVC.isModalInPresentation = false
-        present(productDetailVC, animated: true)
+    func showProductDetail() {
+        router.navigate(to: .productDetails) { [weak self] productDetailVC in
+            guard let productDetailVC = productDetailVC as? ProductDetailsViewController else {
+                print("Can't cast view controller to ProductDetailsViewController")
+                return
+            }
 
-        productDetailVC.onCartButtonTapped = { [weak self] price in
-            guard let self else { return }
-            cartButton.isHidden = false
-            cartButton.setNewPrice(price)
+            productDetailVC.onCartButtonTapped = { [weak self] price in
+                guard let self else { print("Self is nil, can't set price"); return }
+                cartButton.isHidden = false
+                cartButton.setNewPrice(price)
+            }
         }
     }
 
     func showStoriesVC(_ indexPath: IndexPath) {
-        let storiesVC = StoriesVC()
-        storiesVC.showStories(indexPath)
-        storiesVC.modalPresentationStyle = .overFullScreen
-        storiesVC.isModalInPresentation = false
-        present(storiesVC, animated: true)
+        router.navigate(to: .stories) { [weak self] storiesVC in
+            guard let storiesVC = storiesVC as? StoriesVC else {
+                print("Can't cast view controller to StoriesViewController")
+                return
+            }
+            storiesVC.showStories(indexPath)
 
-        storiesVC.onStoriesVCDismissed = { [weak self] in
-            self?.contentCollectionView.reloadData()
+            storiesVC.onStoriesVCDismissed = { [weak self] in
+                self?.contentCollectionView.reloadData()
+            }
         }
     }
 
     func showAddressVC() {
-        let addressVC = AddressViewController()
-        addressVC.modalPresentationStyle = .fullScreen
-        addressVC.isModalInPresentation = true
-        present(addressVC, animated: true)
+        router.navigate(to: .address)
     }
 
     func setupCartButtonActions() {
@@ -133,9 +138,7 @@ private extension MainViewController {
     }
 
     func showCartVC() {
-        let cartVC = CartViewController()
-        let navVC = UINavigationController(rootViewController: cartVC)
-        present(navVC, animated: true)
+        router.navigate(to: .cart)
     }
 }
 

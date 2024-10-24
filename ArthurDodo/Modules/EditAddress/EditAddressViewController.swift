@@ -10,7 +10,7 @@ import UIKit
 final class EditAddressViewController: UIViewController {
 
     // MARK: - Properties
-    var addressToEdit: Address
+    var addressToEdit: Address?
     private let leftInset: CGFloat = 20
 
     // MARK: - UI Properties
@@ -26,8 +26,8 @@ final class EditAddressViewController: UIViewController {
     private lazy var dismissButton = DismissButtonView(isChevron: true)
 
     // MARK: - Init
-    init(addressToEdit: Address) {
-        self.addressToEdit = addressToEdit
+    init() {
+        //        self.addressToEdit = addressToEdit
         super.init(nibName: nil, bundle: nil)
         getCoord()
     }
@@ -37,7 +37,7 @@ final class EditAddressViewController: UIViewController {
     }
 
     func getCoord() {
-        let shortAddress = addressToEdit.cityStreetHouse
+        guard let shortAddress = addressToEdit?.cityStreetHouse else { print("We have no address"); return }
         mapView.getCoordinates(from: shortAddress)
     }
 
@@ -50,7 +50,8 @@ final class EditAddressViewController: UIViewController {
     }
 
     func updateUIWithData() {
-        print(self.addressToEdit)
+        guard let addressToEdit else { print("We have no address to edit"); return }
+        print(addressToEdit)
         addressContainerView.updateUIWithAddress(addressToEdit)
     }
 }
@@ -86,6 +87,7 @@ private extension EditAddressViewController {
 
     // Настраиваем кнопку Сохранить
     func setupSaveButtonAction() {
+        guard let addressToEdit else { print("We have no address to edit"); return }
         addressContainerView.setupSaveButtonAction(addressToEdit)
     }
 

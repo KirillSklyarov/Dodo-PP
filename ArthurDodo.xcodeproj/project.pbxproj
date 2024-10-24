@@ -93,7 +93,6 @@
 		73B969AD2CC7C78700A2415A /* QuitProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969462CC7C78700A2415A /* QuitProfileTableViewCell.swift */; };
 		73B969AE2CC7C78700A2415A /* PromoStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969482CC7C78700A2415A /* PromoStackView.swift */; };
 		73B969AF2CC7C78700A2415A /* ApplyOfferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9694A2CC7C78700A2415A /* ApplyOfferViewController.swift */; };
-		73B969B02CC7C78700A2415A /* ChatAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9694B2CC7C78700A2415A /* ChatAlertController.swift */; };
 		73B969B12CC7C78700A2415A /* MissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9694C2CC7C78700A2415A /* MissionView.swift */; };
 		73B969B22CC7C78700A2415A /* ProfileButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9694D2CC7C78700A2415A /* ProfileButtonView.swift */; };
 		73B969B32CC7C78700A2415A /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9694E2CC7C78700A2415A /* ProfileHeaderView.swift */; };
@@ -118,6 +117,7 @@
 		73B969DA2CC7C7C000A2415A /* UserDefaults+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969D52CC7C7C000A2415A /* UserDefaults+Ext.swift */; };
 		73B969DE2CC7C7C500A2415A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969DB2CC7C7C500A2415A /* AppDelegate.swift */; };
 		73B969DF2CC7C7C500A2415A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969DC2CC7C7C500A2415A /* SceneDelegate.swift */; };
+		73D0FAAD2CCA3FA90009AEE5 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D0FAAC2CCA3FA90009AEE5 /* Router.swift */; };
 		73E6EB3F2CC8D99C006831F2 /* PriceGrayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB3E2CC8D99C006831F2 /* PriceGrayButton.swift */; };
 		73E6EB422CC92FC5006831F2 /* CpfcPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB412CC92FC5006831F2 /* CpfcPopupView.swift */; };
 		73E6EB442CC948F2006831F2 /* CustomTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB432CC948F2006831F2 /* CustomTableView.swift */; };
@@ -224,7 +224,6 @@
 		73B969462CC7C78700A2415A /* QuitProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuitProfileTableViewCell.swift; sourceTree = "<group>"; };
 		73B969482CC7C78700A2415A /* PromoStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoStackView.swift; sourceTree = "<group>"; };
 		73B9694A2CC7C78700A2415A /* ApplyOfferViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyOfferViewController.swift; sourceTree = "<group>"; };
-		73B9694B2CC7C78700A2415A /* ChatAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAlertController.swift; sourceTree = "<group>"; };
 		73B9694C2CC7C78700A2415A /* MissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionView.swift; sourceTree = "<group>"; };
 		73B9694D2CC7C78700A2415A /* ProfileButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileButtonView.swift; sourceTree = "<group>"; };
 		73B9694E2CC7C78700A2415A /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
@@ -238,6 +237,7 @@
 		73B969D52CC7C7C000A2415A /* UserDefaults+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Ext.swift"; sourceTree = "<group>"; };
 		73B969DB2CC7C7C500A2415A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		73B969DC2CC7C7C500A2415A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		73D0FAAC2CCA3FA90009AEE5 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		73E6EB3E2CC8D99C006831F2 /* PriceGrayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceGrayButton.swift; sourceTree = "<group>"; };
 		73E6EB412CC92FC5006831F2 /* CpfcPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CpfcPopupView.swift; sourceTree = "<group>"; };
 		73E6EB432CC948F2006831F2 /* CustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableView.swift; sourceTree = "<group>"; };
@@ -414,6 +414,7 @@
 		73B968E62CC7C78700A2415A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				73D0FAAB2CCA3F960009AEE5 /* Router */,
 				73B968E22CC7C78700A2415A /* DataStorage */,
 				73B968E52CC7C78700A2415A /* NetworkManager */,
 			);
@@ -742,7 +743,6 @@
 				73B969472CC7C78700A2415A /* PersonalVC */,
 				73B969492CC7C78700A2415A /* PromoStackView */,
 				73B9694A2CC7C78700A2415A /* ApplyOfferViewController.swift */,
-				73B9694B2CC7C78700A2415A /* ChatAlertController.swift */,
 				73B9694C2CC7C78700A2415A /* MissionView.swift */,
 				73B9694D2CC7C78700A2415A /* ProfileButtonView.swift */,
 				73B9694E2CC7C78700A2415A /* ProfileHeaderView.swift */,
@@ -823,6 +823,14 @@
 				73B969DC2CC7C7C500A2415A /* SceneDelegate.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		73D0FAAB2CCA3F960009AEE5 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				73D0FAAC2CCA3FA90009AEE5 /* Router.swift */,
+			);
+			path = Router;
 			sourceTree = "<group>";
 		};
 		73E6EB472CC981A2006831F2 /* CpfcPopupView */ = {
@@ -970,6 +978,7 @@
 				73B969872CC7C78700A2415A /* CustomStepperView.swift in Sources */,
 				73B969DE2CC7C7C500A2415A /* AppDelegate.swift in Sources */,
 				73B969DF2CC7C7C500A2415A /* SceneDelegate.swift in Sources */,
+				73D0FAAD2CCA3FA90009AEE5 /* Router.swift in Sources */,
 				73B969882CC7C78700A2415A /* HeaderUIView.swift in Sources */,
 				73B969892CC7C78700A2415A /* SegmentControl.swift in Sources */,
 				73B9698A2CC7C78700A2415A /* EditAddressStackView.swift in Sources */,
@@ -1014,7 +1023,6 @@
 				73B969AD2CC7C78700A2415A /* QuitProfileTableViewCell.swift in Sources */,
 				73B969AE2CC7C78700A2415A /* PromoStackView.swift in Sources */,
 				73B969AF2CC7C78700A2415A /* ApplyOfferViewController.swift in Sources */,
-				73B969B02CC7C78700A2415A /* ChatAlertController.swift in Sources */,
 				73B969B12CC7C78700A2415A /* MissionView.swift in Sources */,
 				73B969B22CC7C78700A2415A /* ProfileButtonView.swift in Sources */,
 				73B969B32CC7C78700A2415A /* ProfileHeaderView.swift in Sources */,

@@ -27,6 +27,7 @@ final class CartViewController: UIViewController {
 
     // MARK: - Other Properties
     private let dataStorage = DataStorage.shared
+    private lazy var router = Router(baseVC: self)
     private var order: [Order]?
     var onEmptyCart: (() -> Void)?
     var onRefreshCart: (() -> Void)?
@@ -98,8 +99,7 @@ private extension CartViewController {
         }
 
         orderStackView.onChangeItem = { [weak self] in
-            let productVC = ProductDetailsViewController()
-            self?.present(productVC, animated: true)
+            self?.router.navigate(to: .productDetails)
         }
     }
 
@@ -113,12 +113,10 @@ private extension CartViewController {
 
     func setupSpecialViewActions() {
         specialOfferStackView.onPromoSelected = { [weak self] specialOffer in
-            let vc = ApplyOfferViewController()
-            guard let configureSheet = vc.sheetPresentationController else { return }
-            configureSheet.detents = [.medium()]
-            configureSheet.prefersGrabberVisible = true
-            vc.configureViewController(specialOffer)
-            self?.present(vc, animated: true)
+            self?.router.navigate(to: .applySpecialOffer) { [weak self] applyOfferVC in
+                guard let applyOfferVC = applyOfferVC as? ApplyOfferViewController else { print("We can't cast applyOfferVC"); return }
+                applyOfferVC.configureViewController(specialOffer)
+            }
         }
     }
 

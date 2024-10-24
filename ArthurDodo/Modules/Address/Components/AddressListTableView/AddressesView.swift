@@ -108,12 +108,6 @@ private extension DeliveryAddressView {
         }
     }
 
-//    func showEditAddressVC(_ address: Address) {
-//        let vc = EditAddressViewController(addressToEdit: address)
-//        vc.modalPresentationStyle = .fullScreen
-//        present(vc, animated: true)
-//    }
-
     func setupDeliveryButtonAction() {
         deliveryButton.onButtonTapped = {
             print("We're here")

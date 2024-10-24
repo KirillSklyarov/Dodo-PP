@@ -52,6 +52,8 @@ final class DeliveryAddressSheetView: UIViewController {
         return stack
     }()
 
+    private lazy var router = Router(baseVC: self)
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,9 +88,11 @@ private extension DeliveryAddressSheetView {
     }
 
     func showEditAddressVC(_ address: Address) {
-        let vc = EditAddressViewController(addressToEdit: address)
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true)
+        router.navigate(to: .editAddress) { [weak self] editAddressVC in
+            guard let editAddressVC = editAddressVC as? EditAddressViewController else { print("We can't cast to EditAddressViewController"); return }
+            editAddressVC.addressToEdit = address
+
+        }
     }
 
     func setupDeliveryButtonAction() {

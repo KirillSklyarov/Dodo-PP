@@ -75,6 +75,10 @@ final class CpfcPopupView: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func getItem(_ item: Item?) {
+        if let item { self.item = item }
+    }
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,6 +90,17 @@ final class CpfcPopupView: UIViewController {
     func setProductDetails(_ productDetails: WeightPrice) {
         self.productDetails = productDetails
         cpfcTableView.reloadData()
+    }
+}
+
+extension CpfcPopupView {
+    func setupPopupView(sourceView: UIView, sourceRect: CGRect) {
+        modalPresentationStyle = .popover
+        preferredContentSize = CGSize(width: 300, height: 310)
+        popoverPresentationController?.sourceView = sourceView
+        popoverPresentationController?.sourceRect = sourceRect
+        popoverPresentationController?.permittedArrowDirections = .right
+        popoverPresentationController?.delegate = sourceView as? UIPopoverPresentationControllerDelegate
     }
 }
 

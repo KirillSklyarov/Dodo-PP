@@ -10,34 +10,21 @@ import SafariServices
 
 final class PersonalViewController: UIViewController {
 
+    // MARK: - UI Properties
     private lazy var personalTableView = PersonalTableView()
 
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBar()
         setupUI()
         setupActions()
-    }
-}
-
-// MARK: - Setup Actions
-private extension PersonalViewController {
-    func setupActions() {
-        personalTableView.onShowURL = { [weak self] in
-            self?.showURL()
-        }
-    }
-
-    func showURL() {
-        guard let url = URL(string: "https://www.dodopizza.ru") else { return }
-        let safariVC = SFSafariViewController(url: url)
-        present(safariVC, animated: true)
     }
 }
 
 // MARK: - Setup UI
 private extension PersonalViewController {
     func setupUI() {
+        setupNavigationBar()
         title = "Настройки"
         view.backgroundColor = AppColors.backgroundGray
         view.addSubviews(personalTableView)
@@ -72,5 +59,20 @@ private extension PersonalViewController {
 
     @objc func doneButtonTapped() {
         dismiss(animated: true)
+    }
+}
+
+// MARK: - Setup Actions
+private extension PersonalViewController {
+    func setupActions() {
+        personalTableView.onShowURL = { [weak self] in
+            self?.showURL()
+        }
+    }
+
+    func showURL() {
+        guard let url = URL(string: "https://www.dodopizza.ru") else { return }
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true)
     }
 }

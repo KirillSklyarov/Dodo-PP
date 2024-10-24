@@ -97,10 +97,6 @@ extension IngredientsView {
         weightLabel.text = text
     }
 
-    func getButtonFrame() -> CGRect {
-        return infoButton.convert(infoButton.bounds, to: nil)
-    }
-
     func setProductDetails(_ details: WeightPrice) {
         cpfcPopupView.setProductDetails(details)
     }
@@ -131,27 +127,24 @@ private extension IngredientsView {
 // MARK: - Setup actions
 private extension IngredientsView {
     @objc private func infoButtonTapped() {
-        showTestPopupView()
+        showPopupView()
     }
 }
 
 // MARK: - Setup PopUpIngredientsView
-private extension IngredientsView {
-    func showTestPopupView() {
-        setupPopupView(cpfcPopupView)
+ extension IngredientsView {
+    func showPopupView() {
+        setupPopupView()
         onShowPopupVC?(cpfcPopupView)
     }
 
-    func setupPopupView(_ view: CpfcPopupView) {
-        view.modalPresentationStyle = .popover
-        view.preferredContentSize = CGSize(width: 300, height: 310)
-        view.popoverPresentationController?.sourceView = self
-        view.popoverPresentationController?.sourceRect = CGRect(
+    // Настраиваем откуда будет показываться экран и кто его источник (т.е. на какой вьюхе он будет показываться)
+    func setupPopupView() {
+        let sourceRect = CGRect(
             origin: CGPoint(x: infoButton.frame.minX - rightInset,
                             y: infoButton.frame.midY + topInset),
             size: .zero)
-        view.popoverPresentationController?.permittedArrowDirections = .right
-        view.popoverPresentationController?.delegate = self
+        cpfcPopupView.setupPopupView(sourceView: self, sourceRect: sourceRect)
     }
 }
 

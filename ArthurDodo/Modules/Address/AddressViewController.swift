@@ -21,6 +21,7 @@ final class AddressViewController: UIViewController {
     }()
 
     private let storage = DataStorage.shared
+    private lazy var router = Router(baseVC: self)
 
     // MARK: - Life cycles
     override func viewDidLoad() {
@@ -93,16 +94,9 @@ private extension AddressViewController {
     }
 
     func showEditAddressVC(_ address: Address) {
-        let vc = EditAddressViewController(addressToEdit: address)
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true)
+        router.navigate(to: .editAddress) { [weak self] editAddressVC in
+            guard let editAddressVC = editAddressVC as? EditAddressViewController else { print("We can't cast to EditAddressViewController"); return }
+            editAddressVC.addressToEdit = address
+        }
     }
-
-//    func showDeliveryAddressVC() {
-//        let vc = DeliveryAddressSheetView()
-//        guard let configureSheet = vc.sheetPresentationController else { return }
-//        configureSheet.detents = [.medium()]
-//        configureSheet.prefersGrabberVisible = true
-//        present(vc, animated: true)
-//    }
 }
