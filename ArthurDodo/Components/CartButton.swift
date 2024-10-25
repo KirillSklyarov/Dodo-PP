@@ -51,6 +51,10 @@ final class CartButton: UIButton {
         totalPrice = 0
     }
 
+    func hideCartButton() {
+        isHidden = true
+    }
+
     func getTotalCartPriceFromStorage() {
         let totalPrice = dataStorage.getTotalOrderPrice()
         let title = "\(totalPrice) ₽"

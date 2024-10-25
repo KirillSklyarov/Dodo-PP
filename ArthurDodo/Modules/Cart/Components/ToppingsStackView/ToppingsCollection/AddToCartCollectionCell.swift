@@ -13,16 +13,20 @@ final class AddToCartCollectionCell: UICollectionViewCell {
     static let identifier: String = "AddToCartCollectionCell"
     private let imageSize: CGFloat = 100
     private let priceLabelHeight: CGFloat = 25
+    private let cornerRadius: CGFloat = 10
+    private let leftInset: CGFloat = 5
+    private let rightInset: CGFloat = -5
+    private let topInset: CGFloat = 5
+    private let bottomInset: CGFloat = -5
 
     // MARK: - UI Properties
     private lazy var cellBackgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = .darkGray.withAlphaComponent(0.4)
-        view.layer.cornerRadius = 10
+        view.backgroundColor = AppColors.backgroundGray
+        view.layer.cornerRadius = cornerRadius
         view.layer.masksToBounds = true
         return view
     }()
-
     private lazy var itemImageView: UIImageView = {
         let imageView = UIImageView()
         let image = UIImage(named: "pizza")
@@ -33,25 +37,25 @@ final class AddToCartCollectionCell: UICollectionViewCell {
     }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .bold)
+        label.font = AppFonts.bold14
         label.numberOfLines = 2
         label.textColor = .white
         return label
     }()
-    private lazy var weightLabel: UILabel = {
+    private lazy var detailsLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .regular)
+        label.font = AppFonts.regular12
         label.numberOfLines = 0
         label.textColor = .gray
         return label
     }()
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .semibold)
-        label.backgroundColor = .darkGray.withAlphaComponent(0.4)
+        label.font = AppFonts.semibold12
+        label.backgroundColor = AppColors.buttonGray
         label.textAlignment = .center
         label.textColor = .white
-        label.layer.cornerRadius = 10
+        label.layer.cornerRadius = cornerRadius
         label.layer.masksToBounds = true
         label.heightAnchor.constraint(equalToConstant: priceLabelHeight).isActive = true
         return label
@@ -68,49 +72,62 @@ final class AddToCartCollectionCell: UICollectionViewCell {
     }
 
     // MARK: - Public methods
-    func configCell(_ pizzaToAdd: Item) {
-        itemImageView.image = UIImage(named: pizzaToAdd.imageName)
-        titleLabel.text = pizzaToAdd.name
+    func configCell(_ itemToAdd: Item) {
+        itemImageView.image = UIImage(named: itemToAdd.imageName)
+        titleLabel.text = itemToAdd.name
+        setProductDetails(itemToAdd)
+        setPrice(itemToAdd)
+    }
+}
+
+// MARK: - Supporting methods
+private extension AddToCartCollectionCell {
+    func setProductDetails(_ item: Item) {
         let dough = Dough.basic.rawValue
         let size = Size.small.displayName.components(separatedBy: " ").dropFirst().joined(separator: " ")
-        weightLabel.text = "\(dough), \(size)"
-        let price = pizzaToAdd.itemSize.small?.price ?? 0
+        detailsLabel.text = "\(dough), \(size)"
+    }
+
+    func setPrice(_ item: Item) {
+        let price = item.getCorrectPrice()
         let title = "\(price) ₽"
         priceLabel.text = title
     }
+}
 
-    // MARK: - Private methods
-    private func setupUI() {
-        layer.cornerRadius = 10
+// MARK: - Setup UI
+private extension AddToCartCollectionCell {
+    func setupUI() {
+        layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
 
-        contentView.addSubviews(cellBackgroundView, itemImageView, titleLabel, weightLabel, priceLabel)
+        contentView.addSubviews(cellBackgroundView, itemImageView, titleLabel, detailsLabel, priceLabel)
 
         setupLayout()
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         NSLayoutConstraint.activate([
             cellBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             cellBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cellBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             cellBackgroundView.topAnchor.constraint(equalTo: itemImageView.centerYAnchor),
 
-            itemImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-            itemImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            itemImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
+            itemImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topInset),
+            itemImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
+            itemImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
 
-            titleLabel.topAnchor.constraint(equalTo: itemImageView.bottomAnchor, constant: 5),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
+            titleLabel.topAnchor.constraint(equalTo: itemImageView.bottomAnchor, constant: topInset),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
 
-            weightLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
-            weightLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            weightLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
+            detailsLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: topInset),
+            detailsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
+            detailsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
 
-            priceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
-            priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            priceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
+            priceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset),
+            priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
+            priceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset)
         ])
     }
 }

@@ -138,7 +138,15 @@ private extension MainViewController {
     }
 
     func showCartVC() {
-        router.navigate(to: .cart)
+        router.navigate(to: .cart) { [weak self] cartVC in
+            guard let self else { return }
+            guard let cartVC = cartVC as? CartViewController else {
+                print("Can't cast view controller to CartViewController"); return }
+            cartVC.onEmptyCart = {
+                self.cartButton.resetPrice()
+                self.cartButton.hideCartButton()
+            }
+        }
     }
 }
 

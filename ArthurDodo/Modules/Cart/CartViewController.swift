@@ -10,19 +10,19 @@ import UIKit
 final class CartViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var orderStackView = OrderStackView()
-    private lazy var toppingsStackView = ToppingsStackView()
-    private lazy var promoStackView = PromoStackView()
-    private lazy var promoButton = PromoButton()
-    private lazy var dodoCoinsView = DodoCoinsStackView()
+    private lazy var orderStackView = OrderStackView() // Хэдер и таблица с заказами
+    private lazy var toppingsStackView = ToppingsStackView() // Добавки к заказу
+    private lazy var promoStackView = PromoStackView() // Акции
+    private lazy var promoButton = PromoButton() // Кнопка Ввести промокод
+    private lazy var dodoCoinsView = DodoCoinsStackView() // Блок с додокоинами
+    private lazy var cartButtonView = CartButtonView() // Кнопка корзины
+    private lazy var scrollUpButton = ScrollUpButton() // Кнопка scrollToTop
     private lazy var contentStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [orderStackView, toppingsStackView, promoStackView, promoButton, dodoCoinsView])
         stackView.axis = .vertical
         stackView.spacing = 10
         return stackView
     }()
-    private lazy var cartButtonView = CartButtonView()
-    private lazy var scrollUpButton = ScrollUpButton()
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties
@@ -57,19 +57,15 @@ private extension CartViewController {
 
     func fetchOrders() {
         order = storage.getOrderFromStorage()
-        print(order)
         updateUI()
     }
 
     func updateUI() {
         let countOfItems = order?.compactMap{ $0.count }.reduce(0, +) ?? 0
         let totalPrice = order?.compactMap{ $0.price * $0.count }.reduce(0, +) ?? 0
-        let dodoCoins = totalPrice / 10
-        orderStackView.setNewData(countOfItems, totalPrice: totalPrice)
-        dodoCoinsView.setCountOfItems(countOfItems)
-        dodoCoinsView.setTotalPrice(totalPrice)
-        dodoCoinsView.setDodoCoins(dodoCoins)
-        cartButtonView.updatePrice(totalPrice)
+        updateOrderData(countOfItems, totalPrice)
+        updateDodoCoinsView(countOfItems, totalPrice)
+        updateCartButtonPrice(totalPrice)
     }
 
     func fetchPromo() {
@@ -96,7 +92,7 @@ private extension CartViewController {
 private extension CartViewController {
     func setupUI() {
         setupNavigationBar()
-        view.backgroundColor = AppColors.backgroundGray
+        view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(scrollView, cartButtonView)
 
         setupScrollView()
@@ -145,8 +141,8 @@ private extension CartViewController {
         orderStackView.onItemDeletedFromCart = { [weak self] in
             self?.fetchDataFromStorage()
         }
-        orderStackView.onCountIncreased = { [weak self] in
-            self?.fetchDataFromStorage()
+        orderStackView.onCountChanged = { [weak self] in
+            self?.fetchOrders()
         }
 
         orderStackView.onChangeItem = { [weak self] in
@@ -253,3 +249,20 @@ extension CartViewController: UIScrollViewDelegate {
     }
 }
 
+// MARK: - Supporting methods
+private extension CartViewController {
+    func updateDodoCoinsView(_ countOfItems: Int, _ totalPrice: Int) {
+        let dodoCoins = totalPrice / 10
+        dodoCoinsView.setCountOfItems(countOfItems)
+        dodoCoinsView.setTotalPrice(totalPrice)
+        dodoCoinsView.setDodoCoins(dodoCoins)
+    }
+
+    func updateOrderData(_ countOfItems: Int, _ totalPrice: Int) {
+        orderStackView.updateHeader(countOfItems, totalPrice: totalPrice)
+    }
+
+    func updateCartButtonPrice(_ totalPrice: Int) {
+        cartButtonView.updatePrice(totalPrice)
+    }
+}

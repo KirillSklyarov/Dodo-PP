@@ -7,22 +7,21 @@
 
 import UIKit
 
-final class CartProductTableView: UITableView {
+final class CartProductTableView: AppTableView {
 
     // MARK: - Properties&Callbacks
+    private let tableRowHeight: CGFloat = 160
+    private var heightConstraint: NSLayoutConstraint?
+
+    private let dataStorage = DataStorage.shared
+
     var order: [Order] = []
     var onUpdateCart: ( (Int) -> Void )?
     var onCellTapped: ( (Item) -> Void )?
     var onEmptyCart: ( () -> Void )?
     var onItemDeletedFromCart: ( () -> Void )?
-    var onCountIncreased: ( () -> Void )?
+    var onCountChanged: ( () -> Void )?
     var onChangeItem: ( () -> Void )?
-
-    private let tableRowHeight: CGFloat = 160
-    private var tableViewHeight: CGFloat = 0
-    private var heightConstraint: NSLayoutConstraint?
-
-    private let dataStorage = DataStorage.shared
 
     // MARK: - Init
     override init(frame: CGRect, style: UITableView.Style) {
@@ -34,27 +33,20 @@ final class CartProductTableView: UITableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // MARK: - Public methods
+// MARK: - Fetch data
+extension CartProductTableView {
     func uploadOrder() {
         order = dataStorage.getOrderFromStorage()
-        updateTableViewHeight()
         reloadData()
+        updateTableViewHeight()
     }
+}
 
-    // MARK: - Private methods
-    private func updateTableViewHeight() {
-        tableViewHeight = CGFloat(order.count) * tableRowHeight
-
-        if let heightConstraint {
-            heightConstraint.constant = tableViewHeight
-        } else {
-            heightConstraint = heightAnchor.constraint(equalToConstant: tableViewHeight)
-            heightConstraint?.isActive = true
-        }
-    }
-
-    private func configTableView() {
+// MARK: - Setup UI
+private extension CartProductTableView {
+     func configTableView() {
         dataSource = self
         delegate = self
         register(CartProductCell.self, forCellReuseIdentifier: CartProductCell.identifier)
@@ -66,6 +58,17 @@ final class CartProductTableView: UITableView {
 
         backgroundColor = .clear
     }
+
+    func updateTableViewHeight() {
+        let tableViewHeight = contentSize.height
+
+       if let heightConstraint {
+           heightConstraint.constant = tableViewHeight
+       } else {
+           heightConstraint = heightAnchor.constraint(equalToConstant: tableViewHeight)
+           heightConstraint?.isActive = true
+       }
+   }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
@@ -77,7 +80,7 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CartProductCell.identifier, for: indexPath) as? CartProductCell else { print("rrrr"); return UITableViewCell() }
         let item = order[indexPath.row]
-        cell.configureCell(pizzaInOrder: item)
+        cell.configureCell(itemInOrder: item)
 
         cell.onValueIsNull = { [weak self] in
             self?.removeItemFromStorage(indexPath)
@@ -90,7 +93,7 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
         cell.onStepperValueChanged = { [weak self] value in
             self?.dataStorage.increaseCountOfItem(indexPath, value)
             self?.uploadOrder()
-            self?.onCountIncreased?()
+            self?.onCountChanged?()
         }
 
         return cell

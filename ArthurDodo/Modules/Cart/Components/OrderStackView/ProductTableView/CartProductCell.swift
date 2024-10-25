@@ -40,6 +40,8 @@ final class CartProductCell: UITableViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
+        label.font = AppFonts.regular18
+        label.numberOfLines = 0
         return label
     }()
     private lazy var sizeDoughLabel: UILabel = {
@@ -68,7 +70,7 @@ final class CartProductCell: UITableViewCell {
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupSubviews()
+        setupUI()
         setupStepper()
     }
 
@@ -76,31 +78,22 @@ final class CartProductCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - IB Actions
-    @objc private func changeButtonTapped(_ sender: UIButton) {
-        onChangeButtonTapped?()
-    }
-
     // MARK: - Public methods
-    func configureCell(pizzaInOrder: Order) {
-        pizzaImageView.image = UIImage(named: pizzaInOrder.imageName)
-        titleLabel.text = pizzaInOrder.pizzaName
-        let detailText =
-            if pizzaInOrder.dough != nil {
-                "\(pizzaInOrder.size.displayName), \(pizzaInOrder.dough!.rawValue)"
-            } else {
-                "\(pizzaInOrder.weight) г"
-            }
+    func configureCell(itemInOrder: Order) {
+        pizzaImageView.image = UIImage(named: itemInOrder.imageName)
+        titleLabel.text = itemInOrder.pizzaName
 
-        let text = detailText
-        sizeDoughLabel.text = text
-        priceLabel.text = "\(pizzaInOrder.price) ₽"
-        isPizzaHit(pizzaInOrder)
-        let count = pizzaInOrder.count
+        setProductDetails(itemInOrder) // Текст с тестом, размером или весом
+        setPrice(itemInOrder)
+        isPizzaHit(itemInOrder)
+        let count = itemInOrder.count
         countStepper.setStepperValue(count)
     }
+}
 
-    private func setupStepper() {
+// MARK: - Setup Actions
+private extension CartProductCell {
+    func setupStepper() {
         countStepper.onValueIsNull = { [weak self] in
             self?.onValueIsNull?()
         }
@@ -109,8 +102,14 @@ final class CartProductCell: UITableViewCell {
         }
     }
 
-    // MARK: - Private methods
-    private func setupSubviews() {
+    @objc func changeButtonTapped(_ sender: UIButton) {
+        onChangeButtonTapped?()
+    }
+}
+
+// MARK: - Setup UI
+private extension CartProductCell {
+    func setupUI() {
         selectionStyle = .none
         backgroundColor = .clear
 
@@ -120,16 +119,7 @@ final class CartProductCell: UITableViewCell {
         setupContentContainerLayout()
     }
 
-    private func setupContentContainerLayout() {
-        NSLayoutConstraint.activate([
-            contentContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
-            contentContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
-    }
-
-    private func setupContentContainer() {
+    func setupContentContainer() {
         let nameSizeStackView: UIStackView = {
             let stack = UIStackView(arrangedSubviews: [titleLabel, sizeDoughLabel])
             stack.axis = .vertical
@@ -141,7 +131,6 @@ final class CartProductCell: UITableViewCell {
             let stack = UIStackView(arrangedSubviews: [changeNumbersButton, countStepper])
             stack.axis = .horizontal
             stack.spacing = 10
-            countStepper.widthAnchor.constraint(equalToConstant: 90).isActive = true
             return stack
         }()
 
@@ -166,11 +155,38 @@ final class CartProductCell: UITableViewCell {
         ])
     }
 
-    private func isPizzaHit(_ pizza: Order) {
+    func setupContentContainerLayout() {
+        NSLayoutConstraint.activate([
+            contentContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
+            contentContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            contentContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            contentContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+    }
+
+    func isPizzaHit(_ pizza: Order) {
         if pizza.isHit {
             hitImageView.isHidden = false
         } else {
             hitImageView.isHidden = true
         }
+    }
+}
+
+// MARK: - Supporting methods
+private extension CartProductCell {
+     func setProductDetails(_ itemInOrder: Order) {
+        let detailText =
+        if itemInOrder.dough != nil {
+            "\(itemInOrder.size.displayName), \(itemInOrder.dough!.rawValue)"
+        } else {
+            "\(itemInOrder.weight) г"
+        }
+        sizeDoughLabel.text = detailText
+    }
+
+     func setPrice(_ itemInOrder: Order) {
+        let totalPrice = itemInOrder.price * itemInOrder.count
+        priceLabel.text = "\(totalPrice) ₽"
     }
 }

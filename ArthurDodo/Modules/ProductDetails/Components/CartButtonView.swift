@@ -45,7 +45,7 @@ final class CartButtonView: UIView {
 
     func updatePrice(_ price: Int) {
         currentPrice = price
-        let title = "В корзину за \(price) ₽"
+        let title = "Оформить заказ на \(price) ₽"
         cartButton.setNewTitle(title)
     }
 }

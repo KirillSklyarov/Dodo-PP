@@ -18,12 +18,7 @@ final class OrderView: UIView {
     }()
 
     // MARK: - Init
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        configUI()
-    }
-
-    init(frame: CGRect = .zero, title: String) {
+    init(frame: CGRect = .zero, title: String? = nil) {
         super.init(frame: frame)
         configUI()
         titleLabel.text = title
@@ -33,22 +28,20 @@ final class OrderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setNewData(_ countOfItems: Int, totalPrice: Int) {
+    func updateTitle(_ countOfItems: Int, totalPrice: Int) {
         let newText = "\(countOfItems) товар на \(totalPrice) ₽"
         titleLabel.text = newText
     }
+}
 
-    // MARK: - Private Properties
-    private func configUI() {
+// MARK: - Setup UI
+private extension OrderView {
+    func configUI() {
         addSubviews(titleLabel)
         setupLayout()
     }
 
-    private func setupLayout() {
-        setupTitleLabelConstraints()
-    }
-
-    private func setupTitleLabelConstraints() {
+    func setupLayout() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),

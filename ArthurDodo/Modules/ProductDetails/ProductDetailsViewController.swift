@@ -141,7 +141,7 @@ private extension ProductDetailsViewController {
         let chosenSize = getCorrectSize()
         let chosenDough = getCorrectDough()
         let weight = getCorrectWeight()
-        let price = item.getCorrectPrice(size: chosenSize)
+        let price = item.getPrice(size: chosenSize)
 
         order = Order(pizzaName: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, weight: weight, price: price, isHit: item.isHit)
     }

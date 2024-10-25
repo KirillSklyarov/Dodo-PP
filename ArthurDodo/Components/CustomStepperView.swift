@@ -9,7 +9,10 @@ import UIKit
 
 final class CustomStepperView: UIView {
 
+    // MARK: - Properties
     private let viewHeight: CGFloat = 25
+    private let viewWidth: CGFloat = 90
+    private let cornerRadius: CGFloat = 10
 
     private var value: Int = 0 {
         didSet {
@@ -21,8 +24,6 @@ final class CustomStepperView: UIView {
     var onValueIsNull: (() -> Void)?
     var onStepperValueChanged: ( (Int) -> Void)?
 
-    private let dataStorage = DataStorage.shared
-
     // MARK: - UI properties
     private lazy var decrementButton: UIButton = {
         let button = UIButton()
@@ -31,7 +32,6 @@ final class CustomStepperView: UIView {
         button.addTarget(self, action: #selector(decrementButtonTapped), for: .touchUpInside)
         return button
     }()
-
     private lazy var incrementButton: UIButton = {
         let button = UIButton()
         let image = UIImage(systemName: "plus")?.withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -39,17 +39,15 @@ final class CustomStepperView: UIView {
         button.addTarget(self, action: #selector(incrementButtonTapped), for: .touchUpInside)
         return button
     }()
-
     private lazy var valueLabel: UILabel = {
         let label = UILabel()
         label.text = "\(value)"
         label.textColor = .white
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.font = AppFonts.semibold14
         label.textAlignment = .center
         return label
     }()
-
-    private lazy var stackView: UIStackView = {
+    private lazy var contentStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [decrementButton, valueLabel, incrementButton])
         stack.axis = .horizontal
         stack.distribution = .fillEqually
@@ -57,12 +55,7 @@ final class CustomStepperView: UIView {
     }()
 
     // MARK: - Init
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-
-    init(frame: CGRect = .zero, isHidden: Bool) {
+    init(frame: CGRect = .zero, isHidden: Bool = false) {
         super.init(frame: frame)
         setupUI()
         self.isHidden = isHidden
@@ -72,7 +65,14 @@ final class CustomStepperView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - IB Action
+    // MARK: - Public methods
+    func setStepperValue(_ value: Int) {
+        self.value = value
+    }
+}
+
+// MARK: - Setup Actions
+private extension CustomStepperView {
     @objc private func decrementButtonTapped() {
         value -= 1
         if value == 0 {
@@ -86,29 +86,28 @@ final class CustomStepperView: UIView {
         value += 1
         onStepperValueChanged?(value)
     }
+}
 
-    // MARK: - Public methods
-    func setStepperValue(_ value: Int) {
-        self.value = value
-    }
-
-    // MARK: - Private methods
-    private func setupUI() {
-        backgroundColor = .darkGray.withAlphaComponent(0.4)
-        layer.cornerRadius = 10
+// MARK: - Setup UI
+private extension CustomStepperView {
+    func setupUI() {
+        backgroundColor = AppColors.buttonGray
+        layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
-        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
 
-        addSubviews(stackView)
+        addSubviews(contentStack)
         setupLayout()
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            contentStack.topAnchor.constraint(equalTo: topAnchor),
+            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            heightAnchor.constraint(equalToConstant: viewHeight),
+            widthAnchor.constraint(equalToConstant: viewWidth)
         ])
     }
 }

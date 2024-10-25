@@ -55,6 +55,7 @@ final class Router {
         case .cart:
             let cartVC = CartViewController()
             vc = UINavigationController(rootViewController: cartVC)
+            callback?(cartVC)
         case .supportAlert:
             vc = CustomActionSheet()
             vc.modalPresentationStyle = .overFullScreen

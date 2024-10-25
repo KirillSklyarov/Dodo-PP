@@ -15,13 +15,14 @@ final class OrderStackView: UIStackView {
 
     var onEmptyCart: (() -> Void)?
     var onItemDeletedFromCart: (() -> Void)?
-    var onCountIncreased: (() -> Void)?
+    var onCountChanged: (() -> Void)?
     var onChangeItem: (() -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupActions()
     }
     
     required init(coder: NSCoder) {
@@ -29,8 +30,8 @@ final class OrderStackView: UIStackView {
     }
 
     // MARK: - Methods
-    func setNewData(_ countOfItems: Int, totalPrice: Int) {
-        orderView.setNewData(countOfItems, totalPrice: totalPrice)
+    func updateHeader(_ countOfItems: Int, totalPrice: Int) {
+        orderView.updateTitle(countOfItems, totalPrice: totalPrice)
     }
 
     func uploadOrder() {
@@ -56,8 +57,8 @@ private extension OrderStackView {
         cartProductTableView.onItemDeletedFromCart = { [weak self] in
             self?.onItemDeletedFromCart?()
         }
-        cartProductTableView.onCountIncreased = { [weak self] in
-            self?.onCountIncreased?()
+        cartProductTableView.onCountChanged = { [weak self] in
+            self?.onCountChanged?()
         }
 
         cartProductTableView.onChangeItem = { [weak self] in

@@ -9,11 +9,13 @@ import UIKit
 
 final class ToppingsStackView: UIStackView {
 
+    // MARK: - UI Properties
     private lazy var toppingsHeader = OrderView(title: "Добавить к заказу?")
     private lazy var toppingsCollectionView = AddToCartCollectionView()
 
     var onNewItemToAddToCart: (() -> Void)?
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -30,7 +32,6 @@ private extension ToppingsStackView {
     func setupUI() {
         addArrangedSubview(toppingsHeader)
         addArrangedSubview(toppingsCollectionView)
-
         axis = .vertical
         spacing = 10
     }

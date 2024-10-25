@@ -12,12 +12,9 @@ final class AddToCartCollectionView: UICollectionView {
     // MARK: - Properties
     private let cellHeight: CGFloat = 215
     private let cellSpacing: CGFloat = 10
-
     private let countOfCellsInRow: CGFloat = 3
     private let leftAndRightPadding: CGFloat = 20
-
     private let numberOfElements = 5
-
     private var correctWidth: CGFloat {
         (UIScreen.main.bounds.width - (cellSpacing * 2) - leftAndRightPadding) / countOfCellsInRow
     }
@@ -33,7 +30,7 @@ final class AddToCartCollectionView: UICollectionView {
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         let customLayout = configLayout()
         collectionViewLayout = customLayout
-        configCollectionView()
+        setupUI()
         getRandomToppings()
     }
 
@@ -44,16 +41,11 @@ final class AddToCartCollectionView: UICollectionView {
     func getRandomToppings() {
         itemsToAddToOrder = storage.getRandomItems(numberOfElements)
     }
+}
 
-    // MARK: - Private methods
-    private func configLayout() -> UICollectionViewFlowLayout {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: correctWidth, height: cellHeight)
-        return layout
-    }
-
-    private func configCollectionView() {
+// MARK: - Setup UI
+private extension AddToCartCollectionView {
+    func setupUI() {
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
         register(AddToCartCollectionCell.self, forCellWithReuseIdentifier: AddToCartCollectionCell.identifier)
@@ -63,8 +55,15 @@ final class AddToCartCollectionView: UICollectionView {
         setupLayout()
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         heightAnchor.constraint(equalToConstant: cellHeight).isActive = true
+    }
+
+    func configLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: correctWidth, height: cellHeight)
+        return layout
     }
 }
 
@@ -76,8 +75,8 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddToCartCollectionCell.identifier, for: indexPath) as? AddToCartCollectionCell else { return UICollectionViewCell() }
-        let pizzaToAdd = itemsToAddToOrder[indexPath.row]
-        cell.configCell(pizzaToAdd)
+        let itemToAdd = itemsToAddToOrder[indexPath.row]
+        cell.configCell(itemToAdd)
         return cell
     }
 
