@@ -11,14 +11,14 @@ final class CartViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var orderStackView = OrderStackView() // Хэдер и таблица с заказами
-    private lazy var toppingsStackView = ToppingsStackView() // Добавки к заказу
+    private lazy var itemsToAddStackView = ItemsToAddStackView() // Добавки к заказу
     private lazy var promoStackView = PromoStackView() // Акции
     private lazy var promoButton = PromoButton() // Кнопка Ввести промокод
     private lazy var dodoCoinsView = DodoCoinsStackView() // Блок с додокоинами
-    private lazy var cartButtonView = CartButtonView() // Кнопка корзины
+    private lazy var cartButtonView = CartButtonView(isCart: true) // Кнопка корзины
     private lazy var scrollUpButton = ScrollUpButton() // Кнопка scrollToTop
     private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [orderStackView, toppingsStackView, promoStackView, promoButton, dodoCoinsView])
+        let stackView = UIStackView(arrangedSubviews: [orderStackView, itemsToAddStackView, promoStackView, promoButton, dodoCoinsView])
         stackView.axis = .vertical
         stackView.spacing = 10
         return stackView
@@ -36,8 +36,7 @@ final class CartViewController: UIViewController {
     private var order: [Order]?
     private var promo: [Promo] = []
 
-    var onEmptyCart: (() -> Void)?
-    var onRefreshCart: (() -> Void)?
+    var onCartVCDismissed: (() -> Void)?
 
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -45,6 +44,12 @@ final class CartViewController: UIViewController {
         setupUI()
         setupActions()
         fetchDataFromStorage()
+    }
+
+    // Мы обновляем кнопку корзины на mainVC всегда, когда закрывается это окно (либо по свайпу, либо по нажатию на кнопку dismiss, либо по причине пустой корзины)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        onCartVCDismissed?()
     }
 }
 
@@ -61,8 +66,8 @@ private extension CartViewController {
     }
 
     func updateUI() {
-        let countOfItems = order?.compactMap{ $0.count }.reduce(0, +) ?? 0
-        let totalPrice = order?.compactMap{ $0.price * $0.count }.reduce(0, +) ?? 0
+        let countOfItems = storage.getCountOfItems()
+        let totalPrice = storage.getTotalOrderPrice()
         updateOrderData(countOfItems, totalPrice)
         updateDodoCoinsView(countOfItems, totalPrice)
         updateCartButtonPrice(totalPrice)
@@ -111,7 +116,6 @@ private extension CartViewController {
     }
 
     @objc func dismissButtonTapped() {
-        onRefreshCart?()
         dismiss(animated: true)
     }
 
@@ -136,7 +140,6 @@ private extension CartViewController {
         orderStackView.onEmptyCart = { [weak self] in
             guard let self else { return }
             dismiss(animated: true)
-            onEmptyCart?()
         }
         orderStackView.onItemDeletedFromCart = { [weak self] in
             self?.fetchDataFromStorage()
@@ -154,7 +157,7 @@ private extension CartViewController {
         scrollUpButton.onScrollUpButtonTapped = { [weak self] in
             guard let self else { return }
             let topInset = scrollView.adjustedContentInset.top
-            self.scrollView.setContentOffset(CGPoint(x: 0, y: -topInset), animated: true)
+            scrollView.setContentOffset(CGPoint(x: 0, y: -topInset), animated: true)
         }
     }
 
@@ -169,7 +172,7 @@ private extension CartViewController {
     }
 
     func setupToppingsCollectionView() {
-        toppingsStackView.onNewItemToAddToCart = { [weak self] in
+        itemsToAddStackView.onNewItemToAddToCart = { [weak self] in
             guard let self else { return }
             fetchDataFromStorage()
             orderStackView.uploadOrder()
@@ -225,27 +228,7 @@ extension CartViewController {
 // MARK: - UIScrollViewDelegate - настройка кнопки scrollToTop
 extension CartViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        setupScrollUpButton()
-    }
-
-    // Метод определяет когда показывать кнопку скролла наверх в зависимости от прокрученного контента
-    func setupScrollUpButton() {
-        let contentHeight = scrollView.contentSize.height
-        let scrollOffset = scrollView.contentOffset.y + scrollView.adjustedContentInset.top
-        let visibleHeight = scrollView.frame.height
-
-        // Срабатывает когда по каким-то причинам контент еще не загрузился
-        if contentHeight == 0 {
-            scrollUpButton.isHidden = true
-            return
-        }
-
-        // Срабатывает когда прокрутили больше половины контента
-        if scrollOffset > (contentHeight - visibleHeight) / 2 {
-            scrollUpButton.isHidden = false
-        } else {
-            scrollUpButton.isHidden = true
-        }
+        scrollUpButton.setupScrollUpButtonAction(scrollView: scrollView)
     }
 }
 

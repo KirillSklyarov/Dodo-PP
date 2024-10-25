@@ -22,9 +22,8 @@ enum Screens {
 }
 
 final class Router {
-
     // Откуда будет вызывать показ нового экрана
-    var baseVC: UIViewController
+    weak var baseVC: UIViewController?
 
     // MARK: - Init
     init(baseVC: UIViewController) {
@@ -79,6 +78,6 @@ final class Router {
             vc = popUpView
         }
 
-        baseVC.present(vc, animated: animated)
+        baseVC?.present(vc, animated: animated)
     }
 }

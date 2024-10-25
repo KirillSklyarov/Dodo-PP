@@ -29,7 +29,8 @@ final class OrderView: UIView {
     }
 
     func updateTitle(_ countOfItems: Int, totalPrice: Int) {
-        let newText = "\(countOfItems) товар на \(totalPrice) ₽"
+        let items = "товар".pluralize(for: countOfItems)
+        let newText = "\(countOfItems) \(items) на \(totalPrice) ₽"
         titleLabel.text = newText
     }
 }

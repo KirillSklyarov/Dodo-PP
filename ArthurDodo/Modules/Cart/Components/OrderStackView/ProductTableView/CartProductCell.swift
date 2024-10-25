@@ -81,7 +81,7 @@ final class CartProductCell: UITableViewCell {
     // MARK: - Public methods
     func configureCell(itemInOrder: Order) {
         pizzaImageView.image = UIImage(named: itemInOrder.imageName)
-        titleLabel.text = itemInOrder.pizzaName
+        titleLabel.text = itemInOrder.itemName
 
         setProductDetails(itemInOrder) // Текст с тестом, размером или весом
         setPrice(itemInOrder)

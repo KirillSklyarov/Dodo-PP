@@ -20,11 +20,12 @@ final class CartButtonView: UIView {
     var onCartButtonTapped: ( (Int) -> Void )?
 
     // MARK: - UI Properties
-    private lazy var cartButton = CartButton(isHidden: false, isCart: false)
+    private var cartButton: CartButton
     private lazy var blurView = CustomBlurView()
 
     // MARK: - Init
-    override init(frame: CGRect) {
+    init(frame: CGRect = .zero, isHidden: Bool = false, title: String? = nil, isNeedImage: Bool = false, isCart: Bool = false) {
+        cartButton = CartButton(isHidden: isHidden, isNeedImage: isNeedImage, isCart: isCart)
         super.init(frame: frame)
         configUI()
         setupActions()
@@ -43,9 +44,14 @@ final class CartButtonView: UIView {
         currentPrice
     }
 
+    // В зависимости корзина или нет, то меняется label на кнопке
     func updatePrice(_ price: Int) {
         currentPrice = price
-        let title = "Оформить заказ на \(price) ₽"
+        let title = if cartButton.isCart {
+            "Оформить заказ на \(price) ₽"
+        } else {
+            "В корзину за \(price) ₽"
+        }
         cartButton.setNewTitle(title)
     }
 }

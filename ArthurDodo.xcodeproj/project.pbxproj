@@ -42,7 +42,7 @@
 		73B969792CC7C78700A2415A /* PromoCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968F92CC7C78700A2415A /* PromoCollectionCell.swift */; };
 		73B9697A2CC7C78700A2415A /* AddToCartCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968FB2CC7C78700A2415A /* AddToCartCollectionCell.swift */; };
 		73B9697B2CC7C78700A2415A /* AddToCartCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968FC2CC7C78700A2415A /* AddToCartCollectionView.swift */; };
-		73B9697C2CC7C78700A2415A /* ToppingsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968FE2CC7C78700A2415A /* ToppingsStackView.swift */; };
+		73B9697C2CC7C78700A2415A /* ItemsToAddStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968FE2CC7C78700A2415A /* ItemsToAddStackView.swift */; };
 		73B9697D2CC7C78700A2415A /* CartVCHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969002CC7C78700A2415A /* CartVCHeader.swift */; };
 		73B9697E2CC7C78700A2415A /* CustomPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969012CC7C78700A2415A /* CustomPageControl.swift */; };
 		73B9697F2CC7C78700A2415A /* OrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969022CC7C78700A2415A /* OrderView.swift */; };
@@ -122,6 +122,8 @@
 		73E6EB422CC92FC5006831F2 /* CpfcPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB412CC92FC5006831F2 /* CpfcPopupView.swift */; };
 		73E6EB442CC948F2006831F2 /* CustomTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB432CC948F2006831F2 /* CustomTableView.swift */; };
 		73E6EB462CC97741006831F2 /* Info&ToppingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB452CC97741006831F2 /* Info&ToppingsView.swift */; };
+		73EA17332CCB9ED90079A16C /* AppLoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EA17322CCB9ED90079A16C /* AppLoadingIndicator.swift */; };
+		73EA17352CCBE21E0079A16C /* String+Plural.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EA17342CCBE21E0079A16C /* String+Plural.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -173,7 +175,7 @@
 		73B968F92CC7C78700A2415A /* PromoCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoCollectionCell.swift; sourceTree = "<group>"; };
 		73B968FB2CC7C78700A2415A /* AddToCartCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToCartCollectionCell.swift; sourceTree = "<group>"; };
 		73B968FC2CC7C78700A2415A /* AddToCartCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToCartCollectionView.swift; sourceTree = "<group>"; };
-		73B968FE2CC7C78700A2415A /* ToppingsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToppingsStackView.swift; sourceTree = "<group>"; };
+		73B968FE2CC7C78700A2415A /* ItemsToAddStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsToAddStackView.swift; sourceTree = "<group>"; };
 		73B969002CC7C78700A2415A /* CartVCHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartVCHeader.swift; sourceTree = "<group>"; };
 		73B969012CC7C78700A2415A /* CustomPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPageControl.swift; sourceTree = "<group>"; };
 		73B969022CC7C78700A2415A /* OrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderView.swift; sourceTree = "<group>"; };
@@ -242,6 +244,8 @@
 		73E6EB412CC92FC5006831F2 /* CpfcPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CpfcPopupView.swift; sourceTree = "<group>"; };
 		73E6EB432CC948F2006831F2 /* CustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableView.swift; sourceTree = "<group>"; };
 		73E6EB452CC97741006831F2 /* Info&ToppingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Info&ToppingsView.swift"; sourceTree = "<group>"; };
+		73EA17322CCB9ED90079A16C /* AppLoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingIndicator.swift; sourceTree = "<group>"; };
+		73EA17342CCBE21E0079A16C /* String+Plural.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Plural.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -499,7 +503,7 @@
 			isa = PBXGroup;
 			children = (
 				73B968FD2CC7C78700A2415A /* ToppingsCollection */,
-				73B968FE2CC7C78700A2415A /* ToppingsStackView.swift */,
+				73B968FE2CC7C78700A2415A /* ItemsToAddStackView.swift */,
 			);
 			path = ToppingsStackView;
 			sourceTree = "<group>";
@@ -549,6 +553,7 @@
 				73B9690F2CC7C78700A2415A /* SegmentControl.swift */,
 				73E6EB432CC948F2006831F2 /* CustomTableView.swift */,
 				73E6EB3E2CC8D99C006831F2 /* PriceGrayButton.swift */,
+				73EA17322CCB9ED90079A16C /* AppLoadingIndicator.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -812,6 +817,7 @@
 				73B969D32CC7C7C000A2415A /* UIColor+hex .swift */,
 				73B969D42CC7C7C000A2415A /* UIView+Ext.swift */,
 				73B969D52CC7C7C000A2415A /* UserDefaults+Ext.swift */,
+				73EA17342CCBE21E0079A16C /* String+Plural.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -934,7 +940,9 @@
 				73B9695E2CC7C78700A2415A /* Size.swift in Sources */,
 				73B9695F2CC7C78700A2415A /* Toppings.swift in Sources */,
 				73B969602CC7C78700A2415A /* Item.swift in Sources */,
+				73EA17352CCBE21E0079A16C /* String+Plural.swift in Sources */,
 				73B969612CC7C78700A2415A /* ItemSize.swift in Sources */,
+				73EA17332CCB9ED90079A16C /* AppLoadingIndicator.swift in Sources */,
 				73B969622CC7C78700A2415A /* Topping.swift in Sources */,
 				73B969632CC7C78700A2415A /* Order.swift in Sources */,
 				73B969642CC7C78700A2415A /* DodoCoinsOrders.swift in Sources */,
@@ -962,7 +970,7 @@
 				73B969792CC7C78700A2415A /* PromoCollectionCell.swift in Sources */,
 				73B9697A2CC7C78700A2415A /* AddToCartCollectionCell.swift in Sources */,
 				73B9697B2CC7C78700A2415A /* AddToCartCollectionView.swift in Sources */,
-				73B9697C2CC7C78700A2415A /* ToppingsStackView.swift in Sources */,
+				73B9697C2CC7C78700A2415A /* ItemsToAddStackView.swift in Sources */,
 				73B9697D2CC7C78700A2415A /* CartVCHeader.swift in Sources */,
 				73E6EB422CC92FC5006831F2 /* CpfcPopupView.swift in Sources */,
 				73B9697E2CC7C78700A2415A /* CustomPageControl.swift in Sources */,

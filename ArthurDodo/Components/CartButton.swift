@@ -14,19 +14,19 @@ final class CartButton: UIButton {
     private let buttonHeight: CGFloat = 50
     private let dataStorage = DataStorage.shared
 
+    var isCart: Bool
     var onButtonTapped: (() -> Void)?
 
     // MARK: - Init
-    init(frame: CGRect = .zero, isHidden: Bool = false, title: String? = nil, isCart: Bool? = nil) {
+    init(frame: CGRect = .zero, isHidden: Bool = false, title: String? = nil, isNeedImage: Bool = false, isCart: Bool = false) {
+        self.isCart = isCart
         super.init(frame: frame)
         configButton(isHidden: isHidden)
         setupLayout()
         if let title { setNewTitle(title) }
-        if let isCart {
-            if !isCart { self.configuration?.image = nil }
-        }
+        if !isNeedImage { self.configuration?.image = nil }
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -40,29 +40,42 @@ final class CartButton: UIButton {
     }
 
     func setNewPrice(_ price: Int) {
-        totalPrice += price
-        let title = "\(totalPrice) ₽"
+        let title = "\(price) ₽"
         configuration?.attributedTitle = AttributedString(title, attributes: AttributeContainer([
             .foregroundColor: UIColor.white,
             .font: AppFonts.bold18]))
     }
 
-    func resetPrice() {
-        totalPrice = 0
+    func updateCart() {
+        let totalPrice = dataStorage.getTotalOrderPrice()
+        setNewPrice(totalPrice)
+        showOrHideCartButton(totalPrice)
+    }
+}
+
+// MARK: - Supporting methods
+private extension CartButton {
+    func showOrHideCartButton(_ totalPrice: Int) {
+        totalPrice > 0 ? showCartButton() : hideCartButton()
     }
 
     func hideCartButton() {
         isHidden = true
     }
 
-    func getTotalCartPriceFromStorage() {
-        let totalPrice = dataStorage.getTotalOrderPrice()
-        let title = "\(totalPrice) ₽"
-        setNewTitle(title)
+    func showCartButton() {
+        isHidden = false
     }
 
-    // MARK: - Private methods
-    private func configButton(isHidden: Bool) {
+    func getTotalCartPriceFromStorage() {
+        let totalPrice = dataStorage.getTotalOrderPrice()
+        setNewPrice(totalPrice)
+    }
+}
+
+// MARK: - Setup UI
+private extension CartButton {
+    func configButton(isHidden: Bool) {
         let image = UIImage(systemName: "cart.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         let title = "0 ₽"
 
@@ -82,11 +95,11 @@ final class CartButton: UIButton {
         addTarget(self, action: #selector(cartButtonTapped), for: .touchUpInside)
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
     }
 
-    @objc private func cartButtonTapped() {
+    @objc func cartButtonTapped() {
         onButtonTapped?()
     }
 }

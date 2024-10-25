@@ -12,16 +12,33 @@ final class MainViewController: UIViewController {
     // MARK: - UI Properties
     private lazy var headerView = HeaderView()
     private lazy var contentCollectionView = ContentCollectionView()
-    private lazy var cartButton = CartButton(isHidden: true, isCart: true)
-    private lazy var loadingIndicator = UIActivityIndicatorView(style: .large)
+    private lazy var cartButton = CartButton(isHidden: true, isNeedImage: true)
+    private lazy var loadingIndicator = AppLoadingIndicator()
 
-    private let storage = DataStorage.shared
-    private lazy var router = Router(baseVC: self)
+    // MARK: - Other properties
+    private let topInset: CGFloat = 10
+    private let bottomInset: CGFloat = -20
+    private let leftInset: CGFloat = 20
+    private let rightInset: CGFloat = -20
+
+    private let storage: DataStorage
+    private var router: Router?
+
+    // MARK: - Init
+    init(storage: DataStorage = DataStorage.shared) {
+        self.storage = storage
+        super.init(nibName: nil, bundle: nil)
+        self.router = Router(baseVC: self)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        configUI()
+        setupUI()
         setupActions()
         fetchAllData()
     }
@@ -29,19 +46,17 @@ final class MainViewController: UIViewController {
 
 // MARK: - Setup UI
 private extension MainViewController {
-    func configUI() {
+    func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(headerView, contentCollectionView, cartButton, loadingIndicator)
         setupLayout()
-        setupLoadingIndicator()
     }
 
     func setupLayout() {
         NSLayoutConstraint.activate([
-            contentCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
-
-            cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            contentCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset),
+            cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
+            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
 
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -91,7 +106,7 @@ private extension MainViewController {
     }
 
     func showProfileVC() {
-        router.navigate(to: .profile)
+        router?.navigate(to: .profile)
     }
 
     func sendSelectedItemToStorage(_ item: Item) {
@@ -99,7 +114,7 @@ private extension MainViewController {
     }
 
     func showProductDetail() {
-        router.navigate(to: .productDetails) { [weak self] productDetailVC in
+        router?.navigate(to: .productDetails) { [weak self] productDetailVC in
             guard let productDetailVC = productDetailVC as? ProductDetailsViewController else {
                 print("Can't cast view controller to ProductDetailsViewController")
                 return
@@ -107,14 +122,13 @@ private extension MainViewController {
 
             productDetailVC.onCartButtonTapped = { [weak self] price in
                 guard let self else { print("Self is nil, can't set price"); return }
-                cartButton.isHidden = false
-                cartButton.setNewPrice(price)
+                cartButton.updateCart()
             }
         }
     }
 
     func showStoriesVC(_ indexPath: IndexPath) {
-        router.navigate(to: .stories) { [weak self] storiesVC in
+        router?.navigate(to: .stories) { [weak self] storiesVC in
             guard let storiesVC = storiesVC as? StoriesVC else {
                 print("Can't cast view controller to StoriesViewController")
                 return
@@ -128,7 +142,7 @@ private extension MainViewController {
     }
 
     func showAddressVC() {
-        router.navigate(to: .address)
+        router?.navigate(to: .address)
     }
 
     func setupCartButtonActions() {
@@ -138,13 +152,12 @@ private extension MainViewController {
     }
 
     func showCartVC() {
-        router.navigate(to: .cart) { [weak self] cartVC in
+        router?.navigate(to: .cart) { [weak self] cartVC in
             guard let self else { return }
             guard let cartVC = cartVC as? CartViewController else {
                 print("Can't cast view controller to CartViewController"); return }
-            cartVC.onEmptyCart = {
-                self.cartButton.resetPrice()
-                self.cartButton.hideCartButton()
+            cartVC.onCartVCDismissed = {
+                self.cartButton.updateCart()
             }
         }
     }
@@ -153,7 +166,7 @@ private extension MainViewController {
 // MARK: - Fetch data from server
 private extension MainViewController {
     func fetchAllData() {
-        showLoadingIndicator()
+        loadingIndicator.showLoadingIndicator()
         getStoriesFromServer()
         getCatalogAndSpecialOffersFromServer()
     }
@@ -171,7 +184,7 @@ private extension MainViewController {
             guard let self else { return }
             DispatchQueue.main.async {
                 self.updateSpecialOffersUI()
-                self.hideLoadingIndicator()
+                self.loadingIndicator.hideLoadingIndicator()
             }
         }
     }
@@ -179,23 +192,5 @@ private extension MainViewController {
     // Вызываем обновление UI всех секций
     func updateSpecialOffersUI() {
         contentCollectionView.uploadDataFromStorage()
-    }
-}
-
-// MARK: - Setup Loading Indicator
-private extension MainViewController {
-
-    func setupLoadingIndicator() {
-        loadingIndicator.color = UIColor.white
-    }
-
-    func showLoadingIndicator() {
-        loadingIndicator.startAnimating()
-        contentCollectionView.isHidden = true
-    }
-
-    func hideLoadingIndicator() {
-        loadingIndicator.stopAnimating()
-        contentCollectionView.isHidden = false
     }
 }

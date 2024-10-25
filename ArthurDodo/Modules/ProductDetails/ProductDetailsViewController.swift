@@ -14,7 +14,6 @@ final class ProductDetailsViewController: UIViewController {
     private lazy var itemDetailsView = DetailsView()
     private lazy var infoAndToppingsContainer = InfoAndToppingsView()
     private lazy var cartButtonView = CartButtonView()
-
     private lazy var contentStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [itemDetailsView, infoAndToppingsContainer])
         stack.axis = .vertical
@@ -24,13 +23,24 @@ final class ProductDetailsViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties
-    private let storage = DataStorage.shared
-    private lazy var router = Router(baseVC: self)
+    private let storage: DataStorage
+    private var router: Router?
 
     private var item: Item?
     private var order: Order?
 
     var onCartButtonTapped: ( (Int) -> Void )?
+
+    // MARK: - Init
+    init(storage: DataStorage = DataStorage.shared) {
+        self.storage = storage
+        super.init(nibName: nil, bundle: nil)
+        self.router = Router(baseVC: self)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -128,22 +138,22 @@ private extension ProductDetailsViewController {
     func setupCartViewAction() {
         cartButtonView.onCartButtonTapped = { [weak self] finalPrice in
             guard let self else { return }
-            configureOrder()
-            guard let order else { return }
-            storage.sendToOrderStorage(order)
-            self.onCartButtonTapped?(finalPrice)
-            self.dismiss(animated: true)
+            guard let orderPosition = configureOrder() else { return }
+            storage.addOrderPositionToOrder(orderPosition)
+            onCartButtonTapped?(finalPrice)
+            dismiss(animated: true)
         }
     }
 
-    func configureOrder() {
-        guard let item else { return }
+    func configureOrder() -> Order? {
+        guard let item else { return nil}
         let chosenSize = getCorrectSize()
         let chosenDough = getCorrectDough()
         let weight = getCorrectWeight()
         let price = item.getPrice(size: chosenSize)
 
-        order = Order(pizzaName: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, weight: weight, price: price, isHit: item.isHit)
+        let order = Order(itemName: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, weight: weight, price: price, isHit: item.isHit)
+        return order
     }
 
     func getCorrectWeight() -> Int {
@@ -194,7 +204,7 @@ private extension ProductDetailsViewController {
             guard let self else { print("Self is nil"); return }
             guard let popupVC = popupVC as? CpfcPopupView else {
                 print("No popupVC"); return }
-            router.navigate(to: .cpfcPopup, popUpView: popupVC)
+            router?.navigate(to: .cpfcPopup, popUpView: popupVC)
         }
     }
 }

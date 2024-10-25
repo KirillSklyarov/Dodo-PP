@@ -5,10 +5,10 @@
 //  Created by Kirill Sklyarov on 27.09.2024.
 //
 
-import Foundation
+import UIKit
 
 struct Order {
-    let pizzaName: String
+    let itemName: String
     let imageName: String
     let size: Size
     let dough: Dough?

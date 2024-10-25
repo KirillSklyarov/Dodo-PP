@@ -40,6 +40,18 @@ struct Item: Codable {
         return price
     }
 
+    func getCorrectSize() -> Size {
+        let isOneSize = hasOneSize()
+        let size: Size = isOneSize ? .oneSize : .medium
+        return size
+    }
+
+    func getCorrectWeight() -> Int {
+        let isOneSize = hasOneSize()
+        let weight = isOneSize ? (itemSize.oneSize?.weight ?? 0) : (itemSize.medium?.weight ?? 0)
+        return weight
+    }
+
     func getPrice(size: Size) -> Int {
         let price =
             switch size {

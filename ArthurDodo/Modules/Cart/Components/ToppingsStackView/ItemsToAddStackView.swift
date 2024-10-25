@@ -7,11 +7,11 @@
 
 import UIKit
 
-final class ToppingsStackView: UIStackView {
+final class ItemsToAddStackView: UIStackView {
 
     // MARK: - UI Properties
-    private lazy var toppingsHeader = OrderView(title: "Добавить к заказу?")
-    private lazy var toppingsCollectionView = AddToCartCollectionView()
+    private lazy var itemsToAddHeader = OrderView(title: "Добавить к заказу?")
+    private lazy var itemsToAddCollectionView = AddToCartCollectionView()
 
     var onNewItemToAddToCart: (() -> Void)?
 
@@ -28,10 +28,10 @@ final class ToppingsStackView: UIStackView {
 }
 
 // MARK: - Setup UI
-private extension ToppingsStackView {
+private extension ItemsToAddStackView {
     func setupUI() {
-        addArrangedSubview(toppingsHeader)
-        addArrangedSubview(toppingsCollectionView)
+        addArrangedSubview(itemsToAddHeader)
+        addArrangedSubview(itemsToAddCollectionView)
         axis = .vertical
         spacing = 10
     }
@@ -42,9 +42,9 @@ private extension ToppingsStackView {
 }
 
 // MARK: - Setup Actions
-private extension ToppingsStackView {
+private extension ItemsToAddStackView {
     func setupActions() {
-        toppingsCollectionView.onNewItemToAddToCart = { [weak self] in
+        itemsToAddCollectionView.onNewItemToAddToCart = { [weak self] in
             self?.onNewItemToAddToCart?()
         }
     }

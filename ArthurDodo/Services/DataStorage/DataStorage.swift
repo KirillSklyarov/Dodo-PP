@@ -147,8 +147,7 @@ extension DataStorage {
 
 // MARK: - Orders
 extension DataStorage {
-
-    func sendToOrderStorage(_ order: Order) {
+    func addOrderPositionToOrder(_ order: Order) {
         self.order.append(order)
     }
 
@@ -166,6 +165,10 @@ extension DataStorage {
 
     func getTotalOrderPrice() -> Int {
         order.compactMap{ $0.price * $0.count }.reduce(0, +)
+    }
+
+    func getCountOfItems() -> Int {
+        order.compactMap{ $0.count }.reduce(0, +)
     }
 }
 
