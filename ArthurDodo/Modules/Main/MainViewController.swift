@@ -120,7 +120,7 @@ private extension MainViewController {
                 return
             }
 
-            productDetailVC.onCartButtonTapped = { [weak self] price in
+            productDetailVC.onCartButtonTapped = { [weak self] in
                 guard let self else { print("Self is nil, can't set price"); return }
                 cartButton.updateCart()
             }

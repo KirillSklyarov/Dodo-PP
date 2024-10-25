@@ -1,10 +1,3 @@
-//
-//  CartViewController.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 24.09.2024.
-//
-
 import UIKit
 
 final class CartViewController: UIViewController {
@@ -93,40 +86,6 @@ private extension CartViewController {
     }
 }
 
-// MARK: - Setup UI
-private extension CartViewController {
-    func setupUI() {
-        setupNavigationBar()
-        view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(scrollView, cartButtonView)
-
-        setupScrollView()
-        setupLayout()
-    }
-
-    func setupNavigationBar() {
-        navigationController?.navigationBar.barTintColor = AppColors.backgroundGray
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationItem.title = "Корзина"
-
-        let dismissButton = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(dismissButtonTapped))
-        dismissButton.tintColor = AppColors.buttonOrange
-        dismissButton.setTitleTextAttributes([NSAttributedString.Key .font: AppFonts.semibold18], for: .normal)
-        navigationItem.leftBarButtonItem = dismissButton
-    }
-
-    @objc func dismissButtonTapped() {
-        dismiss(animated: true)
-    }
-
-    func setupScrollView() {
-        scrollView.addSubviews(contentStackView, scrollUpButton)
-        let bottomInset = cartButtonView.getHeight()
-        scrollView.contentInset = UIEdgeInsets(top: topInset, left: 0, bottom: bottomInset, right: 0)
-        scrollView.delegate = self
-    }
-}
-
 // MARK: - Setup Actions
 private extension CartViewController {
     func setupActions() {
@@ -134,6 +93,7 @@ private extension CartViewController {
         setupToppingsCollectionView()
         setupSpecialViewActions()
         setupScrollUpButtonAction()
+        setupCartButtonAction()
     }
 
     func setupCartProductTableViewAction() {
@@ -177,6 +137,47 @@ private extension CartViewController {
             fetchDataFromStorage()
             orderStackView.uploadOrder()
         }
+    }
+
+    func setupCartButtonAction() {
+        cartButtonView.onCartButtonTapped = { [weak self] in
+            guard let self else { return }
+            router.navigate(to: .delivery)
+        }
+    }
+}
+
+// MARK: - Setup UI
+private extension CartViewController {
+    func setupUI() {
+        setupNavigationBar()
+        view.backgroundColor = AppColors.backgroundBlack
+        view.addSubviews(scrollView, cartButtonView)
+
+        setupScrollView()
+        setupLayout()
+    }
+
+    func setupNavigationBar() {
+        navigationController?.navigationBar.barTintColor = AppColors.backgroundGray
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationItem.title = "Корзина"
+
+        let dismissButton = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(dismissButtonTapped))
+        dismissButton.tintColor = AppColors.buttonOrange
+        dismissButton.setTitleTextAttributes([NSAttributedString.Key .font: AppFonts.semibold18], for: .normal)
+        navigationItem.leftBarButtonItem = dismissButton
+    }
+
+    @objc func dismissButtonTapped() {
+        dismiss(animated: true)
+    }
+
+    func setupScrollView() {
+        scrollView.addSubviews(contentStackView, scrollUpButton)
+        let bottomInset = cartButtonView.getHeight()
+        scrollView.contentInset = UIEdgeInsets(top: topInset, left: 0, bottom: bottomInset, right: 0)
+        scrollView.delegate = self
     }
 }
 

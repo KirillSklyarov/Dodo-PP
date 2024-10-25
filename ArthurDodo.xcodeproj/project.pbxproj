@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		73159A742CCC20F9002CFB76 /* DeliveryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73159A732CCC20F9002CFB76 /* DeliveryVC.swift */; };
 		73B969592CC7C78700A2415A /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968B72CC7C78700A2415A /* Address.swift */; };
 		73B9695A2CC7C78700A2415A /* AddressTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968B92CC7C78700A2415A /* AddressTextField.swift */; };
 		73B9695B2CC7C78700A2415A /* CategoryName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968BA2CC7C78700A2415A /* CategoryName.swift */; };
@@ -127,6 +128,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		73159A732CCC20F9002CFB76 /* DeliveryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryVC.swift; sourceTree = "<group>"; };
 		737D0DD52C99BF7000B7D739 /* ArthurDodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArthurDodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73B968B72CC7C78700A2415A /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		73B968B92CC7C78700A2415A /* AddressTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTextField.swift; sourceTree = "<group>"; };
@@ -248,6 +250,10 @@
 		73EA17342CCBE21E0079A16C /* String+Plural.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Plural.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		73159A752CCC2448002CFB76 /* Components */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Components; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		737D0DD22C99BF7000B7D739 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -259,6 +265,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		73159A722CCC20EE002CFB76 /* Delivery */ = {
+			isa = PBXGroup;
+			children = (
+				73159A732CCC20F9002CFB76 /* DeliveryVC.swift */,
+				73159A752CCC2448002CFB76 /* Components */,
+			);
+			path = Delivery;
+			sourceTree = "<group>";
+		};
 		737D0DCC2C99BF7000B7D739 = {
 			isa = PBXGroup;
 			children = (
@@ -791,6 +806,7 @@
 				73B969512CC7C78700A2415A /* Profile */,
 				73B968EF2CC7C78700A2415A /* Address */,
 				73B969162CC7C78700A2415A /* EditAddress */,
+				73159A722CCC20EE002CFB76 /* Delivery */,
 				73B969562CC7C78700A2415A /* Stories */,
 			);
 			path = Modules;
@@ -862,6 +878,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				73159A752CCC2448002CFB76 /* Components */,
 			);
 			name = ArthurDodo;
 			packageProductDependencies = (
@@ -937,6 +956,7 @@
 				73B9695B2CC7C78700A2415A /* CategoryName.swift in Sources */,
 				73B9695C2CC7C78700A2415A /* CPFC.swift in Sources */,
 				73B9695D2CC7C78700A2415A /* Dough.swift in Sources */,
+				73159A742CCC20F9002CFB76 /* DeliveryVC.swift in Sources */,
 				73B9695E2CC7C78700A2415A /* Size.swift in Sources */,
 				73B9695F2CC7C78700A2415A /* Toppings.swift in Sources */,
 				73B969602CC7C78700A2415A /* Item.swift in Sources */,

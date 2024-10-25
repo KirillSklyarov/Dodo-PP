@@ -19,6 +19,7 @@ enum Screens {
     case applySpecialOffer
     case personalData
     case cpfcPopup
+    case delivery
 }
 
 final class Router {
@@ -76,6 +77,9 @@ final class Router {
             guard let popUpView else {
                 print("Something went wrong with the popup"); return }
             vc = popUpView
+        case .delivery:
+            let deliveryVC = DeliveryVC()
+            vc = UINavigationController(rootViewController: deliveryVC)
         }
 
         baseVC?.present(vc, animated: animated)

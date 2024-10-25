@@ -29,7 +29,7 @@ final class ProductDetailsViewController: UIViewController {
     private var item: Item?
     private var order: Order?
 
-    var onCartButtonTapped: ( (Int) -> Void )?
+    var onCartButtonTapped: ( () -> Void )?
 
     // MARK: - Init
     init(storage: DataStorage = DataStorage.shared) {
@@ -136,11 +136,11 @@ private extension ProductDetailsViewController {
     }
     
     func setupCartViewAction() {
-        cartButtonView.onCartButtonTapped = { [weak self] finalPrice in
+        cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
             guard let orderPosition = configureOrder() else { return }
             storage.addOrderPositionToOrder(orderPosition)
-            onCartButtonTapped?(finalPrice)
+            onCartButtonTapped?()
             dismiss(animated: true)
         }
     }

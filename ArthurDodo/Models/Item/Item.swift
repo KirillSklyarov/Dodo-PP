@@ -52,6 +52,15 @@ struct Item: Codable {
         return weight
     }
 
+    func getCorrectDough() -> String? {
+        if !hasOneSize() {
+            let dough: Dough = .basic
+            return dough.rawValue.lowercased()
+        } else {
+            return nil
+        }
+    }
+
     func getPrice(size: Size) -> Int {
         let price =
             switch size {

@@ -1,10 +1,3 @@
-//
-//  ToppingsCollectionCell.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 26.09.2024.
-//
-
 import UIKit
 
 final class AddToCartCollectionCell: UICollectionViewCell {
@@ -35,20 +28,6 @@ final class AddToCartCollectionCell: UICollectionViewCell {
         imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
         return imageView
     }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.bold14
-        label.numberOfLines = 2
-        label.textColor = .white
-        return label
-    }()
-    private lazy var detailsLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.regular12
-        label.numberOfLines = 0
-        label.textColor = .gray
-        return label
-    }()
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
         label.font = AppFonts.semibold12
@@ -59,6 +38,36 @@ final class AddToCartCollectionCell: UICollectionViewCell {
         label.layer.masksToBounds = true
         label.heightAnchor.constraint(equalToConstant: priceLabelHeight).isActive = true
         return label
+    }()
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFonts.bold14
+        label.numberOfLines = 2
+        label.adjustsFontSizeToFitWidth = true
+        label.textColor = .white
+        return label
+    }()
+    private lazy var detailsLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFonts.regular12
+        label.numberOfLines = 0
+        label.textColor = .gray
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+    private lazy var detailsLabelContainer: UIView = {
+        let view = UIView()
+        view.addSubviews(detailsLabel)
+        return view
+    }()
+
+    private lazy var contentStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [itemImageView, titleLabel, detailsLabelContainer, priceLabel])
+        stack.axis = .vertical
+        stack.spacing = 5
+        titleLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        detailsLabel.setContentHuggingPriority(.defaultLow, for: .vertical)
+        return stack
     }()
 
     // MARK: - Init
@@ -83,9 +92,14 @@ final class AddToCartCollectionCell: UICollectionViewCell {
 // MARK: - Supporting methods
 private extension AddToCartCollectionCell {
     func setProductDetails(_ item: Item) {
-        let dough = Dough.basic.rawValue
-        let size = Size.small.displayName.components(separatedBy: " ").dropFirst().joined(separator: " ")
-        detailsLabel.text = "\(dough), \(size)"
+        let dough = item.getCorrectDough()
+        let size = item.getCorrectSize().displayName
+        let weight = item.getCorrectWeight()
+        if let dough {
+            detailsLabel.text = "\(size), \(dough)"
+        } else {
+            detailsLabel.text = "\(weight) г"
+        }
     }
 
     func setPrice(_ item: Item) {
@@ -101,33 +115,41 @@ private extension AddToCartCollectionCell {
         layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
 
-        contentView.addSubviews(cellBackgroundView, itemImageView, titleLabel, detailsLabel, priceLabel)
+        contentView.addSubviews(cellBackgroundView, contentStack)
 
         setupLayout()
     }
 
     func setupLayout() {
+        setupContentStackLayout()
+        setupBackgroundViewLayout()
+        setupDetailsContainerLayout()
+    }
+
+    func setupContentStackLayout() {
+        NSLayoutConstraint.activate([
+            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topInset),
+            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
+            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
+            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset),
+        ])
+    }
+
+    func setupBackgroundViewLayout() {
         NSLayoutConstraint.activate([
             cellBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             cellBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cellBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cellBackgroundView.topAnchor.constraint(equalTo: itemImageView.centerYAnchor),
+            cellBackgroundView.topAnchor.constraint(equalTo: itemImageView.centerYAnchor)
+        ])
+    }
 
-            itemImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topInset),
-            itemImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
-            itemImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
-
-            titleLabel.topAnchor.constraint(equalTo: itemImageView.bottomAnchor, constant: topInset),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
-
-            detailsLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: topInset),
-            detailsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
-            detailsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
-
-            priceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset),
-            priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
-            priceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset)
+    func setupDetailsContainerLayout() {
+        NSLayoutConstraint.activate([
+            detailsLabel.topAnchor.constraint(equalTo: detailsLabelContainer.topAnchor),
+            detailsLabel.leadingAnchor.constraint(equalTo: detailsLabelContainer.leadingAnchor),
+            detailsLabel.trailingAnchor.constraint(equalTo: detailsLabelContainer.trailingAnchor),
+            detailsLabel.bottomAnchor.constraint(lessThanOrEqualTo: detailsLabelContainer.bottomAnchor)
         ])
     }
 }

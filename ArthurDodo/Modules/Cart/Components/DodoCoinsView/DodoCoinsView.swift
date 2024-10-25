@@ -18,7 +18,6 @@ final class DodoCoinsView: UIView {
         label.numberOfLines = 1
         return label
     }()
-
     private lazy var valueLabel: UILabel = {
         let label = UILabel()
         label.text = "1234 ₽"
@@ -27,7 +26,6 @@ final class DodoCoinsView: UIView {
         label.numberOfLines = 1
         return label
     }()
-
     private lazy var contentStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [titleLabel, valueLabel])
         stack.axis = .horizontal
@@ -51,22 +49,28 @@ final class DodoCoinsView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
+// MARK: - Public methods
+extension DodoCoinsView {
     func setNewCountValue(_ count: Int) {
-        titleLabel.text = "\(count) товар"
+        let item = "товар".pluralize(for: count)
+        titleLabel.text = "\(count) \(item)"
     }
 
     func setTotalPrice(_ totalPrice: Int) {
         valueLabel.text = "\(totalPrice) ₽"
     }
+}
 
-    // MARK: - Private Properties
-    private func configUI() {
+// MARK: - Setup UI
+private extension DodoCoinsView {
+     func configUI() {
         addSubviews(contentStack)
         setupLayout()
     }
 
-    private func setupLayout() {
+     func setupLayout() {
         NSLayoutConstraint.activate([
             contentStack.topAnchor.constraint(equalTo: topAnchor),
             contentStack.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -75,4 +79,3 @@ final class DodoCoinsView: UIView {
         ])
     }
 }
-

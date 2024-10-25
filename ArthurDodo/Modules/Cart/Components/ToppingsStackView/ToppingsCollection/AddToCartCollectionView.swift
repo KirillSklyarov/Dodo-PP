@@ -1,10 +1,3 @@
-//
-//  ToppingsCollectionView.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 26.09.2024.
-//
-
 import UIKit
 
 final class AddToCartCollectionView: UICollectionView {

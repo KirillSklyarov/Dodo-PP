@@ -17,7 +17,7 @@ final class CartButtonView: UIView {
 
     private var currentPrice = 0
 
-    var onCartButtonTapped: ( (Int) -> Void )?
+    var onCartButtonTapped: ( () -> Void )?
 
     // MARK: - UI Properties
     private var cartButton: CartButton
@@ -92,7 +92,7 @@ private extension CartButtonView {
     func setupActions() {
         cartButton.onButtonTapped = { [weak self] in
             guard let self else { return }
-            onCartButtonTapped?(currentPrice)
+            onCartButtonTapped?()
         }
     }
 }
