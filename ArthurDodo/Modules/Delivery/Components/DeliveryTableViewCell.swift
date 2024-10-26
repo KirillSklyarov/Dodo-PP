@@ -37,6 +37,7 @@ private extension DeliveryTableViewCell {
         contentView.addSubviews(titleLabel)
         layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
+        selectionStyle = .none
 
         let image = UIImage(systemName: "chevron.right")?.withTintColor(AppColors.grayFont, renderingMode: .alwaysOriginal)
         let chevronView = UIImageView(image: image)

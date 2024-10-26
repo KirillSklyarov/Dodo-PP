@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		73159A742CCC20F9002CFB76 /* DeliveryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73159A732CCC20F9002CFB76 /* DeliveryVC.swift */; };
+		7350E26E2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7350E26D2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift */; };
 		73B969592CC7C78700A2415A /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968B72CC7C78700A2415A /* Address.swift */; };
 		73B9695A2CC7C78700A2415A /* AddressTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968B92CC7C78700A2415A /* AddressTextField.swift */; };
 		73B9695B2CC7C78700A2415A /* CategoryName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968BA2CC7C78700A2415A /* CategoryName.swift */; };
@@ -129,6 +130,7 @@
 
 /* Begin PBXFileReference section */
 		73159A732CCC20F9002CFB76 /* DeliveryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryVC.swift; sourceTree = "<group>"; };
+		7350E26D2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryTimeIntervalHelper.swift; sourceTree = "<group>"; };
 		737D0DD52C99BF7000B7D739 /* ArthurDodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArthurDodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73B968B72CC7C78700A2415A /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		73B968B92CC7C78700A2415A /* AddressTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTextField.swift; sourceTree = "<group>"; };
@@ -274,6 +276,14 @@
 			path = Delivery;
 			sourceTree = "<group>";
 		};
+		7350E26C2CCD248B009BA276 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				7350E26D2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		737D0DCC2C99BF7000B7D739 = {
 			isa = PBXGroup;
 			children = (
@@ -404,6 +414,7 @@
 		73B968E02CC7C78700A2415A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7350E26C2CCD248B009BA276 /* Helpers */,
 				73B968DA2CC7C78700A2415A /* Font */,
 				73B968DB2CC7C78700A2415A /* Assets.xcassets */,
 				73B968DC2CC7C78700A2415A /* Constants.swift */,
@@ -1050,6 +1061,7 @@
 				73B969AC2CC7C78700A2415A /* PersonalViewController.swift in Sources */,
 				73B969AD2CC7C78700A2415A /* QuitProfileTableViewCell.swift in Sources */,
 				73B969AE2CC7C78700A2415A /* PromoStackView.swift in Sources */,
+				7350E26E2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift in Sources */,
 				73B969AF2CC7C78700A2415A /* ApplyOfferViewController.swift in Sources */,
 				73B969B12CC7C78700A2415A /* MissionView.swift in Sources */,
 				73B969B22CC7C78700A2415A /* ProfileButtonView.swift in Sources */,

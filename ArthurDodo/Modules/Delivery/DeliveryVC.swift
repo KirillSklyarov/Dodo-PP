@@ -11,7 +11,7 @@ final class DeliveryVC: UIViewController {
         label.textColor = .white
         return label
     }()
-
+    private lazy var timeCollection = TimeCollectionView()
     private lazy var paymentLabel: UILabel = {
         let label = UILabel()
         label.text = "Оплата"
@@ -19,10 +19,10 @@ final class DeliveryVC: UIViewController {
         label.textColor = .white
         return label
     }()
-
     private lazy var paymentTableView = DeliveryTableView()
-
-    private lazy var payButton = CartButtonView()
+    private lazy var orderDetailsView = OrderDetailsView()
+    private lazy var totalPriceView = OrderTotalPriceView()
+    private lazy var payButton = PaymentButton(title: "Оплатить")
 
     private let topInset: CGFloat = 10
     private let leftInset: CGFloat = 10
@@ -41,7 +41,7 @@ private extension DeliveryVC {
     func setupUI() {
         setupNavigationBar()
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(addressTableView, timeLabel, paymentLabel, paymentTableView, payButton)
+        view.addSubviews(addressTableView, timeLabel, timeCollection, paymentLabel, paymentTableView, orderDetailsView, totalPriceView, payButton)
 
         setupLayout()
     }
@@ -67,8 +67,11 @@ private extension DeliveryVC {
     func setupLayout() {
         setupAddressTableLayout()
         setupTimeLabelLayout()
+        setupTimeCollectionLayout()
         setupPaymentLabelLayout()
         setupPaymentTableLayout()
+        setupOrderDetailsViewLayout()
+        setupTotalPriceViewLayout()
         setupPayButtonLayout()
     }
 
@@ -88,9 +91,19 @@ private extension DeliveryVC {
         ])
     }
 
+    func setupTimeCollectionLayout() {
+        NSLayoutConstraint.activate([
+            timeCollection.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: topInset),
+            timeCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
+            timeCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
+
+            timeCollection.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
     func setupPaymentLabelLayout() {
         NSLayoutConstraint.activate([
-            paymentLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: topInset*3),
+            paymentLabel.topAnchor.constraint(equalTo: timeCollection.bottomAnchor, constant: topInset*3),
             paymentLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
             paymentLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
         ])
@@ -101,6 +114,22 @@ private extension DeliveryVC {
             paymentTableView.topAnchor.constraint(equalTo: paymentLabel.bottomAnchor, constant: topInset),
             paymentTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
             paymentTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
+        ])
+    }
+
+    func setupOrderDetailsViewLayout() {
+        NSLayoutConstraint.activate([
+            orderDetailsView.bottomAnchor.constraint(equalTo: totalPriceView.topAnchor, constant: bottomInset),
+            orderDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
+            orderDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
+        ])
+    }
+
+    func setupTotalPriceViewLayout() {
+        NSLayoutConstraint.activate([
+            totalPriceView.bottomAnchor.constraint(equalTo: payButton.topAnchor),
+            totalPriceView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
+            totalPriceView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
         ])
     }
 

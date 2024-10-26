@@ -25,6 +25,7 @@ private extension DeliveryTableView {
         delegate = self
         register(DeliveryTableViewCell.self, forCellReuseIdentifier: DeliveryTableViewCell.identifier)
         rowHeight = cellHeight
+       
 
         setupLayout()
     }
@@ -43,5 +44,9 @@ extension DeliveryTableView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DeliveryTableViewCell.identifier, for: indexPath) as? DeliveryTableViewCell else { return UITableViewCell() }
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(#function)
     }
 }
