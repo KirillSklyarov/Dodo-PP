@@ -1,10 +1,3 @@
-//
-//  AddressesView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 21.10.2024.
-//
-
 import UIKit
 
 final class DeliveryAddressView: UIView {
@@ -69,7 +62,6 @@ final class DeliveryAddressView: UIView {
 
     func updateUI() {
         addressTableView.reloadData()
-        addressTableView.heightAnchor.constraint(equalToConstant: 200).isActive = true
     }
 }
 

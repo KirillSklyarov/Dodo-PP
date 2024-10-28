@@ -29,10 +29,27 @@ final class DeliveryVC: UIViewController {
     private let rightInset: CGFloat = -10
     private let bottomInset: CGFloat = -10
 
+    private let storage = DataStorage.shared
+    private lazy var router = Router(baseVC: self)
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupActions()
+        fetchData()
+    }
+}
+
+// MARK: - Fetch Data
+private extension DeliveryVC {
+    func fetchData() {
+        storage.fetchUserAddresses()
+        storage.onDataFetchedSuccessfully = { [weak self] addresses in
+            guard let self else { return }
+            let firstAddressName = addresses.filter { $0.isMain == true }.first?.name ?? ""
+            addressTableView.updateUI(with: firstAddressName)
+        }
     }
 }
 
@@ -139,6 +156,27 @@ private extension DeliveryVC {
             payButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
             payButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
         ])
+    }
+}
+
+// MARK: - Setup Actions
+private extension DeliveryVC {
+    func setupActions() {
+        setupAddressTableViewAction()
+    }
+
+    func setupAddressTableViewAction() {
+        addressTableView.onCellSelected = { [weak self] in
+            guard let self else { return }
+            router.navigate(to: .paymentChooseAddress) { vc in
+                guard let vc = vc as? ChooseAddressVC else {
+                    print("Can't cast to ChooseAddressVC"); return }
+                vc.onAddressCellTapped = { addressName in
+                    self.addressTableView.updateUI(with: addressName)
+                    self.storage.setNewMainAddress(addressName)
+                }
+            }
+        }
     }
 }
 

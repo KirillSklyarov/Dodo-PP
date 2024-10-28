@@ -15,7 +15,6 @@ final class DeliveryTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = AppFonts.semibold18
         label.textColor = .white
-        label.text = "Дом"
         return label
     }()
 
@@ -27,6 +26,12 @@ final class DeliveryTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension DeliveryTableViewCell {
+    func configureCell(_ title: String) {
+        titleLabel.text = title
     }
 }
 

@@ -1,10 +1,3 @@
-//
-//  OrderStorageService.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 27.09.2024.
-//
-
 import Foundation
 
 final class DataStorage {
@@ -27,7 +20,7 @@ final class DataStorage {
     private var selectedItem: Item?
 
     // MARK: - Callbacks
-    var onDataFetchedSuccessfully: (() -> Void)?
+    var onDataFetchedSuccessfully: (([Address]) -> Void)?
     var onToppingsFetchedSuccessfully: (([Topping]) -> Void)?
     var onStoriesFetchedSuccessfully: (([Story]) -> Void)?
     var onItemsFetchedSuccessfully: (([Item]) -> Void)?
@@ -42,11 +35,25 @@ extension DataStorage {
             switch result {
             case .success(let addresses):
                 fetchedUserAddresses = addresses
-                onDataFetchedSuccessfully?()
+                onDataFetchedSuccessfully?(addresses)
             case .failure(let error):
                 print(error)
             }
         }
+    }
+
+    func isAddressesEmpty() -> Bool {
+        fetchedUserAddresses.isEmpty
+    }
+
+    // Мы обнуляем для всех isMain и назначаем для нового, и потом сортируем чтобы isMain был первым
+    func setNewMainAddress(_ newMainAddress: String) {
+        let newAddresses = fetchedUserAddresses.map { address in
+            var newAddress = address
+            newAddress.isMain = (newAddress.name == newMainAddress)
+            return newAddress
+        }
+        fetchedUserAddresses = newAddresses.sortedMainFirst()
     }
 }
 

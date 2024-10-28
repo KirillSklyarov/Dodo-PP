@@ -20,6 +20,7 @@ enum Screens {
     case personalData
     case cpfcPopup
     case delivery
+    case paymentChooseAddress
 }
 
 final class Router {
@@ -80,6 +81,12 @@ final class Router {
         case .delivery:
             let deliveryVC = DeliveryVC()
             vc = UINavigationController(rootViewController: deliveryVC)
+        case .paymentChooseAddress:
+            let chooseVC = ChooseAddressVC()
+            vc = UINavigationController(rootViewController: chooseVC)
+            vc.modalPresentationStyle = .fullScreen
+            vc.modalTransitionStyle = .coverVertical
+            callback?(chooseVC)
         }
 
         baseVC?.present(vc, animated: animated)

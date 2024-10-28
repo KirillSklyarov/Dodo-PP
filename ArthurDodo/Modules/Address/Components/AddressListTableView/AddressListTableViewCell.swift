@@ -57,14 +57,43 @@ final class AddressListTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // MARK: - Public methods
-    func configureCell(title: String) {
+// MARK: - Public methods (configure cell)
+extension AddressListTableViewCell {
+    func configureCell(title: String, isMain: Bool) {
+        let circleImage = setCorrectCircleImage(isMain)
+        orangePoint.image = circleImage
+
         titleLabel.text = title
+        titleLabel.textColor = AppColors.grayFont
+
+        let pencilImage = UIImage(systemName: "pencil")?.withTintColor(AppColors.buttonGray, renderingMode: .alwaysOriginal)
+        editAddressButton.setImage(pencilImage, for: .normal)
     }
 
-    @objc private func editAddressButtonTapped() {
-        onEditAddressButtonTapped?()
+    func configureLastCell(title: String) {
+        let pointImage = UIImage(systemName: "drop")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
+        orangePoint.image = pointImage
+        orangePoint.transform = CGAffineTransform(scaleX: 1, y: -1)
+
+        titleLabel.text = title
+        titleLabel.textColor = AppColors.buttonOrange
+        let plusImage = UIImage(systemName: "plus")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
+        editAddressButton.setImage(plusImage, for: .normal)
+    }
+}
+
+// MARK: - Supporting methods
+private extension AddressListTableViewCell {
+    func setCorrectCircleImage(_ isMain: Bool) -> UIImage? {
+
+        let image: UIImage? = if isMain {
+            UIImage(systemName: "record.circle.fill")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
+        } else {
+           UIImage(systemName: "circle.fill")?.withTintColor(AppColors.backgroundGray, renderingMode: .alwaysOriginal)
+        }
+        return image
     }
 }
 
@@ -86,5 +115,12 @@ private extension AddressListTableViewCell {
             contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftPadding),
             contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightPadding),
         ])
+    }
+}
+
+// MARK: - Setup actions
+private extension AddressListTableViewCell {
+    @objc func editAddressButtonTapped() {
+        onEditAddressButtonTapped?()
     }
 }

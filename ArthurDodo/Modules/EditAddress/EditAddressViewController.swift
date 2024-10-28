@@ -10,7 +10,7 @@ import UIKit
 final class EditAddressViewController: UIViewController {
 
     // MARK: - Properties
-    var addressToEdit: Address?
+    private var addressToEdit: Address?
     private let leftInset: CGFloat = 20
 
     // MARK: - UI Properties
@@ -27,18 +27,11 @@ final class EditAddressViewController: UIViewController {
 
     // MARK: - Init
     init() {
-        //        self.addressToEdit = addressToEdit
         super.init(nibName: nil, bundle: nil)
-        getCoord()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
-    func getCoord() {
-        guard let shortAddress = addressToEdit?.cityStreetHouse else { print("We have no address"); return }
-        mapView.getCoordinates(from: shortAddress)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - Life cycle
@@ -53,6 +46,19 @@ final class EditAddressViewController: UIViewController {
         guard let addressToEdit else { print("We have no address to edit"); return }
         print(addressToEdit)
         addressContainerView.updateUIWithAddress(addressToEdit)
+    }
+
+    func getAddressToEdit(_ addressToEdit: Address) {
+        self.addressToEdit = addressToEdit
+        getCoord()
+    }
+}
+
+// MARK: - Supporting methods
+extension EditAddressViewController {
+    private func getCoord() {
+        guard let shortAddress = addressToEdit?.cityStreetHouse else { print("We have no address"); return }
+        mapView.getCoordinates(from: shortAddress)
     }
 }
 

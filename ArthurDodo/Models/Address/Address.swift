@@ -10,6 +10,7 @@ import Foundation
 struct Address: Codable {
     let userId: String
     let addressId: String
+    var isMain: Bool
     let name: String
     let cityStreetHouse: String
     let apartment: String?

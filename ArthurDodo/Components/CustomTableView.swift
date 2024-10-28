@@ -1,10 +1,3 @@
-//
-//  CustomTableView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 23.10.2024.
-//
-
 import UIKit
 
 
@@ -13,5 +6,10 @@ class AppTableView: UITableView {
     override var intrinsicContentSize: CGSize {
         layoutIfNeeded()
         return CGSize(width: contentSize.width, height: contentSize.height)
+    }
+
+    override func reloadData() {
+        super.reloadData()
+        invalidateIntrinsicContentSize()
     }
 }

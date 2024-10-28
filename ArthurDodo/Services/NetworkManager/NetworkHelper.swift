@@ -34,7 +34,7 @@ enum HttpMethod: String {
 }
 
 enum endPoints: String {
-    case ngrok = "https://795f-213-183-59-146.ngrok-free.app"
+    case ngrok = "https://9f77-2a00-1370-8180-197c-8050-f830-63ab-eb60.ngrok-free.app"
     case mockoon = "http://localhost:3001"
 }
 

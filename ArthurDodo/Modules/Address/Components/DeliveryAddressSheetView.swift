@@ -67,7 +67,7 @@ final class DeliveryAddressSheetView: UIViewController {
 extension DeliveryAddressSheetView {
     func fetchData() {
         DataStorage.shared.fetchUserAddresses()
-        DataStorage.shared.onDataFetchedSuccessfully = { [weak self] in
+        DataStorage.shared.onDataFetchedSuccessfully = { [weak self] addresses in
             self?.addressTableView.reloadData()
         }
     }
@@ -90,8 +90,7 @@ private extension DeliveryAddressSheetView {
     func showEditAddressVC(_ address: Address) {
         router.navigate(to: .editAddress) { editAddressVC in
             guard let editAddressVC = editAddressVC as? EditAddressViewController else { print("We can't cast to EditAddressViewController"); return }
-            editAddressVC.addressToEdit = address
-
+            editAddressVC.getAddressToEdit(address)
         }
     }
 

@@ -1,10 +1,3 @@
-//
-//  AddressViewController.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 12.10.2024.
-//
-
 import UIKit
 
 final class AddressViewController: UIViewController {
@@ -26,23 +19,26 @@ final class AddressViewController: UIViewController {
     // MARK: - Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchData()
         setupUI()
         setupActions()
+        fetchData()
     }
-
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        showDeliveryAddressVC()
-//    }
 }
 
 // MARK: - Fetch data from Network
 extension AddressViewController {
     func fetchData() {
-        storage.fetchUserAddresses()
-        storage.onDataFetchedSuccessfully = { [weak self] in
-            self?.addressView.updateUI()
+        if storage.isAddressesEmpty() {
+            storage.fetchUserAddresses()
+            storage.onDataFetchedSuccessfully = { [weak self] addresses in
+                DispatchQueue.main.async {
+                    self?.addressView.updateUI()
+                }
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.addressView.updateUI()
+            }
         }
     }
 }
@@ -96,7 +92,7 @@ private extension AddressViewController {
     func showEditAddressVC(_ address: Address) {
         router.navigate(to: .editAddress) { editAddressVC in
             guard let editAddressVC = editAddressVC as? EditAddressViewController else { print("We can't cast to EditAddressViewController"); return }
-            editAddressVC.addressToEdit = address
+            editAddressVC.getAddressToEdit(address)
         }
     }
 }

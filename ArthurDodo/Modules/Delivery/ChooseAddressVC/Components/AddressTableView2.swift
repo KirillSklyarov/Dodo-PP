@@ -1,13 +1,14 @@
 import UIKit
 
-final class AddressListTableView: AppTableView {
+final class AddressListTableView2: UITableView {
 
     // MARK: - Properties&Callbacks
     private let tableRowHeight: CGFloat = 70
-    private let storage = DataStorage.shared
 
-    private var heightConstraint: NSLayoutConstraint?
+    var addresses: [Address] = []
+    var addressNames: [String] = []
 
+    var onAddressCellTapped: ( (String) -> Void)?
     var onEditAddressButtonTapped: ( (IndexPath) -> Void)?
 
     // MARK: - Init
@@ -20,8 +21,30 @@ final class AddressListTableView: AppTableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Private methods
-    private func configTableView() {
+    func updateUI(with addresses: [Address]) {
+        getAddresses(addresses)
+        updateHeight()
+    }
+}
+
+// MARK: - Supporting methods
+private extension AddressListTableView2 {
+    func getAddresses(_ addresses: [Address]) {
+        self.addresses = addresses
+        addressNames = addresses.map(\.name)
+        addressNames.append("Добавить новый адрес")
+    }
+
+    func updateHeight() {
+        reloadData()
+        let tableHeight = contentSize.height
+        heightAnchor.constraint(equalToConstant: tableHeight).isActive = true
+    }
+}
+
+// MARK: - Setup UI
+private extension AddressListTableView2 {
+    func configTableView() {
         backgroundColor = .clear
         dataSource = self
         delegate = self
@@ -32,24 +55,33 @@ final class AddressListTableView: AppTableView {
         separatorInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         tableHeaderView = UIView(frame: .zero)
         rowHeight = tableRowHeight
-        isScrollEnabled = false
     }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
-extension AddressListTableView: UITableViewDataSource, UITableViewDelegate {
+extension AddressListTableView2: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        storage.fetchedUserAddresses.count
+        addressNames.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AddressListTableViewCell.identifier, for: indexPath) as? AddressListTableViewCell else { print("rrrr"); return UITableViewCell() }
-        let addressName = storage.fetchedUserAddresses[indexPath.row].name
-        cell.configureCell(title: addressName, isMain: false)
+        let addressName = addressNames[indexPath.row]
+        if indexPath.row != addressNames.count - 1 {
+            let isMain = addresses[indexPath.row].isMain
+            cell.configureCell(title: addressName, isMain: isMain)
+        } else {
+            cell.configureLastCell(title: addressName)
+        }
 
         cell.onEditAddressButtonTapped = { [weak self] in
             self?.onEditAddressButtonTapped?(indexPath)
         }
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let addressName = addressNames[indexPath.row]
+        onAddressCellTapped?(addressName)
     }
 }
