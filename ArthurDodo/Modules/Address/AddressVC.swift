@@ -2,9 +2,9 @@ import UIKit
 
 final class AddressViewController: UIViewController {
 
-    // MARK: - Properties
+    // MARK: - UI Properties
     private lazy var addressHeaderStackView = AddressHeaderView()
-    private lazy var mapView = MapView(isPinHidden: true, isTrackingButtonHidden: true)
+    private lazy var mapView = MapView(isPinHidden: false, isTrackingButtonHidden: true)
     private lazy var addressView = DeliveryAddressView()
     private lazy var contentStack: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [mapView, addressView])
@@ -13,8 +13,11 @@ final class AddressViewController: UIViewController {
         return stackView
     }()
 
+    // MARK: - Other Properties
     private let storage = DataStorage.shared
     private lazy var router = Router(baseVC: self)
+
+    private var mainAddress: Address?
 
     // MARK: - Life cycles
     override func viewDidLoad() {
@@ -31,15 +34,29 @@ extension AddressViewController {
         if storage.isAddressesEmpty() {
             storage.fetchUserAddresses()
             storage.onDataFetchedSuccessfully = { [weak self] addresses in
+                guard let self else { return }
+                mainAddress = addresses.first
                 DispatchQueue.main.async {
-                    self?.addressView.updateUI()
+                    self.addressView.updateUI()
+                    self.moveMapToMainAddress()
                 }
             }
         } else {
+            mainAddress = storage.getMainAddress()
             DispatchQueue.main.async {
                 self.addressView.updateUI()
             }
+            moveMapToMainAddress()
         }
+    }
+}
+
+private extension AddressViewController {
+    func moveMapToMainAddress() {
+        guard let mainAddress else {print("We have no main address"); return }
+        let shortAddress = mainAddress.cityStreetHouse
+        print("shortAddress \(shortAddress)")
+        mapView.getCoordinates(from: shortAddress)
     }
 }
 
@@ -77,10 +94,6 @@ private extension AddressViewController {
         addressHeaderStackView.onDismissButtonTapped = { [weak self] in
             self?.dismiss(animated: true)
         }
-
-//        addressHeaderStackView.onDeliveryButtonTapped = { [weak self] in
-//            self?.showDeliveryAddressVC()
-//        }
     }
 
     func setupAddressViewAction() {

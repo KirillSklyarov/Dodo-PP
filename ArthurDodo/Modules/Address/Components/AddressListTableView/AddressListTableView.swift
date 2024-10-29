@@ -6,8 +6,6 @@ final class AddressListTableView: AppTableView {
     private let tableRowHeight: CGFloat = 70
     private let storage = DataStorage.shared
 
-    private var heightConstraint: NSLayoutConstraint?
-
     var onEditAddressButtonTapped: ( (IndexPath) -> Void)?
 
     // MARK: - Init
@@ -44,12 +42,15 @@ extension AddressListTableView: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AddressListTableViewCell.identifier, for: indexPath) as? AddressListTableViewCell else { print("rrrr"); return UITableViewCell() }
-        let addressName = storage.fetchedUserAddresses[indexPath.row].name
-        cell.configureCell(title: addressName, isMain: false)
+        let address = storage.fetchedUserAddresses[indexPath.row]
+        let addressName = address.name
+        let isMain = address.isMain
+        cell.configureCell(title: addressName, isMain: isMain)
 
         cell.onEditAddressButtonTapped = { [weak self] in
             self?.onEditAddressButtonTapped?(indexPath)
         }
+        
         return cell
     }
 }

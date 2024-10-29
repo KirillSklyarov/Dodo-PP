@@ -1,10 +1,3 @@
-//
-//  Router.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 24.10.2024.
-//
-
 import UIKit
 
 enum Screens {
@@ -21,6 +14,8 @@ enum Screens {
     case cpfcPopup
     case delivery
     case paymentChooseAddress
+    case addNewAddress
+    case choosePaymentMethod
 }
 
 final class Router {
@@ -87,8 +82,18 @@ final class Router {
             vc.modalPresentationStyle = .fullScreen
             vc.modalTransitionStyle = .coverVertical
             callback?(chooseVC)
+        case .addNewAddress:
+            vc = AddNewAddressViewController()
+            callback?(vc)
+        case .choosePaymentMethod:
+            vc = ChoosePaymentMethodVC()
+            callback?(vc)
         }
 
-        baseVC?.present(vc, animated: animated)
+        if screen == .choosePaymentMethod {
+            baseVC?.navigationController?.pushViewController(vc, animated: true)
+        } else {
+            baseVC?.present(vc, animated: animated)
+        }
     }
 }

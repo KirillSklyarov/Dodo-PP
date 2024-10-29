@@ -33,6 +33,8 @@ private extension DeliveryTableView {
         delegate = self
         register(DeliveryTableViewCell.self, forCellReuseIdentifier: DeliveryTableViewCell.identifier)
         rowHeight = cellHeight
+        separatorStyle = .none
+        tableHeaderView = UIView(frame: .zero)
 
         setupLayout()
     }

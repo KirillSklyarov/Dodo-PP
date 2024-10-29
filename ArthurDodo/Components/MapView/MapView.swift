@@ -1,10 +1,3 @@
-//
-//  MapView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 19.10.2024.
-//
-
 import UIKit
 import MapKit
 import CoreLocation
@@ -82,13 +75,12 @@ private extension MapView {
     func setupMapView() {
         mapView.delegate = self
         configureLocationManager()
-//        testGetAddress(addressCoordinates)
     }
 
     func configureLocationManager() {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-//        locationManager.startUpdatingLocation()
+        locationManager.startUpdatingLocation()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
 }
@@ -123,7 +115,7 @@ extension MapView: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         print("Получено местоположение: \(location.coordinate)")
-        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
         mapView.setRegion(region, animated: true)
         showPinAnimation()
 
@@ -147,7 +139,7 @@ extension MapView: MKMapViewDelegate {
 }
 
 // MARK: - Get Address from coordinates
- extension MapView {
+extension MapView {
     func getAddress(_ coordinates: CLLocationCoordinate2D) {
         geocoder.reverseGeocodeLocation(CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)) { placemarks, error in
             if let error = error {
@@ -165,42 +157,26 @@ extension MapView: MKMapViewDelegate {
         }
     }
 
-     func testGetAddress(_ coordinates: CLLocationCoordinate2D) {
-         geocoder.reverseGeocodeLocation(CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)) { placemarks, error in
-             if let error = error {
-                 print("Error: \(error.localizedDescription)"); return }
+    // Получаем координаты из адреса
+    func getCoordinates(from address: String) {
+        geocoder.geocodeAddressString(address) { placemarks, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)"); return }
+            guard let placemark = placemarks?.first else {
+                print("No placemark found"); return }
+            if let coordinates = placemark.location?.coordinate {
+                print("coordinates: \(coordinates)")
+                self.addressCoordinates = coordinates
+                self.setMapViewCenter(coordinates, radius: 500)
+            }
+        }
+    }
 
-             guard let placemark = placemarks?.first else {
-                 print("No placemark found"); return }
-
-             let city = placemark.locality ?? ""
-             let street = placemark.thoroughfare ?? ""
-             let apart = placemark.subThoroughfare ?? ""
-
-             let newAddress = "\(city), \(street), \(apart)"
-             print("newAddress \(newAddress)")
-         }
-     }
-
-     func getCoordinates(from address: String) {
-         geocoder.geocodeAddressString(address) { placemarks, error in
-             if let error = error {
-                 print("Error: \(error.localizedDescription)"); return }
-             guard let placemark = placemarks?.first else {
-                 print("No placemark found"); return }
-             if let coordinates = placemark.location?.coordinate {
-                 print("coordinates: \(coordinates)")
-
-                 self.addressCoordinates = coordinates
-                 self.setMapViewCenter(coordinates)
-             }
-         }
-     }
-
-     func setMapViewCenter(_ coordinates: CLLocationCoordinate2D) {
-         if let addressCoordinates {
-             let region = MKCoordinateRegion(center: addressCoordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
-             mapView.setRegion(region, animated: true)
-         }
-     }
+    // Устанавливаем карту по координатам
+    func setMapViewCenter(_ coordinates: CLLocationCoordinate2D, radius: Double) {
+        if let addressCoordinates {
+            let region = MKCoordinateRegion(center: addressCoordinates, latitudinalMeters: radius, longitudinalMeters: radius)
+            mapView.setRegion(region, animated: true)
+        }
+    }
 }

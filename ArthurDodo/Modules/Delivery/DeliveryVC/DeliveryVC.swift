@@ -163,6 +163,7 @@ private extension DeliveryVC {
 private extension DeliveryVC {
     func setupActions() {
         setupAddressTableViewAction()
+        setupPaymentTableView()
     }
 
     func setupAddressTableViewAction() {
@@ -176,6 +177,13 @@ private extension DeliveryVC {
                     self.storage.setNewMainAddress(addressName)
                 }
             }
+        }
+    }
+
+    func setupPaymentTableView() {
+        paymentTableView.onCellSelected = { [weak self] in
+            guard let self else { return }
+            router.navigate(to: .choosePaymentMethod)
         }
     }
 }

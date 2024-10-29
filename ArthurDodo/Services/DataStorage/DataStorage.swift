@@ -46,6 +46,14 @@ extension DataStorage {
         fetchedUserAddresses.isEmpty
     }
 
+    func getAddresses() -> [Address] {
+        fetchedUserAddresses
+    }
+
+    func getMainAddress() -> Address? {
+        fetchedUserAddresses.first(where: \.isMain)
+    }
+
     // Мы обнуляем для всех isMain и назначаем для нового, и потом сортируем чтобы isMain был первым
     func setNewMainAddress(_ newMainAddress: String) {
         let newAddresses = fetchedUserAddresses.map { address in

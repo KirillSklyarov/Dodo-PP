@@ -68,7 +68,7 @@ final class DeliveryAddressView: UIView {
 // MARK: - Setup UI
 private extension DeliveryAddressView {
     func setupUI() {
-        backgroundColor = AppColors.backgroundGray
+        backgroundColor = AppColors.backgroundBlack
         layer.cornerRadius = 10
         layer.masksToBounds = true
         addSubviews(contentStackView)

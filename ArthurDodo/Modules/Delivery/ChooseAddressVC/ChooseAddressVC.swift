@@ -3,7 +3,7 @@ import UIKit
 final class ChooseAddressVC: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var addressTableView = AddressListTableView2()
+    private lazy var addressTableView = DeliveryAddressListTableView()
 
     private let topInset: CGFloat = 10
     private let leftInset: CGFloat = 10
@@ -11,6 +11,7 @@ final class ChooseAddressVC: UIViewController {
     private let bottomInset: CGFloat = -10
 
     private let storage = DataStorage.shared
+    private lazy var router = Router(baseVC: self)
 
     var onAddressCellTapped: ((String) -> Void)?
 
@@ -76,11 +77,27 @@ private extension ChooseAddressVC {
         setupAddressTableViewActions()
     }
 
+    // Настраиваем action: нажатие на ячейку
     func setupAddressTableViewActions() {
         addressTableView.onAddressCellTapped = { [weak self] addressName in
             guard let self else { return }
             onAddressCellTapped?(addressName)
             dismiss(animated: true)
+        }
+
+        // Настраиваем action: нажатие на редактирование адреса
+        addressTableView.onEditAddressButtonTapped = { [weak self] indexPath in
+            guard let self else { return }
+            let address = storage.fetchedUserAddresses[indexPath.row]
+            router.navigate(to: .editAddress) { editAddressVC in
+                guard let vc = editAddressVC as? EditAddressViewController else { return }
+                vc.getAddressToEdit(address)
+            }
+        }
+
+        // Настраиваем action: переход на экран добавления нового адреса
+        addressTableView.onAddNewAddressCellTapped = { [weak self] in
+            self?.router.navigate(to: .editAddress)
         }
     }
 

@@ -1,6 +1,6 @@
 import UIKit
 
-final class AddressListTableView2: UITableView {
+final class DeliveryAddressListTableView: UITableView {
 
     // MARK: - Properties&Callbacks
     private let tableRowHeight: CGFloat = 70
@@ -10,6 +10,7 @@ final class AddressListTableView2: UITableView {
 
     var onAddressCellTapped: ( (String) -> Void)?
     var onEditAddressButtonTapped: ( (IndexPath) -> Void)?
+    var onAddNewAddressCellTapped: ( () -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect, style: UITableView.Style) {
@@ -28,7 +29,7 @@ final class AddressListTableView2: UITableView {
 }
 
 // MARK: - Supporting methods
-private extension AddressListTableView2 {
+private extension DeliveryAddressListTableView {
     func getAddresses(_ addresses: [Address]) {
         self.addresses = addresses
         addressNames = addresses.map(\.name)
@@ -42,8 +43,17 @@ private extension AddressListTableView2 {
     }
 }
 
+// MARK: - Setup action
+private extension DeliveryAddressListTableView {
+    func setupActions() {
+
+    }
+
+}
+
+
 // MARK: - Setup UI
-private extension AddressListTableView2 {
+private extension DeliveryAddressListTableView {
     func configTableView() {
         backgroundColor = .clear
         dataSource = self
@@ -59,7 +69,7 @@ private extension AddressListTableView2 {
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
-extension AddressListTableView2: UITableViewDataSource, UITableViewDelegate {
+extension DeliveryAddressListTableView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         addressNames.count
     }
@@ -81,7 +91,11 @@ extension AddressListTableView2: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let addressName = addressNames[indexPath.row]
-        onAddressCellTapped?(addressName)
+        if indexPath.row != addressNames.indices.last {
+            let addressName = addressNames[indexPath.row]
+            onAddressCellTapped?(addressName)
+        } else {
+            onAddNewAddressCellTapped?()
+        }
     }
 }
