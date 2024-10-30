@@ -8,22 +8,45 @@
 import Foundation
 
 extension UserDefaults {
-    static private let viewedStories = "viewedStories"
 
+    enum Keys {
+        static let preferredPaymentMethod = "preferredPaymentMethod"
+        static let viewedStories = "viewedStories"
+    }
+}
+
+// MARK: - Stories
+extension UserDefaults {
     func getArrayOfViewedStories() -> [String] {
-        return self.stringArray(forKey: Self.viewedStories) ?? []
+        return self.stringArray(forKey: Keys.viewedStories) ?? []
     }
 
     func markStoryAsViewed(_ storyID: String) {
         var viewedStories = self.getArrayOfViewedStories()
         if !viewedStories.contains(storyID) {
             viewedStories.append(storyID)
-            self.set(viewedStories, forKey: Self.viewedStories)
+            self.set(viewedStories, forKey: Keys.viewedStories)
         }
     }
 
     func isStoryViewed(_ storyID: String) -> Bool {
         let viewedStories = self.getArrayOfViewedStories()
         return viewedStories.contains(storyID)
+    }
+}
+
+// MARK: - Preferred payment method
+extension UserDefaults {
+    func getPreferredPaymentMethod() -> String? {
+        if let paymentMethodTitle = string(forKey: Keys.preferredPaymentMethod) {
+            return paymentMethodTitle
+        } else {
+            print("No preferred payment method set")
+            return nil
+        }
+    }
+    
+    func setPreferredPaymentMethod(_ paymentMethod: PaymentMethods) {
+        set(paymentMethod.title, forKey: Keys.preferredPaymentMethod)
     }
 }

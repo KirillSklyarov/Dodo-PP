@@ -19,7 +19,7 @@ final class DeliveryVC: UIViewController {
         label.textColor = .white
         return label
     }()
-    private lazy var paymentTableView = DeliveryTableView()
+    private lazy var paymentTableView = DeliveryTableView(preferredPaymentMethod: preferredPaymentMethod)
     private lazy var orderDetailsView = OrderDetailsView()
     private lazy var totalPriceView = OrderTotalPriceView()
     private lazy var payButton = PaymentButton(title: "Оплатить")
@@ -28,6 +28,8 @@ final class DeliveryVC: UIViewController {
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let bottomInset: CGFloat = -10
+
+    private var preferredPaymentMethod: PaymentMethods = .cbp
 
     private let storage = DataStorage.shared
     private lazy var router = Router(baseVC: self)
@@ -44,12 +46,23 @@ final class DeliveryVC: UIViewController {
 // MARK: - Fetch Data
 private extension DeliveryVC {
     func fetchData() {
+        fetchAddresses()
+        fetchPreferredPaymentMethod()
+    }
+
+    func fetchAddresses() {
         storage.fetchUserAddresses()
         storage.onDataFetchedSuccessfully = { [weak self] addresses in
             guard let self else { return }
             let firstAddressName = addresses.filter { $0.isMain == true }.first?.name ?? ""
             addressTableView.updateUI(with: firstAddressName)
         }
+    }
+
+    func fetchPreferredPaymentMethod() {
+        preferredPaymentMethod = storage.getPreferredPaymentMethodFromStorage()
+        print("2. DeliveryVC: preferredMethod \(preferredPaymentMethod.title)")
+        paymentTableView.updateUI(with: preferredPaymentMethod.title)
     }
 }
 
@@ -183,7 +196,13 @@ private extension DeliveryVC {
     func setupPaymentTableView() {
         paymentTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            router.navigate(to: .choosePaymentMethod)
+            router.navigate(to: .choosePaymentMethod) { vc in
+                guard let vc = vc as? ChoosePaymentMethodVC else {
+                    print("Can't cast to ChoosePaymentMethodVC"); return }
+                vc.onPaymentMethodSelected = { paymentMethod in
+                    self.paymentTableView.updateUI(with: paymentMethod)
+                }
+            }
         }
     }
 }

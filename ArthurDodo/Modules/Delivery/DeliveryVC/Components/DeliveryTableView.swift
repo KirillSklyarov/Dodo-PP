@@ -10,6 +10,12 @@ final class DeliveryTableView: UITableView {
     var onCellSelected: (() -> Void)?
 
     // MARK: - Init
+    init(frame: CGRect = .zero, style: UITableView.Style = .plain, preferredPaymentMethod: PaymentMethods) {
+        super.init(frame: frame, style: style)
+        setupTableView()
+        updateUI(with: preferredPaymentMethod.title)
+    }
+
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         setupTableView()
