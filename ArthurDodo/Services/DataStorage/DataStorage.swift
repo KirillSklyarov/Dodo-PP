@@ -18,7 +18,7 @@ final class DataStorage {
     var order: [Order] = []
     private var specialOfferArray: [Item] = []
     private var selectedItem: Item?
-    private lazy var preferredPaymentMethod: PaymentMethods = .cbp
+    private lazy var preferredPaymentMethod: PaymentMethod = .cbp
 
     // MARK: - Callbacks
     var onDataFetchedSuccessfully: (([Address]) -> Void)?
@@ -206,15 +206,14 @@ extension DataStorage {
 
 // MARK: - Preferred payment method
 extension DataStorage {
-    func getPreferredPaymentMethodFromStorage() -> PaymentMethods {
+    func getPreferredPaymentMethodFromStorage() -> PaymentMethod {
         getPreferredPaymentMethodFromUserDefaults()
         return preferredPaymentMethod
     }
 
     private func getPreferredPaymentMethodFromUserDefaults() {
         if let preferredMethod = UserDefaults.standard.getPreferredPaymentMethod() {
-            print("1. DataStorage: preferredMethod \(preferredMethod)")
-            if let tempMethod = PaymentMethods.getMethodFrom(preferredMethod) {
+            if let tempMethod = PaymentMethod.getMethodFrom(preferredMethod) {
                 preferredPaymentMethod = tempMethod
             }
         } else {

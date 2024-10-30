@@ -46,7 +46,7 @@ extension UserDefaults {
         }
     }
     
-    func setPreferredPaymentMethod(_ paymentMethod: PaymentMethods) {
+    func setPreferredPaymentMethod(_ paymentMethod: PaymentMethod) {
         set(paymentMethod.title, forKey: Keys.preferredPaymentMethod)
     }
 }

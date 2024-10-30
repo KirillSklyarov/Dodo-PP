@@ -53,6 +53,7 @@ struct AppFonts {
     static let bold24 = UIFont(name: "SFProRounded-Bold", size: 24) ?? basicFont
     static let bold26 = UIFont(name: "SFProRounded-Bold", size: 26) ?? basicFont
     static let bold30 = UIFont(name: "SFProRounded-Bold", size: 30) ?? basicFont
+    static let bold34 = UIFont(name: "SFProRounded-Bold", size: 34) ?? basicFont
     static let bold40 = UIFont(name: "SFProRounded-Bold", size: 40) ?? basicFont
 }
 
@@ -63,6 +64,7 @@ struct AppColors {
     static let dodoCoinsBlue = UIColor(hex: "5f4eca")
     static let buttonOrange = UIColor(hex: "ff6400")
     static let grayFont = UIColor(hex: "959595")
+    static let sberGreen = UIColor(hex: "06c906")
 
     let peach = UIColor(hex: "f7d794")
     let blue = UIColor(hex: "778beb")

@@ -7,9 +7,9 @@ final class ChoosePaymentMethodVC: UIViewController {
     private let userDefaults = UserDefaults.standard
     private lazy var storage = DataStorage.shared
 
-    var onPaymentMethodSelected: ((String) -> Void)?
+    var preferredPaymentMethod: PaymentMethod = .cbp
 
-    var preferredPaymentMethod: PaymentMethods = .cbp
+    var onPaymentMethodSelected: ((PaymentMethod) -> Void)?
 
     // MARK: - Init
     override func viewDidLoad() {
@@ -21,7 +21,6 @@ final class ChoosePaymentMethodVC: UIViewController {
 
     func fetchPreferredPaymentMethod() {
         self.preferredPaymentMethod = storage.getPreferredPaymentMethodFromStorage()
-        print("3. ChoosePaymentMethodVC: preferredPaymentMethod \(preferredPaymentMethod.title)")
         paymentMethodsTableView.updatePreferredPaymentMethod(preferredPaymentMethod)
     }
 }

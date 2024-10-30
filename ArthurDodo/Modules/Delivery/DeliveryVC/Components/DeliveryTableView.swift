@@ -10,12 +10,6 @@ final class DeliveryTableView: UITableView {
     var onCellSelected: (() -> Void)?
 
     // MARK: - Init
-    init(frame: CGRect = .zero, style: UITableView.Style = .plain, preferredPaymentMethod: PaymentMethods) {
-        super.init(frame: frame, style: style)
-        setupTableView()
-        updateUI(with: preferredPaymentMethod.title)
-    }
-
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         setupTableView()
@@ -24,7 +18,10 @@ final class DeliveryTableView: UITableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
+// MARK: - Public methods
+extension DeliveryTableView {
     func updateUI(with addressName: String) {
         self.name = addressName
         reloadData()

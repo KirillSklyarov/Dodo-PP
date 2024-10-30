@@ -16,6 +16,7 @@ enum Screens {
     case paymentChooseAddress
     case addNewAddress
     case choosePaymentMethod
+    case final
 }
 
 final class Router {
@@ -87,6 +88,10 @@ final class Router {
             callback?(vc)
         case .choosePaymentMethod:
             vc = ChoosePaymentMethodVC()
+            callback?(vc)
+        case .final:
+            vc = FinalVC()
+            vc.modalPresentationStyle = .fullScreen
             callback?(vc)
         }
 

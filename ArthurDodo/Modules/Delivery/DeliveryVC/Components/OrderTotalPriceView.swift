@@ -1,10 +1,3 @@
-//
-//  OrderTotalPriceView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 26.10.2024.
-//
-
 import UIKit
 
 final class OrderTotalPriceView: UIView {
@@ -21,10 +14,10 @@ final class OrderTotalPriceView: UIView {
         let label = UILabel()
         label.textColor = .white
         label.font = AppFonts.bold22
-        label.text = "500 ₽"
+        label.textAlignment = .right
         return label
     }()
-    private lazy var stackView: UIStackView = {
+    private lazy var contentStack: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [titleLabel, priceLabel])
         stackView.axis = .horizontal
         return stackView
@@ -36,7 +29,7 @@ final class OrderTotalPriceView: UIView {
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
@@ -44,18 +37,26 @@ final class OrderTotalPriceView: UIView {
     }
 }
 
+// MARK: - Public methods
+extension OrderTotalPriceView {
+    func updateUI(with totalPrice: Int) {
+        priceLabel.text = "\(totalPrice) ₽"
+    }
+}
+
+// MARK: - Setup UI
 private extension OrderTotalPriceView {
-    func setup() {
-        addSubviews(stackView)
+    func setupUI() {
+        addSubviews(contentStack)
         setupLayout()
     }
 
     func setupLayout() {
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            contentStack.topAnchor.constraint(equalTo: topAnchor),
+            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             heightAnchor.constraint(equalToConstant: viewHeight)
         ])

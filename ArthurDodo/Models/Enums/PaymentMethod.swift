@@ -1,6 +1,6 @@
 import UIKit
 
-enum PaymentMethods: Int, CaseIterable {
+enum PaymentMethod: Int, CaseIterable {
     case cbp
     case card
     case sberPay
@@ -15,7 +15,7 @@ enum PaymentMethods: Int, CaseIterable {
         }
     }
 
-    static func getMethodFrom(_ method: String) -> PaymentMethods? {
+    static func getMethodFrom(_ method: String) -> PaymentMethod? {
         switch method {
         case "СБП": return .cbp
         case "Картой в приложении": return .card

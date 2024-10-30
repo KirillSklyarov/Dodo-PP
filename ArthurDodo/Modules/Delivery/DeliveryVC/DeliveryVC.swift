@@ -19,17 +19,17 @@ final class DeliveryVC: UIViewController {
         label.textColor = .white
         return label
     }()
-    private lazy var paymentTableView = DeliveryTableView(preferredPaymentMethod: preferredPaymentMethod)
-    private lazy var orderDetailsView = OrderDetailsView()
+    private lazy var paymentTableView = PreferredPaymentMethodTableView(preferredPaymentMethod)
+    private lazy var orderDetailsView = DodoCoinsView(title: "Доставка", value: "Бесплатно", textColor: AppColors.grayFont)
     private lazy var totalPriceView = OrderTotalPriceView()
-    private lazy var payButton = PaymentButton(title: "Оплатить")
+    private lazy var payButton = PaymentButtonView(preferredPaymentMethod)
 
     private let topInset: CGFloat = 10
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let bottomInset: CGFloat = -10
 
-    private var preferredPaymentMethod: PaymentMethods = .cbp
+    private var preferredPaymentMethod: PaymentMethod = .cbp
 
     private let storage = DataStorage.shared
     private lazy var router = Router(baseVC: self)
@@ -48,21 +48,30 @@ private extension DeliveryVC {
     func fetchData() {
         fetchAddresses()
         fetchPreferredPaymentMethod()
+        fetchOrderDetails()
     }
 
+    // Получаем адреса и обновляем таблицу с активным адресом
     func fetchAddresses() {
         storage.fetchUserAddresses()
         storage.onDataFetchedSuccessfully = { [weak self] addresses in
             guard let self else { return }
-            let firstAddressName = addresses.filter { $0.isMain == true }.first?.name ?? ""
-            addressTableView.updateUI(with: firstAddressName)
+            let mainAddressName = getMainAddressName(from: addresses)
+            addressTableView.updateUI(with: mainAddressName)
         }
     }
 
+    // Получаем выбранный способ оплаты и обновляем таблицу со способами и кнопку оплаты
     func fetchPreferredPaymentMethod() {
         preferredPaymentMethod = storage.getPreferredPaymentMethodFromStorage()
-        print("2. DeliveryVC: preferredMethod \(preferredPaymentMethod.title)")
-        paymentTableView.updateUI(with: preferredPaymentMethod.title)
+        paymentTableView.updateUI(with: preferredPaymentMethod)
+        payButton.updateUI(with: preferredPaymentMethod)
+    }
+
+    // Получаем общую сумму заказа и обновляем кнопку
+    func fetchOrderDetails() {
+        let totalPrice = storage.getTotalOrderPrice()
+        totalPriceView.updateUI(with: totalPrice)
     }
 }
 
@@ -157,7 +166,7 @@ private extension DeliveryVC {
 
     func setupTotalPriceViewLayout() {
         NSLayoutConstraint.activate([
-            totalPriceView.bottomAnchor.constraint(equalTo: payButton.topAnchor),
+            totalPriceView.bottomAnchor.constraint(equalTo: payButton.topAnchor, constant: bottomInset),
             totalPriceView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
             totalPriceView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
         ])
@@ -177,6 +186,7 @@ private extension DeliveryVC {
     func setupActions() {
         setupAddressTableViewAction()
         setupPaymentTableView()
+        setupPayButtonActions()
     }
 
     func setupAddressTableViewAction() {
@@ -201,9 +211,26 @@ private extension DeliveryVC {
                     print("Can't cast to ChoosePaymentMethodVC"); return }
                 vc.onPaymentMethodSelected = { paymentMethod in
                     self.paymentTableView.updateUI(with: paymentMethod)
+                    self.payButton.updateUI(with: paymentMethod)
                 }
             }
         }
+    }
+
+    func setupPayButtonActions() {
+        payButton.onPayButtonTapped = { [weak self] in
+            guard let self else { return }
+            router.navigate(to: .final)
+        }
+    }
+}
+
+// MARK: - Supporting methods
+private extension DeliveryVC {
+    // Из массива всех адресов находим основной адрес
+    func getMainAddressName(from addresses: [Address]) -> String {
+        let mainAddressName = addresses.filter { $0.isMain == true }.first?.name ?? ""
+        return mainAddressName
     }
 }
 
