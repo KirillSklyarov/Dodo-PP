@@ -61,7 +61,7 @@
 		BB00C31C75AEE3F84148D284A4A7CAB0 /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F072EE6DC99CF4FC5403BE3F5BB6C55 /* Notification+Extensions.swift */; };
 		BBB49DBBCDF17D4E05013AA93B19BBF2 /* SkeletonTableViewProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5F5123209B163A4586D0F178376B6B /* SkeletonTableViewProtocols.swift */; };
 		BD5E132A5B075977DDC9024E6CEBF69C /* SkeletonFlowHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BE454C63D3C9E46C07A13AD2E7161A /* SkeletonFlowHandler.swift */; };
-		BE5304A0BD5581CDF5796DB4197456E6 /* Pods-ArthurDodo-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C4AF501E24C1B59962A0CFF0B6EC3F /* Pods-ArthurDodo-dummy.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		BE5304A0BD5581CDF5796DB4197456E6 /* Pods-ArthurDodo-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C4AF501E24C1B59962A0CFF0B6EC3F /* Pods-ArthurDodo-dummy.m */; };
 		C66E58077E0131525DF138C5D361C613 /* CollectionSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19966802DD56F105E896D87247928A6D /* CollectionSkeleton.swift */; };
 		CEAD99ABF694411A9AD5864A35083F88 /* SkeletonTextNumberOfLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E4ED1C28850EAAEA6D64C9EDD12BD7 /* SkeletonTextNumberOfLines.swift */; };
 		CF84DEFF37D69397015C14C0FD7E80ED /* CALayer+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394427DF60B3BA952AD43C3052B5F5D9 /* CALayer+Animations.swift */; };
@@ -408,9 +408,8 @@
 		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1610;
+				LastUpgradeCheck = 1600;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 15.3";
@@ -542,15 +541,18 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8FEDD2DD53157C0306DFA906B1437B65 /* Pods-ArthurDodo.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_MODULE_VERIFIER = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Target Support Files/Pods-ArthurDodo/Pods-ArthurDodo-Info.plist";
@@ -616,7 +618,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -638,6 +639,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
@@ -648,15 +650,18 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3BD7AA9C5A54D4EC430221A9DCA3C367 /* Pods-ArthurDodo.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_MODULE_VERIFIER = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Target Support Files/Pods-ArthurDodo/Pods-ArthurDodo-Info.plist";
@@ -693,13 +698,15 @@
 			baseConfigurationReference = C1F51D575C57574F267E6D19622DC873 /* SkeletonView.release.xcconfig */;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_MODULE_VERIFIER = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_PREFIX_HEADER = "Target Support Files/SkeletonView/SkeletonView-prefix.pch";
 				GENERATE_INFOPLIST_FILE = NO;
@@ -735,13 +742,15 @@
 			baseConfigurationReference = BD784AFF61108A972E671BEDDF603F8E /* SkeletonView.debug.xcconfig */;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_MODULE_VERIFIER = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_PREFIX_HEADER = "Target Support Files/SkeletonView/SkeletonView-prefix.pch";
 				GENERATE_INFOPLIST_FILE = NO;
@@ -806,7 +815,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -832,6 +840,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
