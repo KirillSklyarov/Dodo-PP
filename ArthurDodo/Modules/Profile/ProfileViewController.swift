@@ -1,5 +1,5 @@
 import UIKit
-import SkeletonView
+//import SkeletonView
 
 final class ProfileViewController: UIViewController {
 

@@ -4,7 +4,6 @@ final class MainViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = HeaderView()
-
     private lazy var contentCollectionView = ContentCollectionView()
     private lazy var cartButton = CartButton(isHidden: true, isNeedImage: true)
     private lazy var loadingIndicator = AppLoadingIndicator()
@@ -12,6 +11,7 @@ final class MainViewController: UIViewController {
     // MARK: - Other properties
     private let topInset: CGFloat = 10
     private let bottomInset: CGFloat = -20
+    
     private let leftInset: CGFloat = 20
     private let rightInset: CGFloat = -20
 

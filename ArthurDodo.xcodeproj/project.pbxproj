@@ -137,6 +137,7 @@
 		73B969DE2CC7C7C500A2415A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969DB2CC7C7C500A2415A /* AppDelegate.swift */; };
 		73B969DF2CC7C7C500A2415A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969DC2CC7C7C500A2415A /* SceneDelegate.swift */; };
 		73D0FAAD2CCA3FA90009AEE5 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D0FAAC2CCA3FA90009AEE5 /* Router.swift */; };
+		73D6DD312CD4270A0059EEA6 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = 73D6DD302CD4270A0059EEA6 /* SkeletonView */; };
 		73E6EB3F2CC8D99C006831F2 /* PriceGrayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB3E2CC8D99C006831F2 /* PriceGrayButton.swift */; };
 		73E6EB422CC92FC5006831F2 /* CpfcPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB412CC92FC5006831F2 /* CpfcPopupView.swift */; };
 		73E6EB442CC948F2006831F2 /* CustomTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB432CC948F2006831F2 /* CustomTableView.swift */; };
@@ -145,11 +146,9 @@
 		73EA17352CCBE21E0079A16C /* String+Plural.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EA17342CCBE21E0079A16C /* String+Plural.swift */; };
 		73FD889E2CD28DE9007E0C82 /* PaymentMethodTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD889D2CD28DE9007E0C82 /* PaymentMethodTableViewCell.swift */; };
 		73FD88A22CD28E5E007E0C82 /* PaymentMethodTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD88A12CD28E5E007E0C82 /* PaymentMethodTableView.swift */; };
-		81D49A82FA311D752F68C867 /* Pods_ArthurDodo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E64E943A37FAAFC4B09A53F /* Pods_ArthurDodo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		083BD4CCA6E842157143E84A /* Pods-ArthurDodo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ArthurDodo.release.xcconfig"; path = "Target Support Files/Pods-ArthurDodo/Pods-ArthurDodo.release.xcconfig"; sourceTree = "<group>"; };
 		73159A732CCC20F9002CFB76 /* DeliveryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryVC.swift; sourceTree = "<group>"; };
 		732309E32CD2C18100062C8C /* FinalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalVC.swift; sourceTree = "<group>"; };
 		73238EF82CD219C8006F3A92 /* PaymentAddressesTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentAddressesTableView.swift; sourceTree = "<group>"; };
@@ -172,7 +171,6 @@
 		736B0D292CCFE5C500975195 /* Array+BoolSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+BoolSorting.swift"; sourceTree = "<group>"; };
 		736F044F2CD17A4300BC59CA /* AddNewAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewAddress.swift; sourceTree = "<group>"; };
 		736F04542CD17A9000BC59CA /* ChoosePaymentMethodVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePaymentMethodVC.swift; sourceTree = "<group>"; };
-		737D0DD52C99BF7000B7D739 /* ArthurDodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArthurDodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73B968B72CC7C78700A2415A /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		73B968B92CC7C78700A2415A /* AddressTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTextField.swift; sourceTree = "<group>"; };
 		73B968BA2CC7C78700A2415A /* CategoryName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryName.swift; sourceTree = "<group>"; };
@@ -282,6 +280,7 @@
 		73B969DB2CC7C7C500A2415A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		73B969DC2CC7C7C500A2415A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		73D0FAAC2CCA3FA90009AEE5 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		73D6DD2E2CD4267E0059EEA6 /* ArthurDodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = ArthurDodo.app; path = "/Users/kirillsklyarov/Dodo-PP/build/Debug-iphoneos/ArthurDodo.app"; sourceTree = "<absolute>"; };
 		73E6EB3E2CC8D99C006831F2 /* PriceGrayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceGrayButton.swift; sourceTree = "<group>"; };
 		73E6EB412CC92FC5006831F2 /* CpfcPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CpfcPopupView.swift; sourceTree = "<group>"; };
 		73E6EB432CC948F2006831F2 /* CustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableView.swift; sourceTree = "<group>"; };
@@ -290,8 +289,6 @@
 		73EA17342CCBE21E0079A16C /* String+Plural.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Plural.swift"; sourceTree = "<group>"; };
 		73FD889D2CD28DE9007E0C82 /* PaymentMethodTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodTableViewCell.swift; sourceTree = "<group>"; };
 		73FD88A12CD28E5E007E0C82 /* PaymentMethodTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodTableView.swift; sourceTree = "<group>"; };
-		7E64E943A37FAAFC4B09A53F /* Pods_ArthurDodo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ArthurDodo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B0D4DD6025B40CAC887176B1 /* Pods-ArthurDodo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ArthurDodo.debug.xcconfig"; path = "Target Support Files/Pods-ArthurDodo/Pods-ArthurDodo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -299,21 +296,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81D49A82FA311D752F68C867 /* Pods_ArthurDodo.framework in Frameworks */,
+				73D6DD312CD4270A0059EEA6 /* SkeletonView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		27418BB51FE6706814FC9CD5 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				7E64E943A37FAAFC4B09A53F /* Pods_ArthurDodo.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		73159A722CCC20EE002CFB76 /* Delivery */ = {
 			isa = PBXGroup;
 			children = (
@@ -439,18 +428,7 @@
 			isa = PBXGroup;
 			children = (
 				73B969582CC7C78700A2415A /* ArthurDodo */,
-				737D0DD62C99BF7000B7D739 /* Products */,
-				FD8997329C2D83580B1C38DC /* Pods */,
-				27418BB51FE6706814FC9CD5 /* Frameworks */,
 			);
-			sourceTree = "<group>";
-		};
-		737D0DD62C99BF7000B7D739 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				737D0DD52C99BF7000B7D739 /* ArthurDodo.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		73B968B82CC7C78700A2415A /* Address */ = {
@@ -1022,15 +1000,6 @@
 			path = PaymentMethodTableView;
 			sourceTree = "<group>";
 		};
-		FD8997329C2D83580B1C38DC /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				B0D4DD6025B40CAC887176B1 /* Pods-ArthurDodo.debug.xcconfig */,
-				083BD4CCA6E842157143E84A /* Pods-ArthurDodo.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1038,11 +1007,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 737D0DE82C99BF7100B7D739 /* Build configuration list for PBXNativeTarget "ArthurDodo" */;
 			buildPhases = (
-				9A54119F404BA77386E47587 /* [CP] Check Pods Manifest.lock */,
 				737D0DD12C99BF7000B7D739 /* Sources */,
 				737D0DD22C99BF7000B7D739 /* Frameworks */,
 				737D0DD32C99BF7000B7D739 /* Resources */,
-				12EB27FCF2B95A6BC18A16AB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1050,7 +1017,7 @@
 			);
 			name = ArthurDodo;
 			productName = ArthutDodo;
-			productReference = 737D0DD52C99BF7000B7D739 /* ArthurDodo.app */;
+			productReference = 73D6DD2E2CD4267E0059EEA6 /* ArthurDodo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1078,7 +1045,10 @@
 			);
 			mainGroup = 737D0DCC2C99BF7000B7D739;
 			minimizedProjectReferenceProxies = 1;
-			productRefGroup = 737D0DD62C99BF7000B7D739 /* Products */;
+			packageReferences = (
+				73D6DD2F2CD4270A0059EEA6 /* XCRemoteSwiftPackageReference "SkeletonView" */,
+			);
+			productRefGroup = 737D0DCC2C99BF7000B7D739;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -1107,48 +1077,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		12EB27FCF2B95A6BC18A16AB /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ArthurDodo/Pods-ArthurDodo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ArthurDodo/Pods-ArthurDodo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ArthurDodo/Pods-ArthurDodo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9A54119F404BA77386E47587 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ArthurDodo-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		737D0DD12C99BF7000B7D739 /* Sources */ = {
@@ -1301,7 +1229,6 @@
 /* Begin XCBuildConfiguration section */
 		737D0DE92C99BF7100B7D739 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B0D4DD6025B40CAC887176B1 /* Pods-ArthurDodo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1334,7 +1261,6 @@
 		};
 		737D0DEA2C99BF7100B7D739 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 083BD4CCA6E842157143E84A /* Pods-ArthurDodo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1506,6 +1432,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		73D6DD2F2CD4270A0059EEA6 /* XCRemoteSwiftPackageReference "SkeletonView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Juanpe/SkeletonView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.31.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		73D6DD302CD4270A0059EEA6 /* SkeletonView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 73D6DD2F2CD4270A0059EEA6 /* XCRemoteSwiftPackageReference "SkeletonView" */;
+			productName = SkeletonView;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 737D0DCD2C99BF7000B7D739 /* Project object */;
 }
