@@ -1,17 +1,11 @@
-//
-//  ProfileViewController.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 10.10.2024.
-//
-
 import UIKit
+import SkeletonView
 
 final class ProfileViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = ProfileHeaderView()
-    private lazy var coinsOrdersCollectionView = CoinsOrdersCollectionView()
+    private lazy var coinsOrdersCollectionView = CoinsOrdersCollectionView(personalData: personalData)
     private lazy var promoStackView = PromoStackView()
     private lazy var missionStackView = MissionStackView()
     private lazy var contentStackView: UIStackView = {
@@ -23,6 +17,9 @@ final class ProfileViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties
+    private let topInset: CGFloat = 10
+    private var personalData: Personal?
+
     private let storage = DataStorage.shared
     private lazy var router = Router(baseVC: self)
 
@@ -38,13 +35,34 @@ final class ProfileViewController: UIViewController {
 // MARK: - Fetch Data
 private extension ProfileViewController {
     func fetchData() {
-        storage.fetchPromo()
+        fetchPromo()
+        fetchPersonalData()
+    }
 
+    func fetchPromo() {
+        storage.fetchPromo()
         storage.onPromoFetchedSuccessfully = { [weak self] promo in
             DispatchQueue.main.async {
                 self?.promoStackView.updateUI(promo)
             }
         }
+    }
+
+    func fetchPersonalData() {
+        print("Here")
+        coinsOrdersCollectionView.collectionShowSkeleton()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            guard let self else { return }
+            storage.fetchPersonalData()
+            storage.onPersonalDataFetchedSuccessfully = { [weak self] personalData in
+                self?.coinsOrdersCollectionView.stopShowingSkeleton()
+                self?.personalData = personalData
+                self?.coinsOrdersCollectionView.updateUI(personalData)
+
+            }
+        }
+
     }
 }
 
@@ -96,23 +114,31 @@ private extension ProfileViewController {
         view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(headerView, scrollView)
 
-        setupLayout()
-
         setupScrollView()
+
+        setupLayout()
+    }
+
+    func setupScrollView() {
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.addSubviews(contentStackView)
     }
 
     func setupLayout() {
+        setupScrollViewLayout()
+        setupContentStackViewLayout()
+    }
+
+    func setupScrollViewLayout() {
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
+            scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
 
-    func setupScrollView() {
-        scrollView.addSubviews(contentStackView)
-
+    func setupContentStackViewLayout() {
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),

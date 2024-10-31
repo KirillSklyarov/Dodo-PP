@@ -40,7 +40,7 @@
 		73B969612CC7C78700A2415A /* ItemSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968C12CC7C78700A2415A /* ItemSize.swift */; };
 		73B969622CC7C78700A2415A /* Topping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968C22CC7C78700A2415A /* Topping.swift */; };
 		73B969632CC7C78700A2415A /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968C42CC7C78700A2415A /* Order.swift */; };
-		73B969642CC7C78700A2415A /* DodoCoinsOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968C62CC7C78700A2415A /* DodoCoinsOrders.swift */; };
+		73B969642CC7C78700A2415A /* Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968C62CC7C78700A2415A /* Personal.swift */; };
 		73B969652CC7C78700A2415A /* Promo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968C82CC7C78700A2415A /* Promo.swift */; };
 		73B969662CC7C78700A2415A /* SpecialOffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968CA2CC7C78700A2415A /* SpecialOffer.swift */; };
 		73B969672CC7C78700A2415A /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968CC2CC7C78700A2415A /* Story.swift */; };
@@ -145,9 +145,11 @@
 		73EA17352CCBE21E0079A16C /* String+Plural.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EA17342CCBE21E0079A16C /* String+Plural.swift */; };
 		73FD889E2CD28DE9007E0C82 /* PaymentMethodTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD889D2CD28DE9007E0C82 /* PaymentMethodTableViewCell.swift */; };
 		73FD88A22CD28E5E007E0C82 /* PaymentMethodTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD88A12CD28E5E007E0C82 /* PaymentMethodTableView.swift */; };
+		81D49A82FA311D752F68C867 /* Pods_ArthurDodo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E64E943A37FAAFC4B09A53F /* Pods_ArthurDodo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		083BD4CCA6E842157143E84A /* Pods-ArthurDodo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ArthurDodo.release.xcconfig"; path = "Target Support Files/Pods-ArthurDodo/Pods-ArthurDodo.release.xcconfig"; sourceTree = "<group>"; };
 		73159A732CCC20F9002CFB76 /* DeliveryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryVC.swift; sourceTree = "<group>"; };
 		732309E32CD2C18100062C8C /* FinalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalVC.swift; sourceTree = "<group>"; };
 		73238EF82CD219C8006F3A92 /* PaymentAddressesTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentAddressesTableView.swift; sourceTree = "<group>"; };
@@ -182,7 +184,7 @@
 		73B968C12CC7C78700A2415A /* ItemSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSize.swift; sourceTree = "<group>"; };
 		73B968C22CC7C78700A2415A /* Topping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Topping.swift; sourceTree = "<group>"; };
 		73B968C42CC7C78700A2415A /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
-		73B968C62CC7C78700A2415A /* DodoCoinsOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DodoCoinsOrders.swift; sourceTree = "<group>"; };
+		73B968C62CC7C78700A2415A /* Personal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Personal.swift; sourceTree = "<group>"; };
 		73B968C82CC7C78700A2415A /* Promo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Promo.swift; sourceTree = "<group>"; };
 		73B968CA2CC7C78700A2415A /* SpecialOffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialOffer.swift; sourceTree = "<group>"; };
 		73B968CC2CC7C78700A2415A /* Story.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
@@ -288,6 +290,8 @@
 		73EA17342CCBE21E0079A16C /* String+Plural.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Plural.swift"; sourceTree = "<group>"; };
 		73FD889D2CD28DE9007E0C82 /* PaymentMethodTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodTableViewCell.swift; sourceTree = "<group>"; };
 		73FD88A12CD28E5E007E0C82 /* PaymentMethodTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodTableView.swift; sourceTree = "<group>"; };
+		7E64E943A37FAAFC4B09A53F /* Pods_ArthurDodo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ArthurDodo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0D4DD6025B40CAC887176B1 /* Pods-ArthurDodo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ArthurDodo.debug.xcconfig"; path = "Target Support Files/Pods-ArthurDodo/Pods-ArthurDodo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -295,12 +299,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81D49A82FA311D752F68C867 /* Pods_ArthurDodo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27418BB51FE6706814FC9CD5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7E64E943A37FAAFC4B09A53F /* Pods_ArthurDodo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		73159A722CCC20EE002CFB76 /* Delivery */ = {
 			isa = PBXGroup;
 			children = (
@@ -427,6 +440,8 @@
 			children = (
 				73B969582CC7C78700A2415A /* ArthurDodo */,
 				737D0DD62C99BF7000B7D739 /* Products */,
+				FD8997329C2D83580B1C38DC /* Pods */,
+				27418BB51FE6706814FC9CD5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -481,7 +496,7 @@
 		73B968C72CC7C78700A2415A /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				73B968C62CC7C78700A2415A /* DodoCoinsOrders.swift */,
+				73B968C62CC7C78700A2415A /* Personal.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -1007,6 +1022,15 @@
 			path = PaymentMethodTableView;
 			sourceTree = "<group>";
 		};
+		FD8997329C2D83580B1C38DC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B0D4DD6025B40CAC887176B1 /* Pods-ArthurDodo.debug.xcconfig */,
+				083BD4CCA6E842157143E84A /* Pods-ArthurDodo.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1014,17 +1038,17 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 737D0DE82C99BF7100B7D739 /* Build configuration list for PBXNativeTarget "ArthurDodo" */;
 			buildPhases = (
+				9A54119F404BA77386E47587 /* [CP] Check Pods Manifest.lock */,
 				737D0DD12C99BF7000B7D739 /* Sources */,
 				737D0DD22C99BF7000B7D739 /* Frameworks */,
 				737D0DD32C99BF7000B7D739 /* Resources */,
+				A1143BCD95967B4B8DD426C4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = ArthurDodo;
-			packageProductDependencies = (
-			);
 			productName = ArthutDodo;
 			productReference = 737D0DD52C99BF7000B7D739 /* ArthurDodo.app */;
 			productType = "com.apple.product-type.application";
@@ -1037,7 +1061,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 1610;
 				TargetAttributes = {
 					737D0DD42C99BF7000B7D739 = {
 						CreatedOnToolsVersion = 16.0;
@@ -1054,8 +1078,6 @@
 			);
 			mainGroup = 737D0DCC2C99BF7000B7D739;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-			);
 			productRefGroup = 737D0DD62C99BF7000B7D739 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1086,6 +1108,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		9A54119F404BA77386E47587 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ArthurDodo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A1143BCD95967B4B8DD426C4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ArthurDodo/Pods-ArthurDodo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ArthurDodo/Pods-ArthurDodo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ArthurDodo/Pods-ArthurDodo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		737D0DD12C99BF7000B7D739 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1108,7 +1172,7 @@
 				73EA17332CCB9ED90079A16C /* AppLoadingIndicator.swift in Sources */,
 				73B969622CC7C78700A2415A /* Topping.swift in Sources */,
 				73B969632CC7C78700A2415A /* Order.swift in Sources */,
-				73B969642CC7C78700A2415A /* DodoCoinsOrders.swift in Sources */,
+				73B969642CC7C78700A2415A /* Personal.swift in Sources */,
 				73B969652CC7C78700A2415A /* Promo.swift in Sources */,
 				73B969662CC7C78700A2415A /* SpecialOffer.swift in Sources */,
 				73B969672CC7C78700A2415A /* Story.swift in Sources */,
@@ -1237,6 +1301,7 @@
 /* Begin XCBuildConfiguration section */
 		737D0DE92C99BF7100B7D739 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B0D4DD6025B40CAC887176B1 /* Pods-ArthurDodo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1249,7 +1314,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1269,6 +1334,7 @@
 		};
 		737D0DEA2C99BF7100B7D739 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 083BD4CCA6E842157143E84A /* Pods-ArthurDodo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1281,7 +1347,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1336,7 +1402,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1399,7 +1465,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

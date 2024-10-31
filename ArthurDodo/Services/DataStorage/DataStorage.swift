@@ -12,6 +12,8 @@ final class DataStorage {
     var fetchedStories: [Story] = []
     private var fetchedItems: [Item] = []
     private var fetchedPromo: [Promo] = []
+    private var fetchedPersonalData: Personal?
+
 
     var category: [CategoryName] = []
 
@@ -26,6 +28,25 @@ final class DataStorage {
     var onStoriesFetchedSuccessfully: (([Story]) -> Void)?
     var onItemsFetchedSuccessfully: (([Item]) -> Void)?
     var onPromoFetchedSuccessfully: (([Promo]) -> Void)?
+    var onPersonalDataFetchedSuccessfully: ((Personal) -> Void)?
+
+}
+
+// MARK: - Personal
+extension DataStorage {
+    func fetchPersonalData() {
+        NetworkManager.shared.fetchData(.personal) { [weak self] (result: Result<Personal, NetworkError>) in
+            guard let self else { return }
+            switch result {
+            case .success(let personalData):
+                fetchedPersonalData = personalData
+                onPersonalDataFetchedSuccessfully?(personalData)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
 }
 
 // MARK: - User Addresses

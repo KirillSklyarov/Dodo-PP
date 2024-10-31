@@ -1,11 +1,5 @@
-//
-//  CoinsOrdersCollection.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 10.10.2024.
-//
-
 import UIKit
+import SkeletonView
 
 final class CoinsOrdersCollectionView: UICollectionView {
 
@@ -17,17 +11,34 @@ final class CoinsOrdersCollectionView: UICollectionView {
 
     var onToppingSelected: ( (Int) -> Void )?
 
+    private var personalData: Personal?
+
     // MARK: - Init
-    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+    init(frame: CGRect = .zero, collectionViewLayout layout: UICollectionViewLayout = UICollectionViewLayout(), personalData: Personal?) {
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         let customLayout = configLayout()
         collectionViewLayout = customLayout
+        self.personalData = personalData
         configureCollectionView()
         setupLayout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func updateUI(_ personalData: Personal) {
+        self.personalData = personalData
+        reloadData()
+    }
+
+    func collectionShowSkeleton() {
+        showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .carrot))
+    }
+
+    func stopShowingSkeleton() {
+        stopSkeletonAnimation()
+        hideSkeleton()
     }
 }
 
@@ -39,6 +50,8 @@ private extension CoinsOrdersCollectionView {
         register(CoinsOrdersCollectionViewCell.self, forCellWithReuseIdentifier: CoinsOrdersCollectionViewCell.identifier)
         dataSource = self
         delegate = self
+
+        setupSkeleton()
     }
 
     func setupLayout() {
@@ -48,7 +61,6 @@ private extension CoinsOrdersCollectionView {
     func configLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-//        let correctWidth = (UIScreen.main.bounds.width - (15 * 2) - 20) / 3
         layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
         layout.minimumLineSpacing = lineSpacing
         layout.minimumInteritemSpacing = 1
@@ -57,28 +69,28 @@ private extension CoinsOrdersCollectionView {
 }
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
-extension CoinsOrdersCollectionView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension CoinsOrdersCollectionView: SkeletonCollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+
+    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
+        return CoinsOrdersCollectionViewCell.identifier
+    }
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         3
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CoinsOrdersCollectionViewCell.identifier, for: indexPath) as? CoinsOrdersCollectionViewCell else { return UICollectionViewCell() }
-        cell.configureCell(indexPath)
+        guard let personalData else { return cell }
+        cell.configureCell(indexPath, data: personalData)
         return cell
     }
-
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        guard let cell = collectionView.cellForItem(at: indexPath) as? AddToppingsCollectionViewCell else { return }
-//        cell.chooseTopping()
-//        let priceToAdd = cell.getChosenToppingPrice()
-//        onToppingSelected?(priceToAdd)
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-//        guard let cell = collectionView.cellForItem(at: indexPath) as? AddToppingsCollectionViewCell else { return }
-//        cell.hideTopping()
-//        let priceToRemove = -cell.getChosenToppingPrice()
-//        onToppingSelected?(priceToRemove)
-//    }
 }
+
+// MARK: - Setup Skeleton
+private extension CoinsOrdersCollectionView {
+    func setupSkeleton() {
+        isSkeletonable = true
+    }
+}
+

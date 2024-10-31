@@ -46,6 +46,7 @@ enum endPoint: String {
     case stories = "/stories"
     case products = "/products"
     case promo = "/promo"
+    case personal = "/personal"
 
     var url: String {
         return endPoint.baseURL.rawValue + self.rawValue
