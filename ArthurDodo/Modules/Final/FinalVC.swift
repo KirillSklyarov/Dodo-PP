@@ -43,6 +43,9 @@ final class FinalVC: UIViewController {
     private let rightInset: CGFloat = -20
     private let topInset: CGFloat = 20
 
+    private lazy var router = Router(baseVC: self)
+    private let storage = DataStorage.shared
+
     // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,8 +57,11 @@ final class FinalVC: UIViewController {
 // MARK: - Setup UI
 private extension FinalVC {
     func setupActions() {
+        // Очищаем заказы и закрываем все окна
         dismissButton.onDismissButtonTapped = { [weak self] in
-            self?.view.window?.rootViewController?.dismiss(animated: true)
+            guard let self else { return }
+            storage.eraseOrder()
+            router.dismissAllVC()
         }
     }
 }

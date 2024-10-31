@@ -159,6 +159,8 @@ private extension CartViewController {
     }
 
     func setupNavigationBar() {
+        navigationController?.isNavigationBarHidden = false
+
         navigationController?.navigationBar.barTintColor = AppColors.backgroundGray
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationItem.title = "Корзина"

@@ -28,7 +28,7 @@ final class Router {
         self.baseVC = baseVC
     }
 
-    // Показываем новый экран, там где нужно настраиваем коллбэки 
+    // Показываем новый экран, там где нужно настраиваем коллбэки
     func navigate(to screen: Screens,
                   popUpView: CpfcPopupView? = nil,
                   animated: Bool = true,
@@ -87,18 +87,20 @@ final class Router {
             vc = AddNewAddressViewController()
             callback?(vc)
         case .choosePaymentMethod:
-            vc = ChoosePaymentMethodVC()
-            callback?(vc)
+            let paymentVC = ChoosePaymentMethodVC()
+            vc = UINavigationController(rootViewController: paymentVC)
+            callback?(paymentVC)
         case .final:
             vc = FinalVC()
             vc.modalPresentationStyle = .fullScreen
             callback?(vc)
         }
 
-        if screen == .choosePaymentMethod {
-            baseVC?.navigationController?.pushViewController(vc, animated: true)
-        } else {
-            baseVC?.present(vc, animated: animated)
-        }
+        baseVC?.present(vc, animated: animated)
+    }
+
+    // Закрываем все окна до Main
+    func dismissAllVC() {
+        baseVC?.view.window?.rootViewController?.dismiss(animated: true)
     }
 }

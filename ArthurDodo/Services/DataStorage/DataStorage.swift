@@ -186,6 +186,11 @@ extension DataStorage {
     func getCountOfItems() -> Int {
         order.compactMap{ $0.count }.reduce(0, +)
     }
+
+    // Очищаем заказы (нужно при отправке заказа к исполнению)
+    func eraseOrder() {
+        order = []
+    }
 }
 
 // MARK: - Special Offers

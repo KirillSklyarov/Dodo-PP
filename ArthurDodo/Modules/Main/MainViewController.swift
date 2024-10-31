@@ -1,10 +1,3 @@
-//
-//  MainViewController.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 05.10.2024.
-//
-
 import UIKit
 
 final class MainViewController: UIViewController {
@@ -42,6 +35,12 @@ final class MainViewController: UIViewController {
         setupActions()
         fetchAllData()
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNavigationBar()
+        cartButton.updateCart()
+    }
 }
 
 // MARK: - Setup UI
@@ -50,6 +49,10 @@ private extension MainViewController {
         view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(headerView, contentCollectionView, cartButton, loadingIndicator)
         setupLayout()
+    }
+
+    func setupNavigationBar() {
+        navigationController?.isNavigationBarHidden = true
     }
 
     func setupLayout() {

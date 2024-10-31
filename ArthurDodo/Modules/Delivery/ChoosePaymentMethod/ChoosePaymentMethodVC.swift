@@ -47,10 +47,21 @@ private extension ChoosePaymentMethodVC {
     }
 
     func setupNavigationBar() {
-        title = "Оплата"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.barTintColor = AppColors.backgroundGray
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.tintColor = AppColors.buttonOrange
+
+        navigationItem.title = "Оплата"
+
+        let dismissButton = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(dismissButtonTapped))
+        dismissButton.tintColor = AppColors.buttonOrange
+        dismissButton.setTitleTextAttributes([NSAttributedString.Key .font: AppFonts.semibold18], for: .normal)
+        navigationItem.leftBarButtonItem = dismissButton
+    }
+
+    @objc func dismissButtonTapped() {
+        dismiss(animated: true)
     }
 
     func setupLayout() {
@@ -73,7 +84,7 @@ private extension ChoosePaymentMethodVC {
             paymentMethod in
             guard let self else { return }
             onPaymentMethodSelected?(paymentMethod)
-            navigationController?.popViewController(animated: true)
+            dismiss(animated: true)
         }
     }
 }

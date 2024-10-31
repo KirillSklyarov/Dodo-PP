@@ -66,11 +66,6 @@ private extension CartButton {
     func showCartButton() {
         isHidden = false
     }
-
-    func getTotalCartPriceFromStorage() {
-        let totalPrice = dataStorage.getTotalOrderPrice()
-        setNewPrice(totalPrice)
-    }
 }
 
 // MARK: - Setup UI
