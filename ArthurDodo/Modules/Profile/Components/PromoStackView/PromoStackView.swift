@@ -1,11 +1,5 @@
-//
-//  SpecialOfferStackView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 10.10.2024.
-//
-
 import UIKit
+import SkeletonView
 
 final class PromoStackView: UIStackView {
 
@@ -24,6 +18,7 @@ final class PromoStackView: UIStackView {
         super.init(frame: frame)
         setupUI()
         setupPromoCollectionViewActions()
+        setupSkeleton()
     }
 
     required init(coder: NSCoder) {
@@ -35,6 +30,15 @@ final class PromoStackView: UIStackView {
         if superview != nil {
             setupLayout()
         }
+    }
+
+    func appShowSkeleton() {
+        showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .carrot))
+    }
+
+    func stopShowingSkeleton() {
+        stopSkeletonAnimation()
+        hideSkeleton()
     }
 
     func updateUI(_ promo: [Promo]) {
@@ -73,5 +77,12 @@ extension PromoStackView {
             leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: leftPadding),
             trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: rightPadding),
         ])
+    }
+}
+
+// MARK: - Setup Skeleton
+private extension PromoStackView {
+    func setupSkeleton() {
+        isSkeletonable = true
     }
 }

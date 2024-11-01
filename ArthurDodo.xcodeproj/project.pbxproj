@@ -60,7 +60,7 @@
 		73B969752CC7C78700A2415A /* CartProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968F32CC7C78700A2415A /* CartProductCell.swift */; };
 		73B969762CC7C78700A2415A /* CartProductTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968F42CC7C78700A2415A /* CartProductTableView.swift */; };
 		73B969772CC7C78700A2415A /* OrderStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968F62CC7C78700A2415A /* OrderStackView.swift */; };
-		73B969782CC7C78700A2415A /* CartSpOfferCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968F82CC7C78700A2415A /* CartSpOfferCollection.swift */; };
+		73B969782CC7C78700A2415A /* PromoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968F82CC7C78700A2415A /* PromoCollection.swift */; };
 		73B969792CC7C78700A2415A /* PromoCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968F92CC7C78700A2415A /* PromoCollectionCell.swift */; };
 		73B9697A2CC7C78700A2415A /* AddToCartCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968FB2CC7C78700A2415A /* AddToCartCollectionCell.swift */; };
 		73B9697B2CC7C78700A2415A /* AddToCartCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968FC2CC7C78700A2415A /* AddToCartCollectionView.swift */; };
@@ -171,6 +171,7 @@
 		736B0D292CCFE5C500975195 /* Array+BoolSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+BoolSorting.swift"; sourceTree = "<group>"; };
 		736F044F2CD17A4300BC59CA /* AddNewAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewAddress.swift; sourceTree = "<group>"; };
 		736F04542CD17A9000BC59CA /* ChoosePaymentMethodVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePaymentMethodVC.swift; sourceTree = "<group>"; };
+		73B665B72CD4E4A000B8A533 /* ArthurDodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArthurDodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73B968B72CC7C78700A2415A /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		73B968B92CC7C78700A2415A /* AddressTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTextField.swift; sourceTree = "<group>"; };
 		73B968BA2CC7C78700A2415A /* CategoryName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryName.swift; sourceTree = "<group>"; };
@@ -214,7 +215,7 @@
 		73B968F32CC7C78700A2415A /* CartProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartProductCell.swift; sourceTree = "<group>"; };
 		73B968F42CC7C78700A2415A /* CartProductTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartProductTableView.swift; sourceTree = "<group>"; };
 		73B968F62CC7C78700A2415A /* OrderStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderStackView.swift; sourceTree = "<group>"; };
-		73B968F82CC7C78700A2415A /* CartSpOfferCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartSpOfferCollection.swift; sourceTree = "<group>"; };
+		73B968F82CC7C78700A2415A /* PromoCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoCollection.swift; sourceTree = "<group>"; };
 		73B968F92CC7C78700A2415A /* PromoCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoCollectionCell.swift; sourceTree = "<group>"; };
 		73B968FB2CC7C78700A2415A /* AddToCartCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToCartCollectionCell.swift; sourceTree = "<group>"; };
 		73B968FC2CC7C78700A2415A /* AddToCartCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToCartCollectionView.swift; sourceTree = "<group>"; };
@@ -280,7 +281,6 @@
 		73B969DB2CC7C7C500A2415A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		73B969DC2CC7C7C500A2415A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		73D0FAAC2CCA3FA90009AEE5 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
-		73D6DD2E2CD4267E0059EEA6 /* ArthurDodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = ArthurDodo.app; path = "/Users/kirillsklyarov/Dodo-PP/build/Debug-iphoneos/ArthurDodo.app"; sourceTree = "<absolute>"; };
 		73E6EB3E2CC8D99C006831F2 /* PriceGrayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceGrayButton.swift; sourceTree = "<group>"; };
 		73E6EB412CC92FC5006831F2 /* CpfcPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CpfcPopupView.swift; sourceTree = "<group>"; };
 		73E6EB432CC948F2006831F2 /* CustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableView.swift; sourceTree = "<group>"; };
@@ -552,6 +552,7 @@
 				73B968DC2CC7C78700A2415A /* Constants.swift */,
 				73B968DD2CC7C78700A2415A /* Info.plist */,
 				73B968DF2CC7C78700A2415A /* LaunchScreen.storyboard */,
+				73B665B72CD4E4A000B8A533 /* ArthurDodo.app */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -639,13 +640,13 @@
 			path = OrderStackView;
 			sourceTree = "<group>";
 		};
-		73B968FA2CC7C78700A2415A /* SpecialOffersCollectionView */ = {
+		73B968FA2CC7C78700A2415A /* PromoCollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				73B968F82CC7C78700A2415A /* CartSpOfferCollection.swift */,
+				73B968F82CC7C78700A2415A /* PromoCollection.swift */,
 				73B968F92CC7C78700A2415A /* PromoCollectionCell.swift */,
 			);
-			path = SpecialOffersCollectionView;
+			path = PromoCollectionView;
 			sourceTree = "<group>";
 		};
 		73B968FD2CC7C78700A2415A /* ToppingsCollection */ = {
@@ -671,7 +672,7 @@
 			children = (
 				73B968F22CC7C78700A2415A /* DodoCoinsView */,
 				73B968F72CC7C78700A2415A /* OrderStackView */,
-				73B968FA2CC7C78700A2415A /* SpecialOffersCollectionView */,
+				73B968FA2CC7C78700A2415A /* PromoCollectionView */,
 				73B968FF2CC7C78700A2415A /* ToppingsStackView */,
 				73B969002CC7C78700A2415A /* CartVCHeader.swift */,
 				73B969012CC7C78700A2415A /* CustomPageControl.swift */,
@@ -1017,7 +1018,7 @@
 			);
 			name = ArthurDodo;
 			productName = ArthutDodo;
-			productReference = 73D6DD2E2CD4267E0059EEA6 /* ArthurDodo.app */;
+			productReference = 73B665B72CD4E4A000B8A533 /* ArthurDodo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1122,7 +1123,7 @@
 				73B969752CC7C78700A2415A /* CartProductCell.swift in Sources */,
 				73B969762CC7C78700A2415A /* CartProductTableView.swift in Sources */,
 				73B969772CC7C78700A2415A /* OrderStackView.swift in Sources */,
-				73B969782CC7C78700A2415A /* CartSpOfferCollection.swift in Sources */,
+				73B969782CC7C78700A2415A /* PromoCollection.swift in Sources */,
 				73B969792CC7C78700A2415A /* PromoCollectionCell.swift in Sources */,
 				73B9697A2CC7C78700A2415A /* AddToCartCollectionCell.swift in Sources */,
 				73B9697B2CC7C78700A2415A /* AddToCartCollectionView.swift in Sources */,

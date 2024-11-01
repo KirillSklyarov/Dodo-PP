@@ -32,7 +32,7 @@ final class CoinsOrdersCollectionView: UICollectionView {
         reloadData()
     }
 
-    func collectionShowSkeleton() {
+    func appShowSkeleton() {
         showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .carrot))
     }
 

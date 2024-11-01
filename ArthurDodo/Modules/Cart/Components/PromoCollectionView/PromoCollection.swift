@@ -1,11 +1,5 @@
-//
-//  CartSpOfferCollection.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 24.09.2024.
-//
-
 import UIKit
+import SkeletonView
 
 final class PromoCollectionView: UICollectionView {
 
@@ -34,23 +28,32 @@ final class PromoCollectionView: UICollectionView {
         self.promo = promo
         reloadData()
     }
+}
 
-    // MARK: - Private methods
-    private func configCollectionView() {
+// MARK: - Setup UI
+private extension PromoCollectionView {
+    func configCollectionView() {
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
         register(PromoCollectionCell.self, forCellWithReuseIdentifier: PromoCollectionCell.identifier)
         dataSource = self
         delegate = self
+
+        setupSkeleton()
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         heightAnchor.constraint(equalToConstant: collectionHeight).isActive = true
     }
 }
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
-extension PromoCollectionView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension PromoCollectionView: SkeletonCollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+
+    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
+        PromoCollectionCell.identifier
+    }
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         promo.count
     }
@@ -82,3 +85,11 @@ extension PromoCollectionView: UIScrollViewDelegate {
         onShowNewCell?(page)
     }
 }
+
+// MARK: - Setup Skeleton
+private extension PromoCollectionView {
+    func setupSkeleton() {
+        isSkeletonable = true
+    }
+}
+

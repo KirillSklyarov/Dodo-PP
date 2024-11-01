@@ -5,11 +5,11 @@ final class ProfileViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = ProfileHeaderView()
-    private lazy var coinsOrdersCollectionView = CoinsOrdersCollectionView(personalData: personalData)
+    private lazy var personalDataCollectionView = CoinsOrdersCollectionView(personalData: personalData)
     private lazy var promoStackView = PromoStackView()
     private lazy var missionStackView = MissionStackView()
     private lazy var contentStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [coinsOrdersCollectionView, promoStackView, missionStackView])
+        let stack = UIStackView(arrangedSubviews: [personalDataCollectionView, promoStackView, missionStackView])
         stack.axis = .vertical
         stack.spacing = 10
         return stack
@@ -35,8 +35,18 @@ final class ProfileViewController: UIViewController {
 // MARK: - Fetch Data
 private extension ProfileViewController {
     func fetchData() {
-        fetchPromo()
-        fetchPersonalData()
+
+        personalDataCollectionView.appShowSkeleton()
+        promoStackView.appShowSkeleton()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            guard let self else { return }
+            fetchPromo()
+            fetchPersonalData()
+            
+            personalDataCollectionView.stopShowingSkeleton()
+            promoStackView.stopShowingSkeleton()
+        }
     }
 
     func fetchPromo() {
@@ -49,20 +59,12 @@ private extension ProfileViewController {
     }
 
     func fetchPersonalData() {
-        print("Here")
-        coinsOrdersCollectionView.collectionShowSkeleton()
+        storage.fetchPersonalData()
+        storage.onPersonalDataFetchedSuccessfully = { [weak self] personalData in
+            self?.personalData = personalData
+            self?.personalDataCollectionView.updateUI(personalData)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            guard let self else { return }
-            storage.fetchPersonalData()
-            storage.onPersonalDataFetchedSuccessfully = { [weak self] personalData in
-                self?.coinsOrdersCollectionView.stopShowingSkeleton()
-                self?.personalData = personalData
-                self?.coinsOrdersCollectionView.updateUI(personalData)
-
-            }
         }
-
     }
 }
 
