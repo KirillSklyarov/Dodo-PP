@@ -1,5 +1,5 @@
 import UIKit
-//import SkeletonView
+import SkeletonView
 
 final class ProfileViewController: UIViewController {
 
@@ -30,31 +30,20 @@ final class ProfileViewController: UIViewController {
         setupActions()
         fetchData()
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        showSkeleton()
+    }
 }
 
 // MARK: - Fetch Data
 private extension ProfileViewController {
     func fetchData() {
-
-        personalDataCollectionView.appShowSkeleton()
-        promoStackView.appShowSkeleton()
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             guard let self else { return }
-            fetchPromo()
             fetchPersonalData()
-            
-            personalDataCollectionView.stopShowingSkeleton()
-            promoStackView.stopShowingSkeleton()
-        }
-    }
-
-    func fetchPromo() {
-        storage.fetchPromo()
-        storage.onPromoFetchedSuccessfully = { [weak self] promo in
-            DispatchQueue.main.async {
-                self?.promoStackView.updateUI(promo)
-            }
+            fetchPromo()
         }
     }
 
@@ -63,7 +52,16 @@ private extension ProfileViewController {
         storage.onPersonalDataFetchedSuccessfully = { [weak self] personalData in
             self?.personalData = personalData
             self?.personalDataCollectionView.updateUI(personalData)
+        }
+    }
 
+    func fetchPromo() {
+        storage.fetchPromo()
+        storage.onPromoFetchedSuccessfully = { [weak self] promo in
+            DispatchQueue.main.async {
+                self?.promoStackView.updateUI(promo)
+                self?.stopSkeleton()
+            }
         }
     }
 }
@@ -148,5 +146,20 @@ private extension ProfileViewController {
             contentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
         ])
+    }
+}
+
+// MARK: - Setup Skeleton
+private extension ProfileViewController {
+    func showSkeleton() {
+        personalDataCollectionView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .belizeHole))
+        promoStackView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .emerald))
+        missionStackView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .greenSea))
+    }
+
+    func stopSkeleton() {
+        promoStackView.hideSkeleton()
+        missionStackView.hideSkeleton()
+        personalDataCollectionView.hideSkeleton()
     }
 }

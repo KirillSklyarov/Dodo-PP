@@ -1,4 +1,5 @@
 import UIKit
+import SkeletonView
 
 final class MainViewController: UIViewController {
 
@@ -6,7 +7,6 @@ final class MainViewController: UIViewController {
     private lazy var headerView = HeaderView()
     private lazy var contentCollectionView = ContentCollectionView()
     private lazy var cartButton = CartButton(isHidden: true, isNeedImage: true)
-    private lazy var loadingIndicator = AppLoadingIndicator()
 
     // MARK: - Other properties
     private let topInset: CGFloat = 10
@@ -48,7 +48,7 @@ final class MainViewController: UIViewController {
 private extension MainViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(headerView, contentCollectionView, cartButton, loadingIndicator)
+        view.addSubviews(headerView, contentCollectionView, cartButton)
         setupLayout()
     }
 
@@ -61,9 +61,6 @@ private extension MainViewController {
             contentCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset),
             cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
             cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-
-            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 }
@@ -170,9 +167,12 @@ private extension MainViewController {
 // MARK: - Fetch data from server
 private extension MainViewController {
     func fetchAllData() {
-        loadingIndicator.showLoadingIndicator()
-        getStoriesFromServer()
-        getCatalogAndSpecialOffersFromServer()
+        contentCollectionView.appShowSkeleton()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.getStoriesFromServer()
+            self?.getCatalogAndSpecialOffersFromServer()
+        }
     }
 
     // Мы обращаемся к хранилищу за сторисами, инициируем сетевой запрос и забираем результаты
@@ -188,7 +188,7 @@ private extension MainViewController {
             guard let self else { return }
             DispatchQueue.main.async {
                 self.updateSpecialOffersUI()
-                self.loadingIndicator.hideLoadingIndicator()
+                self.contentCollectionView.stopShowingSkeleton()
             }
         }
     }

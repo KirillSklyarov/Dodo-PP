@@ -1,16 +1,11 @@
-//
-//  ContentCollectionView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 05.10.2024.
-//
-
 import UIKit
+import SkeletonView
 
 final class ContentCollectionView: UICollectionView {
 
     // MARK: - Properties
     private var categoryHeaderView: CategoriesHeaderView?
+
     private var isScrolling = false
     private var stories: [Story] = []
     private var specialOffersArray: [Item] = []
@@ -33,6 +28,7 @@ final class ContentCollectionView: UICollectionView {
         let customLayout = createCompositionalLayout()
         self.collectionViewLayout = customLayout
         configCollectionView()
+        setupSkeleton()
     }
 
     required init?(coder: NSCoder) {
@@ -42,6 +38,22 @@ final class ContentCollectionView: UICollectionView {
     // MARK: - Life cycle
     override func didMoveToSuperview() {
         setupLayout()
+    }
+}
+
+// MARK: - Setup skeleton
+extension ContentCollectionView {
+    func setupSkeleton() {
+        isSkeletonable = true
+    }
+
+    func appShowSkeleton() {
+        showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .alizarin))
+    }
+
+    func stopShowingSkeleton() {
+        stopSkeletonAnimation()
+        hideSkeleton()
     }
 }
 
@@ -248,6 +260,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoriesCollectionCell.identifier, for: indexPath) as? StoriesCollectionCell else { return UICollectionViewCell() }
             let story = stories[indexPath.item]
             cell.configureCell(story)
+            cell.hideSkeleton()
             return cell
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SpecialOfferCollectionCell.identifier, for: indexPath) as? SpecialOfferCollectionCell else { return UICollectionViewCell() }
@@ -298,6 +311,30 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
             setupActions()
             return header
         default: return UICollectionReusableView()
+        }
+    }
+}
+
+// MARK: - SkeletonCollectionViewDataSource
+extension ContentCollectionView: SkeletonCollectionViewDataSource {
+    func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        10
+    }
+
+    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
+        switch indexPath.section {
+        case 0: return StoriesCollectionCell.identifier
+        case 1: return SpecialOfferCollectionCell.identifier
+        case 2: return ItemsCollectionCell.identifier
+        default: return "cell"
+        }
+    }
+
+    func collectionSkeletonView(_ skeletonView: UICollectionView, supplementaryViewIdentifierOfKind: String, at indexPath: IndexPath) -> ReusableCellIdentifier? {
+        switch indexPath.section {
+        case 1: return SpecialOfferHeaderView.identifier
+        case 2: return CategoriesHeaderView.identifier
+        default: return "cell"
         }
     }
 }

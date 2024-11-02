@@ -1,10 +1,3 @@
-//
-//  HeaderCollectionView.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 18.09.2024.
-//
-
 import UIKit
 
 final class CategoryHeaderCollectionView: UICollectionView {
@@ -25,6 +18,7 @@ final class CategoryHeaderCollectionView: UICollectionView {
 
         super.init(frame: frame, collectionViewLayout: layout)
         configCollectionView()
+        isSkeletonable = false
     }
     
     required init?(coder: NSCoder) {

@@ -74,6 +74,13 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
     }
 }
 
+// MARK: - Setup Skeleton
+private extension CoinsOrdersCollectionViewCell {
+    func setupSkeleton() {
+        isSkeletonable = true
+    }
+}
+
 // MARK: - Supporting methods
 private extension CoinsOrdersCollectionViewCell {
     func designDodoCoinsCell(_ data: Personal) {
@@ -144,12 +151,5 @@ private extension CoinsOrdersCollectionViewCell {
             iconImageView.topAnchor.constraint(equalTo: containerImageView.topAnchor),
             iconImageView.leadingAnchor.constraint(equalTo: containerImageView.leadingAnchor)
         ])
-    }
-}
-
-// MARK: - Setup Skeleton
-private extension CoinsOrdersCollectionViewCell {
-    func setupSkeleton() {
-        isSkeletonable = true
     }
 }

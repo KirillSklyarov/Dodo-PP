@@ -8,6 +8,7 @@ final class CoinsOrdersCollectionView: UICollectionView {
     private let cellWidth: CGFloat = 150
     private let lineSpacing: CGFloat = 5
     private var collectionHeight: CGFloat = 200
+    private let countOfItems = 3
 
     var onToppingSelected: ( (Int) -> Void )?
 
@@ -31,15 +32,6 @@ final class CoinsOrdersCollectionView: UICollectionView {
         self.personalData = personalData
         reloadData()
     }
-
-    func appShowSkeleton() {
-        showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .carrot))
-    }
-
-    func stopShowingSkeleton() {
-        stopSkeletonAnimation()
-        hideSkeleton()
-    }
 }
 
 // MARK: - Setup Layout
@@ -50,8 +42,6 @@ private extension CoinsOrdersCollectionView {
         register(CoinsOrdersCollectionViewCell.self, forCellWithReuseIdentifier: CoinsOrdersCollectionViewCell.identifier)
         dataSource = self
         delegate = self
-
-        setupSkeleton()
     }
 
     func setupLayout() {
@@ -69,14 +59,10 @@ private extension CoinsOrdersCollectionView {
 }
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
-extension CoinsOrdersCollectionView: SkeletonCollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-
-    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
-        return CoinsOrdersCollectionViewCell.identifier
-    }
+extension CoinsOrdersCollectionView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        3
+        countOfItems
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -88,9 +74,12 @@ extension CoinsOrdersCollectionView: SkeletonCollectionViewDataSource, UICollect
 }
 
 // MARK: - Setup Skeleton
-private extension CoinsOrdersCollectionView {
-    func setupSkeleton() {
-        isSkeletonable = true
+extension CoinsOrdersCollectionView: SkeletonCollectionViewDataSource {
+    func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        countOfItems
+    }
+
+    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
+        CoinsOrdersCollectionViewCell.identifier
     }
 }
-

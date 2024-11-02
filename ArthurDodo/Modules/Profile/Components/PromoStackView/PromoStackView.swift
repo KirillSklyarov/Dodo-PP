@@ -6,6 +6,7 @@ final class PromoStackView: UIStackView {
     // MARK: - Properties
     private let leftPadding: CGFloat = 0
     private let rightPadding: CGFloat = 0
+    private let cornerRadius: CGFloat = 10
 
     var onPromoSelected: ((Promo) -> Void)?
 
@@ -25,29 +26,24 @@ final class PromoStackView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Life cycle
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         if superview != nil {
             setupLayout()
         }
     }
+}
 
-    func appShowSkeleton() {
-        showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .carrot))
-    }
-
-    func stopShowingSkeleton() {
-        stopSkeletonAnimation()
-        hideSkeleton()
-    }
-
+// MARK: - Public methods
+extension PromoStackView {
     func updateUI(_ promo: [Promo]) {
         promoCollectionView.updateUI(promo)
     }
 }
 
 // MARK: - Setup Actions
-extension PromoStackView {
+private extension PromoStackView {
     func setupPromoCollectionViewActions() {
         promoCollectionView.onShowNewCell = { [weak self] pageNumber in
             self?.pageControl.currentPage = pageNumber
@@ -62,6 +58,9 @@ extension PromoStackView {
 // MARK: - Setup UI
 extension PromoStackView {
     func setupUI() {
+        layer.cornerRadius = cornerRadius
+        clipsToBounds = true
+
         addArrangedSubview(promoHeaderView)
         addArrangedSubview(promoCollectionView)
         addArrangedSubview(pageControl)

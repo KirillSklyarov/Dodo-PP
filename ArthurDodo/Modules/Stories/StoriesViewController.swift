@@ -1,16 +1,10 @@
-//
-//  StoriesVC.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 07.10.2024.
-//
-
 import UIKit
 
 final class StoriesVC: UIViewController {
 
     // MARK: - Properties
     private lazy var backgroundView = BackgroundStoriesView()
+
     var onStoriesVCDismissed: (() -> Void)?
 
     // MARK: - Life cycle
@@ -27,11 +21,12 @@ final class StoriesVC: UIViewController {
 }
 
 // MARK: - Setup Actions
-extension StoriesVC {
-    private func setupActions() {
+private extension StoriesVC {
+     func setupActions() {
         backgroundView.onDismissButtonTapped = { [weak self] in
-            self?.onStoriesVCDismissed?()
-            self?.dismiss(animated: true)
+            guard let self else { return }
+            onStoriesVCDismissed?()
+            dismiss(animated: true)
         }
     }
 }

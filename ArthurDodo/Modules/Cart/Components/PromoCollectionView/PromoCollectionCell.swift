@@ -1,5 +1,4 @@
 import UIKit
-import SkeletonView
 
 final class PromoCollectionCell: UICollectionViewCell {
 
@@ -93,13 +92,6 @@ final class PromoCollectionCell: UICollectionViewCell {
     }
 }
 
-// MARK: - Setup Skeleton
-private extension PromoCollectionCell {
-    func setupSkeleton() {
-        isSkeletonable = true
-    }
-}
-
 // MARK: - Setup UI
 private extension PromoCollectionCell {
     func setupUI() {
@@ -107,8 +99,6 @@ private extension PromoCollectionCell {
         clipsToBounds = true
         backgroundColor = AppColors.backgroundGray
         contentView.addSubviews(contentStack)
-
-        setupSkeleton()
 
         setupLayout()
     }

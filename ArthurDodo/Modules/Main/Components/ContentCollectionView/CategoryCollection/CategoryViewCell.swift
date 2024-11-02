@@ -1,11 +1,5 @@
-//
-//  HeaderViewCell.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 17.09.2024.
-//
-
 import UIKit
+import SkeletonView
 
 final class CategoryViewCell: UICollectionViewCell {
 
@@ -29,6 +23,8 @@ final class CategoryViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupConstraints()
+        isSkeletonable = true
+        contentView.isSkeletonable = true
     }
     
     required init?(coder: NSCoder) {

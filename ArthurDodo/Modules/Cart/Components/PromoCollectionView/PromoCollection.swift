@@ -1,5 +1,4 @@
 import UIKit
-import SkeletonView
 
 final class PromoCollectionView: UICollectionView {
 
@@ -38,8 +37,6 @@ private extension PromoCollectionView {
         register(PromoCollectionCell.self, forCellWithReuseIdentifier: PromoCollectionCell.identifier)
         dataSource = self
         delegate = self
-
-        setupSkeleton()
     }
 
     func setupLayout() {
@@ -48,11 +45,7 @@ private extension PromoCollectionView {
 }
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
-extension PromoCollectionView: SkeletonCollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-
-    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
-        PromoCollectionCell.identifier
-    }
+extension PromoCollectionView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         promo.count
@@ -85,11 +78,3 @@ extension PromoCollectionView: UIScrollViewDelegate {
         onShowNewCell?(page)
     }
 }
-
-// MARK: - Setup Skeleton
-private extension PromoCollectionView {
-    func setupSkeleton() {
-        isSkeletonable = true
-    }
-}
-

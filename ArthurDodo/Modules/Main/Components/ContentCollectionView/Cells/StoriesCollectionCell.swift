@@ -1,23 +1,16 @@
-//
-//  StoriesCollectionCell.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 18.09.2024.
-//
-
 import UIKit
+import SkeletonView
 
 final class StoriesCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
     static let identifier: String = "StoriesCollectionCell"
-    private lazy var containerView: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 14
-        view.clipsToBounds = true
-        view.backgroundColor = .black
-        return view
-    }()
+    private let cornerRadius: CGFloat = 14
+    private let leftInset: CGFloat = 10
+    private let rightInset: CGFloat = -10
+    private let topInset: CGFloat = 10
+    private let bottomInset: CGFloat = -10
+
     private lazy var coverImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -32,22 +25,14 @@ final class StoriesCollectionCell: UICollectionViewCell {
         return label
     }()
 
-    private var gradientLayer: CAGradientLayer?
-
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupConstraints()
-        configGradient()
+        setupUI()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        gradientLayer?.frame = bounds
     }
 
     // MARK: - Public methods
@@ -63,50 +48,51 @@ final class StoriesCollectionCell: UICollectionViewCell {
         let storyID = story.id
         let isViewed = UserDefaults.standard.isStoryViewed(storyID)
         if isViewed {
-            containerView.alpha = 0.3
+            contentView.alpha = 0.35
         } else {
-            containerView.alpha = 1.0
+            contentView.alpha = 1.0
         }
     }
 }
 
 // MARK: - Setup UI
 private extension StoriesCollectionCell {
-    func setupConstraints() {
+    func setupUI() {
+        layer.cornerRadius = cornerRadius
+        clipsToBounds = true
+        backgroundColor = .black
 
-        containerView.addSubviews(coverImageView, titleLabel)
+        contentView.addSubviews(coverImageView, titleLabel)
 
-        NSLayoutConstraint.activate([
-            coverImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            coverImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            coverImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            coverImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+        setupLayout()
 
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -5),
-            titleLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
-        ])
-
-        contentView.addSubviews(containerView)
-
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+        setupSkeleton()
     }
 
-    func configGradient() {
-        let colors = AppColors()
-        let randomColor = colors.getRandomColor()
+    func setupLayout() {
+        setupElementsLayout()
+    }
 
-        let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.white.cgColor, randomColor.cgColor]
-        gradient.startPoint = CGPoint(x: 0, y: 0)
-        gradient.endPoint = CGPoint(x: 0, y: 1)
-        gradient.frame = containerView.bounds
-        containerView.layer.insertSublayer(gradient, at: 0)
-        gradientLayer = gradient
+    func setupElementsLayout() {
+        NSLayoutConstraint.activate([
+            coverImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            coverImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            coverImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset)
+        ])
+    }
+}
+
+// MARK: - Setup skeleton
+private extension StoriesCollectionCell {
+    func setupSkeleton() {
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+//        coverImageView.isSkeletonable = true
+//        titleLabel.isSkeletonable = true
     }
 }
