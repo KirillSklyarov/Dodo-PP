@@ -4,13 +4,15 @@ import SkeletonView
 final class StoriesCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "StoriesCollectionCell"
+    static let identifier = String(describing: StoriesCollectionCell.self)
+
     private let cornerRadius: CGFloat = 14
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let topInset: CGFloat = 10
     private let bottomInset: CGFloat = -10
 
+    // MARK: - UI Properties
     private lazy var coverImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -29,6 +31,7 @@ final class StoriesCollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupSkeleton()
     }
 
     required init?(coder: NSCoder) {
@@ -65,8 +68,6 @@ private extension StoriesCollectionCell {
         contentView.addSubviews(coverImageView, titleLabel)
 
         setupLayout()
-
-        setupSkeleton()
     }
 
     func setupLayout() {
@@ -91,8 +92,5 @@ private extension StoriesCollectionCell {
 private extension StoriesCollectionCell {
     func setupSkeleton() {
         isSkeletonable = true
-        contentView.isSkeletonable = true
-//        coverImageView.isSkeletonable = true
-//        titleLabel.isSkeletonable = true
     }
 }

@@ -28,7 +28,6 @@ final class ContentCollectionView: UICollectionView {
         let customLayout = createCompositionalLayout()
         self.collectionViewLayout = customLayout
         configCollectionView()
-        setupSkeleton()
     }
 
     required init?(coder: NSCoder) {
@@ -41,28 +40,19 @@ final class ContentCollectionView: UICollectionView {
     }
 }
 
-// MARK: - Setup skeleton
-extension ContentCollectionView {
-    func setupSkeleton() {
-        isSkeletonable = true
-    }
-
-    func appShowSkeleton() {
-        showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .alizarin))
-    }
-
-    func stopShowingSkeleton() {
-        stopSkeletonAnimation()
-        hideSkeleton()
-    }
-}
-
 // MARK: - Fetch data
 extension ContentCollectionView {
     // Забираем данные из хранилища и обновляем секцию со сторис
     func uploadDataFromStorage() {
         fetchData()
-        updateUI()
+        updateUI {
+            stopSkeleton()
+        }
+    }
+
+    private func stopSkeleton() {
+        stopSkeletonAnimation()
+        hideSkeleton()
     }
 
     func fetchData() {
@@ -72,9 +62,10 @@ extension ContentCollectionView {
         categories = storage.getCategories()
     }
 
-    func updateUI() {
+    func updateUI(completion: (() -> Void)) {
         categoryHeaderView?.updateUI()
         reloadData()
+        completion()
     }
 }
 
@@ -157,23 +148,23 @@ private extension ContentCollectionView {
         var totalHeight = CGFloat(0)
 
         if categories.isEmpty {
-            let placeholderItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
+            let placeholderItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
             let placeholderItem = NSCollectionLayoutItem(layoutSize: placeholderItemSize)
 
-            let placeholderGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
+            let placeholderGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
             let placeholderGroup = NSCollectionLayoutGroup.vertical(layoutSize: placeholderGroupSize, subitems: [placeholderItem])
 
             allGroups.append(placeholderGroup)
             totalHeight += placeholderGroupSize.heightDimension.dimension
         } else {
             for cat in categories {
-                let firstItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(300))
+                let firstItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(300))
                 let firstItem = NSCollectionLayoutItem(layoutSize: firstItemSize)
 
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(150))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-                let firstGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(300))
+                let firstGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(300))
                 let firstGroup = NSCollectionLayoutGroup.vertical(layoutSize: firstGroupSize, subitems: [firstItem])
 
                 let itemsInCategory = catalog.filter { $0.category == cat }.count
@@ -218,9 +209,10 @@ private extension ContentCollectionView {
         register(SpecialOfferCollectionCell.self, forCellWithReuseIdentifier: SpecialOfferCollectionCell.identifier)
         register(SpecialOfferHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SpecialOfferHeaderView.identifier)
         register(CategoriesHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategoriesHeaderView.identifier)
-
         register(ItemsHeaderView.self, forCellWithReuseIdentifier: ItemsHeaderView.identifier)
         register(ItemsCollectionCell.self, forCellWithReuseIdentifier: ItemsCollectionCell.identifier)
+
+        register(SkeletonPlaceholderCell.self, forCellWithReuseIdentifier: SkeletonPlaceholderCell.identifier)
 
         delegate = self
         dataSource = self
@@ -259,13 +251,18 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
         case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoriesCollectionCell.identifier, for: indexPath) as? StoriesCollectionCell else { return UICollectionViewCell() }
             let story = stories[indexPath.item]
+            cell.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .midnightBlue))
             cell.configureCell(story)
+            cell.stopSkeletonAnimation()
             cell.hideSkeleton()
             return cell
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SpecialOfferCollectionCell.identifier, for: indexPath) as? SpecialOfferCollectionCell else { return UICollectionViewCell() }
             let item = specialOffersArray[indexPath.item]
+            cell.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .midnightBlue))
             cell.configureCell(item)
+            cell.stopSkeletonAnimation()
+            cell.hideSkeleton()
             return cell
         case 2:
             let item = catalog[indexPath.item]
@@ -273,12 +270,10 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
             if item.isHeader {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemsHeaderView.identifier, for: indexPath) as? ItemsHeaderView else {
                     return UICollectionViewCell() }
-                let item = catalog[indexPath.item]
                 cell.configHeader(item)
                 return cell
             } else {
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemsCollectionCell.identifier, for: indexPath) as? ItemsCollectionCell else {
-                    return UICollectionViewCell() }
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemsCollectionCell.identifier, for: indexPath) as? ItemsCollectionCell else { return UICollectionViewCell() }
                 cell.configureCell(item)
                 return cell
             }
@@ -317,15 +312,24 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
 
 // MARK: - SkeletonCollectionViewDataSource
 extension ContentCollectionView: SkeletonCollectionViewDataSource {
+    func numSections(in collectionSkeletonView: UICollectionView) -> Int {
+        2
+    }
+
     func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        switch section {
+        case 0: return 4
+        case 1: return 2
+        case 2: return 1
+        default: return 1
+        }
     }
 
     func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
         switch indexPath.section {
         case 0: return StoriesCollectionCell.identifier
         case 1: return SpecialOfferCollectionCell.identifier
-        case 2: return ItemsCollectionCell.identifier
+        case 2: return SkeletonPlaceholderCell.identifier
         default: return "cell"
         }
     }
@@ -347,5 +351,66 @@ extension ContentCollectionView {
             let catOnScreen = catalog[index].category.rawValue
             categoryHeaderView?.getCategory(catOnScreen)
         }
+    }
+}
+
+
+private extension ContentCollectionView {
+    func createItemsSectionWithHeader2() -> NSCollectionLayoutSection {
+        var allGroups: [NSCollectionLayoutGroup] = []
+        var totalHeight = CGFloat(0)
+
+        if categories.isEmpty {
+            let placeholderItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
+            let placeholderItem = NSCollectionLayoutItem(layoutSize: placeholderItemSize)
+
+            let placeholderGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
+            let placeholderGroup = NSCollectionLayoutGroup.vertical(layoutSize: placeholderGroupSize, subitems: [placeholderItem])
+
+            allGroups.append(placeholderGroup)
+            totalHeight += placeholderGroupSize.heightDimension.dimension
+        } else {
+            for cat in categories {
+                let firstItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(300))
+                let firstItem = NSCollectionLayoutItem(layoutSize: firstItemSize)
+
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(150))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+                let firstGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(300))
+                let firstGroup = NSCollectionLayoutGroup.vertical(layoutSize: firstGroupSize, subitems: [firstItem])
+
+                let itemsInCategory = catalog.filter { $0.category == cat }.count
+
+                let groupHeight = itemSize.heightDimension.dimension * CGFloat(itemsInCategory - 1)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(groupHeight))
+                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+
+                let comboGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(firstGroupSize.heightDimension.dimension + groupHeight))
+                let comboGroup = NSCollectionLayoutGroup.vertical(layoutSize: comboGroupSize, subitems: [firstGroup, group])
+
+                totalHeight += comboGroupSize.heightDimension.dimension
+                allGroups.append(comboGroup)
+            }
+        }
+
+        let superGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(totalHeight))
+        let superGroup = NSCollectionLayoutGroup.vertical(layoutSize: superGroupSize, subitems: allGroups)
+
+        let section = NSCollectionLayoutSection(group: superGroup)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
+
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
+
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .topLeading
+        )
+
+        sectionHeader.pinToVisibleBounds = true
+        section.boundarySupplementaryItems = [sectionHeader]
+
+        return section
     }
 }

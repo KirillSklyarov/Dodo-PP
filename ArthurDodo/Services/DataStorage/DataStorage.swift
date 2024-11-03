@@ -47,6 +47,14 @@ extension DataStorage {
         }
     }
 
+    func getPersonalData() -> Personal? {
+        fetchedPersonalData
+    }
+
+    // Проверяем были ли ранее загружены данные
+    func isPersonalDataLoaded() -> Bool {
+        fetchedPersonalData != nil
+    }
 }
 
 // MARK: - User Addresses

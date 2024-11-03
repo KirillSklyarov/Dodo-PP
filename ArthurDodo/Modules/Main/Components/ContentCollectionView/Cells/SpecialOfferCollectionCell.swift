@@ -1,16 +1,10 @@
-//
-//  SpecialOfferCollectionCell.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 19.09.2024.
-//
-
 import UIKit
+import SkeletonView
 
 final class SpecialOfferCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "SpecialOfferCollectionCell"
+    static let identifier = String(describing: SpecialOfferCollectionCell.self)
     private let imageViewSize: CGFloat = 90
 
     var onPriceButtonTapped: ( (String) -> Void )?
@@ -51,6 +45,7 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupSkeleton()
     }
 
     required init?(coder: NSCoder) {
@@ -79,5 +74,12 @@ private extension SpecialOfferCollectionCell {
             contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
+    }
+}
+
+// MARK: - Setup Skeleton
+private extension SpecialOfferCollectionCell {
+    func setupSkeleton() {
+        isSkeletonable = true
     }
 }

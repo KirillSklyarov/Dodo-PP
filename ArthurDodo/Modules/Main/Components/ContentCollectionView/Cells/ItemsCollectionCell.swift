@@ -1,11 +1,5 @@
-//
-//  ItemsCollectionCell.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 02.10.2024.
-//
-
 import UIKit
+import SkeletonView
 
 final class ItemsCollectionCell: UICollectionViewCell {
 
@@ -65,6 +59,7 @@ final class ItemsCollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupSkeleton()
     }
 
     required init?(coder: NSCoder) {
@@ -78,6 +73,20 @@ final class ItemsCollectionCell: UICollectionViewCell {
         ingredientsLabel.text = item.ingredients
         priceButton.setPrice(item)
         setHitImage(item)
+    }
+}
+
+// MARK: - Setup Skeleton
+private extension ItemsCollectionCell {
+    func setupSkeleton() {
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+        contentStackView.isSkeletonable = true
+        pizzaImageView.isSkeletonable = true
+        titleLabel.isSkeletonable = true
+        ingredientsLabel.isSkeletonable = true
+        priceButton.isSkeletonable = true
+        hitImageView.isSkeletonable = true
     }
 }
 

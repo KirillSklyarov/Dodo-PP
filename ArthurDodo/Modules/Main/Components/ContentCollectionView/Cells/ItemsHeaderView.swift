@@ -1,16 +1,10 @@
-//
-//  ItemsHeaderView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 05.10.2024.
-//
-
 import UIKit
+import SkeletonView
 
 final class ItemsHeaderView: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "ItemsHeaderView"
+    static let identifier = "ItemsHeaderView"
     private let imageSize: CGFloat = 160
     private let hitImageSize: CGFloat = 130
 
@@ -54,12 +48,15 @@ final class ItemsHeaderView: UICollectionViewCell {
         return view
     }()
 
+    private lazy var contentContainer = setupContentContainer()
+
     var gradientLayer: CAGradientLayer?
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupSkeleton()
     }
 
     required init?(coder: NSCoder) {
@@ -82,18 +79,31 @@ final class ItemsHeaderView: UICollectionViewCell {
     }
 }
 
+// MARK: - Setup Skeleton
+private extension ItemsHeaderView {
+    func setupSkeleton() {
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+        contentContainer.isSkeletonable = true
+        pizzaImageView.isSkeletonable = true
+        titleLabel.isSkeletonable = true
+        ingredientsLabel.isSkeletonable = true
+        priceButton.isSkeletonable = true
+        hitImageView.isSkeletonable = true
+        backView.isSkeletonable = true
+    }
+}
+
 // MARK: - Setup UI
 private extension ItemsHeaderView {
     func setupUI() {
-        let contentContainer = setupContentContainer()
-
-        addSubviews(contentContainer)
+        contentView.addSubviews(contentContainer)
 
         NSLayoutConstraint.activate([
-            contentContainer.topAnchor.constraint(equalTo: topAnchor),
-            contentContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: bottomAnchor)
+            contentContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
+            contentContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            contentContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            contentContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 

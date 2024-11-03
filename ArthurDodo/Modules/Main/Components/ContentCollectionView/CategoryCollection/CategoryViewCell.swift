@@ -1,5 +1,4 @@
 import UIKit
-import SkeletonView
 
 final class CategoryViewCell: UICollectionViewCell {
 
@@ -23,8 +22,6 @@ final class CategoryViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupConstraints()
-        isSkeletonable = true
-        contentView.isSkeletonable = true
     }
     
     required init?(coder: NSCoder) {

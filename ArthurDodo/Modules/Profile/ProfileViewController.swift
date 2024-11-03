@@ -19,6 +19,7 @@ final class ProfileViewController: UIViewController {
     // MARK: - Other Properties
     private let topInset: CGFloat = 10
     private var personalData: Personal?
+    private var isDataLoaded: Bool = false
 
     private let storage = DataStorage.shared
     private lazy var router = Router(baseVC: self)
@@ -28,12 +29,26 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        fetchData()
     }
 
+    // При каждом появлении экрана мы решаем нужно ли загружать данные из сети или просто забрать с сервера (делаем тут а не во viewDidLoad из-за скелетона, там он не работает)
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        showSkeleton()
+        fetchDataFromServerOrGetDataFromStorage()
+    }
+}
+
+// MARK: - Supporting methods
+private extension ProfileViewController {
+    // Мы спрашиваем были ли ранее уже загружены данные и если нет, то загружаем, а если да - то просто забираем их с хранилища
+    func fetchDataFromServerOrGetDataFromStorage() {
+        let isDataLoaded = storage.isPersonalDataLoaded()
+        if !isDataLoaded {
+            showSkeleton()
+            fetchData()
+        } else {
+            getDataFromStorage()
+        }
     }
 }
 
@@ -58,11 +73,20 @@ private extension ProfileViewController {
     func fetchPromo() {
         storage.fetchPromo()
         storage.onPromoFetchedSuccessfully = { [weak self] promo in
+            guard let self else { return }
             DispatchQueue.main.async {
-                self?.promoStackView.updateUI(promo)
-                self?.stopSkeleton()
+                self.promoStackView.updateUI(promo)
+                self.stopSkeleton()
             }
         }
+    }
+
+    func getDataFromStorage() {
+        if let personalData = storage.getPersonalData() {
+            personalDataCollectionView.updateUI(personalData)
+        }
+        let promo = storage.getPromoFromStorage()
+        promoStackView.updateUI(promo)
     }
 }
 

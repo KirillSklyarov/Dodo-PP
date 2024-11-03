@@ -11,12 +11,12 @@ final class MainViewController: UIViewController {
     // MARK: - Other properties
     private let topInset: CGFloat = 10
     private let bottomInset: CGFloat = -20
-    
     private let leftInset: CGFloat = 20
     private let rightInset: CGFloat = -20
 
     private let storage: DataStorage
     private var router: Router?
+    private var isDataLoaded: Bool = false
 
     // MARK: - Init
     init(storage: DataStorage = DataStorage.shared) {
@@ -41,6 +41,8 @@ final class MainViewController: UIViewController {
         super.viewWillAppear(animated)
         setupNavigationBar()
         cartButton.updateCart()
+
+        if !isDataLoaded { showSkeleton() }
     }
 }
 
@@ -167,8 +169,6 @@ private extension MainViewController {
 // MARK: - Fetch data from server
 private extension MainViewController {
     func fetchAllData() {
-        contentCollectionView.appShowSkeleton()
-
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             self?.getStoriesFromServer()
             self?.getCatalogAndSpecialOffersFromServer()
@@ -186,15 +186,29 @@ private extension MainViewController {
 
         storage.onItemsFetchedSuccessfully = { [weak self] items in
             guard let self else { return }
-            DispatchQueue.main.async {
-                self.updateSpecialOffersUI()
-                self.contentCollectionView.stopShowingSkeleton()
-            }
+            updateSpecialOffersUI()
+            isDataLoaded = true
         }
     }
 
     // Вызываем обновление UI всех секций
     func updateSpecialOffersUI() {
-        contentCollectionView.uploadDataFromStorage()
+        DispatchQueue.main.async { [weak self] in
+            self?.contentCollectionView.uploadDataFromStorage()
+        }
+    }
+}
+
+// MARK: - Setup Skeleton
+private extension MainViewController {
+    func showSkeleton() {
+        contentCollectionView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .alizarin))
+    }
+
+    func stopSkeleton() {
+        DispatchQueue.main.async {
+            self.contentCollectionView.stopSkeletonAnimation()
+            self.contentCollectionView.hideSkeleton()
+        }
     }
 }

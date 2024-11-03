@@ -18,7 +18,6 @@ final class CategoryHeaderCollectionView: UICollectionView {
 
         super.init(frame: frame, collectionViewLayout: layout)
         configCollectionView()
-        isSkeletonable = false
     }
     
     required init?(coder: NSCoder) {
