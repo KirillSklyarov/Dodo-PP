@@ -9,7 +9,6 @@ final class FinalVC: UIViewController {
     // MARK: - Properties
     private let leftInset: CGFloat = 20
     private let rightInset: CGFloat = -20
-    private let topInset: CGFloat = 20
     private var countDownTimer: Timer?
     private var dismissDelay = 5
 
@@ -45,16 +44,16 @@ private extension FinalVC {
 
 // MARK: - Supporting methods
 private extension FinalVC {
-    // Очищаем заказы и закрываем все окна
-    func eraseOrderAndDismiss() {
-        storage.eraseOrder()
-        router.dismissAllVC()
-    }
-
     // Выключаем таймер и закрываем окно
     func dismissVC() {
         countDownTimer?.invalidate()
         eraseOrderAndDismiss()
+    }
+
+    // Очищаем заказы и закрываем все окна
+    func eraseOrderAndDismiss() {
+        storage.eraseOrder()
+        router.dismissAllVC()
     }
 
     func updateTitle(_ seconds: Int) {
@@ -67,7 +66,7 @@ private extension FinalVC {
     func setupActions() {
         dismissButton.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            eraseOrderAndDismiss()
+            dismissVC()
         }
     }
 }
@@ -76,21 +75,19 @@ private extension FinalVC {
 private extension FinalVC {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(dismissButton, contentStack)
+        view.addSubviews(contentStack)
 
+        setupNavigationBar()
         setupLayout()
     }
 
-    func setupLayout() {
-        setupDismissButtonViewLayout()
-        setupContentStackLayout()
+    func setupNavigationBar() {
+        let dismissButton = UIBarButtonItem(customView: dismissButton)
+        navigationItem.leftBarButtonItem = dismissButton
     }
 
-    func setupDismissButtonViewLayout() {
-        NSLayoutConstraint.activate([
-            dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topInset),
-            dismissButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-        ])
+    func setupLayout() {
+        setupContentStackLayout()
     }
 
     func setupContentStackLayout() {

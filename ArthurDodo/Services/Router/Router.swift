@@ -91,9 +91,9 @@ final class Router {
             vc = UINavigationController(rootViewController: paymentVC)
             callback?(paymentVC)
         case .final:
-            vc = FinalVC()
+            let finalVC = FinalVC()
+            vc = UINavigationController(rootViewController: finalVC)
             vc.modalPresentationStyle = .fullScreen
-            callback?(vc)
         }
 
         baseVC?.present(vc, animated: animated)
