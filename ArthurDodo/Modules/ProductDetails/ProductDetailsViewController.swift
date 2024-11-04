@@ -17,7 +17,7 @@ final class ProductDetailsViewController: UIViewController {
 
     // MARK: - Other Properties
     private let storage: DataStorage
-    private var router: AppRouter
+    weak var coordinator: MainCoordinator?
 
     private var item: Item?
     private var order: Order?
@@ -25,9 +25,8 @@ final class ProductDetailsViewController: UIViewController {
     var onCartButtonTapped: ( () -> Void )?
 
     // MARK: - Init
-    init(storage: DataStorage, router: AppRouter) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -197,7 +196,7 @@ private extension ProductDetailsViewController {
             guard let self else { print("Self is nil"); return }
             guard let popupVC = popupVC as? CpfcPopupView else {
                 print("No popupVC"); return }
-            router.navigate(to: .cpfcPopup, popUpView: popupVC)
+            coordinator?.showPopUpView(popupVC)
         }
     }
 }

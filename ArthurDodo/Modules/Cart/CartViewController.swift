@@ -20,7 +20,7 @@ final class CartViewController: UIViewController {
 
     // MARK: - Other Properties
     private var storage: DataStorage
-    private var router: AppRouter
+    weak var coordinator: CartCoordinator?
 
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
@@ -31,9 +31,9 @@ final class CartViewController: UIViewController {
 
     var onCartVCDismissed: (() -> Void)?
 
-    init(storage: DataStorage, router: AppRouter, order: [Order]? = nil, onCartVCDismissed: ( () -> Void)? = nil) {
+    // MARK: - Init
+    init(storage: DataStorage, order: [Order]? = nil, onCartVCDismissed: ( () -> Void)? = nil) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -52,6 +52,7 @@ final class CartViewController: UIViewController {
     // Мы обновляем кнопку корзины на mainVC всегда, когда закрывается это окно (либо по свайпу, либо по нажатию на кнопку dismiss, либо по причине пустой корзины)
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        print(#function)
         onCartVCDismissed?()
     }
 }
@@ -119,7 +120,7 @@ private extension CartViewController {
         }
 
         orderStackView.onChangeItem = { [weak self] in
-            self?.router.navigate(to: .productDetails)
+//            self?.router.navigate(to: .productDetails)
         }
     }
 
@@ -134,10 +135,10 @@ private extension CartViewController {
     func setupSpecialViewActions() {
         promoStackView.onPromoSelected = { [weak self] specialOffer in
             guard let self else { return }
-            router.navigate(to: .applySpecialOffer) { applyOfferVC in
-                guard let applyOfferVC = applyOfferVC as? ApplyOfferViewController else { print("We can't cast applyOfferVC"); return }
-                applyOfferVC.configureViewController(specialOffer)
-            }
+//            router.navigate(to: .applySpecialOffer) { applyOfferVC in
+//                guard let applyOfferVC = applyOfferVC as? ApplyOfferViewController else { print("We can't cast applyOfferVC"); return }
+//                applyOfferVC.configureViewController(specialOffer)
+//            }
         }
     }
 
@@ -152,8 +153,9 @@ private extension CartViewController {
     func setupCartButtonAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
-            print(#function)
-            router.navigate(to: .delivery)
+            coordinator?.showDelivery()
+            
+//            router.navigate(to: .delivery)
         }
     }
 }

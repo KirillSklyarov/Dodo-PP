@@ -1,6 +1,6 @@
 import UIKit
 
-final class ProfileRouter {
+final class ProfileCoordinator: Coordinator {
 
     // MARK: - Properties
     var storage: DataStorage
@@ -14,22 +14,32 @@ final class ProfileRouter {
 }
 
 // MARK: - Public methods
-extension ProfileRouter {
-    func goToProfile(router: AppRouter) {
-        let vc = ProfileViewController(storage: storage, router: router)
+extension ProfileCoordinator {
+    func start() {
+        let vc = ProfileViewController(storage: storage)
+        vc.coordinator = self
         navigationController.visibleViewController?.present(vc, animated: true)
     }
 
-    func goToChatAlert() {
+    func showChatAlert() {
         let vc = CustomActionSheet()
         vc.modalPresentationStyle = .overFullScreen
         vc.modalTransitionStyle = .crossDissolve
         navigationController.visibleViewController?.present(vc, animated: false)
     }
 
-    func goToPersonalData() {
+    func showPersonalData() {
         let personalDataVC = PersonalViewController()
         let vc = UINavigationController(rootViewController: personalDataVC)
         navigationController.visibleViewController?.present(vc, animated: true)
+    }
+
+    func showApplySpecialOffer(_ offer: Promo) {
+        let vc = ApplyOfferViewController()
+        guard let configureSheet = vc.sheetPresentationController else { return }
+        configureSheet.detents = [.medium()]
+        configureSheet.prefersGrabberVisible = true
+        navigationController.visibleViewController?.present(vc, animated: true)
+        vc.configureViewController(offer)
     }
 }

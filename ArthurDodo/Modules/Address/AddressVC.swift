@@ -17,12 +17,11 @@ final class AddressViewController: UIViewController {
     private var mainAddress: Address?
 
     private let storage: DataStorage
-    private let router: AppRouter
+    weak var coordinator: AddressCoordinator?
 
     // MARK: - Init
-    init(storage: DataStorage, router: AppRouter) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -114,9 +113,6 @@ private extension AddressViewController {
     }
 
     func showEditAddressVC(_ address: Address) {
-        router.navigate(to: .editAddress) { editAddressVC in
-            guard let editAddressVC = editAddressVC as? EditAddressViewController else { print("We can't cast to EditAddressViewController"); return }
-            editAddressVC.getAddressToEdit(address)
-        }
+        coordinator?.showEditAddressVC(address)
     }
 }

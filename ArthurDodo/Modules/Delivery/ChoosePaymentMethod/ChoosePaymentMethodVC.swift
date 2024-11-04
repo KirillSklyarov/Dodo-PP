@@ -8,7 +8,6 @@ final class ChoosePaymentMethodVC: UIViewController {
     private lazy var storage = DataStorage.shared
 
     var preferredPaymentMethod: PaymentMethod = .cbp
-
     var onPaymentMethodSelected: ((PaymentMethod) -> Void)?
 
     // MARK: - Init

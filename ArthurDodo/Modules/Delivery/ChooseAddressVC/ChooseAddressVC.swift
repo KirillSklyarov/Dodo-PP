@@ -13,12 +13,11 @@ final class ChooseAddressVC: UIViewController {
     var onAddressCellTapped: ((String) -> Void)?
 
     private let storage: DataStorage
-    private let router: AppRouter
+    weak var coordinator: CartCoordinator?
 
     // MARK: - Init
-    init(storage: DataStorage, router: AppRouter) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -100,15 +99,12 @@ private extension ChooseAddressVC {
         addressTableView.onEditAddressButtonTapped = { [weak self] indexPath in
             guard let self else { return }
             let address = storage.fetchedUserAddresses[indexPath.row]
-            router.navigate(to: .editAddress) { editAddressVC in
-                guard let vc = editAddressVC as? EditAddressViewController else { return }
-                vc.getAddressToEdit(address)
-            }
+            coordinator?.showEditAddressVC(address)
         }
 
         // Настраиваем action: переход на экран добавления нового адреса
         addressTableView.onAddNewAddressCellTapped = { [weak self] in
-            self?.router.navigate(to: .editAddress)
+            self?.coordinator?.showAddNewAddressVC()
         }
     }
 

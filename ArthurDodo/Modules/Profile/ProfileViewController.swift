@@ -25,12 +25,11 @@ final class ProfileViewController: UIViewController {
     private var isDataLoaded: Bool = false
 
     private let storage: DataStorage
-    private let router: AppRouter
+    weak var coordinator: ProfileCoordinator?
 
     // MARK: - Init
-    init(storage: DataStorage, router: AppRouter) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -50,99 +49,6 @@ final class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         fetchDataFromServerOrGetDataFromStorage()
     }
-}
-
-// MARK: - Supporting methods
-private extension ProfileViewController {
-    // Мы спрашиваем были ли ранее уже загружены данные и если нет, то загружаем, а если да - то просто забираем их с хранилища
-    func fetchDataFromServerOrGetDataFromStorage() {
-        let isDataLoaded = storage.isPersonalDataLoaded()
-        if !isDataLoaded {
-            showSkeleton()
-            fetchData()
-        } else {
-            getDataFromStorage()
-        }
-    }
-}
-
-// MARK: - Fetch Data
-private extension ProfileViewController {
-    func fetchData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-            guard let self else { return }
-            fetchPersonalData()
-            fetchPromo()
-        }
-    }
-
-    func fetchPersonalData() {
-        storage.fetchPersonalData()
-        storage.onPersonalDataFetchedSuccessfully = { [weak self] personalData in
-            self?.personalData = personalData
-            self?.personalDataCollectionView.updateUI(personalData)
-        }
-    }
-
-    func fetchPromo() {
-        storage.fetchPromo()
-        storage.onPromoFetchedSuccessfully = { [weak self] promo in
-            guard let self else { return }
-            DispatchQueue.main.async {
-                self.promoStackView.updateUI(promo)
-                self.stopSkeleton()
-            }
-        }
-    }
-
-    func getDataFromStorage() {
-        if let personalData = storage.getPersonalData() {
-            personalDataCollectionView.updateUI(personalData)
-        }
-        let promo = storage.getPromoFromStorage()
-        promoStackView.updateUI(promo)
-    }
-}
-
-// MARK: - Setup Actions
-private extension ProfileViewController {
-    func setupActions() {
-        setupHeaderViewActions()
-        setupSpecialOfferActions()
-    }
-
-    func setupHeaderViewActions() {
-        headerView.onDismissButtonTapped = { [weak self] in
-            self?.dismiss(animated: true)
-        }
-
-        headerView.onChatButtonTapped = { [weak self] in
-            self?.showChatAlert()
-        }
-
-        headerView.onProfileButtonTapped = { [weak self] in
-            self?.showPersonalVC()
-        }
-    }
-
-    func showChatAlert() {
-        router.navigate(to: .supportAlert)
-    }
-
-    func showPersonalVC() {
-        router.navigate(to: .personalData)
-    }
-
-    func setupSpecialOfferActions() {
-        promoStackView.onPromoSelected = { [weak self] specialOffer in
-            guard let self else { return }
-            router.navigate(to: .applySpecialOffer) { applyOfferVC in
-                guard let applyOfferVC = applyOfferVC as? ApplyOfferViewController else { print("We can't cast to ApplyOfferViewController"); return }
-                applyOfferVC.configureViewController(specialOffer)
-            }
-        }
-    }
-
 }
 
 // MARK: - Setup UI
@@ -192,6 +98,98 @@ private extension ProfileViewController {
             contentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
         ])
+    }
+}
+
+// MARK: - Supporting methods
+private extension ProfileViewController {
+    // Мы спрашиваем были ли ранее уже загружены данные и если нет, то загружаем, а если да - то просто забираем их с хранилища
+    func fetchDataFromServerOrGetDataFromStorage() {
+        let isDataLoaded = storage.isPersonalDataLoaded()
+        if !isDataLoaded {
+            showSkeleton()
+            fetchData()
+        } else {
+            getDataFromStorage()
+        }
+    }
+}
+
+// MARK: - Setup Actions
+private extension ProfileViewController {
+    func setupActions() {
+        setupHeaderViewActions()
+        setupSpecialOfferActions()
+    }
+
+    func setupHeaderViewActions() {
+        headerView.onDismissButtonTapped = { [weak self] in
+            self?.dismiss(animated: true)
+        }
+
+        headerView.onChatButtonTapped = { [weak self] in
+            self?.showChatAlert()
+        }
+
+        headerView.onProfileButtonTapped = { [weak self] in
+            self?.showPersonalVC()
+        }
+    }
+}
+
+// MARK: - Fetch Data
+private extension ProfileViewController {
+    func fetchData() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let self else { return }
+            fetchPersonalData()
+            fetchPromo()
+        }
+    }
+
+    func fetchPersonalData() {
+        storage.fetchPersonalData()
+        storage.onPersonalDataFetchedSuccessfully = { [weak self] personalData in
+            self?.personalData = personalData
+            self?.personalDataCollectionView.updateUI(personalData)
+        }
+    }
+
+    func fetchPromo() {
+        storage.fetchPromo()
+        storage.onPromoFetchedSuccessfully = { [weak self] promo in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                self.promoStackView.updateUI(promo)
+                self.stopSkeleton()
+            }
+        }
+    }
+
+    func getDataFromStorage() {
+        if let personalData = storage.getPersonalData() {
+            personalDataCollectionView.updateUI(personalData)
+        }
+        let promo = storage.getPromoFromStorage()
+        promoStackView.updateUI(promo)
+    }
+}
+
+// MARK: - Setup coordinator
+private extension ProfileViewController {
+    func showChatAlert() {
+        coordinator?.showChatAlert()
+    }
+
+    func showPersonalVC() {
+        coordinator?.showPersonalData()
+    }
+
+    func setupSpecialOfferActions() {
+        promoStackView.onPromoSelected = { [weak self] specialOffer in
+            guard let self else { return }
+            coordinator?.showApplySpecialOffer(specialOffer)
+        }
     }
 }
 

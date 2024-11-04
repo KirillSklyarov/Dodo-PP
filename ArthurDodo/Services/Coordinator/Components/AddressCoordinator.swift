@@ -1,11 +1,12 @@
 import UIKit
 
-final class AddressRouter {
+final class AddressCoordinator: Coordinator {
 
     // MARK: - Properties
     var storage: DataStorage
     var navigationController: UINavigationController
     var callback: ((UIViewController) -> Void)?
+    var parentCoordinator: MainCoordinator?
 
     // MARK: - Init
     init(storage: DataStorage, navigationController: UINavigationController) {
@@ -15,19 +16,19 @@ final class AddressRouter {
 }
 
 // MARK: - Public methods
-extension AddressRouter {
-    func goToAddressVC(router: AppRouter) {
-        let vc = AddressViewController(storage: storage, router: router)
+extension AddressCoordinator {
+    func start() {
+        let vc = AddressViewController(storage: storage)
+        vc.coordinator = self
         vc.modalPresentationStyle = .fullScreen
         navigationController.present(vc, animated: true)
     }
 
-    func goToEditAddressVC(callback: ((UIViewController) -> Void)?) {
+    func showEditAddressVC(_ address: Address) {
         let vc = EditAddressViewController()
         vc.modalPresentationStyle = .fullScreen
-        navigationController.visibleViewController?.present(vc, animated: true) {
-            callback?(vc)
-        }
+        navigationController.visibleViewController?.present(vc, animated: true)
+        vc.getAddressToEdit(address)
     }
 
     func goToAddNewAddress(callback: ((UIViewController) -> Void)?) {

@@ -32,17 +32,26 @@ final class DeliveryVC: UIViewController {
     private var preferredPaymentMethod: PaymentMethod = .cbp
 
     private let storage: DataStorage
-    private let router: AppRouter
+    weak var coordinator: CartCoordinator?
 
     // MARK: - Init
-    init(storage: DataStorage, router: AppRouter) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func updateUI(_ paymentMethod: PaymentMethod) {
+        paymentTableView.updateUI(with: paymentMethod)
+        payButton.updateUI(with: paymentMethod)
+    }
+
+    func updateAddress(_ addressName: String) {
+        addressTableView.updateUI(with: addressName)
+        storage.setNewMainAddress(addressName)
     }
 
     // MARK: - Life cycle
@@ -203,35 +212,21 @@ private extension DeliveryVC {
     func setupAddressTableViewAction() {
         addressTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            router.navigate(to: .paymentChooseAddress) { vc in
-                guard let vc = vc as? ChooseAddressVC else {
-                    print("Can't cast to ChooseAddressVC"); return }
-                vc.onAddressCellTapped = { addressName in
-                    self.addressTableView.updateUI(with: addressName)
-                    self.storage.setNewMainAddress(addressName)
-                }
-            }
+            coordinator?.showChooseAddress()
         }
     }
 
     func setupPaymentTableView() {
         paymentTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            router.navigate(to: .choosePaymentMethod) { vc in
-                guard let vc = vc as? ChoosePaymentMethodVC else {
-                    print("Can't cast to ChoosePaymentMethodVC"); return }
-                vc.onPaymentMethodSelected = { paymentMethod in
-                    self.paymentTableView.updateUI(with: paymentMethod)
-                    self.payButton.updateUI(with: paymentMethod)
-                }
-            }
+            coordinator?.showChoosePaymentMethodVC()
         }
     }
 
     func setupPayButtonActions() {
         payButton.onPayButtonTapped = { [weak self] in
             guard let self else { return }
-            router.navigate(to: .final)
+            coordinator?.showFinalVC()
         }
     }
 }

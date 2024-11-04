@@ -17,12 +17,11 @@ final class MainViewController: UIViewController {
     private var isDataLoaded: Bool = false
 
     private let storage: DataStorage
-    private let router: AppRouter
+    weak var coordinator: MainCoordinator?
 
     // MARK: - Init
-    init(storage: DataStorage, router: AppRouter) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -44,6 +43,17 @@ final class MainViewController: UIViewController {
         cartButton.updateCart()
 
         if !isDataLoaded { showSkeleton() }
+    }
+}
+
+// MARK: - Public methods
+extension MainViewController {
+    func updateCart() {
+        cartButton.updateCart()
+    }
+
+    func updateUI() {
+        contentCollectionView.reloadData()
     }
 }
 
@@ -109,61 +119,37 @@ private extension MainViewController {
         }
     }
 
-    func showProfileVC() {
-        router.navigate(to: .profile)
-    }
-
-    func sendSelectedItemToStorage(_ item: Item) {
-        storage.sendSelectedItemToStorage(item)
-    }
-
-    func showProductDetail() {
-        router.navigate(to: .productDetails) { [weak self] productDetailVC in
-            guard let productDetailVC = productDetailVC as? ProductDetailsViewController else {
-                print("Can't cast view controller to ProductDetailsViewController")
-                return
-            }
-
-            productDetailVC.onCartButtonTapped = { [weak self] in
-                guard let self else { print("Self is nil, can't set price"); return }
-                cartButton.updateCart()
-            }
-        }
-    }
-
-    func showStoriesVC(_ indexPath: IndexPath) {
-        router.navigate(to: .stories) { [weak self] storiesVC in
-            guard let storiesVC = storiesVC as? StoriesVC else {
-                print("Can't cast view controller to StoriesViewController")
-                return
-            }
-            storiesVC.showStories(indexPath)
-
-            storiesVC.onStoriesVCDismissed = { [weak self] in
-                self?.contentCollectionView.reloadData()
-            }
-        }
-    }
-
-    func showAddressVC() {
-        router.navigate(to: .address)
-    }
-
     func setupCartButtonActions() {
         cartButton.onButtonTapped = { [weak self] in
             self?.showCartVC()
         }
     }
 
+    func sendSelectedItemToStorage(_ item: Item) {
+        storage.sendSelectedItemToStorage(item)
+    }
+}
+
+// MARK: - Setup navigation
+private extension MainViewController {
+    func showProfileVC() {
+        coordinator?.showProfile()
+    }
+
+    func showProductDetail() {
+        coordinator?.showProductDetails()
+    }
+
+    func showStoriesVC(_ indexPath: IndexPath) {
+        coordinator?.showStories(indexPath)
+    }
+
+    func showAddressVC() {
+        coordinator?.showAddress()
+    }
+
     func showCartVC() {
-        router.navigate(to: .cart) { [weak self] cartVC in
-            guard let self else { return }
-            guard let cartVC = cartVC as? CartViewController else {
-                print("Can't cast view controller to CartViewController"); return }
-            cartVC.onCartVCDismissed = {
-                self.cartButton.updateCart()
-            }
-        }
+        coordinator?.showCart()
     }
 }
 
