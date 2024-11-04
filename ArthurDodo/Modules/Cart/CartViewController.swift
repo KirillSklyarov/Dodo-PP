@@ -19,8 +19,8 @@ final class CartViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties
-    private let storage = DataStorage.shared
-    private lazy var router = Router(baseVC: self)
+    private var storage: DataStorage
+    private var router: AppRouter
 
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
@@ -31,6 +31,16 @@ final class CartViewController: UIViewController {
 
     var onCartVCDismissed: (() -> Void)?
 
+    init(storage: DataStorage, router: AppRouter, order: [Order]? = nil, onCartVCDismissed: ( () -> Void)? = nil) {
+        self.storage = storage
+        self.router = router
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -142,6 +152,7 @@ private extension CartViewController {
     func setupCartButtonAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
+            print(#function)
             router.navigate(to: .delivery)
         }
     }
@@ -160,7 +171,6 @@ private extension CartViewController {
 
     func setupNavigationBar() {
         navigationController?.isNavigationBarHidden = false
-
         navigationController?.navigationBar.barTintColor = AppColors.backgroundGray
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationItem.title = "Корзина"

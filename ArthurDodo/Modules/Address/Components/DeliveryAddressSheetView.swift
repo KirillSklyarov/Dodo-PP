@@ -52,7 +52,19 @@ final class DeliveryAddressSheetView: UIViewController {
         return stack
     }()
 
-    private lazy var router = Router(baseVC: self)
+    private let storage: DataStorage
+    private let router: AppRouter
+
+    // MARK: - Init
+    init(storage: DataStorage, router: AppRouter) {
+        self.storage = storage
+        self.router = router
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Life cycle
     override func viewDidLoad() {

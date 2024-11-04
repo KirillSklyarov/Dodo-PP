@@ -1,10 +1,3 @@
-//
-//  ProductDetailsViewController.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 19.09.2024.
-//
-
 import UIKit
 
 final class ProductDetailsViewController: UIViewController {
@@ -24,7 +17,7 @@ final class ProductDetailsViewController: UIViewController {
 
     // MARK: - Other Properties
     private let storage: DataStorage
-    private var router: Router?
+    private var router: AppRouter
 
     private var item: Item?
     private var order: Order?
@@ -32,10 +25,10 @@ final class ProductDetailsViewController: UIViewController {
     var onCartButtonTapped: ( () -> Void )?
 
     // MARK: - Init
-    init(storage: DataStorage = DataStorage.shared) {
+    init(storage: DataStorage, router: AppRouter) {
         self.storage = storage
+        self.router = router
         super.init(nibName: nil, bundle: nil)
-        self.router = Router(baseVC: self)
     }
 
     required init?(coder: NSCoder) {
@@ -204,7 +197,7 @@ private extension ProductDetailsViewController {
             guard let self else { print("Self is nil"); return }
             guard let popupVC = popupVC as? CpfcPopupView else {
                 print("No popupVC"); return }
-            router?.navigate(to: .cpfcPopup, popUpView: popupVC)
+            router.navigate(to: .cpfcPopup, popUpView: popupVC)
         }
     }
 }

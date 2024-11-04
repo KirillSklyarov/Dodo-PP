@@ -24,9 +24,20 @@ final class ProfileViewController: UIViewController {
     private var personalData: Personal?
     private var isDataLoaded: Bool = false
 
-    private let storage = DataStorage.shared
-    private lazy var router = Router(baseVC: self)
+    private let storage: DataStorage
+    private let router: AppRouter
 
+    // MARK: - Init
+    init(storage: DataStorage, router: AppRouter) {
+        self.storage = storage
+        self.router = router
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,7 +126,7 @@ private extension ProfileViewController {
     }
 
     func showChatAlert() {
-        router.navigate(to: .supportAlert, animated: false)
+        router.navigate(to: .supportAlert)
     }
 
     func showPersonalVC() {
@@ -125,7 +136,6 @@ private extension ProfileViewController {
     func setupSpecialOfferActions() {
         promoStackView.onPromoSelected = { [weak self] specialOffer in
             guard let self else { return }
-            
             router.navigate(to: .applySpecialOffer) { applyOfferVC in
                 guard let applyOfferVC = applyOfferVC as? ApplyOfferViewController else { print("We can't cast to ApplyOfferViewController"); return }
                 applyOfferVC.configureViewController(specialOffer)

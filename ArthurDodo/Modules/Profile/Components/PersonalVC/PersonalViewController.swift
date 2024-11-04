@@ -1,10 +1,3 @@
-//
-//  PersonalViewController.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 11.10.2024.
-//
-
 import UIKit
 import SafariServices
 

@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		73159A742CCC20F9002CFB76 /* DeliveryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73159A732CCC20F9002CFB76 /* DeliveryVC.swift */; };
+		731C4F712CD905560088CF51 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731C4F702CD905560088CF51 /* ProfileRouter.swift */; };
+		731C4F752CD90CCC0088CF51 /* CartRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731C4F742CD90CCC0088CF51 /* CartRouter.swift */; };
+		731C4F772CD911720088CF51 /* AddressRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731C4F762CD911720088CF51 /* AddressRouter.swift */; };
+		731C4F792CD912EE0088CF51 /* MainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731C4F782CD912EE0088CF51 /* MainRouter.swift */; };
 		732309E42CD2C18100062C8C /* FinalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732309E32CD2C18100062C8C /* FinalVC.swift */; };
 		73238EF92CD219C8006F3A92 /* PaymentAddressesTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73238EF82CD219C8006F3A92 /* PaymentAddressesTableView.swift */; };
 		73238EFB2CD219FF006F3A92 /* PaymentMethodsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73238EFA2CD219FF006F3A92 /* PaymentMethodsTableViewCell.swift */; };
@@ -139,7 +143,7 @@
 		73B969DA2CC7C7C000A2415A /* UserDefaults+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969D52CC7C7C000A2415A /* UserDefaults+Ext.swift */; };
 		73B969DE2CC7C7C500A2415A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969DB2CC7C7C500A2415A /* AppDelegate.swift */; };
 		73B969DF2CC7C7C500A2415A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969DC2CC7C7C500A2415A /* SceneDelegate.swift */; };
-		73D0FAAD2CCA3FA90009AEE5 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D0FAAC2CCA3FA90009AEE5 /* Router.swift */; };
+		73D0FAAD2CCA3FA90009AEE5 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D0FAAC2CCA3FA90009AEE5 /* AppRouter.swift */; };
 		73D6DD312CD4270A0059EEA6 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = 73D6DD302CD4270A0059EEA6 /* SkeletonView */; };
 		73E6EB3F2CC8D99C006831F2 /* PriceGrayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB3E2CC8D99C006831F2 /* PriceGrayButton.swift */; };
 		73E6EB422CC92FC5006831F2 /* CpfcPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB412CC92FC5006831F2 /* CpfcPopupView.swift */; };
@@ -153,6 +157,10 @@
 
 /* Begin PBXFileReference section */
 		73159A732CCC20F9002CFB76 /* DeliveryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryVC.swift; sourceTree = "<group>"; };
+		731C4F702CD905560088CF51 /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
+		731C4F742CD90CCC0088CF51 /* CartRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartRouter.swift; sourceTree = "<group>"; };
+		731C4F762CD911720088CF51 /* AddressRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressRouter.swift; sourceTree = "<group>"; };
+		731C4F782CD912EE0088CF51 /* MainRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRouter.swift; sourceTree = "<group>"; };
 		732309E32CD2C18100062C8C /* FinalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalVC.swift; sourceTree = "<group>"; };
 		73238EF82CD219C8006F3A92 /* PaymentAddressesTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentAddressesTableView.swift; sourceTree = "<group>"; };
 		73238EFA2CD219FF006F3A92 /* PaymentMethodsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodsTableViewCell.swift; sourceTree = "<group>"; };
@@ -286,7 +294,7 @@
 		73B969D52CC7C7C000A2415A /* UserDefaults+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Ext.swift"; sourceTree = "<group>"; };
 		73B969DB2CC7C7C500A2415A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		73B969DC2CC7C7C500A2415A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		73D0FAAC2CCA3FA90009AEE5 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		73D0FAAC2CCA3FA90009AEE5 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		73E6EB3E2CC8D99C006831F2 /* PriceGrayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceGrayButton.swift; sourceTree = "<group>"; };
 		73E6EB412CC92FC5006831F2 /* CpfcPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CpfcPopupView.swift; sourceTree = "<group>"; };
 		73E6EB432CC948F2006831F2 /* CustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableView.swift; sourceTree = "<group>"; };
@@ -318,6 +326,17 @@
 				736F04532CD17A5A00BC59CA /* ChoosePaymentMethod */,
 			);
 			path = Delivery;
+			sourceTree = "<group>";
+		};
+		731C4F732CD90CBF0088CF51 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				731C4F782CD912EE0088CF51 /* MainRouter.swift */,
+				731C4F762CD911720088CF51 /* AddressRouter.swift */,
+				731C4F702CD905560088CF51 /* ProfileRouter.swift */,
+				731C4F742CD90CCC0088CF51 /* CartRouter.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		732309E22CD2C15D00062C8C /* Final */ = {
@@ -995,7 +1014,8 @@
 		73D0FAAB2CCA3F960009AEE5 /* Router */ = {
 			isa = PBXGroup;
 			children = (
-				73D0FAAC2CCA3FA90009AEE5 /* Router.swift */,
+				73D0FAAC2CCA3FA90009AEE5 /* AppRouter.swift */,
+				731C4F732CD90CBF0088CF51 /* Components */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -1165,10 +1185,11 @@
 				73B969872CC7C78700A2415A /* CustomStepperView.swift in Sources */,
 				73B969DE2CC7C7C500A2415A /* AppDelegate.swift in Sources */,
 				73B969DF2CC7C7C500A2415A /* SceneDelegate.swift in Sources */,
-				73D0FAAD2CCA3FA90009AEE5 /* Router.swift in Sources */,
+				73D0FAAD2CCA3FA90009AEE5 /* AppRouter.swift in Sources */,
 				73B969882CC7C78700A2415A /* HeaderUIView.swift in Sources */,
 				732309E42CD2C18100062C8C /* FinalVC.swift in Sources */,
 				73B969892CC7C78700A2415A /* SegmentControl.swift in Sources */,
+				731C4F772CD911720088CF51 /* AddressRouter.swift in Sources */,
 				73B9698A2CC7C78700A2415A /* EditAddressStackView.swift in Sources */,
 				73B9698B2CC7C78700A2415A /* EditAddressTextFieldView.swift in Sources */,
 				73B9698C2CC7C78700A2415A /* EditAddressView.swift in Sources */,
@@ -1202,6 +1223,7 @@
 				73B969A42CC7C78700A2415A /* CoinsOrdersCollectionView.swift in Sources */,
 				73B969A52CC7C78700A2415A /* CoinsOrdersCollectionViewCell.swift in Sources */,
 				73B969A62CC7C78700A2415A /* ActionSheetButton.swift in Sources */,
+				731C4F792CD912EE0088CF51 /* MainRouter.swift in Sources */,
 				73B969A72CC7C78700A2415A /* CustomActionSheet.swift in Sources */,
 				73B969A82CC7C78700A2415A /* MissionStackView.swift in Sources */,
 				73B969A92CC7C78700A2415A /* LegalSectionTableViewCell.swift in Sources */,
@@ -1210,6 +1232,8 @@
 				736B0D182CCD811E00975195 /* TimeCollectionViewCell.swift in Sources */,
 				736B0D192CCD811E00975195 /* TimeInterval.swift in Sources */,
 				736B0D1A2CCD811E00975195 /* DeliveryTableView.swift in Sources */,
+				731C4F712CD905560088CF51 /* ProfileRouter.swift in Sources */,
+				731C4F752CD90CCC0088CF51 /* CartRouter.swift in Sources */,
 				736B0D1B2CCD811E00975195 /* DeliveryTableViewCell.swift in Sources */,
 				736B0D1C2CCD811E00975195 /* OrderDetailsView.swift in Sources */,
 				736B0D1D2CCD811E00975195 /* OrderTotalPriceView.swift in Sources */,

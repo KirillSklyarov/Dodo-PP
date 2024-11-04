@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 17.09.2024.
-//
-
 import UIKit
 
 @main

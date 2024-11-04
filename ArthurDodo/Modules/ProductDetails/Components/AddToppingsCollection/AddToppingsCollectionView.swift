@@ -1,10 +1,3 @@
-//
-//  AddToppingsCollectionView.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 20.09.2024.
-//
-
 import UIKit
 
 final class AddToppingsCollectionView: UICollectionView {

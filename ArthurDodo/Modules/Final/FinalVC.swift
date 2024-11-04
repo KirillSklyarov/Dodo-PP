@@ -12,8 +12,19 @@ final class FinalVC: UIViewController {
     private var countDownTimer: Timer?
     private var dismissDelay = 5
 
-    private lazy var router = Router(baseVC: self)
-    private let storage = DataStorage.shared
+    private let storage: DataStorage
+    private let router: AppRouter
+
+    // MARK: - Init
+    init(storage: DataStorage, router: AppRouter) {
+        self.storage = storage
+        self.router = router
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Init
     override func viewDidLoad() {
@@ -21,6 +32,44 @@ final class FinalVC: UIViewController {
         setupUI()
         setupActions()
         setupTimer()
+    }
+}
+
+// MARK: - Setup UI
+private extension FinalVC {
+    func setupUI() {
+        view.backgroundColor = AppColors.backgroundBlack
+        view.addSubviews(contentStack)
+
+        setupNavigationBar()
+        setupLayout()
+    }
+
+    func setupNavigationBar() {
+        let dismissButton = UIBarButtonItem(customView: dismissButton)
+        navigationItem.leftBarButtonItem = dismissButton
+    }
+
+    func setupLayout() {
+        setupContentStackLayout()
+    }
+
+    func setupContentStackLayout() {
+        NSLayoutConstraint.activate([
+            contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
+            contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
+            contentStack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+}
+
+// MARK: - Setup Actions
+private extension FinalVC {
+    func setupActions() {
+        dismissButton.onDismissButtonTapped = { [weak self] in
+            guard let self else { return }
+            dismissVC()
+        }
     }
 }
 
@@ -58,49 +107,5 @@ private extension FinalVC {
 
     func updateTitle(_ seconds: Int) {
         contentStack.updateTitle(seconds)
-    }
-}
-
-// MARK: - Setup Actions
-private extension FinalVC {
-    func setupActions() {
-        dismissButton.onDismissButtonTapped = { [weak self] in
-            guard let self else { return }
-            dismissVC()
-        }
-    }
-}
-
-// MARK: - Setup UI
-private extension FinalVC {
-    func setupUI() {
-        view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(contentStack)
-
-        setupNavigationBar()
-        setupLayout()
-    }
-
-    func setupNavigationBar() {
-        let dismissButton = UIBarButtonItem(customView: dismissButton)
-        navigationItem.leftBarButtonItem = dismissButton
-        navigationItem.leftBarButtonItem?.target = self
-        navigationItem.leftBarButtonItem?.action = #selector(dismissButtonTapped)
-    }
-
-    @objc private func dismissButtonTapped() {
-        dismissVC()
-    }
-
-    func setupLayout() {
-        setupContentStackLayout()
-    }
-
-    func setupContentStackLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-            contentStack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
     }
 }

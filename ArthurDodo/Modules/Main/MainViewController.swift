@@ -14,15 +14,16 @@ final class MainViewController: UIViewController {
     private let leftInset: CGFloat = 20
     private let rightInset: CGFloat = -20
 
-    private let storage: DataStorage
-    private var router: Router?
     private var isDataLoaded: Bool = false
 
+    private let storage: DataStorage
+    private let router: AppRouter
+
     // MARK: - Init
-    init(storage: DataStorage = DataStorage.shared) {
+    init(storage: DataStorage, router: AppRouter) {
         self.storage = storage
+        self.router = router
         super.init(nibName: nil, bundle: nil)
-        self.router = Router(baseVC: self)
     }
 
     required init?(coder: NSCoder) {
@@ -109,7 +110,7 @@ private extension MainViewController {
     }
 
     func showProfileVC() {
-        router?.navigate(to: .profile)
+        router.navigate(to: .profile)
     }
 
     func sendSelectedItemToStorage(_ item: Item) {
@@ -117,7 +118,7 @@ private extension MainViewController {
     }
 
     func showProductDetail() {
-        router?.navigate(to: .productDetails) { [weak self] productDetailVC in
+        router.navigate(to: .productDetails) { [weak self] productDetailVC in
             guard let productDetailVC = productDetailVC as? ProductDetailsViewController else {
                 print("Can't cast view controller to ProductDetailsViewController")
                 return
@@ -131,7 +132,7 @@ private extension MainViewController {
     }
 
     func showStoriesVC(_ indexPath: IndexPath) {
-        router?.navigate(to: .stories) { [weak self] storiesVC in
+        router.navigate(to: .stories) { [weak self] storiesVC in
             guard let storiesVC = storiesVC as? StoriesVC else {
                 print("Can't cast view controller to StoriesViewController")
                 return
@@ -145,7 +146,7 @@ private extension MainViewController {
     }
 
     func showAddressVC() {
-        router?.navigate(to: .address)
+        router.navigate(to: .address)
     }
 
     func setupCartButtonActions() {
@@ -155,7 +156,7 @@ private extension MainViewController {
     }
 
     func showCartVC() {
-        router?.navigate(to: .cart) { [weak self] cartVC in
+        router.navigate(to: .cart) { [weak self] cartVC in
             guard let self else { return }
             guard let cartVC = cartVC as? CartViewController else {
                 print("Can't cast view controller to CartViewController"); return }

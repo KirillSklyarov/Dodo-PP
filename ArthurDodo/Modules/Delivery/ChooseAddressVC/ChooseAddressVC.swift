@@ -10,10 +10,21 @@ final class ChooseAddressVC: UIViewController {
     private let rightInset: CGFloat = -10
     private let bottomInset: CGFloat = -10
 
-    private let storage = DataStorage.shared
-    private lazy var router = Router(baseVC: self)
-
     var onAddressCellTapped: ((String) -> Void)?
+
+    private let storage: DataStorage
+    private let router: AppRouter
+
+    // MARK: - Init
+    init(storage: DataStorage, router: AppRouter) {
+        self.storage = storage
+        self.router = router
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Init
     override func viewDidLoad() {
@@ -103,31 +114,5 @@ private extension ChooseAddressVC {
 
     @objc func dismissButtonTapped() {
         dismiss(animated: true)
-    }
-}
-
-//MARK: - SwiftUI
-import SwiftUI
-struct ProviderChooseAddressVC : PreviewProvider {
-    static var previews: some View {
-        ContainterView().edgesIgnoringSafeArea(.all)
-    }
-
-    struct ContainterView: UIViewControllerRepresentable {
-        func makeUIViewController(context: Context) -> UIViewController {
-            return ChooseAddressVC()
-        }
-
-        typealias UIViewControllerType = UIViewController
-
-
-        let viewController = ChooseAddressVC()
-        func makeUIViewController(context: UIViewControllerRepresentableContext<ProviderChooseAddressVC.ContainterView>) -> ChooseAddressVC {
-            return viewController
-        }
-
-        func updateUIViewController(_ uiViewController: ProviderChooseAddressVC.ContainterView.UIViewControllerType, context: UIViewControllerRepresentableContext<ProviderChooseAddressVC.ContainterView>) {
-
-        }
     }
 }

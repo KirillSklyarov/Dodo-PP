@@ -31,8 +31,19 @@ final class DeliveryVC: UIViewController {
 
     private var preferredPaymentMethod: PaymentMethod = .cbp
 
-    private let storage = DataStorage.shared
-    private lazy var router = Router(baseVC: self)
+    private let storage: DataStorage
+    private let router: AppRouter
+
+    // MARK: - Init
+    init(storage: DataStorage, router: AppRouter) {
+        self.storage = storage
+        self.router = router
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -231,31 +242,5 @@ private extension DeliveryVC {
     func getMainAddressName(from addresses: [Address]) -> String {
         let mainAddressName = addresses.filter { $0.isMain == true }.first?.name ?? ""
         return mainAddressName
-    }
-}
-
-//MARK: - SwiftUI
-import SwiftUI
-struct ProviderDelivery: PreviewProvider {
-    static var previews: some View {
-        ContainterView().edgesIgnoringSafeArea(.all)
-    }
-
-    struct ContainterView: UIViewControllerRepresentable {
-        func makeUIViewController(context: Context) -> UIViewController {
-            return DeliveryVC()
-        }
-
-        typealias UIViewControllerType = UIViewController
-
-
-        let viewController = DeliveryVC()
-        func makeUIViewController(context: UIViewControllerRepresentableContext<ProviderDelivery.ContainterView>) -> DeliveryVC {
-            return viewController
-        }
-
-        func updateUIViewController(_ uiViewController: ProviderDelivery.ContainterView.UIViewControllerType, context: UIViewControllerRepresentableContext<ProviderDelivery.ContainterView>) {
-
-        }
     }
 }
