@@ -18,6 +18,9 @@ final class ProfileViewController: UIViewController {
 
     // MARK: - Other Properties
     private let topInset: CGFloat = 10
+    private let leftInset: CGFloat = 10
+    private let rightInset: CGFloat = -10
+
     private var personalData: Personal?
     private var isDataLoaded: Bool = false
 
@@ -149,8 +152,17 @@ private extension ProfileViewController {
     }
 
     func setupLayout() {
+        setupHeaderViewLayout()
         setupScrollViewLayout()
         setupContentStackViewLayout()
+    }
+
+    func setupHeaderViewLayout() {
+        NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
+        ])
     }
 
     func setupScrollViewLayout() {

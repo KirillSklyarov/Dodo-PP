@@ -84,6 +84,12 @@ private extension FinalVC {
     func setupNavigationBar() {
         let dismissButton = UIBarButtonItem(customView: dismissButton)
         navigationItem.leftBarButtonItem = dismissButton
+        navigationItem.leftBarButtonItem?.target = self
+        navigationItem.leftBarButtonItem?.action = #selector(dismissButtonTapped)
+    }
+
+    @objc private func dismissButtonTapped() {
+        dismissVC()
     }
 
     func setupLayout() {
