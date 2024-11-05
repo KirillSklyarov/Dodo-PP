@@ -1,17 +1,12 @@
-//
-//  DismissProductView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 02.10.2024.
-//
-
 import UIKit
 
 final class DismissButtonView: UIView {
 
+    // MARK: - Properties&Callbacks
     private let viewSize: CGFloat = 40
     var onDismissButtonTapped: (() -> Void)?
 
+    // MARK: - UI Properties
     private lazy var dismissButton: UIButton = {
         let button = UIButton()
         let image = UIImage(systemName: "xmark")?.withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -20,9 +15,10 @@ final class DismissButtonView: UIView {
         return button
     }()
 
+    // MARK: - Init
     init(frame: CGRect = .zero, xColor: UIColor = .white, backgroundColor: UIColor = AppColors.backgroundGray, isChevron: Bool = false) {
         super.init(frame: frame)
-        configUI()
+        setupUI()
         setColors(xColor: xColor, backgroundColor: backgroundColor)
         if isChevron { setChevron() }
     }
@@ -30,24 +26,18 @@ final class DismissButtonView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    private func setColors(xColor: UIColor, backgroundColor: UIColor) {
-        let image = UIImage(systemName: "xmark")?.withTintColor(xColor, renderingMode: .alwaysOriginal)
-        dismissButton.setImage(image, for: .normal)
-        self.backgroundColor = backgroundColor
-    }
-
-    private func setChevron() {
-        let image = UIImage(systemName: "chevron.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        dismissButton.setImage(image, for: .normal)
-    }
-
-    // MARK: - IB Actions
-    @objc private func closeButtonTapped() {
+// MARK: - Setup actions
+private extension DismissButtonView {
+    @objc func closeButtonTapped() {
         onDismissButtonTapped?()
     }
+}
 
-    private func configUI() {
+// MARK: - Setup UI
+private extension DismissButtonView {
+    func setupUI() {
         backgroundColor = .darkGray.withAlphaComponent(0.4)
 
         heightAnchor.constraint(equalToConstant: viewSize).isActive = true
@@ -61,7 +51,7 @@ final class DismissButtonView: UIView {
         setupLayout()
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         NSLayoutConstraint.activate([
             dismissButton.topAnchor.constraint(equalTo: topAnchor),
             dismissButton.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -70,3 +60,18 @@ final class DismissButtonView: UIView {
         ])
     }
 }
+
+// MARK: - Supporting methods
+private extension DismissButtonView {
+    func setColors(xColor: UIColor, backgroundColor: UIColor) {
+        let image = UIImage(systemName: "xmark")?.withTintColor(xColor, renderingMode: .alwaysOriginal)
+        dismissButton.setImage(image, for: .normal)
+        self.backgroundColor = backgroundColor
+    }
+
+    func setChevron() {
+        let image = UIImage(systemName: "chevron.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        dismissButton.setImage(image, for: .normal)
+    }
+}
+

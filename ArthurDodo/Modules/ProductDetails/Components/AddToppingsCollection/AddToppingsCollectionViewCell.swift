@@ -1,18 +1,13 @@
-//
-//  AddToppingsCollectionViewCell.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 20.09.2024.
-//
-
 import UIKit
 
 final class AddToppingsCollectionViewCell: UICollectionViewCell {
 
+    // MARK: - Properties
     static let identifier: String = "AddToppingsCollectionViewCell"
-
     private let imageSize: CGFloat = 60
+    private let cornerRadius: CGFloat = 10
 
+    // MARK: - UI Properties
     private lazy var toppingImageView: UIImageView = {
         let imageView = UIImageView()
         let image = UIImage(named: "tomato")
@@ -21,7 +16,6 @@ final class AddToppingsCollectionViewCell: UICollectionViewCell {
         imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
         return imageView
     }()
-
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "cheese"
@@ -31,7 +25,6 @@ final class AddToppingsCollectionViewCell: UICollectionViewCell {
         label.textColor = .white
         return label
     }()
-
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
         label.text = "100 ₽"
@@ -41,7 +34,6 @@ final class AddToppingsCollectionViewCell: UICollectionViewCell {
         label.textColor = .white
         return label
     }()
-
     private lazy var chosenImageView: UIImageView = {
         let imageView = UIImageView()
         let image = UIImage(systemName: "checkmark.circle.fill")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
@@ -49,14 +41,31 @@ final class AddToppingsCollectionViewCell: UICollectionViewCell {
         imageView.isHidden = true
         return imageView
     }()
+    private lazy var contentStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [toppingImageView, titleLabel, priceLabel])
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.distribution = .equalSpacing
+        return stack
+    }()
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupConstraints()
+        setupUI()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - Public methods
+extension AddToppingsCollectionViewCell {
+    func configCell(_ topping: Topping) {
+        toppingImageView.image = UIImage(named: topping.imageName)
+        titleLabel.text = topping.name.rawValue
+        priceLabel.text = "\(topping.price) ₽"
     }
 
     func chooseTopping() {
@@ -73,33 +82,28 @@ final class AddToppingsCollectionViewCell: UICollectionViewCell {
         let price = priceLabel.text?.components(separatedBy: " ").first ?? "0"
         return Int(String(price)) ?? 0
     }
+}
 
-    private func setupConstraints() {
-        layer.cornerRadius = 10
+// MARK: - Setup UI
+private extension AddToppingsCollectionViewCell {
+    func setupUI() {
+        layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
 
-        let stack = UIStackView(arrangedSubviews: [toppingImageView, titleLabel, priceLabel])
-        stack.axis = .vertical
-        stack.alignment = .center
-        stack.distribution = .equalSpacing
+        contentView.addSubviews(contentStack, chosenImageView)
 
-        contentView.addSubviews(stack, chosenImageView)
+        setupLayout()
+    }
 
+    func setupLayout() {
         NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            stack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor),
+            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             chosenImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             chosenImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
         ])
     }
-
-    func configCell(_ topping: Topping) {
-        toppingImageView.image = UIImage(named: topping.imageName)
-        titleLabel.text = topping.name.rawValue
-        priceLabel.text = "\(topping.price) ₽"
-    }
 }
-

@@ -1,10 +1,3 @@
-//
-//  DodoCoinsView.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 26.09.2024.
-//
-
 import UIKit
 
 final class DodoCoinsView: UIView {
@@ -34,18 +27,18 @@ final class DodoCoinsView: UIView {
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configUI()
+        setupUI()
     }
 
     init(frame: CGRect = .zero, textColor: UIColor = .white) {
         super.init(frame: frame)
-        configUI()
+        setupUI()
         setTextColor(textColor)
     }
 
     init(frame: CGRect = .zero, title: String, value: String, textColor: UIColor = .white) {
         super.init(frame: frame)
-        configUI()
+        setupUI()
         titleLabel.text = title
         valueLabel.text = value
         setTextColor(textColor)
@@ -70,7 +63,7 @@ extension DodoCoinsView {
 
 // MARK: - Setup UI
 private extension DodoCoinsView {
-     func configUI() {
+     func setupUI() {
         addSubviews(contentStack)
         setupLayout()
     }

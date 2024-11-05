@@ -120,7 +120,7 @@ private extension CartViewController {
         }
 
         orderStackView.onChangeItem = { [weak self] in
-//            self?.router.navigate(to: .productDetails)
+            self?.coordinator?.showProductDetails()
         }
     }
 
@@ -135,10 +135,7 @@ private extension CartViewController {
     func setupSpecialViewActions() {
         promoStackView.onPromoSelected = { [weak self] specialOffer in
             guard let self else { return }
-//            router.navigate(to: .applySpecialOffer) { applyOfferVC in
-//                guard let applyOfferVC = applyOfferVC as? ApplyOfferViewController else { print("We can't cast applyOfferVC"); return }
-//                applyOfferVC.configureViewController(specialOffer)
-//            }
+            coordinator?.showApplySpecialOffer(specialOffer)
         }
     }
 
@@ -154,8 +151,6 @@ private extension CartViewController {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
             coordinator?.showDelivery()
-            
-//            router.navigate(to: .delivery)
         }
     }
 }

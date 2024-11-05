@@ -39,7 +39,7 @@ extension MainCoordinator {
         let vc = ProductDetailsViewController(storage: storage)
         vc.coordinator = self
         vc.modalPresentationStyle = .fullScreen
-        navigationController.present(vc, animated: true)
+        navigationController.visibleViewController?.present(vc, animated: true)
 
         vc.onCartButtonTapped = { [weak self] in
             guard let self else { print("Self is nil, can't set price"); return }

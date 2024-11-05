@@ -1,10 +1,3 @@
-//
-//  Info&ToppingsView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 23.10.2024.
-//
-
 import UIKit
 
 final class InfoAndToppingsView: UIView {
@@ -30,6 +23,7 @@ final class InfoAndToppingsView: UIView {
     }
 }
 
+// MARK: - Public methods
 extension InfoAndToppingsView {
     func getCartView(_ cart: CartButtonView) {
         infoAndToppingsStack.getButtonView(cart)
@@ -52,6 +46,7 @@ extension InfoAndToppingsView {
     }
 }
 
+// MARK: - Setup actions
 private extension InfoAndToppingsView {
     func setupActions() {
         setupInfoButtonAction()

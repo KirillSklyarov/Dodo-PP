@@ -1,20 +1,12 @@
-//
-//  CustomSegmentControl.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 02.10.2024.
-//
-
 import UIKit
 
 final class CustomSegmentControl: UISegmentedControl {
 
     // MARK: - Properties&Callbacks
-    var onSegmentControllerValueChanged: ((Int) -> Void)?
-
-//    private let viewHeight: CGFloat = 40
-    private var leadingConstraint: NSLayoutConstraint?
     private lazy var selectedSegmentOval = UIView()
+
+    private var leadingConstraint: NSLayoutConstraint?
+    var onSegmentControllerValueChanged: ((Int) -> Void)?
 
     // MARK: - Init
     init(items: [Any]?, defaultSelection: Int) {

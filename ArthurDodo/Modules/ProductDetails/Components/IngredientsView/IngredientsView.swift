@@ -1,10 +1,3 @@
-//
-//  IngredientsView.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 21.09.2024.
-//
-
 import UIKit
 
 final class IngredientsView: UIView {

@@ -88,12 +88,16 @@ extension CartCoordinator {
         navigationController.visibleViewController?.present(vc, animated: true)
     }
 
-//    func showApplySpecialOffer(_ offer: Promo) {
-//        let vc = ApplyOfferViewController()
-//        guard let configureSheet = vc.sheetPresentationController else { return }
-//        configureSheet.detents = [.medium()]
-//        configureSheet.prefersGrabberVisible = true
-//        navigationController.visibleViewController?.present(vc, animated: true)
-//        vc.configureViewController(offer)
-//    }
+    func showProductDetails() {
+        parentCoordinator?.showProductDetails()
+    }
+
+    func showApplySpecialOffer(_ offer: Promo) {
+        let vc = ApplyOfferViewController()
+        guard let configureSheet = vc.sheetPresentationController else { return }
+        configureSheet.detents = [.medium()]
+        configureSheet.prefersGrabberVisible = true
+        navigationController.visibleViewController?.present(vc, animated: true)
+        vc.configureViewController(offer)
+    }
 }

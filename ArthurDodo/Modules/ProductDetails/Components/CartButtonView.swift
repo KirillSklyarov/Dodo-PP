@@ -1,10 +1,3 @@
-//
-//  ButtonViewFooter.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 22.09.2024.
-//
-
 import UIKit
 
 final class CartButtonView: UIView {

@@ -1,10 +1,3 @@
-//
-//  CartProductCell.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 24.09.2024.
-//
-
 import UIKit
 
 final class CartProductCell: UITableViewCell {
@@ -77,8 +70,10 @@ final class CartProductCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // MARK: - Public methods
+// MARK: - Public methods
+extension CartProductCell {
     func configureCell(itemInOrder: Order) {
         pizzaImageView.image = UIImage(named: itemInOrder.imageName)
         titleLabel.text = itemInOrder.itemName
