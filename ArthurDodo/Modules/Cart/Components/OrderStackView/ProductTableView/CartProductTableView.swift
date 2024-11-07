@@ -1,10 +1,3 @@
-//
-//  CartProductTableView.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 24.09.2024.
-//
-
 import UIKit
 
 final class CartProductTableView: AppTableView {
@@ -13,21 +6,18 @@ final class CartProductTableView: AppTableView {
     private let tableRowHeight: CGFloat = 160
     private var heightConstraint: NSLayoutConstraint?
 
-    private let dataStorage = DataStorage.shared
-
     var order: [Order] = []
     var onUpdateCart: ( (Int) -> Void )?
     var onCellTapped: ( (Item) -> Void )?
     var onEmptyCart: ( () -> Void )?
-    var onItemDeletedFromCart: ( () -> Void )?
-    var onCountChanged: ( () -> Void )?
+    var onItemDeletedFromCart: ( (IndexPath) -> Void )?
+    var onCountChanged: ( (IndexPath, Int) -> Void )?
     var onChangeItem: ( () -> Void )?
 
     // MARK: - Init
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         configTableView()
-        uploadOrder()
     }
 
     required init?(coder: NSCoder) {
@@ -37,10 +27,10 @@ final class CartProductTableView: AppTableView {
 
 // MARK: - Fetch data
 extension CartProductTableView {
-    func uploadOrder() {
-        order = dataStorage.getOrderFromStorage()
-        reloadData()
-        updateTableViewHeight()
+    // Получаем актуальный заказ от VC и обновляем UI
+    func uploadOrder(_ order: [Order]) {
+        self.order = order
+        checkIfCartIsEmpty()
     }
 }
 
@@ -91,9 +81,7 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
         }
 
         cell.onStepperValueChanged = { [weak self] value in
-            self?.dataStorage.increaseCountOfItem(indexPath, value)
-            self?.uploadOrder()
-            self?.onCountChanged?()
+            self?.onCountChanged?(indexPath, value)
         }
 
         return cell
@@ -108,19 +96,26 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
         return config
     }
 
-    // Удаляем с хранилища позицию заказа, обновляем таблицу
+    // Отправляем инфу, что удалили позицию
     private func removeItemFromStorage(_ indexPath: IndexPath) {
-        dataStorage.removeItemFromOrderStorage(indexPath)
-        uploadOrder()
-        dismissOrRefreshCart()
+        onItemDeletedFromCart?(indexPath)
     }
+}
 
-    // Здесь либо закрывается окно (если корзина пустая), либо удаляется позиция
-    private func dismissOrRefreshCart() {
+// MARK: - Supporting methods
+private extension CartProductTableView {
+    // Запускаем информацию о закрытии окна, если заказов нет или обновляем UI если заказы есть
+    func checkIfCartIsEmpty() {
         if order.isEmpty {
             onEmptyCart?()
         } else {
-            onItemDeletedFromCart?()
+            updateUI()
         }
+    }
+
+    // Обновляем UI
+    func updateUI() {
+        reloadData()
+        updateTableViewHeight()
     }
 }

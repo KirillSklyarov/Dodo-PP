@@ -17,16 +17,18 @@ final class ProductDetailsViewController: UIViewController {
 
     // MARK: - Other Properties
     private let storage: DataStorage
-    weak var coordinator: MainCoordinator?
+    private let router: Router
 
     private var item: Item?
     private var order: Order?
+    private var toppings: [Topping] = []
 
     var onCartButtonTapped: ( () -> Void )?
 
     // MARK: - Init
-    init(storage: DataStorage) {
+    init(storage: DataStorage, router: Router) {
         self.storage = storage
+        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -39,7 +41,7 @@ final class ProductDetailsViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        fetchSelectedItem()
+        fetchData()
         setupSwipe()
     }
 }
@@ -131,7 +133,7 @@ private extension ProductDetailsViewController {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
             guard let orderPosition = configureOrder() else { return }
-            storage.addOrderPositionToOrder(orderPosition)
+            storage.addItemToOrder(orderPosition)
             onCartButtonTapped?()
             dismiss(animated: true)
         }
@@ -186,6 +188,7 @@ private extension ProductDetailsViewController {
 
     func updateUIWithChosenSize(_ index: Int) {
         guard let productDetails = item?.itemSize.getWeightAndPriceViaIndex(index) else {print("We have some problems here"); return }
+        print("productDetails \(productDetails)")
         infoAndToppingsContainer.updateUI(productDetails: productDetails)
         let price = productDetails.price
         cartButtonView.updatePrice(price)
@@ -196,18 +199,56 @@ private extension ProductDetailsViewController {
             guard let self else { print("Self is nil"); return }
             guard let popupVC = popupVC as? CpfcPopupView else {
                 print("No popupVC"); return }
-            coordinator?.showPopUpView(popupVC)
+            router.showPopUpView(popupVC)
         }
     }
 }
 
 // MARK: - Fetch Data
 private extension ProductDetailsViewController {
+    func fetchData() {
+        fetchSelectedItem()
+        fetchToppings()
+    }
+
+    //
+//    func checkIfToppingsIsEmpty() {
+//        if toppings.isEmpty {
+//            fetchToppings()
+//        }
+//    }
+
     func fetchSelectedItem() {
         guard let item = storage.getSelectedItemFromStorage() else { print("No item selected"); return }
         self.item = item
-        infoAndToppingsContainer.getItem(item)
+        passSelectedItemToView(item)
         updateUIWithSelectedItem()
+    }
+
+    func passSelectedItemToView(_ item: Item) {
+        infoAndToppingsContainer.getSelectedItem(item)
+    }
+
+    // Загружаем ВСЕ начинки
+    func fetchToppings() {
+        storage.fetchToppings()
+        storage.onToppingsFetchedSuccessfully = { [weak self] fetchedToppings in
+            guard let self else { return }
+            filterToppings(fetchedToppings)
+        }
+    }
+
+    // Отбираем только нужные нам начинки
+    func filterToppings(_ fetchedToppings: [Topping]) {
+        if let arrayOfToppings = item?.toppings {
+            toppings = fetchedToppings.filter { arrayOfToppings.contains($0.name) }
+            passToppingsToView()
+        }
+    }
+
+    // Отправляем данные о топпингов дальше ко вью
+    func passToppingsToView() {
+        infoAndToppingsContainer.passToppingsToView(toppings)
     }
 }
 

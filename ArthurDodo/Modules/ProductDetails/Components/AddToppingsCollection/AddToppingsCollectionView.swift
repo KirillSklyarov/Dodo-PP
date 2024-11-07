@@ -18,44 +18,28 @@ final class AddToppingsCollectionView: UICollectionView {
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         let customLayout = configLayout()
         collectionViewLayout = customLayout
-        uploadDataFromServer()
         configCollectionView()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
+// MARK: - Public methods
+extension AddToppingsCollectionView {
     func getItem(_ item: Item) {
         self.item = item
     }
-}
 
-// MARK: - Upload Data from Storage
-private extension AddToppingsCollectionView {
-    // Загружаем начинки только один раз, потом они не меняются
-    func uploadDataFromServer() {
-        if toppings.isEmpty {
-            loadDataFromStorage()
-        }
+    func getToppings(_ toppings: [Topping]) {
+        self.toppings = toppings
+        updateUI()
     }
 
-    // Загружаем ВСЕ начинки
-    func loadDataFromStorage() {
-        DataStorage.shared.fetchToppings()
-        DataStorage.shared.onToppingsFetchedSuccessfully = { [weak self] fetchedToppings in
-            guard let self else { return }
-            filterToppings(fetchedToppings)
-            setupCollectionHeight()
-            onDataFetchedSuccessfully?()
-        }
-    }
-
-    // Отбираем только нужные нам начинки
-    func filterToppings(_ fetchedToppings: [Topping]) {
-        if let arrayOfToppings = item?.toppings {
-            toppings = fetchedToppings.filter { arrayOfToppings.contains($0.name) }
-        }
+    func updateUI() {
+        setupCollectionHeight()
+        onDataFetchedSuccessfully?()
     }
 }
 

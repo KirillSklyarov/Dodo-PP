@@ -77,6 +77,7 @@ final class CpfcPopupView: UIViewController {
 
     func getItem(_ item: Item?) {
         if let item { self.item = item }
+        updateUI()
     }
 
     // MARK: - Life cycle
@@ -93,6 +94,7 @@ final class CpfcPopupView: UIViewController {
     }
 }
 
+// MARK: - Setup popUp View
 extension CpfcPopupView {
     func setupPopupView(sourceView: UIView, sourceRect: CGRect) {
         modalPresentationStyle = .popover
@@ -129,7 +131,7 @@ private extension CpfcPopupView {
         isOneSize()
     }
 
-    // Если есть 1 размер, то показывай его
+    // Если есть 1 размер, то показывай его, если больше чем 1 размер, то показывать средний
     func isOneSize() {
         if let oneSize = item?.itemSize.oneSize {
             productDetails = oneSize

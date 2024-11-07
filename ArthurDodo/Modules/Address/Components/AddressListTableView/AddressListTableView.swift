@@ -4,12 +4,13 @@ final class AddressListTableView: AppTableView {
 
     // MARK: - Properties&Callbacks
     private let tableRowHeight: CGFloat = 70
-    private let storage = DataStorage.shared
+    private let storage: DataStorage
 
     var onEditAddressButtonTapped: ( (IndexPath) -> Void)?
 
     // MARK: - Init
-    override init(frame: CGRect, style: UITableView.Style) {
+    init(frame: CGRect, style: UITableView.Style, storage: DataStorage) {
+        self.storage = storage
         super.init(frame: frame, style: style)
         configTableView()
     }

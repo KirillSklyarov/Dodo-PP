@@ -8,13 +8,15 @@ final class CategoriesHeaderView: UICollectionReusableView {
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
 
+    private var storage: DataStorage?
+
     var onCategorySelected: ((CategoryName) -> Void)?
 
     // MARK: - UI Properties
-    private lazy var headerCollectionView = CategoryHeaderCollectionView()
+    private lazy var headerCollectionView = CategoryHeaderCollectionView(storage: storage)
 
     // MARK: - Init
-    override init(frame: CGRect = .zero) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupConstraints()
         collectionCellSelected()
@@ -22,6 +24,10 @@ final class CategoriesHeaderView: UICollectionReusableView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(storage: DataStorage) {
+        self.storage = storage
     }
 
     func updateUI() {

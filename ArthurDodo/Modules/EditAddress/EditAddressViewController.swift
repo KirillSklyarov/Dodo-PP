@@ -26,8 +26,9 @@ final class EditAddressViewController: UIViewController {
     private lazy var dismissButton = DismissButtonView(isChevron: true)
 
     // MARK: - Init
-    init() {
+    init(_ addressToEdit: Address) {
         super.init(nibName: nil, bundle: nil)
+        getAddressToEdit(addressToEdit)
     }
 
     required init?(coder: NSCoder) {

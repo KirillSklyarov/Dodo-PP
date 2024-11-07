@@ -23,10 +23,10 @@ final class MainCoordinator: Coordinator {
 // MARK: - Public methods
 extension MainCoordinator {
     func start() {
-        let vc = MainViewController(storage: storage)
-        viewController = vc
-        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
+//        let vc = MainViewController(storage: storage)
+//        viewController = vc
+//        vc.coordinator = self
+//        navigationController.pushViewController(vc, animated: true)
     }
 
     func showProfile() {
@@ -36,33 +36,26 @@ extension MainCoordinator {
     }
 
     func showProductDetails() {
-        let vc = ProductDetailsViewController(storage: storage)
-        vc.coordinator = self
-        vc.modalPresentationStyle = .fullScreen
-        navigationController.visibleViewController?.present(vc, animated: true)
-
-        vc.onCartButtonTapped = { [weak self] in
-            guard let self else { print("Self is nil, can't set price"); return }
-            viewController?.updateCart()
-        }
+//        let vc = ProductDetailsViewController(storage: storage)
+//        vc.coordinator = self
+//        vc.modalPresentationStyle = .fullScreen
+//        navigationController.visibleViewController?.present(vc, animated: true)
+//
+//        vc.onCartButtonTapped = { [weak self] in
+//            guard let self else { print("Self is nil, can't set price"); return }
+//            viewController?.updateCart()
+//        }
     }
 
     func showStories(_ indexPath: IndexPath) {
-        let vc = StoriesVC()
-        vc.modalPresentationStyle = .fullScreen
-        navigationController.present(vc, animated: true)
-        vc.showStories(indexPath)
-
-        vc.onStoriesVCDismissed = { [weak self] in
-            self?.viewController?.updateUI()
-        }
-    }
-
-    func showCart() {
-        let cartCoordinator = CartCoordinator(storage: storage, navigationController: navigationController)
-        cartCoordinator.parentCoordinator = self
-        childCoordinators.append(cartCoordinator)
-        cartCoordinator.start()
+//        let vc = StoriesVC()
+//        vc.modalPresentationStyle = .fullScreen
+//        navigationController.present(vc, animated: true)
+//        vc.showStories(indexPath)
+//
+//        vc.onStoriesVCDismissed = { [weak self] in
+//            self?.viewController?.updateUI()
+//        }
     }
 
     func showAddress() {
@@ -70,6 +63,13 @@ extension MainCoordinator {
         childCoordinators.append(addressCoordinator)
         addressCoordinator.parentCoordinator = self
         addressCoordinator.start()
+    }
+
+    func showCart() {
+        let cartCoordinator = CartCoordinator(storage: storage, navigationController: navigationController)
+        cartCoordinator.parentCoordinator = self
+        childCoordinators.append(cartCoordinator)
+        cartCoordinator.start()
     }
 
     func showPopUpView(_ popUpView: CpfcPopupView?) {

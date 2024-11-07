@@ -19,21 +19,23 @@ final class CartViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties
-    private var storage: DataStorage
-    weak var coordinator: CartCoordinator?
+    private let storage: DataStorage
+    private let router: Router
 
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let topInset: CGFloat = 10
 
-    private var order: [Order]?
+    private var order: [Order] = []
     private var promo: [Promo] = []
+    private var itemsToAdd: [Item] = []
 
     var onCartVCDismissed: (() -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, order: [Order]? = nil, onCartVCDismissed: ( () -> Void)? = nil) {
+    init(storage: DataStorage, router: Router) {
         self.storage = storage
+        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -52,7 +54,6 @@ final class CartViewController: UIViewController {
     // Мы обновляем кнопку корзины на mainVC всегда, когда закрывается это окно (либо по свайпу, либо по нажатию на кнопку dismiss, либо по причине пустой корзины)
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print(#function)
         onCartVCDismissed?()
     }
 }
@@ -62,10 +63,12 @@ private extension CartViewController {
     func fetchDataFromStorage() {
         fetchOrders()
         fetchPromo()
+        getItemsToAdd()
     }
 
     func fetchOrders() {
         order = storage.getOrderFromStorage()
+        passOrderToView()
         updateUI()
     }
 
@@ -78,13 +81,17 @@ private extension CartViewController {
     }
 
     func fetchPromo() {
-        promo = storage.getPromoFromStorage()
+        getPromoFromStorage()
 
         if promo.isEmpty {
             fetchPromoFromServer()
         } else {
             promoStackView.updateUI(promo)
         }
+    }
+
+    func getPromoFromStorage() {
+        promo = storage.getPromoFromStorage()
     }
 
     func fetchPromoFromServer() {
@@ -94,6 +101,22 @@ private extension CartViewController {
             promo = fetchedPromo
             promoStackView.updateUI(promo)
         }
+    }
+
+    // Получаем товары, для отражения в корзине в категории "Добавить к заказу"
+    func getItemsToAdd() {
+        itemsToAdd = storage.getRandomItems()
+        sendItemsToAdd()
+    }
+
+    // Отправляем товары для отражения в категории "Добавить к заказу" далее по вьюхе
+    func sendItemsToAdd() {
+        itemsToAddStackView.getItemsToAdd(itemsToAdd)
+    }
+
+    // Отправляем актуальный заказ далее для отражения на след вьюхе
+    func passOrderToView() {
+        orderStackView.getOrder(order)
     }
 }
 
@@ -112,15 +135,20 @@ private extension CartViewController {
             guard let self else { return }
             dismiss(animated: true)
         }
-        orderStackView.onItemDeletedFromCart = { [weak self] in
-            self?.fetchDataFromStorage()
+
+        // Удаляем позицию из заказа и опять фетчим заказы
+        orderStackView.onItemDeletedFromCart = { [weak self] indexPath in
+            self?.storage.removeItemFromOrderStorage(indexPath)
+            self?.fetchOrders()
         }
-        orderStackView.onCountChanged = { [weak self] in
+
+        orderStackView.onCountChanged = { [weak self] indexPath, count in
+            self?.storage.increaseCountOfItem(indexPath, count)
             self?.fetchOrders()
         }
 
         orderStackView.onChangeItem = { [weak self] in
-            self?.coordinator?.showProductDetails()
+            self?.router.showProductDetailsScreen(completion: nil)
         }
     }
 
@@ -135,22 +163,24 @@ private extension CartViewController {
     func setupSpecialViewActions() {
         promoStackView.onPromoSelected = { [weak self] specialOffer in
             guard let self else { return }
-            coordinator?.showApplySpecialOffer(specialOffer)
+            router.showApplySpecialOffer(specialOffer)
         }
     }
 
     func setupToppingsCollectionView() {
-        itemsToAddStackView.onNewItemToAddToCart = { [weak self] in
+        itemsToAddStackView.onNewItemToAddToCart = { [weak self] itemToAddToOrder in
             guard let self else { return }
-            fetchDataFromStorage()
-            orderStackView.uploadOrder()
+            storage.addItemToOrder(itemToAddToOrder)
+            fetchOrders()
+//            fetchDataFromStorage()
+//            orderStackView.uploadOrder()
         }
     }
 
     func setupCartButtonAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
-            coordinator?.showDelivery()
+            router.showDelivery()
         }
     }
 }

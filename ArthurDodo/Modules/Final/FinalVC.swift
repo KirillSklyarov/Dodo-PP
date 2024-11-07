@@ -13,11 +13,12 @@ final class FinalVC: UIViewController {
     private var dismissDelay = 5
 
     private let storage: DataStorage
-    weak var coordinator: CartCoordinator?
+    private let router: Router
 
     // MARK: - Init
-    init(storage: DataStorage) {
+    init(storage: DataStorage, router: Router) {
         self.storage = storage
+        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -101,7 +102,7 @@ private extension FinalVC {
     // Очищаем заказы и закрываем все окна
     func eraseOrderAndDismiss() {
         storage.eraseOrder()
-        coordinator?.dismissAllVC()
+        router.dismissAllVC()
     }
 
     func updateTitle(_ seconds: Int) {

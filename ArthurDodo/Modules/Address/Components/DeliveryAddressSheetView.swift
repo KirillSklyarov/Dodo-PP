@@ -1,10 +1,3 @@
-//
-//  DeliveryAddressSheetView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 12.10.2024.
-//
-
 import UIKit
 
 final class DeliveryAddressSheetView: UIViewController {
@@ -44,7 +37,7 @@ final class DeliveryAddressSheetView: UIViewController {
         return stackView
     }()
     private lazy var deliveryButton = CartButton(title: "Доставить сюда", isCart: false)
-    private lazy var addressTableView = AddressListTableView()
+    private lazy var addressTableView = AddressListTableView(frame: .zero, style: .plain, storage: storage)
     private lazy var contentStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [headerStackView, addressTableView, deliveryButton])
         stack.axis = .vertical
@@ -53,11 +46,12 @@ final class DeliveryAddressSheetView: UIViewController {
     }()
 
     private let storage: DataStorage
-    weak var coordinator: AddressCoordinator?
+    private let router: Router
 
     // MARK: - Init
-    init(storage: DataStorage) {
+    init(storage: DataStorage, router: Router) {
         self.storage = storage
+        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -99,12 +93,8 @@ private extension DeliveryAddressSheetView {
     }
 
     func showEditAddressVC(_ address: Address) {
-        coordinator?.showEditAddressVC(address)
-
-//        router.navigate(to: .editAddress) { editAddressVC in
-//            guard let editAddressVC = editAddressVC as? EditAddressViewController else { print("We can't cast to EditAddressViewController"); return }
-//            editAddressVC.getAddressToEdit(address)
-//        }
+        print(#function)
+        router.showEditAddressVC(address)
     }
 
     func setupDeliveryButtonAction() {

@@ -19,6 +19,9 @@
 		7330232F2CD7D5B7003E9818 /* SkeletonPlaceholderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330232E2CD7D5B7003E9818 /* SkeletonPlaceholderCell.swift */; };
 		733023332CD80A5B003E9818 /* Int+Seconds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733023322CD80A5B003E9818 /* Int+Seconds.swift */; };
 		733023372CD80F7F003E9818 /* ContentStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733023362CD80F7F003E9818 /* ContentStack.swift */; };
+		733A01D42CDBBF000013D3EB /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A01D32CDBBF000013D3EB /* DependencyContainer.swift */; };
+		733A01D82CDBBF380013D3EB /* ScreenFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A01D72CDBBF380013D3EB /* ScreenFactory.swift */; };
+		733A01DC2CDBC7D40013D3EB /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A01DB2CDBC7D40013D3EB /* Router.swift */; };
 		7350E26E2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7350E26D2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift */; };
 		7352D58D2CD91CA900F3357E /* ScreenEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7352D58C2CD91CA900F3357E /* ScreenEnum.swift */; };
 		736B0D0A2CCD811500975195 /* AppProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736B0D052CCD811500975195 /* AppProgressView.swift */; };
@@ -169,6 +172,9 @@
 		7330232E2CD7D5B7003E9818 /* SkeletonPlaceholderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonPlaceholderCell.swift; sourceTree = "<group>"; };
 		733023322CD80A5B003E9818 /* Int+Seconds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Seconds.swift"; sourceTree = "<group>"; };
 		733023362CD80F7F003E9818 /* ContentStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentStack.swift; sourceTree = "<group>"; };
+		733A01D32CDBBF000013D3EB /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
+		733A01D72CDBBF380013D3EB /* ScreenFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenFactory.swift; sourceTree = "<group>"; };
+		733A01DB2CDBC7D40013D3EB /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		7350E26D2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryTimeIntervalHelper.swift; sourceTree = "<group>"; };
 		7352D58C2CD91CA900F3357E /* ScreenEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEnum.swift; sourceTree = "<group>"; };
 		736B0D052CCD811500975195 /* AppProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppProgressView.swift; sourceTree = "<group>"; };
@@ -366,6 +372,30 @@
 				733023362CD80F7F003E9818 /* ContentStack.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		733A01D22CDBBEE40013D3EB /* DI */ = {
+			isa = PBXGroup;
+			children = (
+				733A01D32CDBBF000013D3EB /* DependencyContainer.swift */,
+			);
+			path = DI;
+			sourceTree = "<group>";
+		};
+		733A01D62CDBBF2F0013D3EB /* ScreenFactory */ = {
+			isa = PBXGroup;
+			children = (
+				733A01D72CDBBF380013D3EB /* ScreenFactory.swift */,
+			);
+			path = ScreenFactory;
+			sourceTree = "<group>";
+		};
+		733A01DA2CDBC7CE0013D3EB /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				733A01DB2CDBC7D40013D3EB /* Router.swift */,
+			);
+			path = Router;
 			sourceTree = "<group>";
 		};
 		7350E26C2CCD248B009BA276 /* Helpers */ = {
@@ -614,6 +644,8 @@
 		73B968E62CC7C78700A2415A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				733A01DA2CDBC7CE0013D3EB /* Router */,
+				733A01D62CDBBF2F0013D3EB /* ScreenFactory */,
 				73D0FAAB2CCA3F960009AEE5 /* Coordinator */,
 				73B968E22CC7C78700A2415A /* DataStorage */,
 				73B968E52CC7C78700A2415A /* NetworkManager */,
@@ -981,6 +1013,7 @@
 			isa = PBXGroup;
 			children = (
 				73B969DD2CC7C7C500A2415A /* App */,
+				733A01D22CDBBEE40013D3EB /* DI */,
 				73B969572CC7C78700A2415A /* Modules */,
 				73B969102CC7C78700A2415A /* Components */,
 				73B968D02CC7C78700A2415A /* Models */,
@@ -1140,6 +1173,7 @@
 				73EA17352CCBE21E0079A16C /* String+Plural.swift in Sources */,
 				733023332CD80A5B003E9818 /* Int+Seconds.swift in Sources */,
 				73B969612CC7C78700A2415A /* ItemSize.swift in Sources */,
+				733A01DC2CDBC7D40013D3EB /* Router.swift in Sources */,
 				73EA17332CCB9ED90079A16C /* AppLoadingIndicator.swift in Sources */,
 				73B969622CC7C78700A2415A /* Topping.swift in Sources */,
 				73B969632CC7C78700A2415A /* Order.swift in Sources */,
@@ -1182,6 +1216,7 @@
 				73B969812CC7C78700A2415A /* ScrollUpButton.swift in Sources */,
 				73E6EB462CC97741006831F2 /* Info&ToppingsView.swift in Sources */,
 				73B969822CC7C78700A2415A /* CartViewController.swift in Sources */,
+				733A01D82CDBBF380013D3EB /* ScreenFactory.swift in Sources */,
 				73B969832CC7C78700A2415A /* MapView.swift in Sources */,
 				73B969842CC7C78700A2415A /* PinAnnotation.swift in Sources */,
 				73B969852CC7C78700A2415A /* CartButton.swift in Sources */,
@@ -1216,6 +1251,7 @@
 				73B9699C2CC7C78700A2415A /* cpfcTableViewCell.swift in Sources */,
 				73B9699E2CC7C78700A2415A /* IngredientsView.swift in Sources */,
 				73B9699F2CC7C78700A2415A /* CartButtonView.swift in Sources */,
+				733A01D42CDBBF000013D3EB /* DependencyContainer.swift in Sources */,
 				73B969A02CC7C78700A2415A /* CustomSegmentControl.swift in Sources */,
 				73B969A12CC7C78700A2415A /* DismissButtonView.swift in Sources */,
 				73FD88A22CD28E5E007E0C82 /* PaymentMethodTableView.swift in Sources */,

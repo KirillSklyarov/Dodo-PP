@@ -5,7 +5,7 @@ final class MainViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = HeaderView()
-    private lazy var contentCollectionView = ContentCollectionView()
+    private lazy var contentCollectionView = ContentCollectionView(storage: storage)
     private lazy var cartButton = CartButton(isHidden: true, isNeedImage: true)
 
     // MARK: - Other properties
@@ -17,11 +17,12 @@ final class MainViewController: UIViewController {
     private var isDataLoaded: Bool = false
 
     private let storage: DataStorage
-    weak var coordinator: MainCoordinator?
+    private let router: Router
 
     // MARK: - Init
-    init(storage: DataStorage) {
+    init(storage: DataStorage, router: Router) {
         self.storage = storage
+        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -40,7 +41,7 @@ final class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigationBar()
-        cartButton.updateCart()
+        updateCart()
 
         if !isDataLoaded { showSkeleton() }
     }
@@ -49,7 +50,8 @@ final class MainViewController: UIViewController {
 // MARK: - Public methods
 extension MainViewController {
     func updateCart() {
-        cartButton.updateCart()
+        let totalPrice = storage.getTotalOrderPrice()
+        cartButton.updateCart(with: totalPrice)
     }
 
     func updateUI() {
@@ -133,23 +135,30 @@ private extension MainViewController {
 // MARK: - Setup navigation
 private extension MainViewController {
     func showProfileVC() {
-        coordinator?.showProfile()
+        router.showProfileScreen()
     }
 
     func showProductDetail() {
-        coordinator?.showProductDetails()
+        router.showProductDetailsScreen() { [weak self] in
+            self?.updateCart()
+        }
     }
 
     func showStoriesVC(_ indexPath: IndexPath) {
-        coordinator?.showStories(indexPath)
+        router.showStories(indexPath) { [weak self] in
+            self?.updateUI()
+        }
     }
 
     func showAddressVC() {
-        coordinator?.showAddress()
+        router.showAddress()
     }
 
     func showCartVC() {
-        coordinator?.showCart()
+        router.showCart { [weak self] in
+            guard let self else { print("CartCoordinator is deallocated"); return }
+            updateCart()
+        }
     }
 }
 

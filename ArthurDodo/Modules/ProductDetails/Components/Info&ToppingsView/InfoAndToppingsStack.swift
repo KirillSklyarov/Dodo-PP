@@ -23,6 +23,16 @@ final class InfoAndToppingsStack: UIStackView {
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // Передаем выбранный товар дальше
+    func getSelectedItem(_ item: Item) {
+        ingredientsView.getSelectedItem(item)
+    }
+
+    // Передаем топпинги (доп ингредиенты) дальше
+    func passToppingsToView(_ toppings: [Topping]) {
+        toppingsCollectionView.getToppings(toppings)
+    }
 }
 
 // MARK: - Update UI
@@ -34,6 +44,7 @@ extension InfoAndToppingsStack {
     func updateUI(productDetails: WeightPrice) {
         let weight = productDetails.weight
         ingredientsView.updateWeight(weight)
+        print(#function)
         ingredientsView.setProductDetails(productDetails)
     }
 

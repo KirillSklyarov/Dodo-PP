@@ -9,7 +9,7 @@ final class DataStorage {
     // MARK: - Properties
     var fetchedUserAddresses: [Address] = []
     var fetchedToppings: [Topping] = []
-    var fetchedStories: [Story] = []
+    private var fetchedStories: [Story] = []
     private var fetchedItems: [Item] = []
     private var fetchedPromo: [Promo] = []
     private var fetchedPersonalData: Personal?
@@ -109,6 +109,10 @@ extension DataStorage {
             }
         }
     }
+
+    func getFetchedStories() -> [Story] {
+        fetchedStories
+    }
 }
 
 // MARK: - Toppings
@@ -144,14 +148,17 @@ extension DataStorage {
         }
     }
 
+    // Отправляет весь каталог товаров
     func getCatalog() -> [Item] {
         fetchedItems
     }
 
+    // Устанавливает выбранный товар, то есть тот, который открыл пользователь
     func sendSelectedItemToStorage(_ item: Item) {
         selectedItem = item
     }
 
+    // Отправляет выбранный товар, то есть тот, который открыл пользователь
     func getSelectedItemFromStorage() -> Item? {
         selectedItem
     }
@@ -192,8 +199,8 @@ extension DataStorage {
 
 // MARK: - Orders
 extension DataStorage {
-    func addOrderPositionToOrder(_ order: Order) {
-        self.order.append(order)
+    func addItemToOrder(_ item: Order) {
+        self.order.append(item)
     }
 
     func increaseCountOfItem(_ indexPath: IndexPath, _ value: Int) {
@@ -232,7 +239,7 @@ extension DataStorage {
         specialOfferArray = SpecialOffer.configRandomOffer(fetchedItems, countOfElements)
     }
 
-    func getRandomItems(_ countOfElements: Int) -> [Item] {
+    func getRandomItems(_ countOfElements: Int = 5) -> [Item] {
         let result = SpecialOffer.configRandomOffer(fetchedItems, countOfElements)
         return result
     }

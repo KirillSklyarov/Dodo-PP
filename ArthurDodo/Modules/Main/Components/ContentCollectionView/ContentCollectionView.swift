@@ -13,17 +13,17 @@ final class ContentCollectionView: UICollectionView {
     private var categories: [CategoryName] = []
 
     private let countOfSections = 3
+    private let storage: DataStorage
 
     var onItemCellTapped: ((IndexPath) -> Void)?
     var onStoriesCellTapped: ((IndexPath) -> Void)?
     var onSpecialOfferCellTapped: ((IndexPath) -> Void)?
 
-    private let storage = DataStorage.shared
-
     // MARK: - Init
-    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+    init(storage: DataStorage) {
+        self.storage = storage
         let layout = UICollectionViewLayout()
-        super.init(frame: frame, collectionViewLayout: layout)
+        super.init(frame: .zero, collectionViewLayout: layout)
 
         let customLayout = createCompositionalLayout()
         self.collectionViewLayout = customLayout
@@ -56,7 +56,7 @@ extension ContentCollectionView {
     }
 
     func fetchData() {
-        stories = storage.fetchedStories
+        stories = storage.getFetchedStories()
         specialOffersArray = storage.getSpecialOffersArray()
         catalog = storage.getCatalog()
         categories = storage.getCategories()
@@ -303,6 +303,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
         case 2:
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CategoriesHeaderView.identifier, for: indexPath) as! CategoriesHeaderView
             categoryHeaderView = header
+            categoryHeaderView?.configure(storage: storage)
             setupActions()
             return header
         default: return UICollectionReusableView()

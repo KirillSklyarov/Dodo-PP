@@ -24,6 +24,7 @@ final class DeliveryVC: UIViewController {
     private lazy var totalPriceView = OrderTotalPriceView()
     private lazy var payButton = PaymentButtonView(preferredPaymentMethod)
 
+    // MARK: - Other properties
     private let topInset: CGFloat = 10
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
@@ -32,11 +33,12 @@ final class DeliveryVC: UIViewController {
     private var preferredPaymentMethod: PaymentMethod = .cbp
 
     private let storage: DataStorage
-    weak var coordinator: CartCoordinator?
+    private let router: Router
 
     // MARK: - Init
-    init(storage: DataStorage) {
+    init(storage: DataStorage, router: Router) {
         self.storage = storage
+        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -212,21 +214,25 @@ private extension DeliveryVC {
     func setupAddressTableViewAction() {
         addressTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            coordinator?.showChooseAddress()
+            router.showChooseAddress { addressName in
+                self.updateAddress(addressName)
+            }
         }
     }
 
     func setupPaymentTableView() {
         paymentTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            coordinator?.showChoosePaymentMethodVC()
+            router.showChoosePaymentMethod { paymentMethod in
+                self.updateUI(paymentMethod)
+            }
         }
     }
 
     func setupPayButtonActions() {
         payButton.onPayButtonTapped = { [weak self] in
             guard let self else { return }
-            coordinator?.showFinalVC()
+            router.showFinalVC()
         }
     }
 }

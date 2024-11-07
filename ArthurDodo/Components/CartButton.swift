@@ -1,10 +1,3 @@
-//
-//  CartButton.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 18.09.2024.
-//
-
 import UIKit
 
 final class CartButton: UIButton {
@@ -12,7 +5,6 @@ final class CartButton: UIButton {
     // MARK: - Properties
     private var totalPrice = 0
     private let buttonHeight: CGFloat = 50
-    private let dataStorage = DataStorage.shared
 
     var isCart: Bool
     var onButtonTapped: (() -> Void)?
@@ -46,8 +38,7 @@ final class CartButton: UIButton {
             .font: AppFonts.bold18]))
     }
 
-    func updateCart() {
-        let totalPrice = dataStorage.getTotalOrderPrice()
+    func updateCart(with totalPrice: Int) {
         setNewPrice(totalPrice)
         showOrHideCartButton(totalPrice)
     }

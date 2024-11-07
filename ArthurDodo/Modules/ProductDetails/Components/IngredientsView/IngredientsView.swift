@@ -11,7 +11,6 @@ final class IngredientsView: UIView {
     private let bottomInset: CGFloat = -10
 
     private var item: Item?
-    private let storage = DataStorage.shared
 
     var onShowPopupVC: ((UIViewController) -> Void)?
 
@@ -64,7 +63,6 @@ final class IngredientsView: UIView {
     override init(frame: CGRect = .zero) {
         super.init(frame: frame)
         setupUI()
-        fetchData()
     }
 
     required init?(coder: NSCoder) {
@@ -72,24 +70,26 @@ final class IngredientsView: UIView {
     }
 }
 
-// MARK: - Fetch data from storage
-private extension IngredientsView {
-    func fetchData() {
-        self.item = storage.getSelectedItemFromStorage()
-    }
-}
-
 // MARK: - Public methods
 extension IngredientsView {
+    // Получаем выбранный товар
+    func getSelectedItem(_ item: Item) {
+        self.item = item
+        cpfcPopupView.getItem(item)
+    }
+
+    // Обновляем данные о составе товара
     func updateIngredients(_ ingredients: String) {
         ingredientsLabel.text = ingredients
     }
 
+    // Обновляем данные о весе товара
     func updateWeight(_ weight: Int) {
         let text = "\(weight) г"
         weightLabel.text = text
     }
 
+    // Обновляем данные для таблицы КБЖУ
     func setProductDetails(_ details: WeightPrice) {
         cpfcPopupView.setProductDetails(details)
     }

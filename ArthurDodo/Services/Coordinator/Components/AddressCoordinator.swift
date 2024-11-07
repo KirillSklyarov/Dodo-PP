@@ -18,17 +18,17 @@ final class AddressCoordinator: Coordinator {
 // MARK: - Public methods
 extension AddressCoordinator {
     func start() {
-        let vc = AddressViewController(storage: storage)
-        vc.coordinator = self
-        vc.modalPresentationStyle = .fullScreen
-        navigationController.present(vc, animated: true)
+//        let vc = AddressViewController(storage: storage)
+//        vc.coordinator = self
+//        vc.modalPresentationStyle = .fullScreen
+//        navigationController.present(vc, animated: true)
     }
 
     func showEditAddressVC(_ address: Address) {
-        let vc = EditAddressViewController()
-        vc.modalPresentationStyle = .fullScreen
-        navigationController.visibleViewController?.present(vc, animated: true)
-        vc.getAddressToEdit(address)
+//        let vc = EditAddressViewController()
+//        vc.modalPresentationStyle = .fullScreen
+//        navigationController.visibleViewController?.present(vc, animated: true)
+//        vc.getAddressToEdit(address)
     }
 
     func goToAddNewAddress(callback: ((UIViewController) -> Void)?) {

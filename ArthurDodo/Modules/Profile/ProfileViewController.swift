@@ -25,11 +25,12 @@ final class ProfileViewController: UIViewController {
     private var isDataLoaded: Bool = false
 
     private let storage: DataStorage
-    weak var coordinator: ProfileCoordinator?
+    private let router: Router
 
     // MARK: - Init
-    init(storage: DataStorage) {
+    init(storage: DataStorage, router: Router) {
         self.storage = storage
+        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -175,20 +176,20 @@ private extension ProfileViewController {
     }
 }
 
-// MARK: - Setup coordinator
+// MARK: - Setup router
 private extension ProfileViewController {
     func showChatAlert() {
-        coordinator?.showChatAlert()
+        router.showChatAlert()
     }
 
     func showPersonalVC() {
-        coordinator?.showPersonalData()
+        router.showPersonalData()
     }
 
     func setupSpecialOfferActions() {
         promoStackView.onPromoSelected = { [weak self] specialOffer in
             guard let self else { return }
-            coordinator?.showApplySpecialOffer(specialOffer)
+            router.showApplySpecialOffer(specialOffer)
         }
     }
 }

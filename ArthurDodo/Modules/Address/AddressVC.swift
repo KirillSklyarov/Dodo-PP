@@ -17,11 +17,12 @@ final class AddressViewController: UIViewController {
     private var mainAddress: Address?
 
     private let storage: DataStorage
-    weak var coordinator: AddressCoordinator?
+    private let router: Router
 
     // MARK: - Init
-    init(storage: DataStorage) {
+    init(storage: DataStorage, router: Router) {
         self.storage = storage
+        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -107,12 +108,14 @@ private extension AddressViewController {
     }
 
     func setupAddressViewAction() {
+        // Нажатие на кнопку редактирования адреса
         addressView.onEditAddressCellTapped = { [weak self] address in
-            self?.showEditAddressVC(address)
+            self?.router.showEditAddressVC(address)
         }
-    }
 
-    func showEditAddressVC(_ address: Address) {
-        coordinator?.showEditAddressVC(address)
+        // Нажатие на кнопку "+ Новый адрес"
+        addressView.onAddNewAddressButtonTapped = { [weak self] in
+            self?.router.showAddNewAddressVC()
+        }
     }
 }

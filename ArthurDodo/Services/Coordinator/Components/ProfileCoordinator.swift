@@ -16,9 +16,9 @@ final class ProfileCoordinator: Coordinator {
 // MARK: - Public methods
 extension ProfileCoordinator {
     func start() {
-        let vc = ProfileViewController(storage: storage)
-        vc.coordinator = self
-        navigationController.visibleViewController?.present(vc, animated: true)
+//        let vc = ProfileViewController(storage: storage)
+//        vc.coordinator = self
+//        navigationController.visibleViewController?.present(vc, animated: true)
     }
 
     func showChatAlert() {
@@ -35,11 +35,11 @@ extension ProfileCoordinator {
     }
 
     func showApplySpecialOffer(_ offer: Promo) {
-        let vc = ApplyOfferViewController()
-        guard let configureSheet = vc.sheetPresentationController else { return }
-        configureSheet.detents = [.medium()]
-        configureSheet.prefersGrabberVisible = true
-        navigationController.visibleViewController?.present(vc, animated: true)
-        vc.configureViewController(offer)
+//        let vc = ApplyOfferViewController()
+//        guard let configureSheet = vc.sheetPresentationController else { return }
+//        configureSheet.detents = [.medium()]
+//        configureSheet.prefersGrabberVisible = true
+//        navigationController.visibleViewController?.present(vc, animated: true)
+//        vc.configureViewController(offer)
     }
 }

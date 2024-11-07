@@ -25,24 +25,34 @@ final class InfoAndToppingsView: UIView {
 
 // MARK: - Public methods
 extension InfoAndToppingsView {
+    // Передаем выбранный товар дальше
+    func getSelectedItem(_ item: Item) {
+        infoAndToppingsStack.getSelectedItem(item)
+    }
+
     func getCartView(_ cart: CartButtonView) {
         infoAndToppingsStack.getButtonView(cart)
     }
 
+    // Отправляем данные о выбранных деталях (вес, КБЖУ и проч) выбранного товара
     func updateUI(productDetails: WeightPrice) {
+        print(#function)
         infoAndToppingsStack.updateUI(productDetails: productDetails)
     }
 
-    func getItem(_ item: Item) {
-        infoAndToppingsStack.getItemFromVC(item)
-    }
-
+    // Обновляем данные о весе товара
     func updateWeight(_ weight: Int) {
         infoAndToppingsStack.updateWeight(weight)
     }
 
+    // Обновляем данные о весе товара и составе
     func updateIngredientsAndWeight(_ item: Item) {
         infoAndToppingsStack.updateUIWithItem(item)
+    }
+
+    // Отправляем данные о топпингов дальше ко вью
+    func passToppingsToView(_ toppings: [Topping]) {
+        infoAndToppingsStack.passToppingsToView(toppings)
     }
 }
 

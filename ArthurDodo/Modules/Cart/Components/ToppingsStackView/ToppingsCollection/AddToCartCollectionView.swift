@@ -12,11 +12,10 @@ final class AddToCartCollectionView: UICollectionView {
         (UIScreen.main.bounds.width - (cellSpacing * 2) - leftAndRightPadding) / countOfCellsInRow
     }
 
-    private let storage = DataStorage.shared
     private var itemsToAddToOrder: [Item] = []
 
     var onToppingSelected: ( (Int) -> Void )?
-    var onNewItemToAddToCart: ( () -> Void )?
+    var onNewItemToAddToCart: ( (Order) -> Void )?
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -24,15 +23,15 @@ final class AddToCartCollectionView: UICollectionView {
         let customLayout = configLayout()
         collectionViewLayout = customLayout
         setupUI()
-        getRandomToppings()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func getRandomToppings() {
-        itemsToAddToOrder = storage.getRandomItems(numberOfElements)
+    // Получаем товары, для отражения в корзине в категории "Добавить к заказу"
+    func getItemsToAddToOrder(_ items: [Item]) {
+        itemsToAddToOrder = items
     }
 }
 
@@ -96,7 +95,6 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
     }
 
     private func addItemToOrder(_ item: Order) {
-        storage.addOrderPositionToOrder(item)
-        onNewItemToAddToCart?()
+        onNewItemToAddToCart?(item)
     }
 }

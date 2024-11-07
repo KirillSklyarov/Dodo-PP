@@ -12,6 +12,7 @@ final class DeliveryAddressView: UIView {
     private let storage = DataStorage.shared
 
     var onEditAddressCellTapped: ((Address) -> Void)?
+    var onAddNewAddressButtonTapped: (() -> Void)?
 
     // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
@@ -33,6 +34,7 @@ final class DeliveryAddressView: UIView {
         config.cornerStyle = .capsule
         button.configuration = config
         button.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+        button.addTarget(self, action: #selector(addAddressButtonTapped), for: .touchUpInside)
         return button
     }()
     private lazy var headerStackView: UIStackView = {
@@ -41,7 +43,7 @@ final class DeliveryAddressView: UIView {
         return stackView
     }()
     private lazy var deliveryButton = CartButton(title: "Доставить сюда", isCart: false)
-    private lazy var addressTableView = AddressListTableView()
+    private lazy var addressTableView = AddressListTableView(frame: .zero, style: .plain, storage: storage)
     private lazy var contentStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [headerStackView, addressTableView, deliveryButton])
         stack.axis = .vertical
@@ -104,5 +106,9 @@ private extension DeliveryAddressView {
         deliveryButton.onButtonTapped = {
             print("We're here")
         }
+    }
+
+    @objc func addAddressButtonTapped() {
+        onAddNewAddressButtonTapped?()
     }
 }

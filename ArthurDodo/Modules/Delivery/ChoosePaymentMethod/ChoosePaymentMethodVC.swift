@@ -5,11 +5,21 @@ final class ChoosePaymentMethodVC: UIViewController {
     // MARK: - Properties
     private lazy var paymentMethodsTableView = PaymentAddressesTableView(preferredPaymentMethod: preferredPaymentMethod)
     private let userDefaults = UserDefaults.standard
-    private lazy var storage = DataStorage.shared
+    private let storage: DataStorage
 
     var preferredPaymentMethod: PaymentMethod = .cbp
     var onPaymentMethodSelected: ((PaymentMethod) -> Void)?
 
+    // MARK: - Init
+    init(storage: DataStorage) {
+        self.storage = storage
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,28 +98,3 @@ private extension ChoosePaymentMethodVC {
     }
 }
 
-//MARK: - SwiftUI
-import SwiftUI
-struct ProviderChoosePaymentMethod : PreviewProvider {
-    static var previews: some View {
-        ContainterView().edgesIgnoringSafeArea(.all)
-    }
-
-    struct ContainterView: UIViewControllerRepresentable {
-        func makeUIViewController(context: Context) -> UIViewController {
-            return ChoosePaymentMethodVC()
-        }
-
-        typealias UIViewControllerType = UIViewController
-
-
-        let viewController = ChoosePaymentMethodVC()
-        func makeUIViewController(context: UIViewControllerRepresentableContext<ProviderChoosePaymentMethod.ContainterView>) -> ChoosePaymentMethodVC {
-            return viewController
-        }
-
-        func updateUIViewController(_ uiViewController: ProviderChoosePaymentMethod.ContainterView.UIViewControllerType, context: UIViewControllerRepresentableContext<ProviderChoosePaymentMethod.ContainterView>) {
-
-        }
-    }
-}

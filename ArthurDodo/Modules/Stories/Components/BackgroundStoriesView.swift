@@ -1,10 +1,3 @@
-//
-//  BackgroundStoriesView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 07.10.2024.
-//
-
 import UIKit
 
 final class BackgroundStoriesView: UIView {
@@ -16,7 +9,7 @@ final class BackgroundStoriesView: UIView {
     private var countSubStories = 0
     private var subStoryIndex = 0
 
-    private let stories = DataStorage.shared.fetchedStories
+    private var stories: [Story]
 
     var onDismissButtonTapped: (() -> Void)?
 
@@ -44,8 +37,9 @@ final class BackgroundStoriesView: UIView {
     private lazy var progressViews: [UIProgressView] = []
 
     // MARK: - Init
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(story: [Story]) {
+        self.stories = story
+        super.init(frame: .zero)
         setupUI()
         setupActions()
     }
@@ -57,16 +51,22 @@ final class BackgroundStoriesView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // MARK: - Public methods
+// MARK: - Public methods
+extension BackgroundStoriesView {
     func showSelectedStory(_ indexPath: IndexPath) {
         currentStoryIndex = indexPath.row
         countSubStories = stories[currentStoryIndex].subStoryImages.count
         showStory()
     }
+
+    func configure(with stories: [Story]) {
+        self.stories = stories
+    }
 }
 
-// MARK: - setup Actions
+// MARK: - Setup actions
 private extension BackgroundStoriesView {
     func setupActions() {
         dismissButtonTapped()

@@ -1,21 +1,16 @@
-//
-//  OrderStackView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 17.10.2024.
-//
-
 import UIKit
 
 final class OrderStackView: UIStackView {
 
-    // MARK: - Properties&Callbacks
+    // MARK: - Properties
     private lazy var orderView = OrderView()
     private lazy var cartProductTableView = CartProductTableView()
 
+    private var order: [Order] = []
+
     var onEmptyCart: (() -> Void)?
-    var onItemDeletedFromCart: (() -> Void)?
-    var onCountChanged: (() -> Void)?
+    var onItemDeletedFromCart: ((IndexPath) -> Void)?
+    var onCountChanged: ((IndexPath, Int) -> Void)?
     var onChangeItem: (() -> Void)?
 
     // MARK: - Init
@@ -24,18 +19,28 @@ final class OrderStackView: UIStackView {
         setupUI()
         setupActions()
     }
-    
+
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // MARK: - Methods
-    func updateHeader(_ countOfItems: Int, totalPrice: Int) {
-        orderView.updateTitle(countOfItems, totalPrice: totalPrice)
+// MARK: - Public methods
+extension OrderStackView {
+    // Получаем актуальный заказ от VC
+    func getOrder(_ order: [Order]) {
+        self.order = order
+        passOrderToView()
     }
 
-    func uploadOrder() {
-        cartProductTableView.uploadOrder()
+    // Оправляем актуальный заказ для отражения в таблицу
+    private func passOrderToView() {
+        cartProductTableView.uploadOrder(order)
+    }
+
+    // При изменении кол-ва и общей цены обновляем заголовок
+    func updateHeader(_ countOfItems: Int, totalPrice: Int) {
+        orderView.updateTitle(countOfItems, totalPrice: totalPrice)
     }
 }
 
@@ -51,16 +56,22 @@ private extension OrderStackView {
 // MARK: - Setup Actions
 private extension OrderStackView {
     func setupActions() {
+        // Отправляем инфу, что товаров в заказе нет и нужно закрыть окно
         cartProductTableView.onEmptyCart = { [weak self] in
             self?.onEmptyCart?()
         }
-        cartProductTableView.onItemDeletedFromCart = { [weak self] in
-            self?.onItemDeletedFromCart?()
-        }
-        cartProductTableView.onCountChanged = { [weak self] in
-            self?.onCountChanged?()
+
+        // Отправляем инфу, что удалили позицию на VC
+        cartProductTableView.onItemDeletedFromCart = { [weak self] indexPath in
+            self?.onItemDeletedFromCart?(indexPath)
         }
 
+        // Отправляем инфу, что изменили кол-во товара на VC
+        cartProductTableView.onCountChanged = { [weak self] indexPath, count in
+            self?.onCountChanged?(indexPath, count)
+        }
+
+        // Отправляем инфу, что изменили сам товар на VC
         cartProductTableView.onChangeItem = { [weak self] in
             self?.onChangeItem?()
         }

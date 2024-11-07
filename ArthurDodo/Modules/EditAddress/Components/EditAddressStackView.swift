@@ -1,10 +1,3 @@
-//
-//  EditAddressStackView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 19.10.2024.
-//
-
 import UIKit
 
 final class EditAddressStackView: UIStackView {
@@ -73,6 +66,8 @@ private extension EditAddressStackView {
 
 // MARK: - Setup Actions
 extension EditAddressStackView {
+
+    // В качестве примера отправляем новый адрес на сервер
     func setupButtonAction(_ addressToEdit: Address) {
         saveAddressButton.onButtonTapped = { [weak self] in
             guard self != nil else { return }

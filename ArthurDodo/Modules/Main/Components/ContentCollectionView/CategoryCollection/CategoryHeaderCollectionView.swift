@@ -2,21 +2,25 @@ import UIKit
 
 final class CategoryHeaderCollectionView: UICollectionView {
 
-    var onUpdateProductsCollectionView: ( (CategoryName) -> Void )?
-
+    // MARK: - Properties
     private let viewHeight: CGFloat = 50
     private let cornerRadius: CGFloat = 0
     private var previousInd = IndexPath(row: 0, section: 0)
 
     private lazy var categories: [CategoryName] = []
+    private let storage = DataStorage.shared
 
-    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+    var onUpdateProductsCollectionView: ( (CategoryName) -> Void )?
+
+    // MARK: - Init
+    init(storage: DataStorage?) {
+//        self.storage = storage
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.sectionHeadersPinToVisibleBounds = true
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
 
-        super.init(frame: frame, collectionViewLayout: layout)
+        super.init(frame: .zero, collectionViewLayout: layout)
         configCollectionView()
     }
     
@@ -29,7 +33,9 @@ final class CategoryHeaderCollectionView: UICollectionView {
     }
 
     func updateUI() {
-        categories = DataStorage.shared.getCategories()
+//        guard let categories = storage?.getCategories() else { print("We have no categories"); return }
+        categories = storage.getCategories()
+//        self.categories = categories
         reloadData()
     }
 
