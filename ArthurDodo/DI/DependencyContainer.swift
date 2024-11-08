@@ -10,7 +10,10 @@ final class DependencyContainer {
 
     init() {
         self.navigationController = UINavigationController()
-        networkManager = NetworkManager()
+        let decoder = JSONDecoder()
+        let encoder = JSONEncoder()
+
+        networkManager = NetworkManager(decoder: decoder, encoder: encoder)
         storage = DataStorage(networkManager: networkManager)
         screenFactory = ScreenFactory()
 

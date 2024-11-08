@@ -1,13 +1,22 @@
 import Foundation
 
 final class NetworkManager {
-    var addresses: [Address]?
-}
 
-// MARK: - CRUD
-extension NetworkManager {
+    // MARK: - Properties
+    private let decoder: JSONDecoder
+    private let encoder: JSONEncoder
+
+    // MARK: - Init
+    init(decoder: JSONDecoder, encoder: JSONEncoder) {
+        self.decoder = decoder
+        self.encoder = encoder
+    }
+
+    // MARK: - Methods
+
+    // Это базовый get-запрос с использованием дженериков, которым мы потом будем использовать в конкретной реализации
     func fetchData<T: Codable>(_ typeOfData: endPoint, completion: @escaping (Result<T, NetworkError>) -> Void) {
-        guard let url = URL(string: typeOfData.url) else {
+        guard let url = typeOfData.url else {
             DispatchQueue.main.async {
                 completion(.failure(.invalidURL))
             }
@@ -46,8 +55,7 @@ extension NetworkManager {
             }
 
             do {
-                let decoder = JSONDecoder()
-                let fetchedData = try decoder.decode(T.self, from: data)
+                let fetchedData = try self.decoder.decode(T.self, from: data)
                 DispatchQueue.main.async {
                     completion(.success(fetchedData))
                 }
@@ -61,9 +69,9 @@ extension NetworkManager {
     }
 
 
-    // Отправляем новый адрес на сервер
+    // Это put-запрос чтобы отправить новый адрес на сервер
     func updateUserAddress(_ address: Address, completion: @escaping (Result<Address, NetworkError>) -> Void) {
-        guard let url = URL(string: "\(endPoint.userAddress.url)/\(address.userId)") else {
+        guard let url = endPoint.userAddress.getURL(with: address.userId) else {
             DispatchQueue.main.async {
                 completion(.failure(.invalidURL))
             }
@@ -75,8 +83,7 @@ extension NetworkManager {
         request.setValue(HTTPHeader.Value.json, forHTTPHeaderField: HTTPHeader.Field.contentType)
 
         do {
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(address)
+            let data = try self.encoder.encode(address)
             request.httpBody = data
         } catch {
             completion(.failure(.decodingError(error)))
@@ -112,8 +119,7 @@ extension NetworkManager {
             }
 
             do {
-                let decoder = JSONDecoder()
-                let fetchedData = try decoder.decode(Address.self, from: data)
+                let fetchedData = try self.decoder.decode(Address.self, from: data)
                 DispatchQueue.main.async {
                     completion(.success(fetchedData))
                 }

@@ -5,15 +5,17 @@ final class ChooseAddressVC: UIViewController {
     // MARK: - UI Properties
     private lazy var addressTableView = DeliveryAddressListTableView()
 
+    // MARK: - Other Properties
     private let topInset: CGFloat = 10
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let bottomInset: CGFloat = -10
-
-    var onAddressCellTapped: ((String) -> Void)?
+    private var addresses: [Address] = []
 
     private let storage: DataStorage
     private let router: Router
+
+    var onAddressCellTapped: ((String) -> Void)?
 
     // MARK: - Init
     init(storage: DataStorage, router: Router) {
@@ -26,7 +28,7 @@ final class ChooseAddressVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Init
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -50,7 +52,7 @@ private extension ChooseAddressVC {
     }
 
     func getAddressesAndUpdateUI() {
-        let addresses = storage.fetchedUserAddresses
+        addresses = storage.getAddresses()
         addressTableView.updateUI(with: addresses)
     }
 }
@@ -103,7 +105,7 @@ private extension ChooseAddressVC {
         // Настраиваем action: нажатие на редактирование адреса
         addressTableView.onEditAddressButtonTapped = { [weak self] indexPath in
             guard let self else { return }
-            let address = storage.fetchedUserAddresses[indexPath.row]
+            let address = addresses[indexPath.row]
             router.showEditAddressVC(address)
         }
 

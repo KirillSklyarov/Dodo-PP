@@ -3,16 +3,14 @@ import Foundation
 final class DataStorage {
 
     // MARK: - Properties
-    var fetchedUserAddresses: [Address] = []
-    var fetchedToppings: [Topping] = []
+    private var fetchedUserAddresses: [Address] = []
+    private var fetchedToppings: [Topping] = []
     private var fetchedStories: [Story] = []
     private var fetchedItems: [Item] = []
     private var fetchedPromo: [Promo] = []
     private var fetchedPersonalData: Personal?
-
-    var category: [CategoryName] = []
-
-    var order: [Order] = []
+    private var category: [CategoryName] = []
+    private var order: [Order] = []
     private var specialOfferArray: [Item] = []
     private var selectedItem: Item?
     private lazy var preferredPaymentMethod: PaymentMethod = .cbp
@@ -27,6 +25,7 @@ final class DataStorage {
     var onPromoFetchedSuccessfully: (([Promo]) -> Void)?
     var onPersonalDataFetchedSuccessfully: ((Personal) -> Void)?
 
+    // MARK: - Init
     init(networkManager: NetworkManager) {
         self.networkManager = networkManager
     }

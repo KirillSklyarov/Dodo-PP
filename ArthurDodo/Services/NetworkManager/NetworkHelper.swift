@@ -1,12 +1,6 @@
-//
-//  NetworkHelper.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 15.10.2024.
-//
-
 import Foundation
 
+// Здесь мы указываем хэдеры
 struct HTTPHeader {
     struct Field {
         static let contentType = "Content-Type"
@@ -17,6 +11,7 @@ struct HTTPHeader {
     }
 }
 
+// Обработка ошибок
 enum NetworkError: Error {
     case invalidURL
     case requestFailed(Error)
@@ -26,6 +21,7 @@ enum NetworkError: Error {
     case decodingError(Error)
 }
 
+// Методы
 enum HttpMethod: String {
     case get = "GET"
     case post = "POST"
@@ -33,13 +29,14 @@ enum HttpMethod: String {
     case delete = "DELETE"
 }
 
-enum endPoints: String {
+// Точки доступа
+enum BaseURL: String {
     case ngrok = "https://06e7-2a00-1370-8180-197c-cd0c-b96c-333a-ef5d.ngrok-free.app"
     case mockoon = "http://localhost:3001"
 }
 
 enum endPoint: String {
-    private static let baseURL: endPoints = .mockoon
+    private static let baseURL: BaseURL = .mockoon
 
     case userAddress = "/userAddress"
     case toppings = "/toppings"
@@ -48,7 +45,16 @@ enum endPoint: String {
     case promo = "/promo"
     case personal = "/personal"
 
-    var url: String {
-        return endPoint.baseURL.rawValue + self.rawValue
+    // Формирует ссылку
+    var url: URL? {
+        var components = URLComponents(string: endPoint.baseURL.rawValue)
+        components?.path = self.rawValue
+        return components?.url
+    }
+
+    // Добавляет в предыдущую ссылку свойство userID.
+    func getURL(with userID: String) -> URL? {
+        let url = self.url?.appendingPathComponent(userID)
+        return url
     }
 }
