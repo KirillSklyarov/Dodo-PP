@@ -10,8 +10,8 @@ final class DependencyContainer {
 
     init() {
         self.navigationController = UINavigationController()
-        storage = DataStorage.shared
-        networkManager = NetworkManager.shared
+        networkManager = NetworkManager()
+        storage = DataStorage(networkManager: networkManager)
         screenFactory = ScreenFactory()
 
         router = Router(navigationController: self.navigationController)

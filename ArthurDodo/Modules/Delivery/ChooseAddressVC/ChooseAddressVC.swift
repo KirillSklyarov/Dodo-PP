@@ -40,14 +40,18 @@ private extension ChooseAddressVC {
     func fetchData() {
         if storage.isAddressesEmpty() {
             storage.fetchUserAddresses()
-            storage.onDataFetchedSuccessfully = { [weak self] addresses in
+            storage.onDataFetchedSuccessfully = { [weak self] in
                 guard let self else { return }
-                addressTableView.updateUI(with: addresses)
+                getAddressesAndUpdateUI()
             }
         } else {
-            let addresses = storage.fetchedUserAddresses
-            addressTableView.updateUI(with: addresses)
+            getAddressesAndUpdateUI()
         }
+    }
+
+    func getAddressesAndUpdateUI() {
+        let addresses = storage.fetchedUserAddresses
+        addressTableView.updateUI(with: addresses)
     }
 }
 

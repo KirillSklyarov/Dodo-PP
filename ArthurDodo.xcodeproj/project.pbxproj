@@ -64,7 +64,7 @@
 		73B9696E2CC7C78700A2415A /* AddressListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968E82CC7C78700A2415A /* AddressListTableView.swift */; };
 		73B9696F2CC7C78700A2415A /* AddressListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968E92CC7C78700A2415A /* AddressListTableViewCell.swift */; };
 		73B969702CC7C78700A2415A /* AddressHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968EB2CC7C78700A2415A /* AddressHeaderView.swift */; };
-		73B969712CC7C78700A2415A /* DeliveryAddressSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968EC2CC7C78700A2415A /* DeliveryAddressSheetView.swift */; };
+		73B969712CC7C78700A2415A /* DeliveryAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968EC2CC7C78700A2415A /* DeliveryAddressViewController.swift */; };
 		73B969722CC7C78700A2415A /* AddressVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968EE2CC7C78700A2415A /* AddressVC.swift */; };
 		73B969732CC7C78700A2415A /* DodoCoinsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968F02CC7C78700A2415A /* DodoCoinsStackView.swift */; };
 		73B969742CC7C78700A2415A /* DodoCoinsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968F12CC7C78700A2415A /* DodoCoinsView.swift */; };
@@ -230,7 +230,7 @@
 		73B968E82CC7C78700A2415A /* AddressListTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressListTableView.swift; sourceTree = "<group>"; };
 		73B968E92CC7C78700A2415A /* AddressListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressListTableViewCell.swift; sourceTree = "<group>"; };
 		73B968EB2CC7C78700A2415A /* AddressHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressHeaderView.swift; sourceTree = "<group>"; };
-		73B968EC2CC7C78700A2415A /* DeliveryAddressSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryAddressSheetView.swift; sourceTree = "<group>"; };
+		73B968EC2CC7C78700A2415A /* DeliveryAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryAddressViewController.swift; sourceTree = "<group>"; };
 		73B968EE2CC7C78700A2415A /* AddressVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressVC.swift; sourceTree = "<group>"; };
 		73B968F02CC7C78700A2415A /* DodoCoinsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DodoCoinsStackView.swift; sourceTree = "<group>"; };
 		73B968F12CC7C78700A2415A /* DodoCoinsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DodoCoinsView.swift; sourceTree = "<group>"; };
@@ -668,7 +668,7 @@
 			children = (
 				73B968EA2CC7C78700A2415A /* AddressListTableView */,
 				73B968EB2CC7C78700A2415A /* AddressHeaderView.swift */,
-				73B968EC2CC7C78700A2415A /* DeliveryAddressSheetView.swift */,
+				73B968EC2CC7C78700A2415A /* DeliveryAddressViewController.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1190,7 +1190,7 @@
 				73B9696E2CC7C78700A2415A /* AddressListTableView.swift in Sources */,
 				73B9696F2CC7C78700A2415A /* AddressListTableViewCell.swift in Sources */,
 				73B969702CC7C78700A2415A /* AddressHeaderView.swift in Sources */,
-				73B969712CC7C78700A2415A /* DeliveryAddressSheetView.swift in Sources */,
+				73B969712CC7C78700A2415A /* DeliveryAddressViewController.swift in Sources */,
 				73B969722CC7C78700A2415A /* AddressVC.swift in Sources */,
 				7330232F2CD7D5B7003E9818 /* SkeletonPlaceholderCell.swift in Sources */,
 				73B969732CC7C78700A2415A /* DodoCoinsStackView.swift in Sources */,

@@ -2,10 +2,6 @@ import Foundation
 
 final class DataStorage {
 
-    // MARK: - Singleton
-    static var shared = DataStorage()
-    private init() {}
-
     // MARK: - Properties
     var fetchedUserAddresses: [Address] = []
     var fetchedToppings: [Topping] = []
@@ -14,7 +10,6 @@ final class DataStorage {
     private var fetchedPromo: [Promo] = []
     private var fetchedPersonalData: Personal?
 
-
     var category: [CategoryName] = []
 
     var order: [Order] = []
@@ -22,20 +17,25 @@ final class DataStorage {
     private var selectedItem: Item?
     private lazy var preferredPaymentMethod: PaymentMethod = .cbp
 
+    private var networkManager: NetworkManager
+
     // MARK: - Callbacks
-    var onDataFetchedSuccessfully: (([Address]) -> Void)?
+    var onDataFetchedSuccessfully: (() -> Void)?
     var onToppingsFetchedSuccessfully: (([Topping]) -> Void)?
     var onStoriesFetchedSuccessfully: (([Story]) -> Void)?
     var onItemsFetchedSuccessfully: (([Item]) -> Void)?
     var onPromoFetchedSuccessfully: (([Promo]) -> Void)?
     var onPersonalDataFetchedSuccessfully: ((Personal) -> Void)?
 
+    init(networkManager: NetworkManager) {
+        self.networkManager = networkManager
+    }
 }
 
 // MARK: - Personal
 extension DataStorage {
     func fetchPersonalData() {
-        NetworkManager.shared.fetchData(.personal) { [weak self] (result: Result<Personal, NetworkError>) in
+        networkManager.fetchData(.personal) { [weak self] (result: Result<Personal, NetworkError>) in
             guard let self else { return }
             switch result {
             case .success(let personalData):
@@ -60,14 +60,26 @@ extension DataStorage {
 // MARK: - User Addresses
 extension DataStorage {
     func fetchUserAddresses() {
-        NetworkManager.shared.fetchData(.userAddress) { [weak self] (result: Result<[Address], NetworkError>) in
+        networkManager.fetchData(.userAddress) { [weak self] (result: Result<[Address], NetworkError>) in
             guard let self else { return }
             switch result {
             case .success(let addresses):
                 fetchedUserAddresses = addresses
-                onDataFetchedSuccessfully?(addresses)
+                onDataFetchedSuccessfully?()
             case .failure(let error):
                 print(error)
+            }
+        }
+    }
+
+    // Отправляем новый адрес на сервер и выводим сообщение о результате
+    func sendNewAddressToServer(addressToEdit: Address) {
+        networkManager.updateUserAddress(addressToEdit) { (result: Result<Address, NetworkError>) in
+            switch result {
+            case .success(let address):
+                print("Данные успешно обновлены: \(address)")
+            case .failure(let error):
+                print("Данные НЕ обновлены: \(error)")
             }
         }
     }
@@ -93,12 +105,14 @@ extension DataStorage {
         }
         fetchedUserAddresses = newAddresses.sortedMainFirst()
     }
+
+    
 }
 
 // MARK: - Stories
 extension DataStorage {
     func fetchStories() {
-        NetworkManager.shared.fetchData(.stories) { [weak self] (result: Result<[Story], NetworkError>) in
+        networkManager.fetchData(.stories) { [weak self] (result: Result<[Story], NetworkError>) in
             guard let self else { return }
             switch result {
             case .success(let stories):
@@ -118,7 +132,7 @@ extension DataStorage {
 // MARK: - Toppings
 extension DataStorage {
     func fetchToppings() {
-        NetworkManager.shared.fetchData(.toppings) { [weak self] (result: Result<[Topping], NetworkError>) in
+        networkManager.fetchData(.toppings) { [weak self] (result: Result<[Topping], NetworkError>) in
             guard let self else { return }
             switch result {
             case .success(let topping):
@@ -134,7 +148,7 @@ extension DataStorage {
 // MARK: - Items
 extension DataStorage {
     func fetchItems() {
-        NetworkManager.shared.fetchData(.products) { [weak self] (result: Result<[Item], NetworkError>) in
+        networkManager.fetchData(.products) { [weak self] (result: Result<[Item], NetworkError>) in
             guard let self else { return }
             switch result {
             case .success(let items):
@@ -167,7 +181,7 @@ extension DataStorage {
 // MARK: - Promo
 extension DataStorage {
     func fetchPromo() {
-        NetworkManager.shared.fetchData(.promo) { [weak self] (result: Result<[Promo], NetworkError>) in
+        networkManager.fetchData(.promo) { [weak self] (result: Result<[Promo], NetworkError>) in
             guard let self else { return }
             switch result {
             case .success(let promo):

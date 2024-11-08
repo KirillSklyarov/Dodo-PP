@@ -4,13 +4,12 @@ final class AddressListTableView: AppTableView {
 
     // MARK: - Properties&Callbacks
     private let tableRowHeight: CGFloat = 70
-    private let storage: DataStorage
+    private var addresses: [Address] = []
 
-    var onEditAddressButtonTapped: ( (IndexPath) -> Void)?
+    var onEditAddressButtonTapped: ( (Address) -> Void)?
 
     // MARK: - Init
-    init(frame: CGRect, style: UITableView.Style, storage: DataStorage) {
-        self.storage = storage
+    override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         configTableView()
     }
@@ -19,8 +18,15 @@ final class AddressListTableView: AppTableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Private methods
-    private func configTableView() {
+    func getAddresses(_ addresses: [Address]) {
+        self.addresses = addresses
+        reloadData()
+    }
+}
+
+// MARK: - Setup tableView
+private extension AddressListTableView {
+     func configTableView() {
         backgroundColor = .clear
         dataSource = self
         delegate = self
@@ -38,18 +44,20 @@ final class AddressListTableView: AppTableView {
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension AddressListTableView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        storage.fetchedUserAddresses.count
+        addresses.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AddressListTableViewCell.identifier, for: indexPath) as? AddressListTableViewCell else { print("rrrr"); return UITableViewCell() }
-        let address = storage.fetchedUserAddresses[indexPath.row]
+        let address = addresses[indexPath.row]
         let addressName = address.name
         let isMain = address.isMain
         cell.configureCell(title: addressName, isMain: isMain)
 
         cell.onEditAddressButtonTapped = { [weak self] in
-            self?.onEditAddressButtonTapped?(indexPath)
+            guard let self else { return }
+            let address = addresses[indexPath.row]
+            onEditAddressButtonTapped?(address)
         }
         
         return cell

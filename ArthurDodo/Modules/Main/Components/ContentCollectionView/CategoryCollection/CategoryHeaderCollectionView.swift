@@ -8,13 +8,11 @@ final class CategoryHeaderCollectionView: UICollectionView {
     private var previousInd = IndexPath(row: 0, section: 0)
 
     private lazy var categories: [CategoryName] = []
-    private let storage = DataStorage.shared
 
     var onUpdateProductsCollectionView: ( (CategoryName) -> Void )?
 
     // MARK: - Init
-    init(storage: DataStorage?) {
-//        self.storage = storage
+    init() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.sectionHeadersPinToVisibleBounds = true
@@ -32,10 +30,11 @@ final class CategoryHeaderCollectionView: UICollectionView {
         setupLayout()
     }
 
+    func getCategories(_ categories: [CategoryName]) {
+        self.categories = categories
+    }
+
     func updateUI() {
-//        guard let categories = storage?.getCategories() else { print("We have no categories"); return }
-        categories = storage.getCategories()
-//        self.categories = categories
         reloadData()
     }
 

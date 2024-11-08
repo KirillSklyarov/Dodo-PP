@@ -9,8 +9,6 @@ final class DeliveryAddressView: UIView {
     private let bottomPadding: CGFloat = -10
     private let buttonWidth: CGFloat = 150
 
-    private let storage = DataStorage.shared
-
     var onEditAddressCellTapped: ((Address) -> Void)?
     var onAddNewAddressButtonTapped: (() -> Void)?
 
@@ -43,7 +41,7 @@ final class DeliveryAddressView: UIView {
         return stackView
     }()
     private lazy var deliveryButton = CartButton(title: "Доставить сюда", isCart: false)
-    private lazy var addressTableView = AddressListTableView(frame: .zero, style: .plain, storage: storage)
+    private lazy var addressTableView = AddressListTableView()
     private lazy var contentStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [headerStackView, addressTableView, deliveryButton])
         stack.axis = .vertical
@@ -64,6 +62,10 @@ final class DeliveryAddressView: UIView {
 
     func updateUI() {
         addressTableView.reloadData()
+    }
+
+    func getAddresses(_ addresses: [Address]) {
+        addressTableView.getAddresses(addresses)
     }
 }
 
@@ -95,9 +97,8 @@ private extension DeliveryAddressView {
     }
 
     func setupAddressTableViewActions() {
-        addressTableView.onEditAddressButtonTapped = { [weak self] indexPath in
+        addressTableView.onEditAddressButtonTapped = { [weak self] address in
             guard let self else { return }
-            let address = storage.fetchedUserAddresses[indexPath.row]
             onEditAddressCellTapped?(address)
         }
     }

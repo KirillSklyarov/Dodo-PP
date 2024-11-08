@@ -1,10 +1,3 @@
-//
-//  EditAddressView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 20.10.2024.
-//
-
 import UIKit
 
 final class EditAddressView: UIView {
@@ -17,17 +10,22 @@ final class EditAddressView: UIView {
 
     private lazy var addressStackView = EditAddressStackView()
 
+    var onSaveAddressTapped: ((Address) -> Void)?
+
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupAction()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // MARK: - Public methods
+// MARK: - Public methods
+extension EditAddressView {
     func updateUIWithAddress(_ addressToEdit: Address) {
         addressStackView.updateUIWithData(addressToEdit)
     }
@@ -38,6 +36,15 @@ final class EditAddressView: UIView {
 
     func updateBasicAddress(_ basicAddress: String) {
         addressStackView.updateUIBasicAddress(basicAddress)
+    }
+}
+
+// MARK: - Setup actions
+private extension EditAddressView {
+    func setupAction() {
+        addressStackView.onSaveNewAddress = { [weak self] address in
+            self?.onSaveAddressTapped?(address)
+        }
     }
 }
 

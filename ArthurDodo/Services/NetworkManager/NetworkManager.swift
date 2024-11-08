@@ -1,17 +1,6 @@
-//
-//  NetworkManager.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 14.10.2024.
-//
-
 import Foundation
 
 final class NetworkManager {
-
-    static let shared = NetworkManager()
-    private init() {}
-
     var addresses: [Address]?
 }
 
@@ -71,8 +60,10 @@ extension NetworkManager {
         task.resume()
     }
 
+
+    // Отправляем новый адрес на сервер
     func updateUserAddress(_ address: Address, completion: @escaping (Result<Address, NetworkError>) -> Void) {
-        guard let url = URL(string: "\(endPoint.userAddress.rawValue)/\(address.userId)") else {
+        guard let url = URL(string: "\(endPoint.userAddress.url)/\(address.userId)") else {
             DispatchQueue.main.async {
                 completion(.failure(.invalidURL))
             }

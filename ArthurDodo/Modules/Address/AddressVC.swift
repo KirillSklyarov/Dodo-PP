@@ -15,6 +15,7 @@ final class AddressViewController: UIViewController {
 
     // MARK: - Other Properties
     private var mainAddress: Address?
+    private var addresses: [Address]?
 
     private let storage: DataStorage
     private let router: Router
@@ -43,31 +44,32 @@ final class AddressViewController: UIViewController {
 extension AddressViewController {
     func fetchData() {
         if storage.isAddressesEmpty() {
-            storage.fetchUserAddresses()
-            storage.onDataFetchedSuccessfully = { [weak self] addresses in
-                guard let self else { return }
-                mainAddress = addresses.first
-                DispatchQueue.main.async {
-                    self.addressView.updateUI()
-                    self.moveMapToMainAddress()
-                }
-            }
+            fetchAddresses()
         } else {
-            mainAddress = storage.getMainAddress()
-            DispatchQueue.main.async {
-                self.addressView.updateUI()
-            }
-            moveMapToMainAddress()
+            getAddressFromStorage()
+        }
+        moveMapToMainAddress()
+    }
+
+    // Запрашиваем данные с сервера и когда все получено, то просто забираем с него данные
+    func fetchAddresses() {
+        storage.fetchUserAddresses()
+        storage.onDataFetchedSuccessfully = { [weak self] in
+            guard let self else { return }
+            getAddressFromStorage()
         }
     }
-}
 
-private extension AddressViewController {
-    func moveMapToMainAddress() {
-        guard let mainAddress else {print("We have no main address"); return }
-        let shortAddress = mainAddress.cityStreetHouse
-        print("shortAddress \(shortAddress)")
-        mapView.getCoordinates(from: shortAddress)
+    func getAddressFromStorage() {
+        mainAddress = storage.getMainAddress()
+        addresses = storage.getAddresses()
+        passAddressToNextScreen()
+    }
+
+    // Передаем адреса на следующий вью
+    func passAddressToNextScreen() {
+        guard let addresses else {print("We have no addresses"); return }
+        addressView.getAddresses(addresses)
     }
 }
 
@@ -117,5 +119,16 @@ private extension AddressViewController {
         addressView.onAddNewAddressButtonTapped = { [weak self] in
             self?.router.showAddNewAddressVC()
         }
+    }
+}
+
+// MARK: - Supporting methods
+private extension AddressViewController {
+    // Двигаем карту на главный адрес
+    func moveMapToMainAddress() {
+        guard let mainAddress else {print("We have no main address"); return }
+        let shortAddress = mainAddress.cityStreetHouse
+        print("shortAddress \(shortAddress)")
+        mapView.getCoordinates(from: shortAddress)
     }
 }

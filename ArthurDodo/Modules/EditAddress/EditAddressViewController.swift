@@ -1,10 +1,3 @@
-//
-//  EditAddressViewController.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 13.10.2024.
-//
-
 import UIKit
 
 final class EditAddressViewController: UIViewController {
@@ -25,8 +18,11 @@ final class EditAddressViewController: UIViewController {
     }()
     private lazy var dismissButton = DismissButtonView(isChevron: true)
 
+    private var storage: DataStorage
+
     // MARK: - Init
-    init(_ addressToEdit: Address) {
+    init(_ addressToEdit: Address, storage: DataStorage) {
+        self.storage = storage
         super.init(nibName: nil, bundle: nil)
         getAddressToEdit(addressToEdit)
     }
@@ -42,7 +38,10 @@ final class EditAddressViewController: UIViewController {
         updateUIWithData()
         setupActions()
     }
+}
 
+// MARK: - Public methods
+extension EditAddressViewController {
     func updateUIWithData() {
         guard let addressToEdit else { print("We have no address to edit"); return }
         print(addressToEdit)
@@ -87,9 +86,18 @@ private extension EditAddressViewController {
 // MARK: - Setup Actions
 private extension EditAddressViewController {
     func setupActions() {
+        setupAddressContainerViewAction()
         setupDismissButtonAction()
         setupSaveButtonAction()
         setupMapViewAction()
+    }
+
+    // Отрабатываем нажатие на кнопку сохранить новый адрес
+    func setupAddressContainerViewAction() {
+        addressContainerView.onSaveAddressTapped = { [weak self] address in
+            guard let self else { print("We have no self"); return }
+            storage.sendNewAddressToServer(addressToEdit: address)
+        }
     }
 
     // Настраиваем кнопку Сохранить

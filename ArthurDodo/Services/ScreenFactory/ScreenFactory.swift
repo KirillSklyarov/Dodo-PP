@@ -67,7 +67,7 @@ final class ScreenFactory {
     }
 
     func makeEditAddressScreen(_ address: Address) -> EditAddressViewController {
-        return EditAddressViewController(address)
+        return EditAddressViewController(address, storage: di.storage)
     }
 
     func makeAddNewAddressScreen() -> AddNewAddressViewController {

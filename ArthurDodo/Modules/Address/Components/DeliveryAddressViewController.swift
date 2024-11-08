@@ -1,6 +1,6 @@
 import UIKit
 
-final class DeliveryAddressSheetView: UIViewController {
+final class DeliveryAddressViewController: UIViewController {
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 10
@@ -37,7 +37,7 @@ final class DeliveryAddressSheetView: UIViewController {
         return stackView
     }()
     private lazy var deliveryButton = CartButton(title: "Доставить сюда", isCart: false)
-    private lazy var addressTableView = AddressListTableView(frame: .zero, style: .plain, storage: storage)
+    private lazy var addressTableView = AddressListTableView()
     private lazy var contentStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [headerStackView, addressTableView, deliveryButton])
         stack.axis = .vertical
@@ -69,26 +69,27 @@ final class DeliveryAddressSheetView: UIViewController {
 }
 
 // MARK: - Fetch data from Network
-extension DeliveryAddressSheetView {
+extension DeliveryAddressViewController {
     func fetchData() {
-        DataStorage.shared.fetchUserAddresses()
-        DataStorage.shared.onDataFetchedSuccessfully = { [weak self] addresses in
+        storage.fetchUserAddresses()
+        storage.onDataFetchedSuccessfully = { [weak self] in
             self?.addressTableView.reloadData()
         }
     }
 }
 
 // MARK: - Setup Actions
-private extension DeliveryAddressSheetView {
+private extension DeliveryAddressViewController {
     func setupActions() {
         setupAddressTableViewActions()
         setupDeliveryButtonAction()
     }
 
     func setupAddressTableViewActions() {
-        addressTableView.onEditAddressButtonTapped = { [weak self] indexPath in
-            let address = DataStorage.shared.fetchedUserAddresses[indexPath.row]
-            self?.showEditAddressVC(address)
+        addressTableView.onEditAddressButtonTapped = { [weak self] address in
+            guard let self else { return }
+//            let address = storage.fetchedUserAddresses[indexPath.row]
+            showEditAddressVC(address)
         }
     }
 
@@ -105,7 +106,7 @@ private extension DeliveryAddressSheetView {
 }
 
 // MARK: - Setup UI
-private extension DeliveryAddressSheetView {
+private extension DeliveryAddressViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(contentStackView)

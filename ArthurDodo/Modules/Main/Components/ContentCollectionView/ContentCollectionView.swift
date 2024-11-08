@@ -59,7 +59,15 @@ extension ContentCollectionView {
         stories = storage.getFetchedStories()
         specialOffersArray = storage.getSpecialOffersArray()
         catalog = storage.getCatalog()
-        categories = storage.getCategories()
+    }
+
+    func getCategories(_ categories: [CategoryName]) {
+        self.categories = categories
+        passCategoriesToNextView()
+    }
+
+    func passCategoriesToNextView() {
+        categoryHeaderView?.passCategories(categories)
     }
 
     func updateUI(completion: (() -> Void)) {
@@ -303,7 +311,6 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
         case 2:
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CategoriesHeaderView.identifier, for: indexPath) as! CategoriesHeaderView
             categoryHeaderView = header
-            categoryHeaderView?.configure(storage: storage)
             setupActions()
             return header
         default: return UICollectionReusableView()

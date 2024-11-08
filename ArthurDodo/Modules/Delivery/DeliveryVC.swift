@@ -76,9 +76,9 @@ private extension DeliveryVC {
     // Получаем адреса и обновляем таблицу с активным адресом
     func fetchAddresses() {
         storage.fetchUserAddresses()
-        storage.onDataFetchedSuccessfully = { [weak self] addresses in
-            guard let self else { return }
-            let mainAddressName = getMainAddressName(from: addresses)
+        storage.onDataFetchedSuccessfully = { [weak self] in
+            guard let self,
+                  let mainAddressName = storage.getMainAddress()?.name else { return }
             addressTableView.updateUI(with: mainAddressName)
         }
     }

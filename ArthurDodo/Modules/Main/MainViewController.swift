@@ -171,6 +171,15 @@ private extension MainViewController {
         }
     }
 
+    func getCategories() {
+        let categories = storage.getCategories()
+        passCategories(categories)
+    }
+
+    func passCategories(_ categories: [CategoryName]) {
+        contentCollectionView.getCategories(categories)
+    }
+
     // Мы обращаемся к хранилищу за сторисами, инициируем сетевой запрос и забираем результаты
     func getStoriesFromServer() {
         storage.fetchStories()
@@ -183,6 +192,7 @@ private extension MainViewController {
         storage.onItemsFetchedSuccessfully = { [weak self] items in
             guard let self else { return }
             updateSpecialOffersUI()
+            getCategories()
             isDataLoaded = true
         }
     }

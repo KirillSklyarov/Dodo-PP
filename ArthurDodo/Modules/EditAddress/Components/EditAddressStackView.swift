@@ -26,6 +26,8 @@ final class EditAddressStackView: UIStackView {
     private lazy var editCommentToAddressView = EditAddressTextFieldView(.comment)
     private lazy var saveAddressButton = CartButton(title: "Сохранить", isCart: false)
 
+    var onSaveNewAddress: ((Address) -> Void)?
+
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -70,15 +72,8 @@ extension EditAddressStackView {
     // В качестве примера отправляем новый адрес на сервер
     func setupButtonAction(_ addressToEdit: Address) {
         saveAddressButton.onButtonTapped = { [weak self] in
-            guard self != nil else { return }
-            NetworkManager.shared.updateUserAddress(addressToEdit) { result in
-                switch result {
-                case .success(let address):
-                    print("Данные успешно обновлены: \(address)")
-                case .failure(let error):
-                    print("Данные НЕ обновлены: \(error)")
-                }
-            }
+            guard let self else { return }
+            onSaveNewAddress?(addressToEdit)
         }
     }
 }
