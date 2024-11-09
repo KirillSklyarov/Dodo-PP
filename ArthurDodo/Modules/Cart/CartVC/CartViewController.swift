@@ -48,7 +48,7 @@ final class CartViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        fetchDataFromStorage()
+        fetchData()
     }
 
     // Мы обновляем кнопку корзины на mainVC всегда, когда закрывается это окно (либо по свайпу, либо по нажатию на кнопку dismiss, либо по причине пустой корзины)
@@ -60,16 +60,19 @@ final class CartViewController: UIViewController {
 
 // MARK: - Fetch Data
 private extension CartViewController {
-    func fetchDataFromStorage() {
+    func fetchData() {
         fetchOrders()
         fetchPromo()
         getItemsToAdd()
     }
 
     func fetchOrders() {
-        order = storage.getOrderFromStorage()
-        passOrderToView()
-        updateUI()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            guard let self else { return }
+            order = storage.getOrderFromStorage()
+            passOrderToView()
+            updateUI()
+        }
     }
 
     func updateUI() {
@@ -105,7 +108,7 @@ private extension CartViewController {
 
     // Получаем товары, для отражения в корзине в категории "Добавить к заказу"
     func getItemsToAdd() {
-        itemsToAdd = storage.getRandomItems()
+        itemsToAdd = storage.getSpecialOffersArray()
         sendItemsToAdd()
     }
 

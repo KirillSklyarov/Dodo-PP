@@ -1,11 +1,10 @@
 import UIKit
-import SkeletonView
 
 final class MainViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = HeaderView()
-    private lazy var contentCollectionView = ContentCollectionView(storage: storage)
+    private lazy var contentCollectionView = ContentCollectionView()
     private lazy var cartButton = CartButton(isHidden: true, isNeedImage: true)
 
     // MARK: - Other properties
@@ -14,7 +13,7 @@ final class MainViewController: UIViewController {
     private let leftInset: CGFloat = 20
     private let rightInset: CGFloat = -20
 
-    private var isDataLoaded: Bool = false
+    private var state: ScreenState = .loading
 
     private let storage: DataStorage
     private let router: Router
@@ -40,10 +39,7 @@ final class MainViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupNavigationBar()
         updateCart()
-
-        if !isDataLoaded { showSkeleton() }
     }
 }
 
@@ -62,6 +58,8 @@ extension MainViewController {
 // MARK: - Setup UI
 private extension MainViewController {
     func setupUI() {
+        setupNavigationBar()
+
         view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(headerView, contentCollectionView, cartButton)
         setupLayout()
@@ -74,6 +72,10 @@ private extension MainViewController {
     func setupLayout() {
         NSLayoutConstraint.activate([
             contentCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset),
+            contentCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+
             cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
             cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
         ])
@@ -165,7 +167,7 @@ private extension MainViewController {
 // MARK: - Fetch data from server
 private extension MainViewController {
     func fetchAllData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             self?.getStoriesFromServer()
             self?.getCatalogAndSpecialOffersFromServer()
         }
@@ -176,13 +178,13 @@ private extension MainViewController {
         passCategories(categories)
     }
 
-    func passCategories(_ categories: [CategoryName]) {
-        contentCollectionView.getCategories(categories)
-    }
-
     // Мы обращаемся к хранилищу за сторисами, инициируем сетевой запрос и забираем результаты
     func getStoriesFromServer() {
         storage.fetchStories()
+
+        storage.onStoriesFetchedSuccessfully = { [weak self] stories in
+            self?.passStoriesToContentCollectionView(stories)
+        }
     }
 
     // Мы обращаемся к хранилищу за каталогом, инициируем сетевой запрос и забираем результаты. Так как спецпредложения это рандомная выборка из каталога, то можно делать это тут же.
@@ -191,30 +193,48 @@ private extension MainViewController {
 
         storage.onItemsFetchedSuccessfully = { [weak self] items in
             guard let self else { return }
-            updateSpecialOffersUI()
             getCategories()
-            isDataLoaded = true
+            getSpecialOffers()
+            getCatalogue()
+            setState(.success)
         }
     }
 
-    // Вызываем обновление UI всех секций
-    func updateSpecialOffersUI() {
-        DispatchQueue.main.async { [weak self] in
-            self?.contentCollectionView.uploadDataFromStorage()
-        }
+    func getSpecialOffers() {
+        let specialOffersArray = storage.getSpecialOffersArray()
+        passSpecialOffersToContentCollectionView(specialOffersArray)
+    }
+
+    func getCatalogue() {
+        let catalog = storage.getCatalog()
+        passCatalogToContentCollectionView(catalog)
+    }
+
+    func setState(_ state: ScreenState) {
+        self.state = state
+        passStateToContentCollectionView(state)
     }
 }
 
-// MARK: - Setup Skeleton
+// MARK: - Supporting methods
 private extension MainViewController {
-    func showSkeleton() {
-        contentCollectionView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .alizarin))
+    func passStateToContentCollectionView(_ state: ScreenState) {
+        contentCollectionView.setState(state)
     }
 
-    func stopSkeleton() {
-        DispatchQueue.main.async {
-            self.contentCollectionView.stopSkeletonAnimation()
-            self.contentCollectionView.hideSkeleton()
-        }
+    func passCategories(_ categories: [CategoryName]) {
+        contentCollectionView.getCategories(categories)
+    }
+
+    func passStoriesToContentCollectionView(_ stories: [Story]) {
+        contentCollectionView.getStories(stories)
+    }
+
+    func passSpecialOffersToContentCollectionView(_ specialOffers: [Item]) {
+        contentCollectionView.getSpecialOffers(specialOffers)
+    }
+
+    func passCatalogToContentCollectionView(_ catalogue: [Item]) {
+        contentCollectionView.getCatalog(catalogue)
     }
 }

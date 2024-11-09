@@ -1,5 +1,5 @@
 import UIKit
-import SkeletonView
+//import SkeletonView
 
 final class PromoStackView: UIStackView {
 
@@ -82,6 +82,6 @@ extension PromoStackView {
 // MARK: - Setup Skeleton
 private extension PromoStackView {
     func setupSkeleton() {
-        isSkeletonable = true
+//        isSkeletonable = true
     }
 }

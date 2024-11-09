@@ -1,5 +1,5 @@
 import UIKit
-import SkeletonView
+//import SkeletonView
 
 final class ItemsCollectionCell: UICollectionViewCell {
 
@@ -79,14 +79,14 @@ final class ItemsCollectionCell: UICollectionViewCell {
 // MARK: - Setup Skeleton
 private extension ItemsCollectionCell {
     func setupSkeleton() {
-        isSkeletonable = true
-        contentView.isSkeletonable = true
-        contentStackView.isSkeletonable = true
-        pizzaImageView.isSkeletonable = true
-        titleLabel.isSkeletonable = true
-        ingredientsLabel.isSkeletonable = true
-        priceButton.isSkeletonable = true
-        hitImageView.isSkeletonable = true
+//        isSkeletonable = true
+//        contentView.isSkeletonable = true
+//        contentStackView.isSkeletonable = true
+//        pizzaImageView.isSkeletonable = true
+//        titleLabel.isSkeletonable = true
+//        ingredientsLabel.isSkeletonable = true
+//        priceButton.isSkeletonable = true
+//        hitImageView.isSkeletonable = true
     }
 }
 

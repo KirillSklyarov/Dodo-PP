@@ -1,5 +1,5 @@
 import UIKit
-import SkeletonView
+//import SkeletonView
 
 final class SpecialOfferCollectionCell: UICollectionViewCell {
 
@@ -80,6 +80,6 @@ private extension SpecialOfferCollectionCell {
 // MARK: - Setup Skeleton
 private extension SpecialOfferCollectionCell {
     func setupSkeleton() {
-        isSkeletonable = true
+//        isSkeletonable = true
     }
 }

@@ -1,5 +1,5 @@
 import UIKit
-import SkeletonView
+//import SkeletonView
 
 final class ProfileViewController: UIViewController {
 
@@ -197,14 +197,14 @@ private extension ProfileViewController {
 // MARK: - Setup Skeleton
 private extension ProfileViewController {
     func showSkeleton() {
-        personalDataCollectionView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .belizeHole))
-        promoStackView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .emerald))
-        missionStackView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .greenSea))
+//        personalDataCollectionView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .belizeHole))
+//        promoStackView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .emerald))
+//        missionStackView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .greenSea))
     }
 
     func stopSkeleton() {
-        promoStackView.hideSkeleton()
-        missionStackView.hideSkeleton()
-        personalDataCollectionView.hideSkeleton()
+//        promoStackView.hideSkeleton()
+//        missionStackView.hideSkeleton()
+//        personalDataCollectionView.hideSkeleton()
     }
 }

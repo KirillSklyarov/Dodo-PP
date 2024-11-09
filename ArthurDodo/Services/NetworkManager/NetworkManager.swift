@@ -5,11 +5,13 @@ final class NetworkManager {
     // MARK: - Properties
     private let decoder: JSONDecoder
     private let encoder: JSONEncoder
+    private let session: URLSession
 
     // MARK: - Init
-    init(decoder: JSONDecoder, encoder: JSONEncoder) {
+    init(decoder: JSONDecoder, encoder: JSONEncoder, session: URLSession) {
         self.decoder = decoder
         self.encoder = encoder
+        self.session = session
     }
 
     // MARK: - Methods
@@ -25,7 +27,7 @@ final class NetworkManager {
 
         let request = URLRequest(url: url)
 
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = session.dataTask(with: request) { (data, response, error) in
             if let error {
                 DispatchQueue.main.async {
                     completion(.failure(.requestFailed(error)))
@@ -89,7 +91,7 @@ final class NetworkManager {
             completion(.failure(.decodingError(error)))
         }
 
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = session.dataTask(with: request) { (data, response, error) in
             if let error {
                 DispatchQueue.main.async {
                     completion(.failure(.requestFailed(error)))

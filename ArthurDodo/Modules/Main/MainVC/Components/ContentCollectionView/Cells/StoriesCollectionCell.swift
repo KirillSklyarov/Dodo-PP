@@ -1,5 +1,5 @@
 import UIKit
-import SkeletonView
+//import SkeletonView
 
 final class StoriesCollectionCell: UICollectionViewCell {
 
@@ -91,6 +91,6 @@ private extension StoriesCollectionCell {
 // MARK: - Setup skeleton
 private extension StoriesCollectionCell {
     func setupSkeleton() {
-        isSkeletonable = true
+//        isSkeletonable = true
     }
 }

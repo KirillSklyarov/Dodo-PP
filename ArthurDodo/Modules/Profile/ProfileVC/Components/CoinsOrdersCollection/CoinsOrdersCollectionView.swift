@@ -1,5 +1,5 @@
 import UIKit
-import SkeletonView
+//import SkeletonView
 
 final class CoinsOrdersCollectionView: UICollectionView {
 
@@ -74,12 +74,12 @@ extension CoinsOrdersCollectionView: UICollectionViewDataSource, UICollectionVie
 }
 
 // MARK: - Setup Skeleton
-extension CoinsOrdersCollectionView: SkeletonCollectionViewDataSource {
-    func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        countOfItems
-    }
-
-    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
-        CoinsOrdersCollectionViewCell.identifier
-    }
-}
+//extension CoinsOrdersCollectionView: SkeletonCollectionViewDataSource {
+//    func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        countOfItems
+//    }
+//
+//    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
+//        CoinsOrdersCollectionViewCell.identifier
+//    }
+//}

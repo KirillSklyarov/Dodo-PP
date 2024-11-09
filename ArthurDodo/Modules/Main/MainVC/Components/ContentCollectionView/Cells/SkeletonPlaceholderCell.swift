@@ -1,5 +1,5 @@
 import UIKit
-import SkeletonView
+//import SkeletonView
 
 final class SkeletonPlaceholderCell: UICollectionViewCell {
 
@@ -27,9 +27,9 @@ final class SkeletonPlaceholderCell: UICollectionViewCell {
 // MARK: - Setup Skeleton
 private extension SkeletonPlaceholderCell {
     func setupSkeleton() {
-        isSkeletonable = true
-        contentView.isSkeletonable = true
-        placeholderView.isSkeletonable = true
+//        isSkeletonable = true
+//        contentView.isSkeletonable = true
+//        placeholderView.isSkeletonable = true
     }
 }
 

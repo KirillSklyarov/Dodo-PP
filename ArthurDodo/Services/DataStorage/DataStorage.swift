@@ -33,6 +33,7 @@ final class DataStorage {
 
 // MARK: - Personal
 extension DataStorage {
+    // Фетчим личные данные
     func fetchPersonalData() {
         networkManager.fetchData(.personal) { [weak self] (result: Result<Personal, NetworkError>) in
             guard let self else { return }
@@ -46,6 +47,7 @@ extension DataStorage {
         }
     }
 
+    // Отдаем личные данные
     func getPersonalData() -> Personal? {
         fetchedPersonalData
     }
@@ -152,7 +154,7 @@ extension DataStorage {
             switch result {
             case .success(let items):
                 fetchedItems = items.sorted { $0.category.rawValue < $1.category.rawValue }
-                getArrayOfRandomItems(4)
+                getArrayOfRandomItems(5)
                 getCategoriesFromCatalog()
                 onItemsFetchedSuccessfully?(items)
             case .failure(let error):
@@ -244,17 +246,14 @@ extension DataStorage {
 
 // MARK: - Special Offers
 extension DataStorage {
-    func getSpecialOffersArray() -> [Item] {
-        specialOfferArray
-    }
-
+    // Из всего каталога выбираем кол-во (countOfElements) рандомных элементов
     func getArrayOfRandomItems(_ countOfElements: Int) {
         specialOfferArray = SpecialOffer.configRandomOffer(fetchedItems, countOfElements)
     }
 
-    func getRandomItems(_ countOfElements: Int = 5) -> [Item] {
-        let result = SpecialOffer.configRandomOffer(fetchedItems, countOfElements)
-        return result
+    // Отдает специальные предложения
+    func getSpecialOffersArray() -> [Item] {
+        specialOfferArray
     }
 }
 

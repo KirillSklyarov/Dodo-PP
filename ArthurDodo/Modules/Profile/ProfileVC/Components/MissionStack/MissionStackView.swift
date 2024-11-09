@@ -1,5 +1,5 @@
 import UIKit
-import SkeletonView
+//import SkeletonView
 
 final class MissionStackView: UIStackView {
 
@@ -58,6 +58,6 @@ private extension MissionStackView {
 // MARK: - Setup Skeleton
 private extension MissionStackView {
     func setupSkeleton() {
-        isSkeletonable = true
+//        isSkeletonable = true
     }
 }

@@ -1,5 +1,5 @@
 import UIKit
-import SkeletonView
+//import SkeletonView
 
 final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
 
@@ -77,7 +77,7 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
 // MARK: - Setup Skeleton
 private extension CoinsOrdersCollectionViewCell {
     func setupSkeleton() {
-        isSkeletonable = true
+//        isSkeletonable = true
     }
 }
 

@@ -14,6 +14,8 @@ final class CartProductTableView: AppTableView {
     var onCountChanged: ( (IndexPath, Int) -> Void )?
     var onChangeItem: ( () -> Void )?
 
+    private var state: ScreenState = .loading
+
     // MARK: - Init
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
@@ -30,13 +32,14 @@ extension CartProductTableView {
     // Получаем актуальный заказ от VC и обновляем UI
     func uploadOrder(_ order: [Order]) {
         self.order = order
+        orderLoaded()
         checkIfCartIsEmpty()
     }
 }
 
 // MARK: - Setup UI
 private extension CartProductTableView {
-     func configTableView() {
+    func configTableView() {
         dataSource = self
         delegate = self
         register(CartProductCell.self, forCellReuseIdentifier: CartProductCell.identifier)
@@ -47,6 +50,8 @@ private extension CartProductTableView {
         estimatedRowHeight = UITableView.automaticDimension
 
         backgroundColor = .clear
+
+        register(SkeletonTableViewCell.self, forCellReuseIdentifier: SkeletonTableViewCell.identifier)
     }
 
     func updateTableViewHeight() {
@@ -64,27 +69,35 @@ private extension CartProductTableView {
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        order.count
+        switch state {
+        case .loading: return 1
+        case .success: return order.count
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CartProductCell.identifier, for: indexPath) as? CartProductCell else { print("rrrr"); return UITableViewCell() }
-        let item = order[indexPath.row]
-        cell.configureCell(itemInOrder: item)
+        switch state {
+        case .loading:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: SkeletonTableViewCell.identifier, for: indexPath) as? SkeletonTableViewCell else { print("We have a problem with SkeletonCell"); return UITableViewCell() }
+            return cell
+        case .success:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CartProductCell.identifier, for: indexPath) as? CartProductCell else { print("rrrr"); return UITableViewCell() }
+            let item = order[indexPath.row]
+            cell.configureCell(itemInOrder: item)
 
-        cell.onValueIsNull = { [weak self] in
-            self?.removeItemFromStorage(indexPath)
+            cell.onValueIsNull = { [weak self] in
+                self?.removeItemFromStorage(indexPath)
+            }
+
+            cell.onChangeButtonTapped = { [weak self] in
+                self?.onChangeItem?()
+            }
+
+            cell.onStepperValueChanged = { [weak self] value in
+                self?.onCountChanged?(indexPath, value)
+            }
+            return cell
         }
-
-        cell.onChangeButtonTapped = { [weak self] in
-            self?.onChangeItem?()
-        }
-
-        cell.onStepperValueChanged = { [weak self] value in
-            self?.onCountChanged?(indexPath, value)
-        }
-
-        return cell
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -111,6 +124,12 @@ private extension CartProductTableView {
         } else {
             updateUI()
         }
+    }
+
+    // Меняем состояние экрана и обновляем его
+    private func orderLoaded() {
+        state = .success
+        updateUI()
     }
 
     // Обновляем UI
