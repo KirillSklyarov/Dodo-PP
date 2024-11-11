@@ -1,17 +1,10 @@
-//
-//  UserDefaults+Ext.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 09.10.2024.
-//
-
 import Foundation
 
 extension UserDefaults {
-
     enum Keys {
         static let preferredPaymentMethod = "preferredPaymentMethod"
         static let viewedStories = "viewedStories"
+        static let isActiveOrder = "activeOrder"
     }
 }
 
@@ -45,8 +38,18 @@ extension UserDefaults {
             return nil
         }
     }
-    
+
     func setPreferredPaymentMethod(_ paymentMethod: PaymentMethod) {
         set(paymentMethod.title, forKey: Keys.preferredPaymentMethod)
+    }
+}
+
+extension UserDefaults {
+    func setActiveOrderIsTrue() {
+        set(true, forKey: Keys.isActiveOrder)
+    }
+
+    func getIsActiveOrder() -> Bool {
+        return bool(forKey: Keys.isActiveOrder)
     }
 }

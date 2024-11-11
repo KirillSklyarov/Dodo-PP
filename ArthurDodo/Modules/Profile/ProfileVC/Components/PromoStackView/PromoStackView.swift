@@ -1,49 +1,55 @@
 import UIKit
-//import SkeletonView
 
 final class PromoStackView: UIStackView {
 
-    // MARK: - Properties
+    // MARK: - UI Properties
+    private lazy var promoHeaderView = OrderView(title: "Акции")
+    private lazy var promoCollectionView = PromoCollectionView()
+    private lazy var pageControl = CustomPageControl()
+    private lazy var skeletonView = SkeletonView()
+
+    // MARK: - Other Properties
     private let leftPadding: CGFloat = 0
     private let rightPadding: CGFloat = 0
     private let cornerRadius: CGFloat = 10
 
-    var onPromoSelected: ((Promo) -> Void)?
+    private var state: ScreenState = .loading
 
-    private lazy var promoHeaderView = OrderView(title: "Акции")
-    private lazy var promoCollectionView = PromoCollectionView()
-    private lazy var pageControl = CustomPageControl()
+    var onPromoSelected: ((Promo) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        setupPromoCollectionViewActions()
-        setupSkeleton()
+        setupActions()
+        showScreenWithState()
     }
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    // MARK: - Life cycle
-    override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        if superview != nil {
-            setupLayout()
-        }
-    }
 }
 
 // MARK: - Public methods
 extension PromoStackView {
+    // Передаем коллекции полученные акции (нам незачем себе их оставлять) и обновляем UI
     func updateUI(_ promo: [Promo]) {
         promoCollectionView.updateUI(promo)
+    }
+
+    // Позволяет установить состояние стека и показывать тот или иной вид в зависимости от экрана
+    func setState(_ state: ScreenState) {
+        self.state = state
+        showScreenWithState()
     }
 }
 
 // MARK: - Setup Actions
 private extension PromoStackView {
+    func setupActions() {
+        setupPromoCollectionViewActions()
+    }
+
     func setupPromoCollectionViewActions() {
         promoCollectionView.onShowNewCell = { [weak self] pageNumber in
             self?.pageControl.currentPage = pageNumber
@@ -56,32 +62,33 @@ private extension PromoStackView {
 }
 
 // MARK: - Setup UI
-extension PromoStackView {
+private extension PromoStackView {
+    // Базовые настройки стека
     func setupUI() {
         layer.cornerRadius = cornerRadius
         clipsToBounds = true
-
-        addArrangedSubview(promoHeaderView)
-        addArrangedSubview(promoCollectionView)
-        addArrangedSubview(pageControl)
-
         axis = .vertical
         spacing = 10
     }
 
-    func setupLayout() {
-        guard let superview else { print("You must add superview to MissionStackView"); return }
-
-        NSLayoutConstraint.activate([
-            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: leftPadding),
-            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: rightPadding),
-        ])
+    // Метод определяет что показывать в зависимости от состояния стека
+    func showScreenWithState() {
+        switch state {
+        case .loading: showSkeleton()
+        case .success: showSuccessScreen()
+        }
     }
-}
 
-// MARK: - Setup Skeleton
-private extension PromoStackView {
-    func setupSkeleton() {
-//        isSkeletonable = true
+    // Настраиваем как показывать скелетон
+    func showSkeleton() {
+        addArrangedSubview(skeletonView)
+    }
+
+    // Настраиваем показ загруженного экрана
+    func showSuccessScreen() {
+        skeletonView.removeFromSuperview()
+        addArrangedSubview(promoHeaderView)
+        addArrangedSubview(promoCollectionView)
+        addArrangedSubview(pageControl)
     }
 }

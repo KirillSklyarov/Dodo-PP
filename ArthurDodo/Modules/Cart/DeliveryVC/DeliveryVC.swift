@@ -232,6 +232,7 @@ private extension DeliveryVC {
     func setupPayButtonActions() {
         payButton.onPayButtonTapped = { [weak self] in
             guard let self else { return }
+            setActiveOrderToUserDefaults()
             router.showFinalVC()
         }
     }
@@ -243,5 +244,10 @@ private extension DeliveryVC {
     func getMainAddressName(from addresses: [Address]) -> String {
         let mainAddressName = addresses.filter { $0.isMain == true }.first?.name ?? ""
         return mainAddressName
+    }
+
+    // Отправляет в UserDefaults инфу, что есть активный заказ
+    func setActiveOrderToUserDefaults() {
+        UserDefaults.standard.setActiveOrderIsTrue()
     }
 }

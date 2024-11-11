@@ -22,10 +22,13 @@ final class PromoCollectionView: UICollectionView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
+extension PromoCollectionView {
+    // Получаем акции и обновляем коллекцию
     func updateUI(_ promo: [Promo]) {
         self.promo = promo
-        reloadData()
+        reloadCollection()
     }
 }
 

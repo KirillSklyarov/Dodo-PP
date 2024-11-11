@@ -10,7 +10,7 @@ final class FinalVC: UIViewController {
     private let leftInset: CGFloat = 20
     private let rightInset: CGFloat = -20
     private var countDownTimer: Timer?
-    private var dismissDelay = 5
+    private var dismissDelay = 2
 
     private let storage: DataStorage
     private let router: Router

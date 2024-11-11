@@ -7,6 +7,8 @@ final class Router {
     weak var di: DependencyContainer!
     private let navigationController: UINavigationController
 
+    var onAllScreenDismissed: (() -> Void)?
+
     // MARK: - Init
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -102,6 +104,7 @@ extension Router {
 
     func dismissAllVC() {
         navigationController.dismiss(animated: true)
+        onAllScreenDismissed?()
     }
 
     func showEditAddressVC(_ address: Address) {

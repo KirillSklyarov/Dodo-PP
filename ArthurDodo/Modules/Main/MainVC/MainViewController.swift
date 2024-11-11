@@ -3,9 +3,10 @@ import UIKit
 final class MainViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var headerView = HeaderView()
-    private lazy var contentCollectionView = ContentCollectionView()
-    private lazy var cartButton = CartButton(isHidden: true, isNeedImage: true)
+    private lazy var headerView = HeaderView() // Заголовок с кнопками
+    private lazy var orderView = OrderMainVCView() // Вью с заказом (или скрыто или показывается)
+    private lazy var contentCollectionView = ContentCollectionView() // Основная коллекция с товарами
+    private lazy var cartButton = CartButton(isHidden: true, isNeedImage: true) // Кнопка корзины
 
     // MARK: - Other properties
     private let topInset: CGFloat = 10
@@ -14,6 +15,7 @@ final class MainViewController: UIViewController {
     private let rightInset: CGFloat = -20
 
     private var state: ScreenState = .loading
+    private var isActiveOrder: Bool?
 
     private let storage: DataStorage
     private let router: Router
@@ -34,24 +36,16 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        fetchAllData()
+        fetchData()
+        getActiveOrder()
+        showOrHideOrderView()
+
+//        resetActiveOrder()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateCart()
-    }
-}
-
-// MARK: - Public methods
-extension MainViewController {
-    func updateCart() {
-        let totalPrice = storage.getTotalOrderPrice()
-        cartButton.updateCart(with: totalPrice)
-    }
-
-    func updateUI() {
-        contentCollectionView.reloadData()
     }
 }
 
@@ -61,21 +55,42 @@ private extension MainViewController {
         setupNavigationBar()
 
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(headerView, contentCollectionView, cartButton)
+        view.addSubviews(headerView, orderView, contentCollectionView, cartButton)
         setupLayout()
     }
 
     func setupNavigationBar() {
         navigationController?.isNavigationBarHidden = true
     }
+}
 
+// MARK: - Setup layout
+private extension MainViewController {
     func setupLayout() {
+        setupOrderViewLayout()
+        setupContentCollectionViewLayout()
+        setupCartButtonLayout()
+    }
+
+    func setupOrderViewLayout() {
         NSLayoutConstraint.activate([
-            contentCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset),
+            orderView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset),
+            orderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            orderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+    }
+
+    func setupContentCollectionViewLayout() {
+        NSLayoutConstraint.activate([
+            contentCollectionView.topAnchor.constraint(equalTo: orderView.bottomAnchor, constant: topInset),
             contentCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            contentCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
 
+    func setupCartButtonLayout() {
+        NSLayoutConstraint.activate([
             cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
             cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
         ])
@@ -88,6 +103,7 @@ private extension MainViewController {
         setupCollectionView()
         setupHeaderView()
         setupCartButtonActions()
+        setupRouterAction()
     }
 
     func setupCollectionView() {
@@ -132,10 +148,19 @@ private extension MainViewController {
     func sendSelectedItemToStorage(_ item: Item) {
         storage.sendSelectedItemToStorage(item)
     }
+
+    func setupRouterAction() {
+        router.onAllScreenDismissed = { [weak self] in
+            guard let self else { return }
+            self.getActiveOrder()
+            self.showOrHideOrderView()
+        }
+    }
 }
 
-// MARK: - Setup navigation
-private extension MainViewController {
+// MARK: - View controller navigation
+private extension MainViewController { // Тут все переходы между экранами
+
     func showProfileVC() {
         router.showProfileScreen()
     }
@@ -166,19 +191,15 @@ private extension MainViewController {
 
 // MARK: - Fetch data from server
 private extension MainViewController {
-    func fetchAllData() {
+    // Обращаемся к хранилищу за необходимыми данными
+    func fetchData() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             self?.getStoriesFromServer()
             self?.getCatalogAndSpecialOffersFromServer()
         }
     }
 
-    func getCategories() {
-        let categories = storage.getCategories()
-        passCategories(categories)
-    }
-
-    // Мы обращаемся к хранилищу за сторисами, инициируем сетевой запрос и забираем результаты
+    // Мы обращаемся к хранилищу за сторисами, инициируем сетевой запрос, забираем результаты и передаем их в коллекцию
     func getStoriesFromServer() {
         storage.fetchStories()
 
@@ -191,50 +212,95 @@ private extension MainViewController {
     func getCatalogAndSpecialOffersFromServer() {
         storage.fetchItems()
 
-        storage.onItemsFetchedSuccessfully = { [weak self] items in
+        storage.onItemsFetchedSuccessfully = { [weak self] in
             guard let self else { return }
             getCategories()
             getSpecialOffers()
-            getCatalogue()
+            getCatalog()
             setState(.success)
         }
     }
 
+    // Получаем категории и передаем в коллекцию
+    func getCategories() {
+        let categories = storage.getCategories()
+        passCategoriesToContentCollectionView(categories)
+    }
+
+    // Получаем спецпредложения и передаем в коллекцию
     func getSpecialOffers() {
         let specialOffersArray = storage.getSpecialOffersArray()
         passSpecialOffersToContentCollectionView(specialOffersArray)
     }
 
-    func getCatalogue() {
+    // Получаем каталог и передаем в коллекцию
+    func getCatalog() {
         let catalog = storage.getCatalog()
         passCatalogToContentCollectionView(catalog)
     }
 
+    // Получаем состояние и передаем в коллекцию
     func setState(_ state: ScreenState) {
         self.state = state
-        passStateToContentCollectionView(state)
+        setStateOnContentCollectionView(state)
     }
 }
 
 // MARK: - Supporting methods
 private extension MainViewController {
-    func passStateToContentCollectionView(_ state: ScreenState) {
+    // Передает состояние в contentCollectionView
+    func setStateOnContentCollectionView(_ state: ScreenState) {
         contentCollectionView.setState(state)
     }
 
-    func passCategories(_ categories: [CategoryName]) {
+    // Передает категории в contentCollectionView
+    func passCategoriesToContentCollectionView(_ categories: [CategoryName]) {
         contentCollectionView.getCategories(categories)
     }
 
+    // Передает сторис в contentCollectionView
     func passStoriesToContentCollectionView(_ stories: [Story]) {
         contentCollectionView.getStories(stories)
     }
 
+    // Передает спецпредложения в contentCollectionView
     func passSpecialOffersToContentCollectionView(_ specialOffers: [Item]) {
         contentCollectionView.getSpecialOffers(specialOffers)
     }
 
+    // Передает каталог в contentCollectionView
     func passCatalogToContentCollectionView(_ catalogue: [Item]) {
         contentCollectionView.getCatalog(catalogue)
+    }
+
+    // Обновление коллекции
+    func updateUI() {
+        DispatchQueue.main.async { [weak self] in
+            self?.contentCollectionView.reloadData()
+        }
+    }
+
+    // При каждом показе экрана мы запрашиваем актуальную корзину и если там есть позиции, то обновляем сумму на кнопке
+    func updateCart() {
+        let totalPrice = storage.getTotalOrderPrice()
+        cartButton.updateCart(with: totalPrice)
+    }
+
+    // Показать или не показать вью с заказом
+    func showOrHideOrderView() {
+        if let isActiveOrder {
+            orderView.calculateHeight(isActiveOrder)
+        }
+    }
+
+    // Проверяет у UserDefaults есть ли активный заказ
+    func getActiveOrder() {
+        isActiveOrder = UserDefaults.standard.getIsActiveOrder()
+        print("isActiveOrder \(isActiveOrder)")
+    }
+
+    // Метод сбрасывает активный заказ для отладки,
+    func resetActiveOrder() {
+        UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.isActiveOrder)
     }
 }

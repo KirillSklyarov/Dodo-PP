@@ -22,7 +22,7 @@ final class ContentCollectionView: UICollectionView {
     var onItemCellTapped: ((IndexPath) -> Void)?
 
     // MARK: - Init
-    init() {
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let layout = UICollectionViewLayout()
         super.init(frame: .zero, collectionViewLayout: layout)
 
@@ -283,7 +283,6 @@ private extension ContentCollectionView {
 
         delegate = self
         dataSource = self
-        translatesAutoresizingMaskIntoConstraints = false
     }
 }
 

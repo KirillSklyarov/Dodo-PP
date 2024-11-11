@@ -105,9 +105,9 @@ private extension SkeletonCollectionViewCell {
         let animation = CABasicAnimation(keyPath: "transform.translation.x")
         animation.fromValue = -frame.width
         animation.toValue = frame.width
-        animation.repeatCount = Float.infinity
-        animation.duration = 3
+        animation.repeatCount = .infinity
+        animation.duration = 2.5
 
-        gradientLayer.add(animation, forKey: "myAnimation")
+        gradientLayer.add(animation, forKey: "shimmerAnimation")
     }
 }

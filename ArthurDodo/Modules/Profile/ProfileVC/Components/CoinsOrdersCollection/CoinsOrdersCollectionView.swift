@@ -1,5 +1,4 @@
 import UIKit
-//import SkeletonView
 
 final class CoinsOrdersCollectionView: UICollectionView {
 
@@ -13,13 +12,13 @@ final class CoinsOrdersCollectionView: UICollectionView {
     var onToppingSelected: ( (Int) -> Void )?
 
     private var personalData: Personal?
+    private var state: ScreenState = .loading
 
     // MARK: - Init
-    init(frame: CGRect = .zero, collectionViewLayout layout: UICollectionViewLayout = UICollectionViewLayout(), personalData: Personal?) {
+    override init(frame: CGRect = .zero, collectionViewLayout layout: UICollectionViewLayout = UICollectionViewLayout()) {
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         let customLayout = configLayout()
         collectionViewLayout = customLayout
-        self.personalData = personalData
         configureCollectionView()
         setupLayout()
     }
@@ -27,10 +26,18 @@ final class CoinsOrdersCollectionView: UICollectionView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    func updateUI(_ personalData: Personal) {
+// MARK: - Public methods
+extension CoinsOrdersCollectionView {
+    func getPersonalData(_ personalData: Personal) {
         self.personalData = personalData
         reloadData()
+    }
+
+    func setState(_ state: ScreenState) {
+        self.state = state
+        reloadCollection()
     }
 }
 
@@ -40,6 +47,7 @@ private extension CoinsOrdersCollectionView {
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
         register(CoinsOrdersCollectionViewCell.self, forCellWithReuseIdentifier: CoinsOrdersCollectionViewCell.identifier)
+        register(SkeletonCollectionViewCell.self, forCellWithReuseIdentifier: SkeletonCollectionViewCell.identifier)
         dataSource = self
         delegate = self
     }
@@ -62,24 +70,34 @@ private extension CoinsOrdersCollectionView {
 extension CoinsOrdersCollectionView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        countOfItems
+        switch state {
+        case .loading: return 1
+        case .success: return countOfItems
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CoinsOrdersCollectionViewCell.identifier, for: indexPath) as? CoinsOrdersCollectionViewCell else { return UICollectionViewCell() }
-        guard let personalData else { return cell }
-        cell.configureCell(indexPath, data: personalData)
-        return cell
+        switch state {
+        case .loading:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SkeletonCollectionViewCell.identifier, for: indexPath) as? SkeletonCollectionViewCell else { return UICollectionViewCell() }
+            return cell
+        case .success:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CoinsOrdersCollectionViewCell.identifier, for: indexPath) as? CoinsOrdersCollectionViewCell else { return UICollectionViewCell() }
+            guard let personalData else { return cell }
+            cell.configureCell(indexPath, data: personalData)
+            return cell
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        switch state {
+        case .loading: return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        case .success: return CGSize(width: cellWidth, height: cellHeight)
+        }
     }
 }
 
-// MARK: - Setup Skeleton
-//extension CoinsOrdersCollectionView: SkeletonCollectionViewDataSource {
-//    func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        countOfItems
-//    }
-//
-//    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
-//        CoinsOrdersCollectionViewCell.identifier
-//    }
-//}
+// MARK: - Supporting methods
+private extension CoinsOrdersCollectionView {
+
+}

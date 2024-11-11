@@ -21,7 +21,7 @@ final class DataStorage {
     var onDataFetchedSuccessfully: (() -> Void)?
     var onToppingsFetchedSuccessfully: (([Topping]) -> Void)?
     var onStoriesFetchedSuccessfully: (([Story]) -> Void)?
-    var onItemsFetchedSuccessfully: (([Item]) -> Void)?
+    var onItemsFetchedSuccessfully: (() -> Void)?
     var onPromoFetchedSuccessfully: (([Promo]) -> Void)?
     var onPersonalDataFetchedSuccessfully: ((Personal) -> Void)?
 
@@ -156,7 +156,7 @@ extension DataStorage {
                 fetchedItems = items.sorted { $0.category.rawValue < $1.category.rawValue }
                 getArrayOfRandomItems(5)
                 getCategoriesFromCatalog()
-                onItemsFetchedSuccessfully?(items)
+                onItemsFetchedSuccessfully?()
             case .failure(let error):
                 print(error)
             }

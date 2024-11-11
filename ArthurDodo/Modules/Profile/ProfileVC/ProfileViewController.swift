@@ -1,11 +1,10 @@
 import UIKit
-//import SkeletonView
 
 final class ProfileViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = ProfileHeaderView()
-    private lazy var personalDataCollectionView = CoinsOrdersCollectionView(personalData: personalData)
+    private lazy var personalDataCollectionView = CoinsOrdersCollectionView()
     private lazy var promoStackView = PromoStackView()
     private lazy var missionStackView = MissionStackView()
     private lazy var contentStackView: UIStackView = {
@@ -21,8 +20,7 @@ final class ProfileViewController: UIViewController {
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
 
-    private var personalData: Personal?
-    private var isDataLoaded: Bool = false
+    private var state: ScreenState = .loading
 
     private let storage: DataStorage
     private let router: Router
@@ -43,12 +41,7 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-    }
-
-    // При каждом появлении экрана мы решаем нужно ли загружать данные из сети или просто забрать с сервера (делаем тут а не во viewDidLoad из-за скелетона, там он не работает)
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        fetchDataFromServerOrGetDataFromStorage()
+        fetchData()
     }
 }
 
@@ -102,20 +95,6 @@ private extension ProfileViewController {
     }
 }
 
-// MARK: - Supporting methods
-private extension ProfileViewController {
-    // Мы спрашиваем были ли ранее уже загружены данные и если нет, то загружаем, а если да - то просто забираем их с хранилища
-    func fetchDataFromServerOrGetDataFromStorage() {
-        let isDataLoaded = storage.isPersonalDataLoaded()
-        if !isDataLoaded {
-            showSkeleton()
-            fetchData()
-        } else {
-            getDataFromStorage()
-        }
-    }
-}
-
 // MARK: - Setup Actions
 private extension ProfileViewController {
     func setupActions() {
@@ -139,45 +118,59 @@ private extension ProfileViewController {
 }
 
 // MARK: - Fetch Data
-private extension ProfileViewController {
+private extension ProfileViewController { // Запрашиваем данные с сервера
     func fetchData() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             guard let self else { return }
-            fetchPersonalData()
-            fetchPromo()
-        }
-    }
 
-    func fetchPersonalData() {
-        storage.fetchPersonalData()
-        storage.onPersonalDataFetchedSuccessfully = { [weak self] personalData in
-            self?.personalData = personalData
-            self?.personalDataCollectionView.updateUI(personalData)
-        }
-    }
+            let dispatchGroup = DispatchGroup() // Решаем задачу вызвать setState только после завершения двух методов: fetchPersonalData, fetchPromo. Сначала делаем группу.
 
-    func fetchPromo() {
-        storage.fetchPromo()
-        storage.onPromoFetchedSuccessfully = { [weak self] promo in
-            guard let self else { return }
-            DispatchQueue.main.async {
-                self.promoStackView.updateUI(promo)
-                self.stopSkeleton()
+            // Входим в группу и выполняем метод, когда метод выполнен, вызывается комплишн и покидаем группу
+            dispatchGroup.enter()
+            fetchPersonalData {
+                dispatchGroup.leave()
+            }
+
+            // Входим в группу и выполняем метод, когда метод выполнен, вызывается комплишн и покидаем группу
+            dispatchGroup.enter()
+            fetchPromo {
+                dispatchGroup.leave()
+            }
+
+            // Группа сообщает, что все операции внутри нее выполнены и можно выполнять операции в теле setState, missionStackView.setState
+            dispatchGroup.notify(queue: .main) { [weak self] in
+                guard let self else { return }
+                self.setState(view: .profile, state: .success)
+                self.setState(view: .mission, state: .success)
             }
         }
     }
 
-    func getDataFromStorage() {
-        if let personalData = storage.getPersonalData() {
-            personalDataCollectionView.updateUI(personalData)
+    // Запрашиваем персональные данные с сервера: додокоины, кол-во заказов, адреса
+    func fetchPersonalData(completion: @escaping (() -> Void)) {
+        storage.fetchPersonalData()
+        storage.onPersonalDataFetchedSuccessfully = { [weak self] personalData in
+            guard let self else { return }
+            passPersonalDataToCollectionView(personalData)
+            setState(view: .personalData, state: .success)
+            completion()
         }
-        let promo = storage.getPromoFromStorage()
-        promoStackView.updateUI(promo)
+    }
+
+    // Запрашиваем спецпредложения с сервера (раздел Акции)
+    func fetchPromo(completion: @escaping (() -> Void)) {
+        storage.fetchPromo()
+        storage.onPromoFetchedSuccessfully = { [weak self] promo in
+            guard let self else { return }
+            passPromoToCollectionView(promo)
+            setState(view: .promo, state: .success)
+            completion()
+        }
     }
 }
 
 // MARK: - Setup router
-private extension ProfileViewController {
+private extension ProfileViewController { // Здесь все переходы между экранами
     func showChatAlert() {
         router.showChatAlert()
     }
@@ -194,17 +187,22 @@ private extension ProfileViewController {
     }
 }
 
-// MARK: - Setup Skeleton
+// MARK: - Supporting methods
 private extension ProfileViewController {
-    func showSkeleton() {
-//        personalDataCollectionView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .belizeHole))
-//        promoStackView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .emerald))
-//        missionStackView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .greenSea))
+    func passPersonalDataToCollectionView(_ personalData: Personal) {
+        personalDataCollectionView.getPersonalData(personalData)
     }
 
-    func stopSkeleton() {
-//        promoStackView.hideSkeleton()
-//        missionStackView.hideSkeleton()
-//        personalDataCollectionView.hideSkeleton()
+    func passPromoToCollectionView(_ promo: [Promo]) {
+        promoStackView.updateUI(promo)
+    }
+
+    func setState(view: ProfileView, state: ScreenState) {
+        switch view {
+        case .profile: self.state = state
+        case .personalData: personalDataCollectionView.setState(state)
+        case .promo: promoStackView.setState(state)
+        case .mission: missionStackView.setState(state)
+        }
     }
 }
