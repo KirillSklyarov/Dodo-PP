@@ -92,7 +92,7 @@ private extension DeliveryVC {
 
     // Получаем общую сумму заказа и обновляем кнопку
     func fetchOrderDetails() {
-        let totalPrice = storage.getTotalOrderPrice()
+        let totalPrice = storage.getTotalCartPrice()
         totalPriceView.updateUI(with: totalPrice)
     }
 }
@@ -207,6 +207,7 @@ private extension DeliveryVC {
 private extension DeliveryVC {
     func setupActions() {
         setupAddressTableViewAction()
+        setupTimeCollectionAction()
         setupPaymentTableView()
         setupPayButtonActions()
     }
@@ -217,6 +218,12 @@ private extension DeliveryVC {
             router.showChooseAddress { addressName in
                 self.updateAddress(addressName)
             }
+        }
+    }
+
+    func setupTimeCollectionAction() {
+        timeCollection.onDeliveryTimeSelected = { [weak self] time in
+            self?.storage.setDeliveryTime(time: time)
         }
     }
 
@@ -232,7 +239,9 @@ private extension DeliveryVC {
     func setupPayButtonActions() {
         payButton.onPayButtonTapped = { [weak self] in
             guard let self else { return }
-            setActiveOrderToUserDefaults()
+            storage.configureOrder()
+            guard let order = storage.getOrderFromStorage() else { print("We have no order"); return }
+            setActiveOrderToUserDefaults(order)
             router.showFinalVC()
         }
     }
@@ -247,7 +256,8 @@ private extension DeliveryVC {
     }
 
     // Отправляет в UserDefaults инфу, что есть активный заказ
-    func setActiveOrderToUserDefaults() {
-        UserDefaults.standard.setActiveOrderIsTrue()
+    func setActiveOrderToUserDefaults(_ order: Order) {
+        print("3. Order: \(String(describing: order))")
+        UserDefaults.standard.sendOrder(order)
     }
 }

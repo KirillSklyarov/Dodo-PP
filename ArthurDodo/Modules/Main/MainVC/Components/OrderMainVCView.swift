@@ -24,21 +24,18 @@ final class OrderMainVCView: UIView {
     }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Заказ на 5000 ₽"
         label.textColor = AppColors.grayFont
         label.font = AppFonts.semibold18
         return label
     }()
     private lazy var statusLabel: UILabel = {
         let label = UILabel()
-        label.text = "Заказ собирается"
         label.textColor = AppColors.grayFont
         label.font = AppFonts.semibold18
         return label
     }()
     private lazy var timeLabel: UILabel = {
         let label = UILabel()
-        label.text = "~17.00"
         label.textColor = AppColors.backgroundBlack
         label.font = AppFonts.bold20
         label.backgroundColor = .systemYellow
@@ -84,6 +81,31 @@ extension OrderMainVCView {
     func calculateHeight(_ isOrder: Bool) {
         viewHeightConstraint?.constant = isOrder ? viewHeight : 0
     }
+
+    func getOrder(_ order: Order, _ totalPrice: Int) {
+        updateUI(with: order, totalPrice)
+    }
+}
+
+// MARK: - Supporting methods
+private extension OrderMainVCView {
+    // Обновляем все лейблы
+    func updateUI(with order: Order, _ totalPrice: Int) {
+        titleLabel.text = "Заказ на \(totalPrice) ₽"
+        statusLabel.text = order.status.rawValue
+        updateTimeLabel(order)
+    }
+
+    // Показываем правильно время доставки
+    func updateTimeLabel(_ order: Order) {
+        var correctTime = "30 мин"
+        if order.deliveryTime != "" {
+            if let timeText = order.deliveryTime?.components(separatedBy: "-").last?.dropFirst() {
+                correctTime = "\(timeText)"
+            }
+        }
+        timeLabel.text = "~\(correctTime)"
+    }
 }
 
 // MARK: - Setup UI
@@ -128,9 +150,9 @@ private extension OrderMainVCView {
 
             timeLabel.centerXAnchor.constraint(equalTo: timeView.centerXAnchor),
             timeLabel.centerYAnchor.constraint(equalTo: timeView.centerYAnchor),
-            timeView.widthAnchor.constraint(equalTo: contentStackView.widthAnchor, multiplier: 0.25),
+            timeView.widthAnchor.constraint(equalTo: contentStackView.widthAnchor, multiplier: 0.28),
 
-            timeLabel.widthAnchor.constraint(equalTo: timeView.widthAnchor, multiplier: 0.8),
+            timeLabel.widthAnchor.constraint(equalTo: timeView.widthAnchor, multiplier: 0.87),
         ])
     }
 }

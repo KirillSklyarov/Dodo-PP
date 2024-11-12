@@ -4,31 +4,32 @@ import UIKit
 final class Router {
 
     // MARK: - Properties
-    weak var di: DependencyContainer!
     private let navigationController: UINavigationController
+    private let screenFactory: ScreenFactory
 
     var onAllScreenDismissed: (() -> Void)?
 
     // MARK: - Init
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, screenFactory: ScreenFactory) {
         self.navigationController = navigationController
+        self.screenFactory = screenFactory
     }
 }
 
 // MARK: - Navigation methods
 extension Router {
     func showMainScreen() {
-        let vc = di.screenFactory.makeMainScreen()
+        let vc = screenFactory.makeMainScreen()
         navigationController.pushViewController(vc, animated: true)
     }
 
     func showProfileScreen() {
-        let vc = di.screenFactory.makeProfileScreen()
+        let vc = screenFactory.makeProfileScreen()
         navigationController.present(vc, animated: true)
     }
 
     func showProductDetailsScreen(completion: (() -> Void)?) {
-        let vc = di.screenFactory.makeProductDetailsScreen()
+        let vc = screenFactory.makeProductDetailsScreen()
         vc.onCartButtonTapped = completion
 
         vc.modalPresentationStyle = .fullScreen
@@ -36,20 +37,20 @@ extension Router {
     }
 
     func showStories(_ indexPath: IndexPath, completion: (() -> Void)?) {
-        let vc = di.screenFactory.makeStoriesScreen(indexPath: indexPath)
+        let vc = screenFactory.makeStoriesScreen(indexPath: indexPath)
         vc.modalPresentationStyle = .fullScreen
         navigationController.present(vc, animated: true)
         vc.onStoriesVCDismissed = completion
     }
 
     func showAddress() {
-        let vc = di.screenFactory.makeAddressScreen()
+        let vc = screenFactory.makeAddressScreen()
         vc.modalPresentationStyle = .fullScreen
         navigationController.present(vc, animated: true)
     }
 
     func showCart(completion: (() -> Void)?) {
-        let cartVC = di.screenFactory.makeCartScreen()
+        let cartVC = screenFactory.makeCartScreen()
         let vc = UINavigationController(rootViewController: cartVC)
         navigationController.present(vc, animated: true)
 
@@ -57,19 +58,19 @@ extension Router {
     }
 
     func showChatAlert() {
-        let vc = di.screenFactory.makeChatAlertScreen()
+        let vc = screenFactory.makeChatAlertScreen()
         vc.modalPresentationStyle = .overFullScreen
         vc.modalTransitionStyle = .crossDissolve
         navigationController.visibleViewController?.present(vc, animated: false)
     }
 
     func showPersonalData() {
-        let vc = di.screenFactory.makePersonalDataScreen()
+        let vc = screenFactory.makePersonalDataScreen()
         navigationController.visibleViewController?.present(vc, animated: true)
     }
 
     func showApplySpecialOffer(_ offer: Promo) {
-        let vc = di.screenFactory.makeApplySpecialOfferScreen(offer)
+        let vc = screenFactory.makeApplySpecialOfferScreen(offer)
         guard let configureSheet = vc.sheetPresentationController else { return }
         configureSheet.detents = [.medium()]
         configureSheet.prefersGrabberVisible = true
@@ -77,12 +78,12 @@ extension Router {
     }
 
     func showDelivery() {
-        let vc = di.screenFactory.makeDeliveryScreen()
+        let vc = screenFactory.makeDeliveryScreen()
         navigationController.visibleViewController?.present(vc, animated: true)
     }
 
     func showChooseAddress(completion: ((String) -> Void)?) {
-        let vc = di.screenFactory.makeChooseAddressScreen()
+        let vc = screenFactory.makeChooseAddressScreen()
         vc.modalPresentationStyle = .fullScreen
         navigationController.visibleViewController?.present(vc, animated: false)
         guard let chooseVC = vc.viewControllers.first as? ChooseAddressVC else { return }
@@ -90,14 +91,14 @@ extension Router {
     }
 
     func showChoosePaymentMethod(completion: ((PaymentMethod) -> Void)?) {
-        let vc = di.screenFactory.makeChoosePaymentMethodScreen()
+        let vc = screenFactory.makeChoosePaymentMethodScreen()
         navigationController.visibleViewController?.present(vc, animated: false)
         guard let paymentVC = vc.viewControllers.first as? ChoosePaymentMethodVC else { return }
         paymentVC.onPaymentMethodSelected = completion
     }
 
     func showFinalVC() {
-        let vc = di.screenFactory.makeFinalVCScreen()
+        let vc = screenFactory.makeFinalVCScreen()
         vc.modalPresentationStyle = .fullScreen
         navigationController.visibleViewController?.present(vc, animated: false)
     }
@@ -108,13 +109,13 @@ extension Router {
     }
 
     func showEditAddressVC(_ address: Address) {
-        let vc = di.screenFactory.makeEditAddressScreen(address)
+        let vc = screenFactory.makeEditAddressScreen(address)
         vc.modalPresentationStyle = .fullScreen
         navigationController.visibleViewController?.present(vc, animated: true)
     }
 
     func showAddNewAddressVC() {
-        let vc = di.screenFactory.makeAddNewAddressScreen()
+        let vc = screenFactory.makeAddNewAddressScreen()
         vc.modalPresentationStyle = .fullScreen
         navigationController.visibleViewController?.present(vc, animated: true)
     }

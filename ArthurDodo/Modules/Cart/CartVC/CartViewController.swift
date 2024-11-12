@@ -65,7 +65,7 @@ private extension CartViewController {
             let dispatchGroup = DispatchGroup()
 
             dispatchGroup.enter()
-            fetchOrders() {
+            fetchCart() {
                 dispatchGroup.leave()
             }
 
@@ -86,16 +86,16 @@ private extension CartViewController {
     }
 
     // Получаем заказ с хранилища и передаем его в таблицу
-    func fetchOrders(completion: (() -> Void)? = nil) {
-        let order = storage.getOrderFromStorage()
-        passOrderToView(order)
+    func fetchCart(completion: (() -> Void)? = nil) {
+        guard let order = storage.getCartFromStorage() else { print("Cart not found in storage"); return }
+        passCartToView(order)
         updateUI()
         completion?()
     }
 
     func updateUI() {
-        let countOfItems = storage.getCountOfItems()
-        let totalPrice = storage.getTotalOrderPrice()
+        let countOfItems = storage.getCountOfItemsInCart()
+        let totalPrice = storage.getTotalCartPrice()
         updateOrderData(countOfItems, totalPrice)
         updateDodoCoinsView(countOfItems, totalPrice)
         updateCartButtonPrice(totalPrice)
@@ -148,8 +148,8 @@ private extension CartViewController {
     }
 
     // Отправляем актуальный заказ далее для отражения на след вьюхе
-    func passOrderToView(_ order: [Order]) {
-        orderStackView.getOrder(order)
+    func passCartToView(_ cart: Cart) {
+        orderStackView.getCart(cart)
     }
 }
 
@@ -171,13 +171,13 @@ private extension CartViewController {
 
         // Удаляем позицию из заказа и опять фетчим заказы
         orderStackView.onItemDeletedFromCart = { [weak self] indexPath in
-            self?.storage.removeItemFromOrderStorage(indexPath)
-            self?.fetchOrders()
+            self?.storage.removeItemFromCart(indexPath)
+            self?.fetchCart()
         }
 
         orderStackView.onCountChanged = { [weak self] indexPath, count in
-            self?.storage.increaseCountOfItem(indexPath, count)
-            self?.fetchOrders()
+            self?.storage.changeCountOfItems(indexPath, count)
+            self?.fetchCart()
         }
 
         orderStackView.onChangeItem = { [weak self] in
@@ -203,8 +203,8 @@ private extension CartViewController {
     func setupToppingsCollectionView() {
         itemsToAddStackView.onNewItemToAddToCart = { [weak self] itemToAddToOrder in
             guard let self else { return }
-            storage.addItemToOrder(itemToAddToOrder)
-            fetchOrders()
+            storage.addItemToCart(item: itemToAddToOrder)
+            fetchCart()
 //            fetchDataFromStorage()
 //            orderStackView.uploadOrder()
         }

@@ -1,5 +1,6 @@
 import UIKit
 
+// Ячейка таблицы с товарами в корзине (самая верхняя секция под хэдером)
 final class CartProductCell: UITableViewCell {
 
     // MARK: - Properties
@@ -74,14 +75,14 @@ final class CartProductCell: UITableViewCell {
 
 // MARK: - Public methods
 extension CartProductCell {
-    func configureCell(itemInOrder: Order) {
-        pizzaImageView.image = UIImage(named: itemInOrder.imageName)
-        titleLabel.text = itemInOrder.itemName
+    func configureCell(itemInCart: CartItem) {
+        pizzaImageView.image = UIImage(named: itemInCart.imageName)
+        titleLabel.text = itemInCart.name
 
-        setProductDetails(itemInOrder) // Текст с тестом, размером или весом
-        setPrice(itemInOrder)
-        isPizzaHit(itemInOrder)
-        let count = itemInOrder.count
+        setProductDetails(itemInCart) // Текст с тестом, размером или весом
+        setPrice(itemInCart)
+        isItemHit(itemInCart)
+        let count = itemInCart.count
         countStepper.setStepperValue(count)
     }
 }
@@ -159,8 +160,8 @@ private extension CartProductCell {
         ])
     }
 
-    func isPizzaHit(_ pizza: Order) {
-        if pizza.isHit {
+    func isItemHit(_ item: CartItem) {
+        if item.isHit {
             hitImageView.isHidden = false
         } else {
             hitImageView.isHidden = true
@@ -170,18 +171,18 @@ private extension CartProductCell {
 
 // MARK: - Supporting methods
 private extension CartProductCell {
-     func setProductDetails(_ itemInOrder: Order) {
+    func setProductDetails(_ itemInCart: CartItem) {
         let detailText =
-        if itemInOrder.dough != nil {
-            "\(itemInOrder.size.displayName), \(itemInOrder.dough!.rawValue)"
+        if itemInCart.dough != nil {
+            "\(itemInCart.size.displayName), \(itemInCart.dough!.rawValue)"
         } else {
-            "\(itemInOrder.weight) г"
+            "\(itemInCart.weight) г"
         }
         sizeDoughLabel.text = detailText
     }
 
-     func setPrice(_ itemInOrder: Order) {
-        let totalPrice = itemInOrder.price * itemInOrder.count
+    func setPrice(_ itemInCart: CartItem) {
+        let totalPrice = itemInCart.price * itemInCart.count
         priceLabel.text = "\(totalPrice) ₽"
     }
 }

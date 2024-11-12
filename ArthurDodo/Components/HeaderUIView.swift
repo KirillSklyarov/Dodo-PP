@@ -1,10 +1,3 @@
-//
-//  HeaderUIView.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 17.09.2024.
-//
-
 import UIKit
 
 final class HeaderView: UIView {

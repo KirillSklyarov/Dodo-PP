@@ -4,7 +4,7 @@ extension UserDefaults {
     enum Keys {
         static let preferredPaymentMethod = "preferredPaymentMethod"
         static let viewedStories = "viewedStories"
-        static let isActiveOrder = "activeOrder"
+        static let order = "order"
     }
 }
 
@@ -34,7 +34,7 @@ extension UserDefaults {
         if let paymentMethodTitle = string(forKey: Keys.preferredPaymentMethod) {
             return paymentMethodTitle
         } else {
-            print("No preferred payment method set")
+//            print("No preferred payment method set")
             return nil
         }
     }
@@ -46,16 +46,30 @@ extension UserDefaults {
 
 // MARK: - Active order
 extension UserDefaults {
-    func setActiveOrderIsTrue() {
-        set(true, forKey: Keys.isActiveOrder)
-    }
-
+//    func setActiveOrderIsTrue() {
+//        set(true, forKey: Keys.isActiveOrder)
+//    }
+//
     func getIsActiveOrder() -> Bool {
-        return bool(forKey: Keys.isActiveOrder)
+        return data(forKey: Keys.order) != nil
     }
 
     func resetActiveOrder() {
-        removeObject(forKey: Keys.isActiveOrder)
+        removeObject(forKey: Keys.order)
+    }
+
+    func sendOrder(_ order: Order) {
+        if let encodedOrder = try? JSONEncoder().encode(order) {
+            set(encodedOrder, forKey: Keys.order)
+        } else {
+            print("We couldn't encode the order to UserDefaults.")
+        }
+    }
+
+    func getOrder() -> Order? {
+        guard let encodedOrder = data(forKey: Keys.order) else { return nil }
+        guard let order = try? JSONDecoder().decode(Order.self, from: encodedOrder) else { print("We couldn't decode the order from UserDefaults."); return nil }
+        return order
     }
 }
 

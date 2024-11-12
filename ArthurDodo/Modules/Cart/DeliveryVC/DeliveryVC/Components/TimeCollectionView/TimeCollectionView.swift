@@ -8,6 +8,8 @@ final class TimeCollectionView: UICollectionView {
 
     private var timeIntervals: [String] = []
 
+    var onDeliveryTimeSelected: ((String) -> Void)?
+
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let collectionLayout = UICollectionViewFlowLayout()
@@ -54,9 +56,9 @@ extension TimeCollectionView: UICollectionViewDataSource, UICollectionViewDelega
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-        let cell = collectionView.cellForItem(at: indexPath)
-        cell?.layer.borderWidth = 2
+        designSelectedCell(collectionView, indexPath)
+        let timeInterval = timeIntervals[indexPath.row]
+        onDeliveryTimeSelected?(timeInterval)
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -90,5 +92,12 @@ private extension TimeCollectionView {
         } else {
             cell.layer.borderWidth = 0
         }
+    }
+
+    private func designSelectedCell(_ collectionView: UICollectionView,
+                                    _ indexPath: IndexPath) {
+        selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+        let cell = collectionView.cellForItem(at: indexPath)
+        cell?.layer.borderWidth = 2
     }
 }

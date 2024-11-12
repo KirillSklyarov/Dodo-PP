@@ -10,12 +10,14 @@ final class DataStorage {
     private var fetchedPromo: [Promo] = []
     private var fetchedPersonalData: Personal?
     private var category: [CategoryName] = []
-    private var order: [Order] = []
+    private var order: Order?
+    private var cart: Cart?
     private var specialOfferArray: [Item] = []
     private var selectedItem: Item?
     private lazy var preferredPaymentMethod: PaymentMethod = .cbp
+    private var deliveryTime = ""
 
-    private var networkManager: NetworkManager
+    private let networkManager: NetworkManager
 
     // MARK: - Callbacks
     var onDataFetchedSuccessfully: (() -> Void)?
@@ -28,6 +30,45 @@ final class DataStorage {
     // MARK: - Init
     init(networkManager: NetworkManager) {
         self.networkManager = networkManager
+        getOrderFromUserDefaults()
+    }
+}
+
+// MARK: - Cart
+extension DataStorage {
+    func addItemToCart(item: CartItem) {
+        if cart == nil {
+            cart = Cart(items: [item])
+        } else {
+            cart?.items.append(item)
+        }
+    }
+
+    func getCartFromStorage() -> Cart? {
+        guard let cart else { print("1.Cart is nil"); return nil }
+        return cart
+    }
+
+    // Мы возвращаем цену только в том случае,
+    func getTotalCartPrice() -> Int {
+        guard let cart else { return 0 }
+        return cart.items.compactMap{ $0.price * $0.count }.reduce(0, +)
+    }
+
+    // Изменяем кол-во позиций в корзине
+    func changeCountOfItems(_ indexPath: IndexPath, _ value: Int) {
+        cart?.items[indexPath.row].count = value
+    }
+
+    // Удаляем позицию из корзины
+    func removeItemFromCart(_ indexPath: IndexPath) {
+        cart?.items.remove(at: indexPath.row)
+    }
+
+    // Возвращаем кол-во товаров в корзине (например, в корзине 2 маргариты и 1 сок - ответ: 3)
+    func getCountOfItemsInCart() -> Int {
+        guard let cart else { print("Cart is nil"); return 0 }
+        return cart.items.compactMap{ $0.count }.reduce(0, +)
     }
 }
 
@@ -220,33 +261,39 @@ extension DataStorage {
 
 // MARK: - Orders
 extension DataStorage {
-    func addItemToOrder(_ item: Order) {
-        self.order.append(item)
+    // Мы возвращаем цену только в том случае,
+    func getTotalOrderPrice() -> Int {
+        guard let order else { print("Order is nil"); return 0 }
+        return order.position.compactMap{ $0.price * $0.count }.reduce(0, +)
     }
 
-    func increaseCountOfItem(_ indexPath: IndexPath, _ value: Int) {
-        order[indexPath.row].count = value
-    }
-
-    func removeItemFromOrderStorage(_ indexPath: IndexPath) {
-        order.remove(at: indexPath.row)
-    }
-
-    func getOrderFromStorage() -> [Order] {
+    func getOrderFromStorage() -> Order? {
         order
     }
 
-    func getTotalOrderPrice() -> Int {
-        order.compactMap{ $0.price * $0.count }.reduce(0, +)
+    // Получаем заказ из UserDefaults
+    private func getOrderFromUserDefaults() {
+        order = UserDefaults.standard.getOrder()
     }
 
-    func getCountOfItems() -> Int {
-        order.compactMap{ $0.count }.reduce(0, +)
+    func setDeliveryTime(time: String) {
+        deliveryTime = time
     }
 
-    // Очищаем заказы (нужно при отправке заказа к исполнению)
-    func eraseOrder() {
-        order = []
+    func configureOrder() {
+        guard let orderPositions = castCartToOrder() else { print("OrderPositions is nil"); return }
+        guard let address = getMainAddress()?.cityStreetHouse else { print("No main address"); return }
+        order = Order(position: orderPositions, deliveryAddress: address, deliveryTime: deliveryTime, status: .inProgress)
+    }
+
+    private func castCartToOrder() -> [OrderPosition]? {
+        guard let cart else { print("Cart is nil"); return nil}
+        var orderPositions: [OrderPosition] = []
+        for item in cart.items {
+            let position = OrderPosition(itemName: item.name, size: item.size, dough: item.dough, weight: item.weight, price: item.price, count: item.count)
+            orderPositions.append(position)
+        }
+        return orderPositions
     }
 }
 
@@ -276,7 +323,7 @@ extension DataStorage {
                 preferredPaymentMethod = tempMethod
             }
         } else {
-            print("Default payment method = .cbp")
+//            print("Default payment method = .cbp")
         }
     }
 }

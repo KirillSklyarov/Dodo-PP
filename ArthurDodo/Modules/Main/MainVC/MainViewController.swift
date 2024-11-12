@@ -15,7 +15,6 @@ final class MainViewController: UIViewController {
     private let rightInset: CGFloat = -20
 
     private var state: ScreenState = .loading
-    private var isActiveOrder: Bool?
 
     private let storage: DataStorage
     private let router: Router
@@ -37,9 +36,8 @@ final class MainViewController: UIViewController {
         setupUI()
         setupActions()
         fetchData()
-        showOrHideOrderView()
 
-//        resetActiveOrder()
+//        resetActiveOrder() // Просто сбрасывает активный заказ (использую для тестирования)
     }
 
     // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет
@@ -58,7 +56,7 @@ private extension MainViewController {
         view.addSubviews(headerView, orderView, contentCollectionView, cartButton)
         setupLayout()
 
-        getActiveOrder()
+        isNeedToShowOrderView()
     }
 
     func setupNavigationBar() {
@@ -154,8 +152,7 @@ private extension MainViewController {
     func setupRouterAction() {
         router.onAllScreenDismissed = { [weak self] in
             guard let self else { return }
-            self.getActiveOrder()
-            self.showOrHideOrderView()
+            self.isNeedToShowOrderView()
         }
     }
 }
@@ -284,20 +281,29 @@ private extension MainViewController {
 
     // При каждом показе экрана мы запрашиваем актуальную корзину и если там есть позиции, то обновляем сумму на кнопке
     func updateCart() {
-        let totalPrice = storage.getTotalOrderPrice()
+        let totalPrice = storage.getTotalCartPrice()
         cartButton.updateCart(with: totalPrice)
     }
 
     // Показать или не показать вью с заказом
-    func showOrHideOrderView() {
-        if let isActiveOrder {
-            orderView.calculateHeight(isActiveOrder)
-        }
+    func isNeedToShowOrderView() {
+        let isActiveOrder = UserDefaults.standard.getIsActiveOrder() // Проверяет у UserDefaults есть ли активный заказ
+
+        // Только если заказ есть, то пересылаем данные во вью
+        if isActiveOrder { passOrderToView() }
+
+        updateUI(isActiveOrder)
     }
 
-    // Проверяет у UserDefaults есть ли активный заказ
-    func getActiveOrder() {
-        isActiveOrder = UserDefaults.standard.getIsActiveOrder()
+    // Либо показывает orderView, либо не показывает (выставляет высоту 0)
+    func updateUI(_ isActiveOrder: Bool) {
+        orderView.calculateHeight(isActiveOrder)
+    }
+
+    func passOrderToView() {
+        guard let order = storage.getOrderFromStorage() else { print("We have no order in storage"); return }
+        let totalPrice = storage.getTotalOrderPrice()
+        orderView.getOrder(order, totalPrice)
     }
 
     // Метод сбрасывает активный заказ для отладки,

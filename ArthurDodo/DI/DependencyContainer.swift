@@ -14,15 +14,13 @@ final class DependencyContainer {
         let encoder = JSONEncoder()
         let session = URLSession(configuration: .default)
 
+        self.navigationController = navigationController
         networkManager = NetworkManager(decoder: decoder, encoder: encoder, session: session)
         storage = DataStorage(networkManager: networkManager)
-        screenFactory = ScreenFactory()
+        screenFactory = ScreenFactory(storage: storage)
 
-        self.navigationController = navigationController
+        router = Router(navigationController: navigationController, screenFactory: screenFactory)
 
-        router = Router(navigationController: navigationController)
-
-        router.di = self
-        screenFactory.di = self
+        screenFactory.router = router
     }
 }

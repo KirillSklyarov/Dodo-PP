@@ -7,7 +7,7 @@ final class ItemsToAddStackView: UIStackView {
     private lazy var itemsToAddCollectionView = AddToCartCollectionView()
     private var itemsToAdd: [Item] = []
 
-    var onNewItemToAddToCart: ((Order) -> Void)?
+    var onNewItemToAddToCart: ((CartItem) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {

@@ -1,5 +1,6 @@
 import UIKit
 
+// Класс, который отвечает за показ экрана с товаром (где фотка, описание, ингредиенты, состав и проч.)
 final class ProductDetailsViewController: UIViewController {
 
     // MARK: - UI Properties
@@ -132,22 +133,34 @@ private extension ProductDetailsViewController {
     func setupCartViewAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
-            guard let orderPosition = configureOrder() else { return }
-            storage.addItemToOrder(orderPosition)
+            guard let itemToCart = configureCart() else { return }
+            storage.addItemToCart(item: itemToCart)
+//            addItemToOrder(orderPosition)
             onCartButtonTapped?()
             dismiss(animated: true)
         }
     }
 
-    func configureOrder() -> Order? {
+    func configureCart() -> CartItem? {
         guard let item else { return nil}
         let chosenSize = getCorrectSize()
         let chosenDough = getCorrectDough()
         let weight = getCorrectWeight()
         let price = item.getPrice(size: chosenSize)
 
-        let order = Order(itemName: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, weight: weight, price: price, isHit: item.isHit)
-        return order
+        let positionToAddToCart = CartItem(name: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, weight: weight, price: price, isHit: item.isHit)
+        return positionToAddToCart
+    }
+
+    func configureOrder() -> OrderPosition? {
+        guard let item else { return nil}
+        let chosenSize = getCorrectSize()
+        let chosenDough = getCorrectDough()
+        let weight = getCorrectWeight()
+        let price = item.getPrice(size: chosenSize)
+
+        let positionToAddToOrder = OrderPosition(itemName: item.name, size: chosenSize, dough: chosenDough, weight: weight, price: price, count: 1)
+        return positionToAddToOrder
     }
 
     func getCorrectWeight() -> Int {

@@ -5,7 +5,7 @@ final class CartProductTableView: AppTableView {
     // MARK: - Properties&Callbacks
     private let tableRowHeight: CGFloat = 160
 
-    var order: [Order] = []
+    private var cart: Cart?
     var onUpdateCart: ( (Int) -> Void )?
     var onCellTapped: ( (Item) -> Void )?
     var onEmptyCart: ( () -> Void )?
@@ -29,8 +29,8 @@ final class CartProductTableView: AppTableView {
 // MARK: - Fetch data
 extension CartProductTableView {
     // Получаем актуальный заказ от VC и обновляем UI
-    func uploadOrder(_ order: [Order]) {
-        self.order = order
+    func uploadCart(_ cart: Cart) {
+        self.cart = cart
         orderLoaded()
         checkIfCartIsEmpty()
     }
@@ -59,7 +59,7 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch state {
         case .loading: return 1
-        case .success: return order.count
+        case .success: return cart?.items.count ?? 0
         }
     }
 
@@ -70,8 +70,9 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
             return cell
         case .success:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: CartProductCell.identifier, for: indexPath) as? CartProductCell else { print("rrrr"); return UITableViewCell() }
-            let item = order[indexPath.row]
-            cell.configureCell(itemInOrder: item)
+            guard let item = cart?.items[indexPath.row] else { print("Can't get item from Order"); return UITableViewCell()}
+
+            cell.configureCell(itemInCart: item)
 
             cell.onValueIsNull = { [weak self] in
                 self?.removeItemFromStorage(indexPath)
@@ -111,7 +112,8 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
 private extension CartProductTableView {
     // Запускаем информацию о закрытии окна, если заказов нет или обновляем UI если заказы есть
     func checkIfCartIsEmpty() {
-        if order.isEmpty {
+        guard let cart else {print("Cart is nil"); return }
+        if cart.items.isEmpty {
             onEmptyCart?()
         } else {
             updateUI()

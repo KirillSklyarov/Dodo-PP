@@ -1,5 +1,6 @@
 import UIKit
 
+// Это коллекция, которая отвечает за добавление новой позиции к действующему заказу (блок "Добавить к заказу")
 final class AddToCartCollectionView: UICollectionView {
 
     // MARK: - Properties
@@ -17,7 +18,7 @@ final class AddToCartCollectionView: UICollectionView {
     private var state: ScreenState = .loading
 
     var onToppingSelected: ( (Int) -> Void )?
-    var onNewItemToAddToCart: ( (Order) -> Void )?
+    var onNewItemToAddToCart: ( (CartItem) -> Void )?
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -98,28 +99,29 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let positionToAdd = getOrderFromIndexPath(indexPath)
+        let positionToAdd = getItemFromIndexPath(indexPath)
         print("positionToAdd \(positionToAdd)")
-        addItemToOrder(positionToAdd)
+        addItemToCart(positionToAdd)
     }
 
-    private func getOrderFromIndexPath(_ indexPath: IndexPath) -> Order {
+    private func getItemFromIndexPath(_ indexPath: IndexPath) -> CartItem {
         let itemToAdd = itemsToAddToOrder[indexPath.row]
         let positionToAdd = castOrderFromItem(itemToAdd)
         return positionToAdd
     }
 
-    func castOrderFromItem(_ item: Item) -> Order {
+    func castOrderFromItem(_ item: Item) -> CartItem {
         let size = item.getCorrectSize()
-        let price = item.getCorrectPrice()
         let dough: Dough? = item.category == .pizza ? .basic : nil
         let weight = item.getCorrectWeight()
+        let price = item.getCorrectPrice()
 
-        let order = Order(itemName: item.name, imageName: item.imageName, size: size, dough: dough, weight: weight, price: price, isHit: item.isHit)
-        return order
+        let cartPosition = CartItem(name: item.name, imageName: item.imageName, size: size, dough: dough, weight: weight, price: price, isHit: item.isHit)
+
+        return cartPosition
     }
 
-    private func addItemToOrder(_ item: Order) {
+    private func addItemToCart(_ item: CartItem) {
         onNewItemToAddToCart?(item)
     }
 }

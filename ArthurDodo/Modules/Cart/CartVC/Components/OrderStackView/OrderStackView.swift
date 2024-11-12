@@ -3,8 +3,8 @@ import UIKit
 final class OrderStackView: UIStackView {
 
     // MARK: - Properties
-    private lazy var orderView = OrderView()
-    private lazy var cartProductTableView = CartProductTableView()
+    private lazy var orderView = OrderView() // Плашка с кол-вом товара и общей суммой
+    private lazy var cartProductTableView = CartProductTableView() // Таблица с товарами в корзине
 
     var onEmptyCart: (() -> Void)?
     var onItemDeletedFromCart: ((IndexPath) -> Void)?
@@ -25,14 +25,14 @@ final class OrderStackView: UIStackView {
 
 // MARK: - Public methods
 extension OrderStackView {
-    // Получаем актуальный заказ от VC
-    func getOrder(_ order: [Order]) {
-        passOrderToView(order)
+    // Получаем актуальную корзину от VC
+    func getCart(_ cart: Cart) {
+        passCartToView(cart)
     }
 
     // Оправляем актуальный заказ для отражения в таблицу
-    private func passOrderToView(_ order: [Order]) {
-        cartProductTableView.uploadOrder(order)
+    private func passCartToView(_ cart: Cart) {
+        cartProductTableView.uploadCart(cart)
     }
 
     // При изменении кол-ва и общей цены обновляем заголовок
