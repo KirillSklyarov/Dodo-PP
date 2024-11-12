@@ -1,10 +1,3 @@
-//
-//  TimeCollectionViewCell.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 26.10.2024.
-//
-
 import UIKit
 
 final class TimeCollectionViewCell: UICollectionViewCell {
@@ -43,6 +36,7 @@ private extension TimeCollectionViewCell {
         layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
         backgroundColor = AppColors.backgroundGray
+        layer.borderColor = AppColors.buttonOrange.cgColor
         contentView.addSubviews(timeLabel)
 
         setupLayout()

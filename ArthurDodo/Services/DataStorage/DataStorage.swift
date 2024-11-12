@@ -194,6 +194,12 @@ extension DataStorage {
         }
     }
 
+    // Показывает были ли ранее загружены акции
+    func isPromoAlreadyFetched() -> Bool {
+        !fetchedPromo.isEmpty
+    }
+
+    // Возвращает загруженные акции 
     func getPromoFromStorage() -> [Promo] {
         fetchedPromo
     }

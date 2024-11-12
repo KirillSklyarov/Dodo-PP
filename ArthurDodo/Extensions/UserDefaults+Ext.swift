@@ -44,6 +44,7 @@ extension UserDefaults {
     }
 }
 
+// MARK: - Active order
 extension UserDefaults {
     func setActiveOrderIsTrue() {
         set(true, forKey: Keys.isActiveOrder)
@@ -52,4 +53,10 @@ extension UserDefaults {
     func getIsActiveOrder() -> Bool {
         return bool(forKey: Keys.isActiveOrder)
     }
+
+    func resetActiveOrder() {
+        removeObject(forKey: Keys.isActiveOrder)
+    }
 }
+
+

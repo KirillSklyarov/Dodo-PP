@@ -25,9 +25,15 @@ final class ItemsToAddStackView: UIStackView {
         itemsToAdd = items
         sendItemToAdd()
     }
+
     // Отправляем товары для отражения в категории "Добавить к заказу" далее по вьюхе
     private func sendItemToAdd() {
         itemsToAddCollectionView.getItemsToAddToOrder(itemsToAdd)
+    }
+
+    // Устанавливаем состояние экрана в коллекции
+    func setState(_ state: ScreenState) {
+        itemsToAddCollectionView.setState(state)
     }
 }
 

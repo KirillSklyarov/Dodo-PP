@@ -3,26 +3,26 @@ import UIKit
 final class DeliveryVC: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var addressTableView = DeliveryTableView()
+    private lazy var addressTableView = DeliveryTableView() // Таблица с адресом
     private lazy var timeLabel: UILabel = {
         let label = UILabel()
         label.text = "Время доставки"
         label.font = AppFonts.semibold20
         label.textColor = .white
         return label
-    }()
-    private lazy var timeCollection = TimeCollectionView()
+    }() // Время доставки
+    private lazy var timeCollection = TimeCollectionView() // Коллекция со временем
     private lazy var paymentLabel: UILabel = {
         let label = UILabel()
         label.text = "Оплата"
         label.font = AppFonts.semibold20
         label.textColor = .white
         return label
-    }()
-    private lazy var paymentTableView = PreferredPaymentMethodTableView(preferredPaymentMethod)
-    private lazy var orderDetailsView = DodoCoinsView(title: "Доставка", value: "Бесплатно", textColor: AppColors.grayFont)
-    private lazy var totalPriceView = OrderTotalPriceView()
-    private lazy var payButton = PaymentButtonView(preferredPaymentMethod)
+    }() // Оплата
+    private lazy var paymentTableView = PreferredPaymentMethodTableView(preferredPaymentMethod) // Коллекция с методами оплаты
+    private lazy var orderDetailsView = DodoCoinsView(title: "Доставка", value: "Бесплатно", textColor: AppColors.grayFont) // Блок с доставкой
+    private lazy var totalPriceView = OrderTotalPriceView() // Общая стоимость заказа
+    private lazy var payButton = PaymentButtonView(preferredPaymentMethod) // Кнопка оплатить
 
     // MARK: - Other properties
     private let topInset: CGFloat = 10

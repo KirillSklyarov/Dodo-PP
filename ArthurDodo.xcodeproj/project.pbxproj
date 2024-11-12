@@ -164,7 +164,6 @@
 		73FD889E2CD28DE9007E0C82 /* PaymentMethodTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD889D2CD28DE9007E0C82 /* PaymentMethodTableViewCell.swift */; };
 		73FD88A22CD28E5E007E0C82 /* PaymentMethodTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD88A12CD28E5E007E0C82 /* PaymentMethodTableView.swift */; };
 		73FE978A2CE253E40056D53D /* ProfileViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FE97892CE253E40056D53D /* ProfileViews.swift */; };
-		73FE978C2CE2571F0056D53D /* ContentStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FE978B2CE2571F0056D53D /* ContentStackView.swift */; };
 		73FE978E2CE257F20056D53D /* OrderMainVCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FE978D2CE257F20056D53D /* OrderMainVCView.swift */; };
 /* End PBXBuildFile section */
 
@@ -328,7 +327,6 @@
 		73FD889D2CD28DE9007E0C82 /* PaymentMethodTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodTableViewCell.swift; sourceTree = "<group>"; };
 		73FD88A12CD28E5E007E0C82 /* PaymentMethodTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodTableView.swift; sourceTree = "<group>"; };
 		73FE97892CE253E40056D53D /* ProfileViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViews.swift; sourceTree = "<group>"; };
-		73FE978B2CE2571F0056D53D /* ContentStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentStackView.swift; sourceTree = "<group>"; };
 		73FE978D2CE257F20056D53D /* OrderMainVCView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderMainVCView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -356,8 +354,6 @@
 			isa = PBXGroup;
 			children = (
 				73B969252CC7C78700A2415A /* MainViewController.swift */,
-				73FE978D2CE257F20056D53D /* OrderMainVCView.swift */,
-				73FE978B2CE2571F0056D53D /* ContentStackView.swift */,
 				73B969242CC7C78700A2415A /* Components */,
 			);
 			path = MainVC;
@@ -922,6 +918,7 @@
 			isa = PBXGroup;
 			children = (
 				73B969232CC7C78700A2415A /* ContentCollectionView */,
+				73FE978D2CE257F20056D53D /* OrderMainVCView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1348,7 +1345,6 @@
 				736B0D182CCD811E00975195 /* TimeCollectionViewCell.swift in Sources */,
 				736B0D192CCD811E00975195 /* TimeInterval.swift in Sources */,
 				736B0D1A2CCD811E00975195 /* DeliveryTableView.swift in Sources */,
-				73FE978C2CE2571F0056D53D /* ContentStackView.swift in Sources */,
 				731C4F712CD905560088CF51 /* ProfileCoordinator.swift in Sources */,
 				731C4F752CD90CCC0088CF51 /* CartCoordinator.swift in Sources */,
 				736B0D1B2CCD811E00975195 /* DeliveryTableViewCell.swift in Sources */,

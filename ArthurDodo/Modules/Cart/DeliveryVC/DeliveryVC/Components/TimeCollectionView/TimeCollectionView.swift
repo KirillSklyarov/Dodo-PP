@@ -6,7 +6,7 @@ final class TimeCollectionView: UICollectionView {
     private let numberOfItems = 4
     private let collectionHeight: CGFloat = 50
 
-    var timeIntervals: [String] = []
+    private var timeIntervals: [String] = []
 
     // MARK: - Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -31,16 +31,10 @@ private extension TimeCollectionView {
         register(TimeCollectionViewCell.self, forCellWithReuseIdentifier: TimeCollectionViewCell.identifier)
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
+
+        selectFirstCell()
     }
 }
-
-// MARK: - Supporting methods
-private extension TimeCollectionView {
-    func getDeliveryTimeintervals() {
-        timeIntervals = DeliveryTimeIntervalHelper.setupTimeInterval()
-    }
-}
-
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate
 extension TimeCollectionView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -51,13 +45,18 @@ extension TimeCollectionView: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimeCollectionViewCell.identifier, for: indexPath) as? TimeCollectionViewCell else { return UICollectionViewCell() }
         let cellTime = timeIntervals[indexPath.row]
+
         cell.configureCell(cellTime)
+
+        designSelectedCell(cell)
+
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
         let cell = collectionView.cellForItem(at: indexPath)
-        cell?.setBorder(AppColors.buttonOrange)
+        cell?.layer.borderWidth = 2
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -68,5 +67,28 @@ extension TimeCollectionView: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.bounds.width / 2.5
         return CGSize(width: width, height: collectionHeight)
+    }
+}
+
+// MARK: - Supporting methods
+private extension TimeCollectionView {
+    // Получаем временные интервалы доставки из хелпера
+    func getDeliveryTimeintervals() {
+        timeIntervals = DeliveryTimeIntervalHelper.setupTimeInterval()
+    }
+
+    // Делаем выбранной первую ячейку
+    func selectFirstCell() {
+        let firstItemIndexPath = IndexPath(row: 0, section: 0)
+        selectItem(at: firstItemIndexPath, animated: false, scrollPosition: .left)
+    }
+
+    // Если ячейка выбрана, то у нее есть рамка, если не выбрана, то рамки нет
+    func designSelectedCell(_ cell: TimeCollectionViewCell) {
+        if cell.isSelected {
+            cell.layer.borderWidth = 2
+        } else {
+            cell.layer.borderWidth = 0
+        }
     }
 }

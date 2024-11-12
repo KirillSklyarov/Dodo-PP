@@ -14,6 +14,8 @@ final class AddToCartCollectionView: UICollectionView {
 
     private var itemsToAddToOrder: [Item] = []
 
+    private var state: ScreenState = .loading
+
     var onToppingSelected: ( (Int) -> Void )?
     var onNewItemToAddToCart: ( (Order) -> Void )?
 
@@ -33,6 +35,11 @@ final class AddToCartCollectionView: UICollectionView {
     func getItemsToAddToOrder(_ items: [Item]) {
         itemsToAddToOrder = items
     }
+
+    func setState(_ state: ScreenState) {
+        self.state = state
+        reloadData()
+    }
 }
 
 // MARK: - Setup UI
@@ -41,6 +48,8 @@ private extension AddToCartCollectionView {
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
         register(AddToCartCollectionCell.self, forCellWithReuseIdentifier: AddToCartCollectionCell.identifier)
+        register(SkeletonCollectionViewCell2.self, forCellWithReuseIdentifier: SkeletonCollectionViewCell2.identifier)
+
         dataSource = self
         delegate = self
 
@@ -62,14 +71,30 @@ private extension AddToCartCollectionView {
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        numberOfElements
+        switch state {
+        case .loading: return 1
+        case .success: return numberOfElements
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddToCartCollectionCell.identifier, for: indexPath) as? AddToCartCollectionCell else { return UICollectionViewCell() }
-        let itemToAdd = itemsToAddToOrder[indexPath.row]
-        cell.configCell(itemToAdd)
-        return cell
+        switch state {
+        case .loading:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SkeletonCollectionViewCell2.identifier, for: indexPath) as? SkeletonCollectionViewCell2 else { return UICollectionViewCell() }
+            return cell
+        case .success:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddToCartCollectionCell.identifier, for: indexPath) as? AddToCartCollectionCell else { return UICollectionViewCell() }
+            let itemToAdd = itemsToAddToOrder[indexPath.row]
+            cell.configCell(itemToAdd)
+            return cell
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        switch state {
+        case .loading: return CGSize(width: collectionView.frame.width, height: cellHeight)
+        case .success: return CGSize(width: correctWidth, height: cellHeight)
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

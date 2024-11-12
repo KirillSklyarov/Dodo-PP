@@ -6,8 +6,6 @@ final class OrderStackView: UIStackView {
     private lazy var orderView = OrderView()
     private lazy var cartProductTableView = CartProductTableView()
 
-    private var order: [Order] = []
-
     var onEmptyCart: (() -> Void)?
     var onItemDeletedFromCart: ((IndexPath) -> Void)?
     var onCountChanged: ((IndexPath, Int) -> Void)?
@@ -29,12 +27,11 @@ final class OrderStackView: UIStackView {
 extension OrderStackView {
     // Получаем актуальный заказ от VC
     func getOrder(_ order: [Order]) {
-        self.order = order
-        passOrderToView()
+        passOrderToView(order)
     }
 
     // Оправляем актуальный заказ для отражения в таблицу
-    private func passOrderToView() {
+    private func passOrderToView(_ order: [Order]) {
         cartProductTableView.uploadOrder(order)
     }
 

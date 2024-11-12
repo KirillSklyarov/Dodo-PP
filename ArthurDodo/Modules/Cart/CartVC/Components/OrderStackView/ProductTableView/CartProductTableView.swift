@@ -4,7 +4,6 @@ final class CartProductTableView: AppTableView {
 
     // MARK: - Properties&Callbacks
     private let tableRowHeight: CGFloat = 160
-    private var heightConstraint: NSLayoutConstraint?
 
     var order: [Order] = []
     var onUpdateCart: ( (Int) -> Void )?
@@ -53,17 +52,6 @@ private extension CartProductTableView {
 
         register(SkeletonTableViewCell.self, forCellReuseIdentifier: SkeletonTableViewCell.identifier)
     }
-
-    func updateTableViewHeight() {
-        let tableViewHeight = contentSize.height
-
-       if let heightConstraint {
-           heightConstraint.constant = tableViewHeight
-       } else {
-           heightConstraint = heightAnchor.constraint(equalToConstant: tableViewHeight)
-           heightConstraint?.isActive = true
-       }
-   }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
@@ -98,6 +86,10 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
             }
             return cell
         }
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        onChangeItem?()
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -135,6 +127,20 @@ private extension CartProductTableView {
     // Обновляем UI
     func updateUI() {
         reloadData()
-        updateTableViewHeight()
+//        updateTableViewHeight()
     }
+
+//    private var heightConstraint: NSLayoutConstraint?
+//
+//
+//    func updateTableViewHeight() {
+//        let tableViewHeight = contentSize.height
+//
+//        if let heightConstraint {
+//            heightConstraint.constant = tableViewHeight
+//        } else {
+//            heightConstraint = heightAnchor.constraint(equalToConstant: tableViewHeight)
+//            heightConstraint?.isActive = true
+//        }
+//    }
 }

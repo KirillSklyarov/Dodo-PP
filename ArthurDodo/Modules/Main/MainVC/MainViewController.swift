@@ -37,12 +37,12 @@ final class MainViewController: UIViewController {
         setupUI()
         setupActions()
         fetchData()
-        getActiveOrder()
         showOrHideOrderView()
 
 //        resetActiveOrder()
     }
 
+    // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateCart()
@@ -57,6 +57,8 @@ private extension MainViewController {
         view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(headerView, orderView, contentCollectionView, cartButton)
         setupLayout()
+
+        getActiveOrder()
     }
 
     func setupNavigationBar() {
@@ -296,11 +298,12 @@ private extension MainViewController {
     // Проверяет у UserDefaults есть ли активный заказ
     func getActiveOrder() {
         isActiveOrder = UserDefaults.standard.getIsActiveOrder()
-        print("isActiveOrder \(isActiveOrder)")
     }
 
     // Метод сбрасывает активный заказ для отладки,
     func resetActiveOrder() {
-        UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.isActiveOrder)
+        UserDefaults.standard.resetActiveOrder()
+        let isActiveOrder = UserDefaults.standard.getIsActiveOrder()
+        print("isActiveOrder \(isActiveOrder)")
     }
 }

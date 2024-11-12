@@ -6,12 +6,12 @@ final class CartViewController: UIViewController {
     private lazy var orderStackView = OrderStackView() // Хэдер и таблица с заказами
     private lazy var itemsToAddStackView = ItemsToAddStackView() // Добавки к заказу
     private lazy var promoStackView = PromoStackView() // Акции
-    private lazy var promoButton = PromoButton() // Кнопка Ввести промокод
+    private lazy var enterPromoCodeButton = PromoButton() // Кнопка Ввести промокод
     private lazy var dodoCoinsView = DodoCoinsStackView() // Блок с додокоинами
     private lazy var cartButtonView = CartButtonView(isCart: true) // Кнопка корзины
     private lazy var scrollUpButton = ScrollUpButton() // Кнопка scrollToTop
     private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [orderStackView, itemsToAddStackView, promoStackView, promoButton, dodoCoinsView])
+        let stackView = UIStackView(arrangedSubviews: [orderStackView, itemsToAddStackView, promoStackView, enterPromoCodeButton, dodoCoinsView])
         stackView.axis = .vertical
         stackView.spacing = 10
         return stackView
@@ -19,16 +19,14 @@ final class CartViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties
-    private let storage: DataStorage
-    private let router: Router
-
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let topInset: CGFloat = 10
 
-    private var order: [Order] = []
-    private var promo: [Promo] = []
-    private var itemsToAdd: [Item] = []
+    private let storage: DataStorage
+    private let router: Router
+
+    private var state: ScreenState = .loading
 
     var onCartVCDismissed: (() -> Void)?
 
@@ -42,7 +40,7 @@ final class CartViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,18 +59,38 @@ final class CartViewController: UIViewController {
 // MARK: - Fetch Data
 private extension CartViewController {
     func fetchData() {
-        fetchOrders()
-        fetchPromo()
-        getItemsToAdd()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let self else { return }
+
+            let dispatchGroup = DispatchGroup()
+
+            dispatchGroup.enter()
+            fetchOrders() {
+                dispatchGroup.leave()
+            }
+
+            dispatchGroup.enter()
+            fetchItemsToAdd() {
+                dispatchGroup.leave()
+            }
+
+            dispatchGroup.enter()
+            fetchPromo() {
+                dispatchGroup.leave()
+            }
+
+            dispatchGroup.notify(queue: .main) { [weak self] in
+                self?.setState(.success)
+            }
+        }
     }
 
-    func fetchOrders() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            guard let self else { return }
-            order = storage.getOrderFromStorage()
-            passOrderToView()
-            updateUI()
-        }
+    // Получаем заказ с хранилища и передаем его в таблицу
+    func fetchOrders(completion: (() -> Void)? = nil) {
+        let order = storage.getOrderFromStorage()
+        passOrderToView(order)
+        updateUI()
+        completion?()
     }
 
     func updateUI() {
@@ -83,42 +101,54 @@ private extension CartViewController {
         updateCartButtonPrice(totalPrice)
     }
 
-    func fetchPromo() {
-        getPromoFromStorage()
+    // Сначала запрашиваем из хранилища (мб ранее уже загружались промо), если в хранилище нет, то запрашиваем с сервера, если есть, то обновляем UI
+    func fetchPromo(completion: (() -> Void)? = nil) {
+        let isPromoInStorage = storage.isPromoAlreadyFetched()
 
-        if promo.isEmpty {
-            fetchPromoFromServer()
+        if isPromoInStorage {
+            getPromoFromStorage()
         } else {
-            promoStackView.updateUI(promo)
+            fetchPromoFromServer()
         }
+        completion?()
     }
 
+    // Получаем данные из хранилища и передаем их в коллекцию и выставляем состояние экрана
     func getPromoFromStorage() {
-        promo = storage.getPromoFromStorage()
+        let promo = storage.getPromoFromStorage()
+        promoCollectionUpdateUI(promo)
+        promoStackView.setState(.success)
+    }
+
+    // Передаем данные в коллекцию и обновляем ее
+    func promoCollectionUpdateUI(_ promo: [Promo]) {
+        promoStackView.updateUI(promo)
     }
 
     func fetchPromoFromServer() {
         storage.fetchPromo()
         storage.onPromoFetchedSuccessfully = { [weak self] fetchedPromo in
             guard let self else { return }
-            promo = fetchedPromo
-            promoStackView.updateUI(promo)
+            promoCollectionUpdateUI(fetchedPromo)
+            promoStackView.setState(.success)
         }
     }
 
     // Получаем товары, для отражения в корзине в категории "Добавить к заказу"
-    func getItemsToAdd() {
-        itemsToAdd = storage.getSpecialOffersArray()
-        sendItemsToAdd()
+    func fetchItemsToAdd(completion: (() -> Void)? = nil) {
+        let itemsToAdd = storage.getSpecialOffersArray()
+        sendItemsToAdd(itemsToAdd)
+        completion?()
     }
 
     // Отправляем товары для отражения в категории "Добавить к заказу" далее по вьюхе
-    func sendItemsToAdd() {
-        itemsToAddStackView.getItemsToAdd(itemsToAdd)
+    func sendItemsToAdd(_ items: [Item]) {
+        itemsToAddStackView.getItemsToAdd(items)
+        itemsToAddStackView.setState(.success)
     }
 
     // Отправляем актуальный заказ далее для отражения на след вьюхе
-    func passOrderToView() {
+    func passOrderToView(_ order: [Order]) {
         orderStackView.getOrder(order)
     }
 }
@@ -290,5 +320,10 @@ private extension CartViewController {
 
     func updateCartButtonPrice(_ totalPrice: Int) {
         cartButtonView.updatePrice(totalPrice)
+    }
+
+    // Устанавливает состояние экрана
+    private func setState(_ state: ScreenState) {
+        self.state = state
     }
 }
