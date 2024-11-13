@@ -180,10 +180,13 @@ private extension CartViewController {
             self?.fetchCart()
         }
 
-        // Нажали на ячейку в таблице с товаром, отправили выбранный товар в хранилище (с помощью ItemID) и открыли экран с товаром
-        orderStackView.onItemCellSelected = { [weak self] itemId in
-            self?.storage.sendSelectedItemToStorage(with: itemId)
-            self?.router.showProductDetailsScreen(completion: nil)
+        // Нажали на ячейку в таблице с товаром, отправили редактируемый товар в хранилище и открыли экран с этим товаром, при закрытии этого экрана срабатывает комплишн и мы заново загружаем корзину
+        orderStackView.onItemCellSelected = { [weak self] item in
+            guard let self else { return }
+            storage.setChangingItem(item: item) //
+            router.showProductDetailsScreen { [weak self] in
+                self?.fetchCart()
+            }
         }
     }
 

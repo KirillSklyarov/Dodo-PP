@@ -11,7 +11,7 @@ final class CartProductTableView: AppTableView {
     var onEmptyCart: ( () -> Void )?
     var onItemDeletedFromCart: ( (IndexPath) -> Void )?
     var onCountChanged: ( (IndexPath, Int) -> Void )?
-    var onItemCellSelected: ( (String) -> Void )?
+    var onItemCellSelected: ( (CartItem) -> Void )?
 
     private var state: ScreenState = .loading
 
@@ -87,8 +87,7 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let item = cart?.items[indexPath.row] else { return }
-        let itemId = item.id
-        onItemCellSelected?(itemId)
+        setSelection(item)
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -122,6 +121,11 @@ private extension CartProductTableView {
     private func orderLoaded() {
         state = .success
         updateUI()
+    }
+
+    // Включает или отключает возможность выбора ячейки (если у продукта нет опций, то отключаем ему возможность выбора)
+    func setSelection(_ item: CartItem) {
+        if !item.isOneSize { onItemCellSelected?(item) }
     }
 
     // Обновляем UI

@@ -4,7 +4,7 @@ struct Cart {
     var items: [CartItem]
 }
 
-struct CartItem {
+struct CartItem: Equatable {
     let id: String
     let name: String
     let imageName: String

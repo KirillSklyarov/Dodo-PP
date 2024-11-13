@@ -129,13 +129,13 @@ private extension ProductDetailsViewController {
     func sendCartToInfoView() {
         infoAndToppingsContainer.getCartView(cartButtonView)
     }
-    
+
+    // Когда нажимаем на кнопку корзины на экране, то формируем позицию (кастим Item -> CartItem) для корзины, и добавляем позицию для заказа в хранилище
     func setupCartViewAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
             guard let itemToCart = configureCart() else { return }
             storage.addItemToCart(item: itemToCart)
-//            addItemToOrder(orderPosition)
             onCartButtonTapped?()
             dismiss(animated: true)
         }
@@ -213,13 +213,6 @@ private extension ProductDetailsViewController {
         fetchSelectedItem()
         fetchToppings()
     }
-
-    //
-//    func checkIfToppingsIsEmpty() {
-//        if toppings.isEmpty {
-//            fetchToppings()
-//        }
-//    }
 
     func fetchSelectedItem() {
         guard let item = storage.getSelectedItemFromStorage() else { print("No item selected"); return }

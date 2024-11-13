@@ -13,9 +13,11 @@ final class DataStorage {
     private var order: Order?
     private var cart: Cart?
     private var specialOfferArray: [Item] = []
-    private var selectedItem: Item?
+    private var selectedItem: SelectedItem?
     private lazy var preferredPaymentMethod: PaymentMethod = .cbp
     private var deliveryTime = ""
+
+    private var changingItem: CartItem?
 
     private let networkManager: NetworkManager
 
@@ -37,8 +39,31 @@ final class DataStorage {
 // MARK: - Cart
 extension DataStorage {
     func addItemToCart(item: CartItem) {
+//        print("selectedItem \(selectedItem)")
+
         if cart == nil {
             cart = Cart(items: [item])
+        } else {
+//            cart?.items.append(item)
+            changeOrAddItemToCart(item: item)
+        }
+    }
+
+    func setChangingItem(item: CartItem) {
+        changingItem = item
+//        print("changingItem \(changingItem)")
+    }
+
+    private func changeOrAddItemToCart(item: CartItem) {
+
+        if let changingItem {
+//            print("cart before deletion \(cart)")
+
+            guard let index = cart?.items.firstIndex(where: { $0 == changingItem } ) else { print("No item found"); return }
+            cart?.items[index] = item
+            self.changingItem = nil
+
+//            print("cart after deletion \(cart)")
         } else {
             cart?.items.append(item)
         }
@@ -211,19 +236,18 @@ extension DataStorage {
 
     // Устанавливает выбранный товар, то есть тот, который открыл пользователь
     func sendSelectedItemToStorage(_ item: Item) {
-        selectedItem = item
+        selectedItem = SelectedItem(item: item)
     }
 
-    // Устанавливает выбранный товар, то есть тот, который открыл пользователь по его ID
+    // Устанавливает выбранный товар, то есть тот, который открыл пользователь по его ID и тк он идет под редактирование, то устанавливаем ему isChanging: true
     func sendSelectedItemToStorage(with itemId: String) {
-        let item = fetchedItems.first { $0.id == itemId }
-        selectedItem = item
+        guard let item = fetchedItems.first(where: { $0.id == itemId }) else { return }
+        selectedItem = SelectedItem(item: item, isChanging: true)
     }
-
 
     // Отправляет выбранный товар, то есть тот, который открыл пользователь
     func getSelectedItemFromStorage() -> Item? {
-        selectedItem
+        selectedItem?.item
     }
 }
 
