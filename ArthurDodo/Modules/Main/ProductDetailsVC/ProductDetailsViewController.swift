@@ -122,7 +122,7 @@ private extension ProductDetailsViewController {
 
     func setupHeaderAction() {
         headerView.onCloseButtonTapped = { [weak self] in
-            self?.dismiss(animated: true)
+            self?.router.dismissCurrentVC()
         }
     }
 
@@ -137,7 +137,7 @@ private extension ProductDetailsViewController {
             guard let itemToCart = configureCart() else { return }
             storage.addItemToCart(item: itemToCart)
             onCartButtonTapped?()
-            dismiss(animated: true)
+            router.dismissCurrentVC()
         }
     }
 
@@ -290,6 +290,6 @@ private extension ProductDetailsViewController {
     }
 
     @objc private func vcSwiped() {
-        dismiss(animated: true)
+        router.dismissCurrentVC()
     }
 }

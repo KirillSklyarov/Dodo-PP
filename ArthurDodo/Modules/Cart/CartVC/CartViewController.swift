@@ -166,7 +166,7 @@ private extension CartViewController {
     func setupCartProductTableViewAction() {
         orderStackView.onEmptyCart = { [weak self] in
             guard let self else { return }
-            dismiss(animated: true)
+            router.dismissCurrentVC()
         }
 
         // Удаляем позицию из заказа и опять фетчим заказы
@@ -245,7 +245,7 @@ private extension CartViewController {
     }
 
     @objc func dismissButtonTapped() {
-        dismiss(animated: true)
+        router.dismissCurrentVC()
     }
 
     func setupScrollView() {

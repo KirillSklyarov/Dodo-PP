@@ -6,12 +6,14 @@ final class StoriesVC: UIViewController {
     private lazy var backgroundView = BackgroundStoriesView(story: story)
 
     private var story: [Story]
+    private let router: Router
 
     var onStoriesVCDismissed: (() -> Void)?
 
     // MARK: - Init
-    init(indexPath: IndexPath, story: [Story]) {
+    init(indexPath: IndexPath, story: [Story], router: Router) {
         self.story = story
+        self.router = router
         super.init(nibName: nil, bundle: nil)
         showStories(indexPath)
     }
@@ -39,7 +41,7 @@ private extension StoriesVC {
         backgroundView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
             onStoriesVCDismissed?()
-            dismiss(animated: true)
+            router.dismissCurrentVC()
         }
     }
 }

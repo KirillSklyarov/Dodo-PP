@@ -104,7 +104,7 @@ private extension ProfileViewController {
 
     func setupHeaderViewActions() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.dismiss(animated: true)
+            self?.router.dismissCurrentVC()
         }
 
         headerView.onChatButtonTapped = { [weak self] in

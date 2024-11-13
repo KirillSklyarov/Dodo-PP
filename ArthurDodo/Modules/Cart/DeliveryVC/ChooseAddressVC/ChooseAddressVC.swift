@@ -99,7 +99,7 @@ private extension ChooseAddressVC {
         addressTableView.onAddressCellTapped = { [weak self] addressName in
             guard let self else { return }
             onAddressCellTapped?(addressName)
-            dismiss(animated: true)
+            router.dismissCurrentVC()
         }
 
         // Настраиваем action: нажатие на редактирование адреса
@@ -116,6 +116,6 @@ private extension ChooseAddressVC {
     }
 
     @objc func dismissButtonTapped() {
-        dismiss(animated: true)
+        router.dismissCurrentVC()
     }
 }

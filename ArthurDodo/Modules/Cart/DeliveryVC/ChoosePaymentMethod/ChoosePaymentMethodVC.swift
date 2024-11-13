@@ -6,13 +6,15 @@ final class ChoosePaymentMethodVC: UIViewController {
     private lazy var paymentMethodsTableView = PaymentAddressesTableView(preferredPaymentMethod: preferredPaymentMethod)
     private let userDefaults = UserDefaults.standard
     private let storage: DataStorage
+    private let router: Router
 
     var preferredPaymentMethod: PaymentMethod = .cbp
     var onPaymentMethodSelected: ((PaymentMethod) -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage) {
+    init(storage: DataStorage, router: Router) {
         self.storage = storage
+        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -70,7 +72,7 @@ private extension ChoosePaymentMethodVC {
     }
 
     @objc func dismissButtonTapped() {
-        dismiss(animated: true)
+        router.dismissCurrentVC()
     }
 
     func setupLayout() {
@@ -93,7 +95,7 @@ private extension ChoosePaymentMethodVC {
             paymentMethod in
             guard let self else { return }
             onPaymentMethodSelected?(paymentMethod)
-            dismiss(animated: true)
+            router.dismissCurrentVC()
         }
     }
 }

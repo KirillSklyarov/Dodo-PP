@@ -18,8 +18,11 @@ final class AddNewAddressViewController: UIViewController {
     }()
     private lazy var dismissButton = DismissButtonView(isChevron: true)
 
+    private let router: Router
+
     // MARK: - Init
-    init() {
+    init(router: Router) {
+        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -100,7 +103,7 @@ private extension AddNewAddressViewController {
     // Настраиваем кнопку Закрыть
     func setupDismissButtonAction() {
         dismissButton.onDismissButtonTapped = { [weak self] in
-            self?.dismiss(animated: true)
+            self?.router.dismissCurrentVC()
         }
     }
 }

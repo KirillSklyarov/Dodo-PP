@@ -105,7 +105,7 @@ private extension AddressViewController {
 
     func setupAddressHeaderAction() {
         addressHeaderStackView.onDismissButtonTapped = { [weak self] in
-            self?.dismiss(animated: true)
+            self?.router.dismissCurrentVC()
         }
     }
 

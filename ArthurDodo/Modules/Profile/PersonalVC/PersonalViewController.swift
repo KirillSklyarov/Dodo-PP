@@ -6,6 +6,18 @@ final class PersonalViewController: UIViewController {
     // MARK: - UI Properties
     private lazy var personalTableView = PersonalTableView()
 
+    private let router: Router
+
+    // MARK: - Init
+    init(router: Router) {
+        self.router = router
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +63,7 @@ private extension PersonalViewController {
     }
 
     @objc func doneButtonTapped() {
-        dismiss(animated: true)
+        router.dismissCurrentVC()
     }
 }
 

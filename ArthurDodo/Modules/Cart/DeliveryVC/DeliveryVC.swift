@@ -122,7 +122,7 @@ private extension DeliveryVC {
     }
 
     @objc func dismissButtonTapped() {
-        dismiss(animated: true)
+        router.dismissCurrentVC()
     }
 
     func setupLayout() {

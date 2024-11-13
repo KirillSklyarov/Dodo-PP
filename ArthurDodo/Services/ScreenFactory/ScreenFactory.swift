@@ -28,7 +28,7 @@ extension ScreenFactory {
     
     func makeStoriesScreen(indexPath: IndexPath) -> StoriesVC {
         let story = storage.getFetchedStories()
-        return StoriesVC(indexPath: indexPath, story: story)
+        return StoriesVC(indexPath: indexPath, story: story, router: router)
     }
     
     func makeAddressScreen() -> AddressViewController {
@@ -40,11 +40,11 @@ extension ScreenFactory {
     }
     
     func makeChatAlertScreen() -> CustomActionSheet {
-        return CustomActionSheet()
+        return CustomActionSheet(router: router)
     }
     
     func makePersonalDataScreen() -> UINavigationController {
-        let personalDataVC = PersonalViewController()
+        let personalDataVC = PersonalViewController(router: router)
         let vc = UINavigationController(rootViewController: personalDataVC)
         return vc
     }
@@ -66,7 +66,7 @@ extension ScreenFactory {
     }
 
     func makeChoosePaymentMethodScreen() -> UINavigationController {
-        let paymentVC = ChoosePaymentMethodVC(storage: storage)
+        let paymentVC = ChoosePaymentMethodVC(storage: storage, router: router)
         let vc = UINavigationController(rootViewController: paymentVC)
         return vc
     }
@@ -78,11 +78,11 @@ extension ScreenFactory {
     }
 
     func makeEditAddressScreen(_ address: Address) -> EditAddressViewController {
-        return EditAddressViewController(address, storage: storage)
+        return EditAddressViewController(address, storage: storage, router: router)
     }
 
     func makeAddNewAddressScreen() -> AddNewAddressViewController {
-        return AddNewAddressViewController()
+        return AddNewAddressViewController(router: router)
     }
 
 }

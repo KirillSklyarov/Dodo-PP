@@ -103,11 +103,6 @@ extension Router {
         navigationController.visibleViewController?.present(vc, animated: false)
     }
 
-    func dismissAllVC() {
-        navigationController.dismiss(animated: true)
-        onAllScreenDismissed?()
-    }
-
     func showEditAddressVC(_ address: Address) {
         let vc = screenFactory.makeEditAddressScreen(address)
         vc.modalPresentationStyle = .fullScreen
@@ -124,5 +119,13 @@ extension Router {
         guard let popUpView else { print("PopUpView is nil"); return }
         navigationController.visibleViewController?.present(popUpView, animated: true)
     }
-}
 
+    func dismissCurrentVC() {
+        navigationController.topViewController?.dismiss(animated: true)
+    }
+
+    func dismissAllVC() {
+        navigationController.dismiss(animated: true)
+        onAllScreenDismissed?()
+    }
+}

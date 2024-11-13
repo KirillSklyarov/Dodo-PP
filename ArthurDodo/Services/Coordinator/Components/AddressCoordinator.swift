@@ -32,9 +32,9 @@ extension AddressCoordinator {
     }
 
     func goToAddNewAddress(callback: ((UIViewController) -> Void)?) {
-        let vc = AddNewAddressViewController()
-        navigationController.visibleViewController?.present(vc, animated: true) {
-            callback?(vc)
-        }
+//        let vc = AddNewAddressViewController(router: ro)
+//        navigationController.visibleViewController?.present(vc, animated: true) {
+//            callback?(vc)
+//        }
     }
 }

@@ -72,7 +72,7 @@ extension CartCoordinator {
 
     // Закрываем все окна до Main
     func dismissAllVC() {
-        navigationController.dismiss(animated: true)
+//        navigationController.dismiss(animated: true)
     }
 
     func showEditAddressVC(_ address: Address) {
@@ -82,11 +82,11 @@ extension CartCoordinator {
 //        vc.getAddressToEdit(address)
     }
 
-    func showAddNewAddressVC() {
-        let vc = AddNewAddressViewController()
-        vc.modalPresentationStyle = .fullScreen
-        navigationController.visibleViewController?.present(vc, animated: true)
-    }
+//    func showAddNewAddressVC() {
+//        let vc = AddNewAddressViewController()
+//        vc.modalPresentationStyle = .fullScreen
+//        navigationController.visibleViewController?.present(vc, animated: true)
+//    }
 
     func showProductDetails() {
         parentCoordinator?.showProductDetails()

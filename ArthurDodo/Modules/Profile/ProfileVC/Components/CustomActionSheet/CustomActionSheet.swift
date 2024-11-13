@@ -1,10 +1,3 @@
-//
-//  CustomActionSheet.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 17.10.2024.
-//
-
 import UIKit
 
 final class CustomActionSheet: UIViewController {
@@ -41,8 +34,20 @@ final class CustomActionSheet: UIViewController {
         return view
     }()
 
+    // MARK: - Other Properties
     private var bottomConstraint: NSLayoutConstraint!
+    private let router: Router
 
+    // MARK: - Init
+    init(router: Router) {
+        self.router = router
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +74,7 @@ private extension CustomActionSheet {
         dismissButton.onButtonTapped = { [weak self] in
             guard let self else { return }
             moveDownContentContainer()
-            dismiss(animated: true)
+            router.dismissCurrentVC()
         }
 
         chatButton.onButtonTapped = {
@@ -145,6 +150,6 @@ private extension CustomActionSheet {
     // Окно закрывается, если нажали не на кнопки
     @objc private func viewTapped() {
         moveDownContentContainer()
-        dismiss(animated: true)
+        router.dismissCurrentVC()
     }
 }

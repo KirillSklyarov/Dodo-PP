@@ -21,18 +21,18 @@ extension ProfileCoordinator {
 //        navigationController.visibleViewController?.present(vc, animated: true)
     }
 
-    func showChatAlert() {
-        let vc = CustomActionSheet()
-        vc.modalPresentationStyle = .overFullScreen
-        vc.modalTransitionStyle = .crossDissolve
-        navigationController.visibleViewController?.present(vc, animated: false)
-    }
+//    func showChatAlert() {
+//        let vc = CustomActionSheet()
+//        vc.modalPresentationStyle = .overFullScreen
+//        vc.modalTransitionStyle = .crossDissolve
+//        navigationController.visibleViewController?.present(vc, animated: false)
+//    }
 
-    func showPersonalData() {
-        let personalDataVC = PersonalViewController()
-        let vc = UINavigationController(rootViewController: personalDataVC)
-        navigationController.visibleViewController?.present(vc, animated: true)
-    }
+//    func showPersonalData() {
+//        let personalDataVC = PersonalViewController()
+//        let vc = UINavigationController(rootViewController: personalDataVC)
+//        navigationController.visibleViewController?.present(vc, animated: true)
+//    }
 
     func showApplySpecialOffer(_ offer: Promo) {
 //        let vc = ApplyOfferViewController()

@@ -18,11 +18,13 @@ final class EditAddressViewController: UIViewController {
     }()
     private lazy var dismissButton = DismissButtonView(isChevron: true)
 
-    private var storage: DataStorage
+    private let storage: DataStorage
+    private let router: Router
 
     // MARK: - Init
-    init(_ addressToEdit: Address, storage: DataStorage) {
+    init(_ addressToEdit: Address, storage: DataStorage, router: Router) {
         self.storage = storage
+        self.router = router
         super.init(nibName: nil, bundle: nil)
         getAddressToEdit(addressToEdit)
     }
@@ -116,7 +118,7 @@ private extension EditAddressViewController {
     // Настраиваем кнопку Закрыть
     func setupDismissButtonAction() {
         dismissButton.onDismissButtonTapped = { [weak self] in
-            self?.dismiss(animated: true)
+            self?.router.dismissCurrentVC()
         }
     }
 }
