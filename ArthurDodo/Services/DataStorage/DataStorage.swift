@@ -214,6 +214,13 @@ extension DataStorage {
         selectedItem = item
     }
 
+    // Устанавливает выбранный товар, то есть тот, который открыл пользователь по его ID
+    func sendSelectedItemToStorage(with itemId: String) {
+        let item = fetchedItems.first { $0.id == itemId }
+        selectedItem = item
+    }
+
+
     // Отправляет выбранный товар, то есть тот, который открыл пользователь
     func getSelectedItemFromStorage() -> Item? {
         selectedItem

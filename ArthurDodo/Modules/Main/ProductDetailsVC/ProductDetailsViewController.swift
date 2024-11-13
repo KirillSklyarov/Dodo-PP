@@ -147,20 +147,10 @@ private extension ProductDetailsViewController {
         let chosenDough = getCorrectDough()
         let weight = getCorrectWeight()
         let price = item.getPrice(size: chosenSize)
+        let isOneSize = item.hasOneSize()
 
-        let positionToAddToCart = CartItem(name: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, weight: weight, price: price, isHit: item.isHit)
+        let positionToAddToCart = CartItem(id: item.id, name: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, weight: weight, price: price, isHit: item.isHit, isOneSize: isOneSize)
         return positionToAddToCart
-    }
-
-    func configureOrder() -> OrderPosition? {
-        guard let item else { return nil}
-        let chosenSize = getCorrectSize()
-        let chosenDough = getCorrectDough()
-        let weight = getCorrectWeight()
-        let price = item.getPrice(size: chosenSize)
-
-        let positionToAddToOrder = OrderPosition(itemName: item.name, size: chosenSize, dough: chosenDough, weight: weight, price: price, count: 1)
-        return positionToAddToOrder
     }
 
     func getCorrectWeight() -> Int {

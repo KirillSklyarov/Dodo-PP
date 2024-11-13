@@ -8,15 +8,17 @@ final class CartProductCell: UITableViewCell {
     private let imageSize: CGFloat = 100
     private let hitImageSize: CGFloat = 30
 
+    private let leftInset: CGFloat = 10
+    private let rightInset: CGFloat = -10
+    private let topInset: CGFloat = 10
+    private let bottomInset: CGFloat = -10
+
     var onValueIsNull: (() -> Void)?
     var onStepperValueChanged: ((Int) -> Void)?
-    var onChangeButtonTapped: ( () -> Void)?
 
     // MARK: - UI Properties
     private lazy var pizzaImageView: UIImageView = {
         let imageView = UIImageView()
-        let image = UIImage(named: "pizza")
-        imageView.image = image
         imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
         return imageView
@@ -50,16 +52,16 @@ final class CartProductCell: UITableViewCell {
         label.font = AppFonts.bold20
         return label
     }()
-    private lazy var changeNumbersButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Изменить", for: .normal)
-        button.setTitleColor(AppColors.buttonOrange, for: .normal)
-        button.titleLabel?.font = AppFonts.semibold16
-        button.addTarget(self, action: #selector (changeButtonTapped), for: .touchUpInside)
-        return button
+    private lazy var changeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Изменить"
+        label.textColor = AppColors.buttonOrange
+        label.font = AppFonts.semibold16
+        return label
     }()
     private lazy var countStepper = CustomStepperView()
-    private lazy var contentContainer = UIView()
+
+    private lazy var contentStackView = setupContentContainer()
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -79,11 +81,11 @@ extension CartProductCell {
         pizzaImageView.image = UIImage(named: itemInCart.imageName)
         titleLabel.text = itemInCart.name
 
-        setProductDetails(itemInCart) // Текст с тестом, размером или весом
-        setPrice(itemInCart)
-        isItemHit(itemInCart)
-        let count = itemInCart.count
-        countStepper.setStepperValue(count)
+        setProductDetails(itemInCart) // Устанавливаем детали продукта
+        setPrice(itemInCart) // Устанавливаем цену
+        isItemHit(itemInCart) // Устанавливаем отметку хит
+        setCount(itemInCart) // Устанавливаем кол-во единиц в степпере
+        isCanChange(itemInCart) // Показываем или нет лейбл "Изменить"
     }
 }
 
@@ -97,10 +99,6 @@ private extension CartProductCell {
             self?.onStepperValueChanged?(value)
         }
     }
-
-    @objc func changeButtonTapped(_ sender: UIButton) {
-        onChangeButtonTapped?()
-    }
 }
 
 // MARK: - Setup UI
@@ -109,13 +107,33 @@ private extension CartProductCell {
         selectionStyle = .none
         backgroundColor = .clear
 
-        setupContentContainer()
+        contentView.addSubviews(contentStackView)
 
-        contentView.addSubviews(contentContainer)
-        setupContentContainerLayout()
+        setupLayout()
     }
 
-    func setupContentContainer() {
+    func setupLayout() {
+        setupContentStackViewLayout()
+        setupElementsLayout()
+    }
+
+    func setupContentStackViewLayout() {
+        NSLayoutConstraint.activate([
+            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topInset),
+            contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
+            contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
+            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset),
+        ])
+    }
+
+    func setupElementsLayout() {
+        NSLayoutConstraint.activate([
+            hitImageView.trailingAnchor.constraint(equalTo: pizzaImageView.trailingAnchor),
+            hitImageView.topAnchor.constraint(equalTo: pizzaImageView.topAnchor),
+        ])
+    }
+
+    func setupContentContainer() -> UIStackView {
         let nameSizeStackView: UIStackView = {
             let stack = UIStackView(arrangedSubviews: [titleLabel, sizeDoughLabel])
             stack.axis = .vertical
@@ -123,49 +141,36 @@ private extension CartProductCell {
             return stack
         }()
 
+        let imageDetailsStackView: UIStackView = {
+            let stack = UIStackView(arrangedSubviews: [pizzaImageView, nameSizeStackView])
+            stack.axis = .horizontal
+            stack.spacing = 10
+            stack.alignment = .center
+            return stack
+        }()
+
         let countStackView: UIStackView = {
-            let stack = UIStackView(arrangedSubviews: [changeNumbersButton, countStepper])
+            let stack = UIStackView(arrangedSubviews: [changeLabel, countStepper])
             stack.axis = .horizontal
             stack.spacing = 10
             return stack
         }()
 
-        contentContainer.addSubviews(pizzaImageView, hitImageView, nameSizeStackView, priceLabel, countStackView)
+        let priceCountStackView: UIStackView = {
+            let stack = UIStackView(arrangedSubviews: [priceLabel, countStackView])
+            stack.axis = .horizontal
+            return stack
+        }()
 
-        NSLayoutConstraint.activate([
-            pizzaImageView.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: 10),
-            pizzaImageView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 10),
+        let contentStackView = {
+            let stack = UIStackView(arrangedSubviews: [imageDetailsStackView, priceCountStackView])
+            stack.axis = .vertical
+            return stack
+        }()
 
-            hitImageView.trailingAnchor.constraint(equalTo: pizzaImageView.trailingAnchor),
-            hitImageView.topAnchor.constraint(equalTo: pizzaImageView.topAnchor),
+        contentStackView.addSubviews(hitImageView)
 
-            nameSizeStackView.centerYAnchor.constraint(equalTo: pizzaImageView.centerYAnchor),
-            nameSizeStackView.leadingAnchor.constraint(equalTo: pizzaImageView.trailingAnchor, constant: 10),
-            nameSizeStackView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -10),
-
-            priceLabel.topAnchor.constraint(equalTo: pizzaImageView.bottomAnchor, constant: 5),
-            priceLabel.leadingAnchor.constraint(equalTo: pizzaImageView.leadingAnchor),
-
-            countStackView.centerYAnchor.constraint(equalTo: priceLabel.centerYAnchor),
-            countStackView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -10),
-        ])
-    }
-
-    func setupContentContainerLayout() {
-        NSLayoutConstraint.activate([
-            contentContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
-            contentContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
-    }
-
-    func isItemHit(_ item: CartItem) {
-        if item.isHit {
-            hitImageView.isHidden = false
-        } else {
-            hitImageView.isHidden = true
-        }
+        return contentStackView
     }
 }
 
@@ -184,5 +189,21 @@ private extension CartProductCell {
     func setPrice(_ itemInCart: CartItem) {
         let totalPrice = itemInCart.price * itemInCart.count
         priceLabel.text = "\(totalPrice) ₽"
+    }
+
+    func setCount(_ item: CartItem) {
+        let count = item.count
+        countStepper.setStepperValue(count)
+    }
+
+    // Если товар Хит, то покажи картинку
+    func isItemHit(_ item: CartItem) {
+        hitImageView.isHidden =  item.isHit ? false : true
+    }
+
+    // Если у товара один размер, то прячем кнопку изменить, если несколько, то показываем
+    func isCanChange(_ item: CartItem) {
+        let isOneSize = item.isOneSize
+        changeLabel.isHidden = isOneSize ? true : false
     }
 }

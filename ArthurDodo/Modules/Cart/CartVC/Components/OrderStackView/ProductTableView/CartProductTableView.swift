@@ -4,14 +4,14 @@ final class CartProductTableView: AppTableView {
 
     // MARK: - Properties&Callbacks
     private let tableRowHeight: CGFloat = 160
-
     private var cart: Cart?
+
     var onUpdateCart: ( (Int) -> Void )?
     var onCellTapped: ( (Item) -> Void )?
     var onEmptyCart: ( () -> Void )?
     var onItemDeletedFromCart: ( (IndexPath) -> Void )?
     var onCountChanged: ( (IndexPath, Int) -> Void )?
-    var onChangeItem: ( () -> Void )?
+    var onItemCellSelected: ( (String) -> Void )?
 
     private var state: ScreenState = .loading
 
@@ -78,10 +78,6 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
                 self?.removeItemFromStorage(indexPath)
             }
 
-            cell.onChangeButtonTapped = { [weak self] in
-                self?.onChangeItem?()
-            }
-
             cell.onStepperValueChanged = { [weak self] value in
                 self?.onCountChanged?(indexPath, value)
             }
@@ -90,7 +86,9 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        onChangeItem?()
+        guard let item = cart?.items[indexPath.row] else { return }
+        let itemId = item.id
+        onItemCellSelected?(itemId)
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {

@@ -1,10 +1,3 @@
-//
-//  Pizza2.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 18.10.2024.
-//
-
 import Foundation
 
 struct Item: Codable {

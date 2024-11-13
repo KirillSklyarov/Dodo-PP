@@ -100,7 +100,6 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let positionToAdd = getItemFromIndexPath(indexPath)
-        print("positionToAdd \(positionToAdd)")
         addItemToCart(positionToAdd)
     }
 
@@ -115,8 +114,9 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
         let dough: Dough? = item.category == .pizza ? .basic : nil
         let weight = item.getCorrectWeight()
         let price = item.getCorrectPrice()
+        let isOneSize = item.hasOneSize()
 
-        let cartPosition = CartItem(name: item.name, imageName: item.imageName, size: size, dough: dough, weight: weight, price: price, isHit: item.isHit)
+        let cartPosition = CartItem(id: item.id, name: item.name, imageName: item.imageName, size: size, dough: dough, weight: weight, price: price, isHit: item.isHit, isOneSize: isOneSize)
 
         return cartPosition
     }

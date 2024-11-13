@@ -9,7 +9,7 @@ final class OrderStackView: UIStackView {
     var onEmptyCart: (() -> Void)?
     var onItemDeletedFromCart: ((IndexPath) -> Void)?
     var onCountChanged: ((IndexPath, Int) -> Void)?
-    var onChangeItem: (() -> Void)?
+    var onItemCellSelected: ((String) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -69,8 +69,8 @@ private extension OrderStackView {
         }
 
         // Отправляем инфу, что изменили сам товар на VC
-        cartProductTableView.onChangeItem = { [weak self] in
-            self?.onChangeItem?()
+        cartProductTableView.onItemCellSelected = { [weak self] itemId in
+            self?.onItemCellSelected?(itemId)
         }
     }
 }

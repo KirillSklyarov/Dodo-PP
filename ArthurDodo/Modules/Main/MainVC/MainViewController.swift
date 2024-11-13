@@ -192,7 +192,7 @@ private extension MainViewController { // Тут все переходы меж�
 private extension MainViewController {
     // Обращаемся к хранилищу за необходимыми данными
     func fetchData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.getStoriesFromServer()
             self?.getCatalogAndSpecialOffersFromServer()
         }

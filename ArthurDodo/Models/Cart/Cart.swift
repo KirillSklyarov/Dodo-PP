@@ -5,6 +5,7 @@ struct Cart {
 }
 
 struct CartItem {
+    let id: String
     let name: String
     let imageName: String
     let size: Size
@@ -13,4 +14,5 @@ struct CartItem {
     let price: Int
     let isHit: Bool
     var count: Int = 1
+    let isOneSize: Bool
 }

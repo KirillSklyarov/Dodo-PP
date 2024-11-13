@@ -59,7 +59,7 @@ final class CartViewController: UIViewController {
 // MARK: - Fetch Data
 private extension CartViewController {
     func fetchData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self else { return }
 
             let dispatchGroup = DispatchGroup()
@@ -180,7 +180,9 @@ private extension CartViewController {
             self?.fetchCart()
         }
 
-        orderStackView.onChangeItem = { [weak self] in
+        // Нажали на ячейку в таблице с товаром, отправили выбранный товар в хранилище (с помощью ItemID) и открыли экран с товаром
+        orderStackView.onItemCellSelected = { [weak self] itemId in
+            self?.storage.sendSelectedItemToStorage(with: itemId)
             self?.router.showProductDetailsScreen(completion: nil)
         }
     }
@@ -205,8 +207,6 @@ private extension CartViewController {
             guard let self else { return }
             storage.addItemToCart(item: itemToAddToOrder)
             fetchCart()
-//            fetchDataFromStorage()
-//            orderStackView.uploadOrder()
         }
     }
 
@@ -254,15 +254,15 @@ private extension CartViewController {
 }
 
 // MARK: - Constraints
-extension CartViewController {
-    private func setupLayout() {
+private extension CartViewController {
+    func setupLayout() {
         setupScrollViewConstraints()
-        setupContentViewConstraints()
+        setupContentStackViewConstraints()
         setupScrollUpButtonConstraints()
         setupCartButtonConstraints()
     }
 
-    private func setupScrollViewConstraints() {
+    func setupScrollViewConstraints() {
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -271,25 +271,25 @@ extension CartViewController {
         ])
     }
 
-    private func setupContentViewConstraints() {
+    func setupContentStackViewConstraints() {
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: leftInset),
             contentStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: rightInset),
             contentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
 
-            contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -20),
+            contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: rightInset * 2),
         ])
     }
 
-    private func setupScrollUpButtonConstraints() {
+    func setupScrollUpButtonConstraints() {
         NSLayoutConstraint.activate([
-            scrollUpButton.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor, constant: -5),
+            scrollUpButton.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor, constant: rightInset / 2),
             scrollUpButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
         ])
     }
 
-    private func setupCartButtonConstraints() {
+    func setupCartButtonConstraints() {
         NSLayoutConstraint.activate([
             cartButtonView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             cartButtonView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
