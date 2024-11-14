@@ -38,32 +38,26 @@ final class DataStorage {
 
 // MARK: - Cart
 extension DataStorage {
+    // Если корзина еще пустая (cart=nil), то создаем корзину с этим продуктов, если не пустая, то либо добавляем продукт в корзину, либо меняем на отредактированный товар
     func addItemToCart(item: CartItem) {
-//        print("selectedItem \(selectedItem)")
-
         if cart == nil {
             cart = Cart(items: [item])
         } else {
-//            cart?.items.append(item)
             changeOrAddItemToCart(item: item)
         }
     }
 
+    // Устанавливаем продукт для редактирования
     func setChangingItem(item: CartItem) {
         changingItem = item
-//        print("changingItem \(changingItem)")
     }
 
+    // Если продукт для редактирования есть, то находим его индекс в заказе и подменяем его на исправленный товар
     private func changeOrAddItemToCart(item: CartItem) {
-
         if let changingItem {
-//            print("cart before deletion \(cart)")
-
             guard let index = cart?.items.firstIndex(where: { $0 == changingItem } ) else { print("No item found"); return }
             cart?.items[index] = item
             self.changingItem = nil
-
-//            print("cart after deletion \(cart)")
         } else {
             cart?.items.append(item)
         }
@@ -94,6 +88,11 @@ extension DataStorage {
     func getCountOfItemsInCart() -> Int {
         guard let cart else { print("Cart is nil"); return 0 }
         return cart.items.compactMap{ $0.count }.reduce(0, +)
+    }
+
+    // Обнуляем корзину
+    func eraseCart() {
+        cart = nil
     }
 }
 

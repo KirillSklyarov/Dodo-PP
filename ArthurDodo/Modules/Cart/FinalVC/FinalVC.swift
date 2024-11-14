@@ -93,9 +93,10 @@ private extension FinalVC {
 
 // MARK: - Supporting methods
 private extension FinalVC {
-    // Выключаем таймер и закрываем все окна
+    // Выключаем таймер, обнуляем корзину и закрываем все окна
     func dismissVC() {
         countDownTimer?.invalidate()
+        storage.eraseCart()
         router.dismissAllVC()
     }
 

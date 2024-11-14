@@ -11,5 +11,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = di.navigationController
         window?.makeKeyAndVisible()
         di.router.showMainScreen()
+
+        resetActiveOrder() // Сбрасывает активный заказ (использую для тестирования)
+
+    }
+
+    // Метод сбрасывает активный заказ для отладки,
+    private func resetActiveOrder() {
+        UserDefaults.standard.resetActiveOrder()
     }
 }

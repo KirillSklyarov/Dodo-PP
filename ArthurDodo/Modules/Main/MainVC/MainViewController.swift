@@ -37,7 +37,7 @@ final class MainViewController: UIViewController {
         setupActions()
         fetchData()
 
-//        resetActiveOrder() // Просто сбрасывает активный заказ (использую для тестирования)
+//        showIsActiveOrder()
     }
 
     // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет
@@ -306,9 +306,7 @@ private extension MainViewController {
         orderView.getOrder(order, totalPrice)
     }
 
-    // Метод сбрасывает активный заказ для отладки,
-    func resetActiveOrder() {
-        UserDefaults.standard.resetActiveOrder()
+    func showIsActiveOrder() {
         let isActiveOrder = UserDefaults.standard.getIsActiveOrder()
         print("isActiveOrder \(isActiveOrder)")
     }

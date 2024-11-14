@@ -56,6 +56,7 @@ extension UserDefaults {
 
     func resetActiveOrder() {
         removeObject(forKey: Keys.order)
+        print("Active order reset")
     }
 
     func sendOrder(_ order: Order) {

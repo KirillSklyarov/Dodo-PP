@@ -257,7 +257,6 @@ private extension DeliveryVC {
 
     // Отправляет в UserDefaults инфу, что есть активный заказ
     func setActiveOrderToUserDefaults(_ order: Order) {
-        print("3. Order: \(String(describing: order))")
         UserDefaults.standard.sendOrder(order)
     }
 }
