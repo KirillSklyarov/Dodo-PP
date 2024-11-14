@@ -74,7 +74,7 @@ private extension AddressHeaderView {
     }
 
     func setupDismissButtonAction() {
-        dismissButton.onDismissButtonTapped = { [weak self] in
+        dismissButton.onButtonTapped = { [weak self] in
             self?.onDismissButtonTapped?()
         }
     }

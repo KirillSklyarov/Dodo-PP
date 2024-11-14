@@ -29,6 +29,7 @@
 		733A01DC2CDBC7D40013D3EB /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A01DB2CDBC7D40013D3EB /* Router.swift */; };
 		7350E26E2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7350E26D2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift */; };
 		7352D58D2CD91CA900F3357E /* ScreenEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7352D58C2CD91CA900F3357E /* ScreenEnum.swift */; };
+		736280582CE5FA9600DD6FD7 /* PersonalDataNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736280572CE5FA9600DD6FD7 /* PersonalDataNavigationBar.swift */; };
 		73638F692CE4B474008F1E90 /* SelectedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73638F682CE4B474008F1E90 /* SelectedItem.swift */; };
 		736B0D0A2CCD811500975195 /* AppProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736B0D052CCD811500975195 /* AppProgressView.swift */; };
 		736B0D0B2CCD811500975195 /* BackgroundStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736B0D062CCD811500975195 /* BackgroundStoriesView.swift */; };
@@ -192,6 +193,7 @@
 		733A01DB2CDBC7D40013D3EB /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		7350E26D2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryTimeIntervalHelper.swift; sourceTree = "<group>"; };
 		7352D58C2CD91CA900F3357E /* ScreenEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEnum.swift; sourceTree = "<group>"; };
+		736280572CE5FA9600DD6FD7 /* PersonalDataNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalDataNavigationBar.swift; sourceTree = "<group>"; };
 		73638F682CE4B474008F1E90 /* SelectedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedItem.swift; sourceTree = "<group>"; };
 		736B0D052CCD811500975195 /* AppProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppProgressView.swift; sourceTree = "<group>"; };
 		736B0D062CCD811500975195 /* BackgroundStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundStoriesView.swift; sourceTree = "<group>"; };
@@ -1060,6 +1062,7 @@
 				73B969412CC7C78700A2415A /* MissionStack */,
 				73B969492CC7C78700A2415A /* PromoStackView */,
 				73B9694A2CC7C78700A2415A /* ApplyOfferViewController.swift */,
+				736280572CE5FA9600DD6FD7 /* PersonalDataNavigationBar.swift */,
 				73B9694C2CC7C78700A2415A /* MissionView.swift */,
 				73B9694D2CC7C78700A2415A /* ProfileButtonView.swift */,
 				73B9694E2CC7C78700A2415A /* ProfileHeaderView.swift */,
@@ -1334,6 +1337,7 @@
 				73B969992CC7C78700A2415A /* AddToppingsCollectionViewCell.swift in Sources */,
 				73B9699A2CC7C78700A2415A /* DetailsView.swift in Sources */,
 				73B9699B2CC7C78700A2415A /* InfoAndToppingsStack.swift in Sources */,
+				736280582CE5FA9600DD6FD7 /* PersonalDataNavigationBar.swift in Sources */,
 				73B9699C2CC7C78700A2415A /* cpfcTableViewCell.swift in Sources */,
 				73B9699E2CC7C78700A2415A /* IngredientsView.swift in Sources */,
 				73FE978A2CE253E40056D53D /* ProfileViews.swift in Sources */,

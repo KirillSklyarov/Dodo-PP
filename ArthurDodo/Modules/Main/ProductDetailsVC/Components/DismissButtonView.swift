@@ -4,7 +4,7 @@ final class DismissButtonView: UIView {
 
     // MARK: - Properties&Callbacks
     private let viewSize: CGFloat = 40
-    var onDismissButtonTapped: (() -> Void)?
+    var onButtonTapped: (() -> Void)?
 
     // MARK: - UI Properties
     private lazy var dismissButton: UIButton = {
@@ -31,7 +31,7 @@ final class DismissButtonView: UIView {
 // MARK: - Setup actions
 private extension DismissButtonView {
     @objc func closeButtonTapped() {
-        onDismissButtonTapped?()
+        onButtonTapped?()
     }
 }
 

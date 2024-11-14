@@ -102,7 +102,7 @@ private extension AddNewAddressViewController {
 
     // Настраиваем кнопку Закрыть
     func setupDismissButtonAction() {
-        dismissButton.onDismissButtonTapped = { [weak self] in
+        dismissButton.onButtonTapped = { [weak self] in
             self?.router.dismissCurrentVC()
         }
     }

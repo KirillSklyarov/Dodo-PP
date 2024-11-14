@@ -4,7 +4,6 @@ final class ProfileHeaderView: UIView {
 
     // MARK: - Properties
     private let viewHeight: CGFloat = 40
-    private let rightInset: CGFloat = -10
 
     // MARK: - Callbacks
     var onDismissButtonTapped: (() -> Void)?
@@ -45,7 +44,7 @@ final class ProfileHeaderView: UIView {
 // MARK: - Setup actions
 private extension ProfileHeaderView {
     func setupActions() {
-        dismissButton.onDismissButtonTapped = { [weak self] in
+        dismissButton.onButtonTapped = { [weak self] in
             self?.onDismissButtonTapped?()
         }
 

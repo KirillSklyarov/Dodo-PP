@@ -24,7 +24,8 @@ extension Router {
     }
 
     func showProfileScreen() {
-        let vc = screenFactory.makeProfileScreen()
+        let profileVC = screenFactory.makeProfileScreen()
+        let vc = UINavigationController(rootViewController: profileVC)
         navigationController.present(vc, animated: true)
     }
 
@@ -121,7 +122,7 @@ extension Router {
     }
 
     func dismissCurrentVC() {
-        navigationController.topViewController?.dismiss(animated: true)
+        navigationController.visibleViewController?.dismiss(animated: true)
     }
 
     func dismissAllVC() {

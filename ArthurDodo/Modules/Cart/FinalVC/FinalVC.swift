@@ -66,7 +66,7 @@ private extension FinalVC {
 // MARK: - Setup Actions
 private extension FinalVC {
     func setupActions() {
-        dismissButton.onDismissButtonTapped = { [weak self] in
+        dismissButton.onButtonTapped = { [weak self] in
             guard let self else { return }
             dismissVC()
         }

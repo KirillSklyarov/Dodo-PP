@@ -49,7 +49,7 @@ extension ProductHeaderView {
 // MARK: - Setup actions
 private extension ProductHeaderView {
     func closeButtonTapped() {
-        dismissButton.onDismissButtonTapped = { [weak self] in
+        dismissButton.onButtonTapped = { [weak self] in
             self?.onCloseButtonTapped?()
         }
     }

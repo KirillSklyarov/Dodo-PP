@@ -3,7 +3,6 @@ import UIKit
 final class ProfileViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var headerView = ProfileHeaderView()
     private lazy var personalDataCollectionView = CoinsOrdersCollectionView()
     private lazy var promoStackView = PromoStackView()
     private lazy var missionStackView = MissionStackView()
@@ -17,8 +16,6 @@ final class ProfileViewController: UIViewController {
 
     // MARK: - Other Properties
     private let topInset: CGFloat = 10
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
 
     private var state: ScreenState = .loading
 
@@ -48,36 +45,30 @@ final class ProfileViewController: UIViewController {
 // MARK: - Setup UI
 private extension ProfileViewController {
     func setupUI() {
+        setupNavigationBar()
+
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(headerView, scrollView)
+        view.addSubviews(scrollView)
 
         setupScrollView()
 
         setupLayout()
     }
 
+    // Настраиваем скролл вью
     func setupScrollView() {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.addSubviews(contentStackView)
     }
 
     func setupLayout() {
-        setupHeaderViewLayout()
         setupScrollViewLayout()
         setupContentStackViewLayout()
     }
 
-    func setupHeaderViewLayout() {
-        NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-        ])
-    }
-
     func setupScrollViewLayout() {
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topInset),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -95,23 +86,51 @@ private extension ProfileViewController {
     }
 }
 
+// MARK: - Setup navigation bar
+private extension ProfileViewController {
+    func setupNavigationBar() {
+        let dismissButtonView = DismissButtonView()
+        let chatButtonView = ProfileButtonView(type: .chat)
+        let profileButtonView = ProfileButtonView(type: .profile)
+
+        navigationController?.isNavigationBarHidden = false
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButtonView)
+        navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(customView: profileButtonView),
+            UIBarButtonItem(customView: chatButtonView)
+        ]
+        
+        setupNavigationViewActions(dismissButtonView, chatButtonView, profileButtonView)
+    }
+}
+
 // MARK: - Setup Actions
 private extension ProfileViewController {
     func setupActions() {
-        setupHeaderViewActions()
         setupSpecialOfferActions()
     }
 
-    func setupHeaderViewActions() {
-        headerView.onDismissButtonTapped = { [weak self] in
-            self?.router.dismissCurrentVC()
+    // Настройка действий секции Акции
+    func setupSpecialOfferActions() {
+        promoStackView.onPromoSelected = { [weak self] specialOffer in
+            guard let self else { return }
+            showSpecialOfferView(specialOffer)
+        }
+    }
+
+    // Настройка действий навигации
+    func setupNavigationViewActions(_ dismissButtonView: DismissButtonView, _ chatButtonView: ProfileButtonView, _ profileButtonView: ProfileButtonView) {
+
+        dismissButtonView.onButtonTapped = { [weak self] in
+            self?.dismissVC()
         }
 
-        headerView.onChatButtonTapped = { [weak self] in
+        chatButtonView.onButtonTapped = { [weak self] in
             self?.showChatAlert()
         }
 
-        headerView.onProfileButtonTapped = { [weak self] in
+        profileButtonView.onButtonTapped = { [weak self] in
             self?.showPersonalVC()
         }
     }
@@ -179,11 +198,12 @@ private extension ProfileViewController { // Здесь все переходы 
         router.showPersonalData()
     }
 
-    func setupSpecialOfferActions() {
-        promoStackView.onPromoSelected = { [weak self] specialOffer in
-            guard let self else { return }
-            router.showApplySpecialOffer(specialOffer)
-        }
+    func showSpecialOfferView(_ specialOffer: Promo) {
+        router.showApplySpecialOffer(specialOffer)
+    }
+
+    func dismissVC() {
+        router.dismissCurrentVC()
     }
 }
 
