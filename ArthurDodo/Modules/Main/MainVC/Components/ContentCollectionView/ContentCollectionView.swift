@@ -146,6 +146,17 @@ private extension ContentCollectionView {
             section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
 
             return section
+        case .error:
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(120))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(120))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            group.interItemSpacing = NSCollectionLayoutSpacing.fixed(10)
+
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
+            return section
         }
     }
 
@@ -183,6 +194,17 @@ private extension ContentCollectionView {
 
             section.boundarySupplementaryItems = [sectionHeader]
 
+            return section
+        case .error:
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(120))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(120))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            group.interItemSpacing = NSCollectionLayoutSpacing.fixed(10)
+
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
             return section
         }
     }
@@ -263,6 +285,24 @@ private extension ContentCollectionView {
             section.boundarySupplementaryItems = [sectionHeader]
 
             return section
+        case .error:
+            let skeletonItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(350))
+            let skeletonItem = NSCollectionLayoutItem(layoutSize: skeletonItemSize)
+
+            let skeletonGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(350))
+            let skeletonGroup = NSCollectionLayoutGroup.vertical(layoutSize: skeletonGroupSize, subitems: [skeletonItem])
+
+            let section = NSCollectionLayoutSection(group: skeletonGroup)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
+
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
+            let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: headerSize,
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .topLeading
+            )
+            section.boundarySupplementaryItems = [sectionHeader]
+            return section
         }
     }
 
@@ -298,16 +338,19 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
             switch state {
                 case .loading: return 1
                 case .success: return stories.count
+                case .error: return 1
             }
         case 1:
             switch state {
                 case .loading: return 1
                 case .success: return specialOffersArray.count
+                case .error: return 1
             }
         case 2:
             switch state {
                 case .loading: return 1
                 case .success: return catalog.count
+                case .error: return 1
             }
         default : return 0
         }
@@ -326,6 +369,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
                 let story = stories[indexPath.item]
                 cell.configureCell(story)
                 return cell
+            case .error: return UICollectionViewCell()
             }
         case 1:
             switch state {
@@ -337,6 +381,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
                 let item = specialOffersArray[indexPath.item]
                 cell.configureCell(item)
                 return cell
+            case .error: return UICollectionViewCell()
             }
         case 2:
             switch state {
@@ -355,6 +400,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
                     cell.configureCell(item)
                     return cell
                 }
+            case .error: return UICollectionViewCell()
             }
         default: return UICollectionViewCell()
         }

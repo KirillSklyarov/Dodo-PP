@@ -75,6 +75,7 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
         switch state {
         case .loading: return 1
         case .success: return numberOfElements
+        case .error: return 1
         }
     }
 
@@ -88,6 +89,7 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
             let itemToAdd = itemsToAddToOrder[indexPath.row]
             cell.configCell(itemToAdd)
             return cell
+        case .error: return UICollectionViewCell()
         }
     }
 
@@ -95,6 +97,8 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
         switch state {
         case .loading: return CGSize(width: collectionView.frame.width, height: cellHeight)
         case .success: return CGSize(width: correctWidth, height: cellHeight)
+        case .error: return CGSize(width: collectionView.frame.width, height: cellHeight)
+
         }
     }
 

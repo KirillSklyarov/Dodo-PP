@@ -61,6 +61,7 @@ private extension ProfileViewController {
         scrollView.addSubviews(contentStackView)
     }
 
+    // Настраиваем констреинты
     func setupLayout() {
         setupScrollViewLayout()
         setupContentStackViewLayout()
@@ -94,13 +95,17 @@ private extension ProfileViewController {
         let profileButtonView = ProfileButtonView(type: .profile)
 
         navigationController?.isNavigationBarHidden = false
+        navigationController?.navigationBar.barTintColor = AppColors.backgroundBlack
+        navigationController?.navigationBar.backgroundColor = AppColors.backgroundBlack
+        navigationController?.navigationBar.isTranslucent = false
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButtonView)
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(customView: profileButtonView),
             UIBarButtonItem(customView: chatButtonView)
         ]
-        
+
+        // Настраиваем действия кнопок навигации
         setupNavigationViewActions(dismissButtonView, chatButtonView, profileButtonView)
     }
 }
@@ -172,6 +177,11 @@ private extension ProfileViewController { // Запрашиваем данные
             guard let self else { return }
             passPersonalDataToCollectionView(personalData)
             setState(view: .personalData, state: .success)
+            completion()
+        }
+
+        storage.onError = { [weak self] error in
+            self?.setState(view: .personalData, state: .error)
             completion()
         }
     }

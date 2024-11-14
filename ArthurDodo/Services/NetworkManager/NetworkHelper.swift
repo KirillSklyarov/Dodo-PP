@@ -44,6 +44,7 @@ enum endPoint: String {
     case products = "/products"
     case promo = "/promo"
     case personal = "/personal"
+    case error = "/error"
 
     // Формирует ссылку
     var url: URL? {

@@ -29,6 +29,8 @@ final class DataStorage {
     var onPromoFetchedSuccessfully: (([Promo]) -> Void)?
     var onPersonalDataFetchedSuccessfully: ((Personal) -> Void)?
 
+    var onError: ((Error) -> Void)?
+
     // MARK: - Init
     init(networkManager: NetworkManager) {
         self.networkManager = networkManager
@@ -100,13 +102,14 @@ extension DataStorage {
 extension DataStorage {
     // Фетчим личные данные
     func fetchPersonalData() {
-        networkManager.fetchData(.personal) { [weak self] (result: Result<Personal, NetworkError>) in
+        networkManager.fetchData(.error) { [weak self] (result: Result<Personal, NetworkError>) in
             guard let self else { return }
             switch result {
             case .success(let personalData):
                 fetchedPersonalData = personalData
                 onPersonalDataFetchedSuccessfully?(personalData)
             case .failure(let error):
+                onError?(error)
                 print(error)
             }
         }

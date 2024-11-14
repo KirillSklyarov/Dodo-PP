@@ -1,5 +1,4 @@
 import UIKit
-//import SkeletonView
 
 final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
 
@@ -53,7 +52,6 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        setupSkeleton()
     }
 
     required init?(coder: NSCoder) {
@@ -71,13 +69,6 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
         case 2: designAddressCell(data)
         default: break
         }
-    }
-}
-
-// MARK: - Setup Skeleton
-private extension CoinsOrdersCollectionViewCell {
-    func setupSkeleton() {
-//        isSkeletonable = true
     }
 }
 

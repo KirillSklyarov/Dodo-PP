@@ -76,6 +76,7 @@ private extension PromoStackView {
         switch state {
         case .loading: showSkeleton()
         case .success: showSuccessScreen()
+        case .error: break
         }
     }
 

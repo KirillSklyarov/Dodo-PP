@@ -60,6 +60,7 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
         switch state {
         case .loading: return 1
         case .success: return cart?.items.count ?? 0
+        case .error: return 1
         }
     }
 
@@ -82,6 +83,7 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
                 self?.onCountChanged?(indexPath, value)
             }
             return cell
+            case .error: return UITableViewCell()
         }
     }
 

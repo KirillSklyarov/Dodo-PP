@@ -48,6 +48,7 @@ private extension MissionStackView {
         switch state {
         case .loading: showSkeleton()
         case .success: showSuccessScreen()
+        case .error: break
         }
     }
 

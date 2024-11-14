@@ -46,8 +46,11 @@ private extension CoinsOrdersCollectionView {
     func configureCollectionView() {
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
+
         register(CoinsOrdersCollectionViewCell.self, forCellWithReuseIdentifier: CoinsOrdersCollectionViewCell.identifier)
         register(SkeletonCollectionViewCell.self, forCellWithReuseIdentifier: SkeletonCollectionViewCell.identifier)
+        register(ErrorCollectionViewCell.self, forCellWithReuseIdentifier: ErrorCollectionViewCell.identifier)
+
         dataSource = self
         delegate = self
     }
@@ -73,6 +76,7 @@ extension CoinsOrdersCollectionView: UICollectionViewDataSource, UICollectionVie
         switch state {
         case .loading: return 1
         case .success: return countOfItems
+        case .error: return 1
         }
     }
 
@@ -86,6 +90,9 @@ extension CoinsOrdersCollectionView: UICollectionViewDataSource, UICollectionVie
             guard let personalData else { return cell }
             cell.configureCell(indexPath, data: personalData)
             return cell
+        case .error:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ErrorCollectionViewCell.identifier, for: indexPath) as? ErrorCollectionViewCell else { return UICollectionViewCell() }
+            return cell
         }
     }
 
@@ -93,6 +100,7 @@ extension CoinsOrdersCollectionView: UICollectionViewDataSource, UICollectionVie
         switch state {
         case .loading: return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
         case .success: return CGSize(width: cellWidth, height: cellHeight)
+        case .error: return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
         }
     }
 }
