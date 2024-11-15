@@ -85,4 +85,7 @@ extension ScreenFactory {
         return AddNewAddressViewController(router: router)
     }
 
+    func makeEditProductScreen() -> EditProductViewController {
+        return EditProductViewController(storage: storage, router: router)
+    }
 }

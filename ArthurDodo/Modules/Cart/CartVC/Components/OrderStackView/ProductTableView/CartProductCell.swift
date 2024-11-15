@@ -4,7 +4,6 @@ import UIKit
 final class CartProductCell: UITableViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "CartProductCell"
     private let imageSize: CGFloat = 100
     private let hitImageSize: CGFloat = 30
 
@@ -77,15 +76,15 @@ final class CartProductCell: UITableViewCell {
 
 // MARK: - Public methods
 extension CartProductCell {
-    func configureCell(itemInCart: CartItem) {
-        pizzaImageView.image = UIImage(named: itemInCart.imageName)
-        titleLabel.text = itemInCart.name
+    func configureCell(cartItem: CartItem) {
+        pizzaImageView.image = UIImage(named: cartItem.item.imageName)
+        titleLabel.text = cartItem.item.name
 
-        setProductDetails(itemInCart) // Устанавливаем детали продукта
-        setPrice(itemInCart) // Устанавливаем цену
-        isItemHit(itemInCart) // Устанавливаем отметку хит
-        setCount(itemInCart) // Устанавливаем кол-во единиц в степпере
-        isCanChange(itemInCart) // Показываем или нет лейбл "Изменить"
+        setProductDetails(cartItem) // Устанавливаем детали продукта
+        setPrice(cartItem) // Устанавливаем цену
+        isItemHit(cartItem) // Устанавливаем отметку хит
+        setCount(cartItem) // Устанавливаем кол-во единиц в степпере
+        isCanChange(cartItem) // Показываем или нет лейбл "Изменить"
     }
 }
 
@@ -176,12 +175,12 @@ private extension CartProductCell {
 
 // MARK: - Supporting methods
 private extension CartProductCell {
-    func setProductDetails(_ itemInCart: CartItem) {
+    func setProductDetails(_ cartItem: CartItem) {
         let detailText =
-        if itemInCart.dough != nil {
-            "\(itemInCart.size.displayName), \(itemInCart.dough!.rawValue)"
+        if cartItem.chosenDough != nil {
+            "\(cartItem.chosenSize.displayName), \(cartItem.chosenDough!.displayName)"
         } else {
-            "\(itemInCart.weight) г"
+            "\(cartItem.weight) г"
         }
         sizeDoughLabel.text = detailText
     }
@@ -197,13 +196,13 @@ private extension CartProductCell {
     }
 
     // Если товар Хит, то покажи картинку
-    func isItemHit(_ item: CartItem) {
-        hitImageView.isHidden =  item.isHit ? false : true
+    func isItemHit(_ cartItem: CartItem) {
+        hitImageView.isHidden =  cartItem.item.isHit ? false : true
     }
 
     // Если у товара один размер, то прячем кнопку изменить, если несколько, то показываем
-    func isCanChange(_ item: CartItem) {
-        let isOneSize = item.isOneSize
+    func isCanChange(_ cartItem: CartItem) {
+        let isOneSize = cartItem.isOneSize
         changeLabel.isHidden = isOneSize ? true : false
     }
 }

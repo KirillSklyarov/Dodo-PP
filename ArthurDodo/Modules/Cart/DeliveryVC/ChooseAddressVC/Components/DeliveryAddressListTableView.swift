@@ -58,7 +58,7 @@ private extension DeliveryAddressListTableView {
         backgroundColor = .clear
         dataSource = self
         delegate = self
-        register(AddressListTableViewCell.self, forCellReuseIdentifier: AddressListTableViewCell.identifier)
+        registerCell(AddressListTableViewCell.self)
 
         separatorStyle = .singleLine
         separatorColor = .darkGray
@@ -75,7 +75,7 @@ extension DeliveryAddressListTableView: UITableViewDataSource, UITableViewDelega
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: AddressListTableViewCell.identifier, for: indexPath) as? AddressListTableViewCell else { print("rrrr"); return UITableViewCell() }
+        let cell = tableView.dequeueCell(indexPath) as AddressListTableViewCell
         let addressName = addressNames[indexPath.row]
         if indexPath.row != addressNames.count - 1 {
             let isMain = addresses[indexPath.row].isMain

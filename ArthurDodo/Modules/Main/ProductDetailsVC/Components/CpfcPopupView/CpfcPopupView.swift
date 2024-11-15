@@ -1,26 +1,6 @@
-//
-//  TestPopupView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 23.10.2024.
-//
-
 import UIKit
 
 final class CpfcPopupView: UIViewController {
-
-    // MARK: - Properties
-    private let leftInsets: CGFloat = 10
-    private let rightInsets: CGFloat = -20
-    private let topInsets: CGFloat = 10
-    private let bottomInset: CGFloat = -10
-
-    private let cellHeight: CGFloat = 30
-    private let cornerRadius: CGFloat = 20
-
-    private let cpfcNames = CPFCData.allCases
-    private var item: Item?
-    private var productDetails: WeightPrice?
 
     // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
@@ -42,7 +22,7 @@ final class CpfcPopupView: UIViewController {
         let tableView = AppTableView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(cpfcTableViewCell.self, forCellReuseIdentifier: cpfcTableViewCell.identifier)
+        tableView.registerCell(CpfcTableViewCell.self)
         tableView.backgroundColor = .clear
         tableView.rowHeight = cellHeight
         tableView.estimatedRowHeight = UITableView.automaticDimension
@@ -64,6 +44,19 @@ final class CpfcPopupView: UIViewController {
         stack.distribution = .equalSpacing
         return stack
     }()
+
+    // MARK: - Properties
+    private let leftInsets: CGFloat = 10
+    private let rightInsets: CGFloat = -20
+    private let topInsets: CGFloat = 10
+    private let bottomInset: CGFloat = -10
+
+    private let cellHeight: CGFloat = 30
+    private let cornerRadius: CGFloat = 20
+
+    private let cpfcNames = CPFCData.allCases
+    private var item: Item?
+    private var productDetails: WeightPrice?
 
     // MARK: - Init
     init(item: Item? = nil) {
@@ -148,7 +141,7 @@ extension CpfcPopupView: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cpfcTableViewCell.identifier, for: indexPath) as? cpfcTableViewCell else { return UITableViewCell() }
+        let cell = tableView.dequeueCell(indexPath) as CpfcTableViewCell 
         guard let item = productDetails else { print("We have no productDetails"); return cell }
 
         let title = cpfcNames[indexPath.row]

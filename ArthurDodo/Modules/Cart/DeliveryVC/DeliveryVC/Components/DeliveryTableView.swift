@@ -34,7 +34,7 @@ private extension DeliveryTableView {
         backgroundColor = .clear
         dataSource = self
         delegate = self
-        register(DeliveryTableViewCell.self, forCellReuseIdentifier: DeliveryTableViewCell.identifier)
+        registerCell(DeliveryTableViewCell.self)
         rowHeight = cellHeight
         separatorStyle = .none
         tableHeaderView = UIView(frame: .zero)
@@ -54,7 +54,7 @@ extension DeliveryTableView: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: DeliveryTableViewCell.identifier, for: indexPath) as? DeliveryTableViewCell else { return UITableViewCell() }
+        let cell = tableView.dequeueCell(indexPath) as DeliveryTableViewCell
         cell.configureCell(name)
         return cell
     }

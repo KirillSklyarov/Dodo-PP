@@ -1,10 +1,8 @@
 import UIKit
 
-final class cpfcTableViewCell: UITableViewCell {
+final class CpfcTableViewCell: UITableViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "cpfcTableViewCell"
-
     var onPriceButtonTapped: ( (String) -> Void )?
 
     // MARK: - UI Properties
@@ -39,7 +37,7 @@ final class cpfcTableViewCell: UITableViewCell {
 }
 
 // MARK: - Setup UI
-private extension cpfcTableViewCell {
+private extension CpfcTableViewCell {
     func setupUI() {
         backgroundColor = .clear
         selectionStyle = .none

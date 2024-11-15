@@ -30,7 +30,7 @@ private extension TimeCollectionView {
     func setupCollection() {
         dataSource = self
         delegate = self
-        register(TimeCollectionViewCell.self, forCellWithReuseIdentifier: TimeCollectionViewCell.identifier)
+        registerCell(TimeCollectionViewCell.self)
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
 
@@ -45,7 +45,7 @@ extension TimeCollectionView: UICollectionViewDataSource, UICollectionViewDelega
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimeCollectionViewCell.identifier, for: indexPath) as? TimeCollectionViewCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueCell(indexPath) as TimeCollectionViewCell
         let cellTime = timeIntervals[indexPath.row]
 
         cell.configureCell(cellTime)

@@ -6,6 +6,8 @@ final class CartButton: UIButton {
     private var totalPrice = 0
     private let buttonHeight: CGFloat = 50
 
+    private var heightConstraint: NSLayoutConstraint?
+
     var isCart: Bool
     var onButtonTapped: (() -> Void)?
 
@@ -41,6 +43,13 @@ final class CartButton: UIButton {
     func updateCart(with totalPrice: Int) {
         setNewPrice(totalPrice)
         showOrHideCartButton(totalPrice)
+    }
+
+    func setNewHeight(_ height: CGFloat = 0) {
+        heightConstraint?.isActive = false
+        let correctHeight = height == 0 ? buttonHeight : height
+        heightConstraint = heightAnchor.constraint(equalToConstant: correctHeight)
+        heightConstraint?.isActive = true
     }
 }
 

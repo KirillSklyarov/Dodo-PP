@@ -149,7 +149,7 @@ private extension ProductDetailsViewController {
         let price = item.getPrice(size: chosenSize)
         let isOneSize = item.hasOneSize()
 
-        let positionToAddToCart = CartItem(id: item.id, name: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, weight: weight, price: price, isHit: item.isHit, isOneSize: isOneSize)
+        let positionToAddToCart = CartItem(item: item, chosenSize: chosenSize, chosenDough: chosenDough, weight: weight, price: price, isOneSize: isOneSize)
         return positionToAddToCart
     }
 
@@ -191,7 +191,6 @@ private extension ProductDetailsViewController {
 
     func updateUIWithChosenSize(_ index: Int) {
         guard let productDetails = item?.itemSize.getWeightAndPriceViaIndex(index) else {print("We have some problems here"); return }
-        print("productDetails \(productDetails)")
         infoAndToppingsContainer.updateUI(productDetails: productDetails)
         let price = productDetails.price
         cartButtonView.updatePrice(price)
@@ -230,16 +229,15 @@ private extension ProductDetailsViewController {
         storage.fetchToppings()
         storage.onToppingsFetchedSuccessfully = { [weak self] fetchedToppings in
             guard let self else { return }
-            filterToppings(fetchedToppings)
+            filterToppings()
         }
     }
 
     // Отбираем только нужные нам начинки
-    func filterToppings(_ fetchedToppings: [Topping]) {
-        if let arrayOfToppings = item?.toppings {
-            toppings = fetchedToppings.filter { arrayOfToppings.contains($0.name) }
-            passToppingsToView()
-        }
+    func filterToppings() {
+        guard let toppings = item?.toppings else { return }
+        self.toppings = toppings
+        passToppingsToView()
     }
 
     // Отправляем данные о топпингов дальше ко вью
@@ -276,6 +274,7 @@ private extension ProductDetailsViewController {
         guard let item else { return }
         headerView.updateTitle(item.name)
         itemDetailsView.updatePizzaImage(item.imageName)
+
         infoAndToppingsContainer.updateIngredientsAndWeight(item)
         cartButtonView.updatePrice(item.itemSize.medium?.price ?? 0)
     }

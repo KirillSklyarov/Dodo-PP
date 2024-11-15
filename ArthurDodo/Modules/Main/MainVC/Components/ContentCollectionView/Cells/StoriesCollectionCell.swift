@@ -4,8 +4,6 @@ import UIKit
 final class StoriesCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier = String(describing: StoriesCollectionCell.self)
-
     private let cornerRadius: CGFloat = 14
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10

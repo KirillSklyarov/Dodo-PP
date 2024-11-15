@@ -1,10 +1,6 @@
 import UIKit
-//import SkeletonView
 
 final class SkeletonPlaceholderCell: UICollectionViewCell {
-
-    // MARK: - Properties
-    static let identifier = String(describing: SkeletonPlaceholderCell.self)
 
     // MARK: - UI Properties
     private lazy var placeholderView: UIView = {

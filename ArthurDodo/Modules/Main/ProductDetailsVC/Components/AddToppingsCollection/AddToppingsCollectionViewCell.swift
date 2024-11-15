@@ -3,7 +3,6 @@ import UIKit
 final class AddToppingsCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "AddToppingsCollectionViewCell"
     private let imageSize: CGFloat = 60
     private let cornerRadius: CGFloat = 10
 

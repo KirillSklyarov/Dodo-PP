@@ -192,10 +192,8 @@ private extension MainViewController { // Тут все переходы меж�
 private extension MainViewController {
     // Обращаемся к хранилищу за необходимыми данными
     func fetchData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.getStoriesFromServer()
-            self?.getCatalogAndSpecialOffersFromServer()
-        }
+        getStoriesFromServer()
+        getCatalogAndSpecialOffersFromServer()
     }
 
     // Мы обращаемся к хранилищу за сторисами, инициируем сетевой запрос, забираем результаты и передаем их в коллекцию
@@ -253,7 +251,7 @@ private extension MainViewController {
     }
 
     // Передает категории в contentCollectionView
-    func passCategoriesToContentCollectionView(_ categories: [CategoryName]) {
+    func passCategoriesToContentCollectionView(_ categories: [Category]) {
         contentCollectionView.getCategories(categories)
     }
 

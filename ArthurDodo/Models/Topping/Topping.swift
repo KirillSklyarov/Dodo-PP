@@ -1,11 +1,10 @@
-//
-//  ToppingsEnum.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 19.10.2024.
-//
-
 import Foundation
+
+struct Topping: Codable, Equatable {
+    let name: ToppingEnum
+    let imageName: String
+    let price: Int
+}
 
 enum ToppingEnum: String, Codable {
     case cheese = "cheese"

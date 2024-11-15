@@ -1,14 +1,7 @@
-//
-//  Size.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 19.10.2024.
-//
-
 import Foundation
 
-enum Size: Codable {
-    case small
+enum Size: Int, Codable {
+    case small = 0
     case medium
     case large
     case oneSize

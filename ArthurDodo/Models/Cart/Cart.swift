@@ -5,14 +5,12 @@ struct Cart {
 }
 
 struct CartItem: Equatable {
-    let id: String
-    let name: String
-    let imageName: String
-    let size: Size
-    let dough: Dough?
-    let weight: Int
-    let price: Int
-    let isHit: Bool
+    let item: Item
+    var chosenSize: Size
+    var chosenDough: Dough?
+    var chosenToppings: [Topping]?
+    let weight: Int // Вес конкретной комплектации
+    var price: Int // Цена конкретной комплектации
     var count: Int = 1
     let isOneSize: Bool
 }

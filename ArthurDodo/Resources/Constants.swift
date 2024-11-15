@@ -1,19 +1,12 @@
-//
-//  Constants.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 18.09.2024.
-//
-
 import UIKit
 
-struct WeightPrice: Codable {
+struct WeightPrice: Equatable, Codable {
     let weight: Int
     let price: Int
     let cpfc: CPFC
 }
 
-struct CPFC: Codable {
+struct CPFC: Equatable, Codable {
     let calories: Float
     let protein: Float
     let fat: Float

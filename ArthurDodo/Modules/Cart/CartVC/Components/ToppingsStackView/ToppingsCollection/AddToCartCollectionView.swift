@@ -48,8 +48,8 @@ private extension AddToCartCollectionView {
     func setupUI() {
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
-        register(AddToCartCollectionCell.self, forCellWithReuseIdentifier: AddToCartCollectionCell.identifier)
-        register(SkeletonCollectionViewCell2.self, forCellWithReuseIdentifier: SkeletonCollectionViewCell2.identifier)
+        registerCell(AddToCartCollectionCell.self)
+        registerCell(SkeletonCollectionViewCell2.self)
 
         dataSource = self
         delegate = self
@@ -82,10 +82,10 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch state {
         case .loading:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SkeletonCollectionViewCell2.identifier, for: indexPath) as? SkeletonCollectionViewCell2 else { return UICollectionViewCell() }
+            let cell = collectionView.dequeueCell(indexPath) as SkeletonCollectionViewCell2
             return cell
         case .success:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddToCartCollectionCell.identifier, for: indexPath) as? AddToCartCollectionCell else { return UICollectionViewCell() }
+            let cell = collectionView.dequeueCell(indexPath) as AddToCartCollectionCell
             let itemToAdd = itemsToAddToOrder[indexPath.row]
             cell.configCell(itemToAdd)
             return cell
@@ -120,7 +120,7 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
         let price = item.getCorrectPrice()
         let isOneSize = item.hasOneSize()
 
-        let cartPosition = CartItem(id: item.id, name: item.name, imageName: item.imageName, size: size, dough: dough, weight: weight, price: price, isHit: item.isHit, isOneSize: isOneSize)
+        let cartPosition = CartItem(item: item, chosenSize: size, chosenDough: dough, weight: weight, price: price, isOneSize: isOneSize)
 
         return cartPosition
     }

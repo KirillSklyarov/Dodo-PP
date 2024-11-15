@@ -183,8 +183,8 @@ private extension CartViewController {
         // Нажали на ячейку в таблице с товаром, отправили редактируемый товар в хранилище и открыли экран с этим товаром, при закрытии этого экрана срабатывает комплишн и мы заново загружаем корзину
         orderStackView.onItemCellSelected = { [weak self] item in
             guard let self else { return }
-            storage.setChangingItem(item: item) //
-            router.showProductDetailsScreen { [weak self] in
+            storage.setChangingItem(item) //
+            router.showEditProductVC() { [weak self] in
                 self?.fetchCart()
             }
         }

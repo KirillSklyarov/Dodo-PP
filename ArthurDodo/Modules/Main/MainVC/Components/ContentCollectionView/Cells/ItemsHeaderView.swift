@@ -1,10 +1,8 @@
 import UIKit
-//import SkeletonView
 
 final class ItemsHeaderView: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier = "ItemsHeaderView"
     private let imageSize: CGFloat = 160
     private let hitImageSize: CGFloat = 130
 

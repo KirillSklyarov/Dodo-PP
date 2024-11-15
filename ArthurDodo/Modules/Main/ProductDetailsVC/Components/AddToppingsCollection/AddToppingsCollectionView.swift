@@ -76,7 +76,7 @@ private extension AddToppingsCollectionView {
         backgroundColor = .clear
         allowsMultipleSelection = true
         isScrollEnabled = false
-        register(AddToppingsCollectionViewCell.self, forCellWithReuseIdentifier: AddToppingsCollectionViewCell.identifier)
+        registerCell(AddToppingsCollectionViewCell.self)
         dataSource = self
         delegate = self
     }
@@ -89,7 +89,7 @@ extension AddToppingsCollectionView: UICollectionViewDataSource, UICollectionVie
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddToppingsCollectionViewCell.identifier, for: indexPath) as? AddToppingsCollectionViewCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueCell(indexPath) as AddToppingsCollectionViewCell
         let topping = toppings[indexPath.row]
         cell.configCell(topping)
         return cell

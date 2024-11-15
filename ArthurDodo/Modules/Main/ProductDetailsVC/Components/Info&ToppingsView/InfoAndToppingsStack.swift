@@ -44,14 +44,13 @@ extension InfoAndToppingsStack {
     func updateUI(productDetails: WeightPrice) {
         let weight = productDetails.weight
         ingredientsView.updateWeight(weight)
-        print(#function)
         ingredientsView.setProductDetails(productDetails)
     }
 
     func updateUIWithItem(_ item: Item) {
         let ingredients = item.ingredients
         ingredientsView.updateIngredients(ingredients)
-        let weight = item.itemSize.medium?.weight ?? 0
+        guard let weight = item.itemSize.medium?.weight else { return }
         ingredientsView.updateWeight(weight)
     }
 

@@ -69,8 +69,8 @@ private extension OrderStackView {
         }
 
         // Отправляем инфу, что изменили сам товар на VC
-        cartProductTableView.onItemCellSelected = { [weak self] Item in
-            self?.onItemCellSelected?(Item)
+        cartProductTableView.onItemCellSelected = { [weak self] item in
+            self?.onItemCellSelected?(item)
         }
     }
 }

@@ -3,7 +3,6 @@ import UIKit
 final class ErrorCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "ErrorCollectionViewCell"
     private let xmarkImageSize: CGFloat = 65
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10

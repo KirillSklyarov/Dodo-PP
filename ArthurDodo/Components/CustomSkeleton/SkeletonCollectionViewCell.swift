@@ -3,7 +3,6 @@ import UIKit
 final class SkeletonCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "SkeletonCollectionViewCell"
     private var gradientLayer = CAGradientLayer()
 
     private let leftInset: CGFloat = 5

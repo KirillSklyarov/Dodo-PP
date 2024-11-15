@@ -9,6 +9,8 @@ final class ProductHeaderView: UIView {
     private let buttonLeftPadding: CGFloat = 20
     private let buttonBottomPadding: CGFloat = 10
 
+    private var heightConstraint: NSLayoutConstraint?
+
     var onCloseButtonTapped: (() -> Void)?
 
     // MARK: - UI Properties
@@ -41,8 +43,12 @@ extension ProductHeaderView {
         titleLabel.text = title
     }
 
-    func getViewHeight() -> CGFloat {
-        viewHeight
+    // Метод позволяет менять высоту у вью (сначала выключаем текущий констреинт, определяем правильную высоту, потом выставляем констреинт и активируем его)
+    func setViewHeight(_ height: CGFloat = 0) {
+        heightConstraint?.isActive = false
+        let correctHeight = height == 0 ? viewHeight : height
+        heightConstraint = heightAnchor.constraint(equalToConstant: correctHeight)
+        heightConstraint?.isActive = true
     }
 }
 
@@ -63,7 +69,8 @@ private extension ProductHeaderView {
     }
 
     func setupLayout() {
-        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
+        setViewHeight()
+
         setupBlurConstraints()
         setupDismissButtonConstraints()
         setupTitleLabelConstraints()

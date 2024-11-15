@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CategoryName: String, Codable {
+enum Category: String, Codable {
     case breakfast = "Завтрак"
     case combo = "Комбо"
     case starter = "Закуски"

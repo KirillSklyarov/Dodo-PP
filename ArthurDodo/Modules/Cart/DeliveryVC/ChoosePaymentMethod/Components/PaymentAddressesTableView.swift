@@ -40,7 +40,7 @@ private extension PaymentAddressesTableView {
         backgroundColor = AppColors.backgroundGray
         dataSource = self
         delegate = self
-        register(PaymentMethodsTableViewCell.self, forCellReuseIdentifier: PaymentMethodsTableViewCell.identifier)
+        registerCell(PaymentMethodsTableViewCell.self)
         separatorStyle = .singleLine
         separatorColor = .darkGray
         separatorInset = .init(top: 0, left: 0, bottom: 0, right: 0)
@@ -67,7 +67,7 @@ extension PaymentAddressesTableView: UITableViewDataSource, UITableViewDelegate 
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PaymentMethodsTableViewCell.identifier, for: indexPath) as? PaymentMethodsTableViewCell else { print("rrrr"); return UITableViewCell() }
+        let cell = tableView.dequeueCell(indexPath) as PaymentMethodsTableViewCell
         guard let paymentMethod = PaymentMethod(rawValue: indexPath.row) else {
             print("We don't have payment method"); return UITableViewCell()}
 

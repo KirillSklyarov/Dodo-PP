@@ -3,8 +3,6 @@ import UIKit
 final class DeliveryTableViewCell: UITableViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "deliveryTableViewCell"
-
     private let cornerRadius: CGFloat = 10
     private let topInset: CGFloat = 10
     private let leftInset: CGFloat = 20

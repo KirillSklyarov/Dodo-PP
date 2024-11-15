@@ -47,9 +47,9 @@ private extension CoinsOrdersCollectionView {
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
 
-        register(CoinsOrdersCollectionViewCell.self, forCellWithReuseIdentifier: CoinsOrdersCollectionViewCell.identifier)
-        register(SkeletonCollectionViewCell.self, forCellWithReuseIdentifier: SkeletonCollectionViewCell.identifier)
-        register(ErrorCollectionViewCell.self, forCellWithReuseIdentifier: ErrorCollectionViewCell.identifier)
+        registerCell(CoinsOrdersCollectionViewCell.self)
+        registerCell(SkeletonCollectionViewCell.self)
+        registerCell(ErrorCollectionViewCell.self)
 
         dataSource = self
         delegate = self
@@ -83,15 +83,15 @@ extension CoinsOrdersCollectionView: UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch state {
         case .loading:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SkeletonCollectionViewCell.identifier, for: indexPath) as? SkeletonCollectionViewCell else { return UICollectionViewCell() }
+            let cell = collectionView.dequeueCell(indexPath) as SkeletonCollectionViewCell
             return cell
         case .success:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CoinsOrdersCollectionViewCell.identifier, for: indexPath) as? CoinsOrdersCollectionViewCell else { return UICollectionViewCell() }
+            let cell = collectionView.dequeueCell(indexPath) as CoinsOrdersCollectionViewCell
             guard let personalData else { return cell }
             cell.configureCell(indexPath, data: personalData)
             return cell
         case .error:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ErrorCollectionViewCell.identifier, for: indexPath) as? ErrorCollectionViewCell else { return UICollectionViewCell() }
+            let cell = collectionView.dequeueCell(indexPath) as ErrorCollectionViewCell
             return cell
         }
     }

@@ -1,10 +1,8 @@
 import UIKit
-//import SkeletonView
 
 final class SpecialOfferCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier = String(describing: SpecialOfferCollectionCell.self)
     private let imageViewSize: CGFloat = 90
 
     var onPriceButtonTapped: ( (String) -> Void )?

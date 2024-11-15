@@ -3,8 +3,6 @@ import UIKit
 final class PromoCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "PromoCollectionCell"
-
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let topInset: CGFloat = 10

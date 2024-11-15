@@ -2,8 +2,6 @@ import UIKit
 
 final class SpecialOfferHeaderView: UICollectionReusableView {
 
-    static let identifier: String = "CollectionHeaderView"
-
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppFonts.semibold16

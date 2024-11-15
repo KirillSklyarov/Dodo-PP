@@ -3,7 +3,6 @@ import UIKit
 final class SkeletonTableViewCell: UITableViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "SkeletonCell"
     private var gradientLayer = CAGradientLayer()
 
     private lazy var darkPlaceholderTitle: UILabel = {

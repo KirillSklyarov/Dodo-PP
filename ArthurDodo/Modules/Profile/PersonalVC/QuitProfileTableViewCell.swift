@@ -1,18 +1,8 @@
-//
-//  QuitProfileTableViewCell.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 11.10.2024.
-//
-
-
 import UIKit
 
 final class QuitProfileTableViewCell: UITableViewCell {
 
     // MARK: - Properties
-    static let identifier = "QuitProfileTableViewCell"
-
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
     private let topPadding: CGFloat = 10

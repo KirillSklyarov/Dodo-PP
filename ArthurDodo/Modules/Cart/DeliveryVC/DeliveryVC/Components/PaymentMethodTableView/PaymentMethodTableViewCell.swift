@@ -3,8 +3,6 @@ import UIKit
 final class PreferredPaymentMethodTableViewCell: UITableViewCell {
 
     // MARK: - Properties
-    static let identifier = "PreferredPaymentMethodTableViewCell"
-
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
     private let topPadding: CGFloat = 10

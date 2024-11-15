@@ -41,7 +41,8 @@ private extension CartProductTableView {
     func configTableView() {
         dataSource = self
         delegate = self
-        register(CartProductCell.self, forCellReuseIdentifier: CartProductCell.identifier)
+        registerCell(CartProductCell.self)
+        registerCell(SkeletonTableViewCell.self)
         separatorStyle = .singleLine
         separatorColor = AppColors.backgroundGray
         separatorInset = .zero
@@ -49,8 +50,6 @@ private extension CartProductTableView {
         estimatedRowHeight = UITableView.automaticDimension
 
         backgroundColor = .clear
-
-        register(SkeletonTableViewCell.self, forCellReuseIdentifier: SkeletonTableViewCell.identifier)
     }
 }
 
@@ -67,13 +66,13 @@ extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch state {
         case .loading:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: SkeletonTableViewCell.identifier, for: indexPath) as? SkeletonTableViewCell else { print("We have a problem with SkeletonCell"); return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as SkeletonTableViewCell
             return cell
         case .success:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: CartProductCell.identifier, for: indexPath) as? CartProductCell else { print("rrrr"); return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as CartProductCell
             guard let item = cart?.items[indexPath.row] else { print("Can't get item from Order"); return UITableViewCell()}
 
-            cell.configureCell(itemInCart: item)
+            cell.configureCell(cartItem: item)
 
             cell.onValueIsNull = { [weak self] in
                 self?.removeItemFromStorage(indexPath)

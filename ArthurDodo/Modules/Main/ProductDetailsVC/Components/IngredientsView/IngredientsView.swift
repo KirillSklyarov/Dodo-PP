@@ -2,18 +2,6 @@ import UIKit
 
 final class IngredientsView: UIView {
 
-    // MARK: - Properties&Callbacks
-    private let buttonSize: CGFloat = 24
-    private let cornerRadius: CGFloat = 10
-    private let topInset: CGFloat = 10
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-    private let bottomInset: CGFloat = -10
-
-    private var item: Item?
-
-    var onShowPopupVC: ((UIViewController) -> Void)?
-
     // MARK: - UI Properties
     private lazy var ingredientsLabel: UILabel = {
         let label = UILabel()
@@ -58,6 +46,18 @@ final class IngredientsView: UIView {
     }()
 
     private lazy var cpfcPopupView = CpfcPopupView(item: item)
+
+    // MARK: - Properties&Callbacks
+    private let buttonSize: CGFloat = 24
+    private let cornerRadius: CGFloat = 10
+    private let topInset: CGFloat = 10
+    private let leftInset: CGFloat = 10
+    private let rightInset: CGFloat = -10
+    private let bottomInset: CGFloat = -10
+
+    private var item: Item?
+
+    var onShowPopupVC: ((UIViewController) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect = .zero) {

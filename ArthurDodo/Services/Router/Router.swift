@@ -121,6 +121,12 @@ extension Router {
         navigationController.visibleViewController?.present(popUpView, animated: true)
     }
 
+    func showEditProductVC(completion: (() -> Void)?) {
+        let vc = screenFactory.makeEditProductScreen()
+        navigationController.visibleViewController?.present(vc, animated: true)
+        vc.onCartButtonTapped = completion
+    }
+
     func dismissCurrentVC() {
         navigationController.visibleViewController?.dismiss(animated: true)
     }

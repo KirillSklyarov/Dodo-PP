@@ -3,7 +3,6 @@ import UIKit
 final class AddToCartCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "AddToCartCollectionCell"
     private let imageSize: CGFloat = 100
     private let priceLabelHeight: CGFloat = 25
     private let cornerRadius: CGFloat = 10

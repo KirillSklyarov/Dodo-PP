@@ -1,11 +1,8 @@
 import UIKit
-//import SkeletonView
 
 final class ItemsCollectionCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "ProductCollectionCell"
-
     private let imageSize: CGFloat = 130
     private let hitImageSize: CGFloat = 30
 

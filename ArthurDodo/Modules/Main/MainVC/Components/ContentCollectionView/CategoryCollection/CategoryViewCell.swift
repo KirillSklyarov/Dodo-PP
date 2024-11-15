@@ -3,7 +3,6 @@ import UIKit
 final class CategoryViewCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "CategoryViewCell"
     private let viewHeight: CGFloat = 40
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10

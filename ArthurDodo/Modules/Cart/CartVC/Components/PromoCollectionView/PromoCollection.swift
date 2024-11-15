@@ -37,7 +37,7 @@ private extension PromoCollectionView {
     func configCollectionView() {
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
-        register(PromoCollectionCell.self, forCellWithReuseIdentifier: PromoCollectionCell.identifier)
+        registerCell(PromoCollectionCell.self)
         dataSource = self
         delegate = self
     }
@@ -55,7 +55,7 @@ extension PromoCollectionView: UICollectionViewDataSource, UICollectionViewDeleg
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PromoCollectionCell.identifier, for: indexPath) as? PromoCollectionCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueCell(indexPath) as PromoCollectionCell
         let item = promo[indexPath.item]
         cell.configureCell(item)
         return cell

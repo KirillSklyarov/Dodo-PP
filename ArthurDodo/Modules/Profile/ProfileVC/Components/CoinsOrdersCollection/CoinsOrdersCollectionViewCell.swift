@@ -3,7 +3,6 @@ import UIKit
 final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "CoinsOrdersCollectionViewCell"
     private let coinsImageSize: CGFloat = 70
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10

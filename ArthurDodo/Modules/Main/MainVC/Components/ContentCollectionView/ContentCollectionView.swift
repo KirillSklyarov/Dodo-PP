@@ -10,7 +10,7 @@ final class ContentCollectionView: UICollectionView {
     private var stories: [Story] = []
     private var specialOffersArray: [Item] = []
     private var catalog: [Item] = []
-    private var categories: [CategoryName] = []
+    private var categories: [Category] = []
 
     private let countOfSections = 3 // Указываем кол-во секций в коллекции
 
@@ -49,7 +49,7 @@ extension ContentCollectionView {
 extension ContentCollectionView {
 
     // Получаем список категорий
-    func getCategories(_ categories: [CategoryName]) {
+    func getCategories(_ categories: [Category]) {
         self.categories = categories
         passCategoriesToNextView()
     }
@@ -310,16 +310,16 @@ private extension ContentCollectionView {
         backgroundColor = AppColors.backgroundGray
         layer.cornerRadius = 14
         layer.masksToBounds = true
-        register(StoriesCollectionCell.self, forCellWithReuseIdentifier: StoriesCollectionCell.identifier)
-        register(SpecialOfferCollectionCell.self, forCellWithReuseIdentifier: SpecialOfferCollectionCell.identifier)
-        register(SpecialOfferHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SpecialOfferHeaderView.identifier)
-        register(CategoriesHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategoriesHeaderView.identifier)
-        register(ItemsHeaderView.self, forCellWithReuseIdentifier: ItemsHeaderView.identifier)
-        register(ItemsCollectionCell.self, forCellWithReuseIdentifier: ItemsCollectionCell.identifier)
+        registerCell(StoriesCollectionCell.self)
+        registerCell(SpecialOfferCollectionCell.self)
+        registerHeader(SpecialOfferHeaderView.self)
+        registerHeader(CategoriesHeaderView.self)
+        registerCell(ItemsHeaderView.self)
+        registerCell(ItemsCollectionCell.self)
 
         // Регистрируем скелетоны
-        register(SkeletonCollectionViewCell.self, forCellWithReuseIdentifier: SkeletonCollectionViewCell.identifier)
-        register(SkeletonCollectionViewCell2.self, forCellWithReuseIdentifier: SkeletonCollectionViewCell2.identifier)
+        registerCell(SkeletonCollectionViewCell.self)
+        registerCell(SkeletonCollectionViewCell2.self)
 
         delegate = self
         dataSource = self
@@ -362,10 +362,10 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
         case 0:
             switch state {
             case .loading:
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SkeletonCollectionViewCell2.identifier, for: indexPath) as? SkeletonCollectionViewCell2 else { return UICollectionViewCell() }
+                let cell = collectionView.dequeueCell(indexPath) as SkeletonCollectionViewCell2
                 return cell
             case .success:
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoriesCollectionCell.identifier, for: indexPath) as? StoriesCollectionCell else { return UICollectionViewCell() }
+                let cell = collectionView.dequeueCell(indexPath) as StoriesCollectionCell
                 let story = stories[indexPath.item]
                 cell.configureCell(story)
                 return cell
@@ -374,10 +374,10 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
         case 1:
             switch state {
             case .loading:
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SkeletonCollectionViewCell.identifier, for: indexPath) as? SkeletonCollectionViewCell else { return UICollectionViewCell() }
+                let cell = collectionView.dequeueCell(indexPath) as SkeletonCollectionViewCell
                 return cell
             case .success:
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SpecialOfferCollectionCell.identifier, for: indexPath) as? SpecialOfferCollectionCell else { return UICollectionViewCell() }
+                let cell = collectionView.dequeueCell(indexPath) as SpecialOfferCollectionCell
                 let item = specialOffersArray[indexPath.item]
                 cell.configureCell(item)
                 return cell
@@ -386,17 +386,16 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
         case 2:
             switch state {
             case .loading:
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SkeletonCollectionViewCell2.identifier, for: indexPath) as? SkeletonCollectionViewCell2 else { return UICollectionViewCell() }
+                let cell = collectionView.dequeueCell(indexPath) as SkeletonCollectionViewCell2
                 return cell
             case .success:
                 let item = catalog[indexPath.item]
                 if item.isHeader {
-                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemsHeaderView.identifier, for: indexPath) as? ItemsHeaderView else {
-                        return UICollectionViewCell() }
+                    let cell = collectionView.dequeueCell(indexPath) as ItemsHeaderView
                     cell.configHeader(item)
                     return cell
                 } else {
-                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemsCollectionCell.identifier, for: indexPath) as? ItemsCollectionCell else { return UICollectionViewCell() }
+                    let cell = collectionView.dequeueCell(indexPath) as ItemsCollectionCell
                     cell.configureCell(item)
                     return cell
                 }
@@ -422,11 +421,11 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
 
         switch section {
         case 1:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SpecialOfferHeaderView.identifier, for: indexPath) as! SpecialOfferHeaderView
+            let header = collectionView.dequeueHeader(indexPath) as SpecialOfferHeaderView
             header.setTitle("Вам понравится")
             return header
         case 2:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CategoriesHeaderView.identifier, for: indexPath) as! CategoriesHeaderView
+            let header = collectionView.dequeueHeader(indexPath) as CategoriesHeaderView
             categoryHeaderView = header
             setupActions()
             return header

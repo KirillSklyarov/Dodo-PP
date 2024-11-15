@@ -1,17 +1,8 @@
-//
-//  LegalSectionTableViewCell.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 11.10.2024.
-//
-
 import UIKit
 
 final class LegalSectionTableViewCell: UITableViewCell {
 
     // MARK: - Properties
-    static let identifier = "LegalSectionTableViewCell"
-
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
     private let topPadding: CGFloat = 10

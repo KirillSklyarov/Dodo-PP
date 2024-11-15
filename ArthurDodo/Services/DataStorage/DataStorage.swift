@@ -9,7 +9,7 @@ final class DataStorage {
     private var fetchedItems: [Item] = []
     private var fetchedPromo: [Promo] = []
     private var fetchedPersonalData: Personal?
-    private var category: [CategoryName] = []
+    private var category: [Category] = []
     private var order: Order?
     private var cart: Cart?
     private var specialOfferArray: [Item] = []
@@ -50,7 +50,7 @@ extension DataStorage {
     }
 
     // Устанавливаем продукт для редактирования
-    func setChangingItem(item: CartItem) {
+    func setChangingItem(_ item: CartItem) {
         changingItem = item
     }
 
@@ -63,6 +63,12 @@ extension DataStorage {
         } else {
             cart?.items.append(item)
         }
+    }
+
+    func changeItemInCart(_ item: CartItem) {
+        guard let index = cart?.items.firstIndex(where: { $0 == changingItem } ) else { print("No item found"); return }
+        cart?.items[index] = item
+        self.changingItem = nil
     }
 
     func getCartFromStorage() -> Cart? {
@@ -212,6 +218,22 @@ extension DataStorage {
             }
         }
     }
+
+    func getFetchedToppings(for item: Item) -> [Topping]? {
+        let itemToppings = item.toppings
+        return itemToppings
+    }
+
+    func getFetchedToppings(for cartItem: CartItem) -> [Topping]? {
+        guard let item = getItem(for: cartItem) else { return nil }
+        let itemToppings = item.toppings
+        return itemToppings
+    }
+
+    func getIngredients(for cartItem: CartItem) -> String? {
+        guard let item = getItem(for: cartItem) else { return nil }
+        return item.ingredients
+    }
 }
 
 // MARK: - Items
@@ -245,6 +267,31 @@ extension DataStorage {
     func sendSelectedItemToStorage(with itemId: String) {
         guard let item = fetchedItems.first(where: { $0.id == itemId }) else { return }
         selectedItem = SelectedItem(item: item, isChanging: true)
+    }
+
+    // Если есть позиция для редактирования, то возвращает ее, если позиции для редактирования нет, то отправляет выбранный товар
+    func getSelectedOrChangingItemFromStorage() -> Item? {
+        if changingItem != nil {
+            return castChangingItemToItem()
+        } else {
+            return getSelectedItemFromStorage()
+        }
+    }
+
+    // Возвращает товар для редактирования, но в виде Item
+    func getChangingItem() -> Item? {
+        guard let changingItem else { return nil }
+        return changingItem.item
+    }
+
+    // Возвращает товар для редактирования (в виде CartItem)
+    func getChangingCartItem() -> CartItem? {
+        changingItem
+    }
+
+    // Находит в каталоге позицию для редактирования
+    func castChangingItemToItem() -> Item? {
+        return getChangingItem()
     }
 
     // Отправляет выбранный товар, то есть тот, который открыл пользователь
@@ -287,7 +334,7 @@ extension DataStorage {
         category = sorted
     }
 
-    func getCategories() -> [CategoryName] {
+    func getCategories() -> [Category] {
         category
     }
 }
@@ -322,8 +369,8 @@ extension DataStorage {
     private func castCartToOrder() -> [OrderPosition]? {
         guard let cart else { print("Cart is nil"); return nil}
         var orderPositions: [OrderPosition] = []
-        for item in cart.items {
-            let position = OrderPosition(itemName: item.name, size: item.size, dough: item.dough, weight: item.weight, price: item.price, count: item.count)
+        for cartItem in cart.items {
+            let position = OrderPosition(itemName: cartItem.item.name, size: cartItem.chosenSize, dough: cartItem.chosenDough, weight: cartItem.weight, price: cartItem.price, count: cartItem.count)
             orderPositions.append(position)
         }
         return orderPositions
@@ -358,5 +405,23 @@ extension DataStorage {
         } else {
 //            print("Default payment method = .cbp")
         }
+    }
+}
+
+// MARK: - Supporting methods
+extension DataStorage {
+    func getProductDetails(_ cartItem: CartItem, size: Size) -> WeightPrice? {
+        let item = cartItem.item
+        let index = size.rawValue
+
+        guard let productDetails = item.itemSize.getWeightAndPriceViaIndex(index) else {print("We have some problems here"); return nil }
+        return productDetails
+    }
+
+    // По cartItem находим Item
+    private func getItem(for cartItem: CartItem) -> Item? {
+//        let itemId = cartItem.id
+//        guard let item = fetchedItems.first(where: { $0.id == itemId }) else { return nil }
+        return cartItem.item
     }
 }

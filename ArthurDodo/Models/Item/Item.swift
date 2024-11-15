@@ -1,17 +1,17 @@
 import Foundation
 
-struct Item: Codable {
+struct Item: Equatable, Codable {
     var id: String
-    var category: CategoryName
+    var category: Category
     var name: String
     var ingredients: String
-    var toppings: [ToppingEnum]
+    var toppings: [Topping]
     var imageName: String
     var isHit: Bool
     var itemSize: ItemSize
     var isHeader: Bool
 
-    init(id: String, category: CategoryName = .pizza, name: String, ingredients: String, toppings: [ToppingEnum] = [], imageName: String, itemSize: ItemSize, isHit: Bool = false, isHeader: Bool = false) {
+    init(id: String, category: Category = .pizza, name: String, ingredients: String, toppings: [Topping] = [], imageName: String, itemSize: ItemSize, isHit: Bool = false, isHeader: Bool = false) {
         self.id = id
         self.name = name
         self.ingredients = ingredients
@@ -48,7 +48,7 @@ struct Item: Codable {
     func getCorrectDough() -> String? {
         if !hasOneSize() {
             let dough: Dough = .basic
-            return dough.rawValue.lowercased()
+            return dough.displayName.lowercased()
         } else {
             return nil
         }

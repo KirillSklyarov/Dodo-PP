@@ -7,9 +7,9 @@ final class CategoryHeaderCollectionView: UICollectionView {
     private let cornerRadius: CGFloat = 0
     private var previousInd = IndexPath(row: 0, section: 0)
 
-    private lazy var categories: [CategoryName] = []
+    private lazy var categories: [Category] = []
 
-    var onUpdateProductsCollectionView: ( (CategoryName) -> Void )?
+    var onUpdateProductsCollectionView: ( (Category) -> Void )?
 
     // MARK: - Init
     init() {
@@ -30,7 +30,7 @@ final class CategoryHeaderCollectionView: UICollectionView {
         setupLayout()
     }
 
-    func getCategories(_ categories: [CategoryName]) {
+    func getCategories(_ categories: [Category]) {
         self.categories = categories
     }
 
@@ -84,7 +84,7 @@ final class CategoryHeaderCollectionView: UICollectionView {
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         layer.masksToBounds = true
         showsHorizontalScrollIndicator = false
-        register(CategoryViewCell.self, forCellWithReuseIdentifier: CategoryViewCell.identifier)
+        registerCell(CategoryViewCell.self)
         dataSource = self
         delegate = self
     }
@@ -97,7 +97,7 @@ extension CategoryHeaderCollectionView: UICollectionViewDataSource, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryViewCell.identifier, for: indexPath) as? CategoryViewCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueCell(indexPath) as CategoryViewCell
         let title = categories[indexPath.row].rawValue
         cell.configHeader(title, indexPath: indexPath)
         return cell

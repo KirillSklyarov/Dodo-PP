@@ -44,7 +44,7 @@ private extension PreferredPaymentMethodTableView {
         layer.masksToBounds = true
         dataSource = self
         delegate = self
-        register(PreferredPaymentMethodTableViewCell.self, forCellReuseIdentifier: PreferredPaymentMethodTableViewCell.identifier)
+        registerCell(PreferredPaymentMethodTableViewCell.self)
         rowHeight = cellHeight
         separatorStyle = .none
         tableHeaderView = UIView(frame: .zero)
@@ -64,7 +64,7 @@ extension PreferredPaymentMethodTableView: UITableViewDataSource, UITableViewDel
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PreferredPaymentMethodTableViewCell.identifier, for: indexPath) as? PreferredPaymentMethodTableViewCell else { return UITableViewCell() }
+        let cell = tableView.dequeueCell(indexPath) as PreferredPaymentMethodTableViewCell
         guard let preferredPaymentMethod else { return cell }
         let name = preferredPaymentMethod.title
         let image = preferredPaymentMethod.image

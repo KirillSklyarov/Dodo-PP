@@ -3,7 +3,6 @@ import UIKit
 final class TimeCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
-    static let identifier: String = "TimeCollectionViewCell"
     private let cornerRadius: CGFloat = 10
 
     private lazy var timeLabel: UILabel = {

@@ -36,7 +36,6 @@ extension InfoAndToppingsView {
 
     // Отправляем данные о выбранных деталях (вес, КБЖУ и проч) выбранного товара
     func updateUI(productDetails: WeightPrice) {
-        print(#function)
         infoAndToppingsStack.updateUI(productDetails: productDetails)
     }
 

@@ -3,12 +3,11 @@ import UIKit
 final class CategoriesHeaderView: UICollectionReusableView {
 
     // MARK: - Properties
-    static let identifier: String = "CategoriesHeaderView"
     private let viewHeight: CGFloat = 40
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
 
-    var onCategorySelected: ((CategoryName) -> Void)?
+    var onCategorySelected: ((Category) -> Void)?
 
     // MARK: - UI Properties
     private lazy var headerCollectionView = CategoryHeaderCollectionView()
@@ -28,7 +27,7 @@ final class CategoriesHeaderView: UICollectionReusableView {
         headerCollectionView.updateUI()
     }
 
-    func passCategories(_ categories: [CategoryName]) {
+    func passCategories(_ categories: [Category]) {
         headerCollectionView.getCategories(categories)
     }
 

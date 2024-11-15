@@ -48,9 +48,9 @@ final class PersonalTableView: UITableView {
         backgroundColor = .clear
         dataSource = self
         delegate = self
-        register(PersonalTableViewCell.self, forCellReuseIdentifier: PersonalTableViewCell.identifier)
-        register(LegalSectionTableViewCell.self, forCellReuseIdentifier: LegalSectionTableViewCell.identifier)
-        register(QuitProfileTableViewCell.self, forCellReuseIdentifier: QuitProfileTableViewCell.identifier)
+        registerCell(PersonalTableViewCell.self)
+        registerCell(LegalSectionTableViewCell.self)
+        registerCell(QuitProfileTableViewCell.self)
 
         separatorStyle = .singleLine
         separatorColor = .darkGray
@@ -80,24 +80,24 @@ extension PersonalTableView: UITableViewDataSource, UITableViewDelegate {
 
         switch section {
         case 0:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PersonalTableViewCell.identifier, for: indexPath) as? PersonalTableViewCell else { print("rrrr"); return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as PersonalTableViewCell
             guard let row = PersonalData(rawValue: indexPath.row) else { return UITableViewCell() }
             let cellName = row.title
             let cellData = getRowDataFromModel(row, testUser)
             cell.configureCell(title: cellName, data: cellData)
             return cell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: LegalSectionTableViewCell.identifier, for: indexPath) as? LegalSectionTableViewCell else { print("rrrr"); return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as LegalSectionTableViewCell
             let row = indexPath.row
             cell.configureCell(row)
             return cell
         case 2:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: QuitProfileTableViewCell.identifier, for: indexPath) as? QuitProfileTableViewCell else { print("rrrr"); return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as QuitProfileTableViewCell
             let title = "Выйти из профиля"
             cell.configureCell(title)
             return cell
         case 3:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: QuitProfileTableViewCell.identifier, for: indexPath) as? QuitProfileTableViewCell else { print("rrrr"); return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as QuitProfileTableViewCell
             let title = "Удалить профиль"
             cell.configureCell(title, UIColor.red)
             return cell
