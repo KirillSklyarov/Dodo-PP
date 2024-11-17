@@ -1,17 +1,6 @@
-//
-//  CartVCHeader.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 24.09.2024.
-//
-
 import UIKit
 
 final class CartVCHeader: UIView {
-
-    // MARK: - Properties&Callbacks
-    var onCloseButtonTapped: (() -> Void)?
-    private let viewHeight: CGFloat = 60
 
     // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
@@ -21,7 +10,6 @@ final class CartVCHeader: UIView {
         label.font = AppFonts.semibold18
         return label
     }()
-
     private lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("Закрыть", for: .normal)
@@ -30,7 +18,11 @@ final class CartVCHeader: UIView {
         return button
     }()
 
-    private lazy var blurView = CustomBlurView()
+    // MARK: - Properties&Callbacks
+    private let viewHeight: CGFloat = 60
+    private let leftInset: CGFloat = 20
+
+    var onCloseButtonTapped: (() -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -56,30 +48,21 @@ final class CartVCHeader: UIView {
 // MARK: - Setup UI
 private extension CartVCHeader {
     func configUI() {
-        addSubviews(blurView, dismissButton, titleLabel)
+        addSubviews(dismissButton, titleLabel)
         setupLayout()
     }
 
     func setupLayout() {
         heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
-        setupBlurLayout()
+
         setupDismissButtonConstraints()
         setupTitleLabelConstraints()
-    }
-
-    func setupBlurLayout() {
-        NSLayoutConstraint.activate([
-            blurView.topAnchor.constraint(equalTo: topAnchor),
-            blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            blurView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
     }
 
     func setupDismissButtonConstraints() {
         NSLayoutConstraint.activate([
             dismissButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            dismissButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            dismissButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
         ])
     }
 

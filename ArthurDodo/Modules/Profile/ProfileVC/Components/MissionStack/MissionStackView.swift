@@ -5,7 +5,7 @@ final class MissionStackView: UIStackView {
     // MARK: - UI Properties
     private lazy var missionHeaderView = OrderView(title: "Миссии")
     private lazy var missionView = MissionView()
-    private lazy var skeletonView = SkeletonViewWithBorderView()
+    private lazy var skeletonView = CustomSkeletonViewBorder()
 
     // MARK: - Other properties
     private let cornerRadius: CGFloat = 10

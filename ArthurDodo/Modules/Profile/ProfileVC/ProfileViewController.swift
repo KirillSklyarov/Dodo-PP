@@ -3,6 +3,7 @@ import UIKit
 final class ProfileViewController: UIViewController {
 
     // MARK: - UI Properties
+    private lazy var headerView = ProfileHeaderView()
     private lazy var personalDataCollectionView = CoinsOrdersCollectionView()
     private lazy var promoStackView = PromoStackView()
     private lazy var missionStackView = MissionStackView()
@@ -16,6 +17,9 @@ final class ProfileViewController: UIViewController {
 
     // MARK: - Other Properties
     private let topInset: CGFloat = 10
+    private let leftInset: CGFloat = 10
+    private let rightInset: CGFloat = -10
+    private let bottomInset: CGFloat = -10
 
     private var state: ScreenState = .loading
 
@@ -45,10 +49,8 @@ final class ProfileViewController: UIViewController {
 // MARK: - Setup UI
 private extension ProfileViewController {
     func setupUI() {
-        setupNavigationBar()
-
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(scrollView)
+        view.addSubviews(headerView, scrollView)
 
         setupScrollView()
 
@@ -63,15 +65,24 @@ private extension ProfileViewController {
 
     // Настраиваем констреинты
     func setupLayout() {
+        setupHeaderViewLayout()
         setupScrollViewLayout()
         setupContentStackViewLayout()
     }
 
+    func setupHeaderViewLayout() {
+        NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topInset * 2),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
+        ])
+    }
+
     func setupScrollViewLayout() {
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topInset),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
@@ -87,32 +98,10 @@ private extension ProfileViewController {
     }
 }
 
-// MARK: - Setup navigation bar
-private extension ProfileViewController {
-    func setupNavigationBar() {
-        let dismissButtonView = DismissButtonView()
-        let chatButtonView = ProfileButtonView(type: .chat)
-        let profileButtonView = ProfileButtonView(type: .profile)
-
-        navigationController?.isNavigationBarHidden = false
-        navigationController?.navigationBar.barTintColor = AppColors.backgroundBlack
-        navigationController?.navigationBar.backgroundColor = AppColors.backgroundBlack
-        navigationController?.navigationBar.isTranslucent = false
-
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButtonView)
-        navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(customView: profileButtonView),
-            UIBarButtonItem(customView: chatButtonView)
-        ]
-
-        // Настраиваем действия кнопок навигации
-        setupNavigationViewActions(dismissButtonView, chatButtonView, profileButtonView)
-    }
-}
-
 // MARK: - Setup Actions
 private extension ProfileViewController {
     func setupActions() {
+        setupHeaderViewActions()
         setupSpecialOfferActions()
     }
 
@@ -124,18 +113,17 @@ private extension ProfileViewController {
         }
     }
 
-    // Настройка действий навигации
-    func setupNavigationViewActions(_ dismissButtonView: DismissButtonView, _ chatButtonView: ProfileButtonView, _ profileButtonView: ProfileButtonView) {
-
-        dismissButtonView.onButtonTapped = { [weak self] in
+    // Настройка действий header view (где 3 кнопки)
+    func setupHeaderViewActions() {
+        headerView.onDismissButtonTapped = { [weak self] in
             self?.dismissVC()
         }
 
-        chatButtonView.onButtonTapped = { [weak self] in
+        headerView.onChatButtonTapped = { [weak self] in
             self?.showChatAlert()
         }
 
-        profileButtonView.onButtonTapped = { [weak self] in
+        headerView.onProfileButtonTapped = { [weak self] in
             self?.showPersonalVC()
         }
     }
@@ -236,3 +224,43 @@ private extension ProfileViewController {
         }
     }
 }
+
+
+// MARK: - Setup navigation bar
+//private extension ProfileViewController {
+//    func setupNavigationBar() {
+//        let dismissButtonView = DismissButtonView()
+//        let chatButtonView = ProfileButtonView(type: .chat)
+//        let profileButtonView = ProfileButtonView(type: .profile)
+//
+//        navigationController?.isNavigationBarHidden = false
+//        navigationController?.navigationBar.barTintColor = AppColors.backgroundBlack
+//        navigationController?.navigationBar.backgroundColor = AppColors.backgroundBlack
+//        navigationController?.navigationBar.isTranslucent = false
+//
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButtonView)
+//        navigationItem.rightBarButtonItems = [
+//            UIBarButtonItem(customView: profileButtonView),
+//            UIBarButtonItem(customView: chatButtonView)
+//        ]
+//
+//        // Настраиваем действия кнопок навигации
+//        setupNavigationViewActions(dismissButtonView, chatButtonView, profileButtonView)
+//    }
+//
+//    // Настройка действий навигации
+//    func setupNavigationViewActions(_ dismissButtonView: DismissButtonView, _ chatButtonView: ProfileButtonView, _ profileButtonView: ProfileButtonView) {
+//
+//        dismissButtonView.onButtonTapped = { [weak self] in
+//            self?.dismissVC()
+//        }
+//
+//        chatButtonView.onButtonTapped = { [weak self] in
+//            self?.showChatAlert()
+//        }
+//
+//        profileButtonView.onButtonTapped = { [weak self] in
+//            self?.showPersonalVC()
+//        }
+//    }
+//}

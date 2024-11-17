@@ -1,6 +1,6 @@
 import UIKit
 
-final class CartCoordinator: Coordinator {
+final class CartCoordinator2: Coordinator {
 
     // MARK: - Properties
     var storage: DataStorage
@@ -17,7 +17,7 @@ final class CartCoordinator: Coordinator {
 }
 
 // MARK: - Public methods
-extension CartCoordinator {
+extension CartCoordinator2 {
     func start() {
 //        let cartVC = CartViewController(storage: storage)
 //        cartVC.coordinator = self
@@ -89,7 +89,7 @@ extension CartCoordinator {
 //    }
 
     func showProductDetails() {
-        parentCoordinator?.showProductDetails()
+//        parentCoordinator?.showProductDetails()
     }
 
     func showApplySpecialOffer(_ offer: Promo) {

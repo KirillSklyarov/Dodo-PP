@@ -23,12 +23,12 @@ extension ScreenFactory {
     }
     
     func makeProductDetailsScreen() -> ProductDetailsViewController {
-        return ProductDetailsViewController(storage: storage, router: router)
+        return ProductDetailsViewController(storage: storage)
     }
     
     func makeStoriesScreen(indexPath: IndexPath) -> StoriesVC {
         let story = storage.getFetchedStories()
-        return StoriesVC(indexPath: indexPath, story: story, router: router)
+        return StoriesVC(indexPath: indexPath, story: story)
     }
     
     func makeAddressScreen() -> AddressViewController {

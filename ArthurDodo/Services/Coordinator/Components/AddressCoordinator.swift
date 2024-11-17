@@ -1,6 +1,6 @@
 import UIKit
 
-final class AddressCoordinator: Coordinator {
+final class AddressCoordinator2: Coordinator {
 
     // MARK: - Properties
     var storage: DataStorage
@@ -16,7 +16,7 @@ final class AddressCoordinator: Coordinator {
 }
 
 // MARK: - Public methods
-extension AddressCoordinator {
+extension AddressCoordinator2 {
     func start() {
 //        let vc = AddressViewController(storage: storage)
 //        vc.coordinator = self

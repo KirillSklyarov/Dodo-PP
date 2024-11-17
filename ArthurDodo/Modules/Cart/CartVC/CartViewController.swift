@@ -18,6 +18,8 @@ final class CartViewController: UIViewController {
     }()
     private lazy var scrollView = UIScrollView()
 
+    private lazy var headerView = CartVCHeader()
+
     // MARK: - Other Properties
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
@@ -39,6 +41,10 @@ final class CartViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        print("CartViewController deinited")
     }
 
     // MARK: - Life cycle
@@ -156,11 +162,19 @@ private extension CartViewController {
 // MARK: - Setup Actions
 private extension CartViewController {
     func setupActions() {
+        setupHeaderViewAction()
         setupCartProductTableViewAction()
         setupToppingsCollectionView()
         setupSpecialViewActions()
         setupScrollUpButtonAction()
         setupCartButtonAction()
+    }
+
+    func setupHeaderViewAction() {
+        headerView.onCloseButtonTapped = { [weak self] in
+            guard let self else { return }
+            onCartVCDismissed?()
+        }
     }
 
     func setupCartProductTableViewAction() {
@@ -224,29 +238,33 @@ private extension CartViewController {
 // MARK: - Setup UI
 private extension CartViewController {
     func setupUI() {
-        setupNavigationBar()
+//        setupNavigationBar()
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(scrollView, cartButtonView)
+        view.addSubviews(headerView, scrollView, cartButtonView)
 
         setupScrollView()
         setupLayout()
     }
 
-    func setupNavigationBar() {
-        navigationController?.isNavigationBarHidden = false
-        navigationController?.navigationBar.barTintColor = AppColors.backgroundGray
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationItem.title = "Корзина"
-
-        let dismissButton = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(dismissButtonTapped))
-        dismissButton.tintColor = AppColors.buttonOrange
-        dismissButton.setTitleTextAttributes([NSAttributedString.Key .font: AppFonts.semibold18], for: .normal)
-        navigationItem.leftBarButtonItem = dismissButton
-    }
-
-    @objc func dismissButtonTapped() {
-        router.dismissCurrentVC()
-    }
+//    func setupNavigationBar() {
+//        navigationController?.isNavigationBarHidden = false
+//        navigationController?.navigationBar.barTintColor = AppColors.backgroundBlack
+//        navigationController?.navigationBar.backgroundColor = AppColors.backgroundBlack
+//        navigationController?.navigationBar.isTranslucent = false
+//
+//        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+//        navigationItem.title = "Корзина"
+//
+//        let dismissButton = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(dismissButtonTapped))
+//        dismissButton.tintColor = AppColors.buttonOrange
+//        dismissButton.setTitleTextAttributes([NSAttributedString.Key .font: AppFonts.semibold18], for: .normal)
+//        navigationItem.leftBarButtonItem = dismissButton
+//    }
+//
+//    @objc func dismissButtonTapped() {
+//        onCartVCDismissed?()
+////        router.dismissCurrentVC()
+//    }
 
     func setupScrollView() {
         scrollView.addSubviews(contentStackView, scrollUpButton)
@@ -259,15 +277,24 @@ private extension CartViewController {
 // MARK: - Constraints
 private extension CartViewController {
     func setupLayout() {
+        setupHeaderViewLayout()
         setupScrollViewConstraints()
         setupContentStackViewConstraints()
         setupScrollUpButtonConstraints()
         setupCartButtonConstraints()
     }
 
+    func setupHeaderViewLayout() {
+        NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+    }
+
     func setupScrollViewConstraints() {
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)

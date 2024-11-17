@@ -8,11 +8,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = di.navigationController
+        window?.rootViewController = di.router.setRootNavigation()
         window?.makeKeyAndVisible()
-        di.router.showMainScreen()
 
-        resetActiveOrder() // Сбрасывает активный заказ (использую для тестирования)
+        let appCoordinator = di.appCoordinator
+        appCoordinator.start()
+
+//        resetActiveOrder() // Сбрасывает активный заказ (использую для тестирования)
 
     }
 

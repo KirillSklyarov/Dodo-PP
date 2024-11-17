@@ -1,6 +1,6 @@
 import UIKit
 
-final class MainCoordinator: Coordinator {
+final class MainCoordinator2: Coordinator {
 
     // MARK: - Properties
     var storage: DataStorage
@@ -21,7 +21,7 @@ final class MainCoordinator: Coordinator {
 }
 
 // MARK: - Public methods
-extension MainCoordinator {
+extension MainCoordinator2 {
     func start() {
 //        let vc = MainViewController(storage: storage)
 //        viewController = vc
@@ -29,11 +29,11 @@ extension MainCoordinator {
 //        navigationController.pushViewController(vc, animated: true)
     }
 
-    func showProfile() {
-        let profileCoordinator = ProfileCoordinator(storage: storage, navigationController: navigationController)
-        childCoordinators.append(profileCoordinator)
-        profileCoordinator.start()
-    }
+//    func showProfile() {
+//        let profileCoordinator = ProfileCoordinator(storage: storage, navigationController: navigationController)
+//        childCoordinators.append(profileCoordinator)
+//        profileCoordinator.start()
+//    }
 
     func showProductDetails() {
 //        let vc = ProductDetailsViewController(storage: storage)
@@ -58,22 +58,22 @@ extension MainCoordinator {
 //        }
     }
 
-    func showAddress() {
-        let addressCoordinator = AddressCoordinator(storage: storage, navigationController: navigationController)
-        childCoordinators.append(addressCoordinator)
-        addressCoordinator.parentCoordinator = self
-        addressCoordinator.start()
-    }
+//    func showAddress() {
+//        let addressCoordinator = AddressCoordinator(storage: storage, navigationController: navigationController)
+//        childCoordinators.append(addressCoordinator)
+//        addressCoordinator.parentCoordinator = self
+//        addressCoordinator.start()
+//    }
 
-    func showCart() {
-        let cartCoordinator = CartCoordinator(storage: storage, navigationController: navigationController)
-        cartCoordinator.parentCoordinator = self
-        childCoordinators.append(cartCoordinator)
-        cartCoordinator.start()
-    }
+//    func showCart() {
+//        let cartCoordinator = CartCoordinator(storage: storage, navigationController: navigationController)
+//        cartCoordinator.parentCoordinator = self
+//        childCoordinators.append(cartCoordinator)
+//        cartCoordinator.start()
+//    }
 
-    func showPopUpView(_ popUpView: CpfcPopupView?) {
-        guard let popUpView else { print("PopUpView is nil"); return }
-        navigationController.visibleViewController?.present(popUpView, animated: true)
-    }
+//    func showPopUpView(_ popUpView: CpfcPopupView?) {
+//        guard let popUpView else { print("PopUpView is nil"); return }
+//        navigationController.visibleViewController?.present(popUpView, animated: true)
+//    }
 }

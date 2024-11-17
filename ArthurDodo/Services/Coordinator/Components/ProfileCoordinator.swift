@@ -1,6 +1,6 @@
 import UIKit
 
-final class ProfileCoordinator: Coordinator {
+final class ProfileCoordinator2: Coordinator {
 
     // MARK: - Properties
     var storage: DataStorage
@@ -14,7 +14,7 @@ final class ProfileCoordinator: Coordinator {
 }
 
 // MARK: - Public methods
-extension ProfileCoordinator {
+extension ProfileCoordinator2 {
     func start() {
 //        let vc = ProfileViewController(storage: storage)
 //        vc.coordinator = self

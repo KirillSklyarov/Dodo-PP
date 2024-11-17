@@ -19,6 +19,12 @@ final class MainViewController: UIViewController {
     private let storage: DataStorage
     private let router: Router
 
+    var onProfileButtonTapped: (() -> Void)?
+    var onAddressButtonTapped: (() -> Void)?
+    var onStoryTapped: ((IndexPath) -> Void)?
+    var onProductDetailsTapped: (() -> Void)?
+    var onCartButtonTapped: (() -> Void)?
+
     // MARK: - Init
     init(storage: DataStorage, router: Router) {
         self.storage = storage
@@ -45,6 +51,13 @@ final class MainViewController: UIViewController {
         super.viewWillAppear(animated)
         updateCart()
     }
+
+    // Обновление коллекции
+    func updateUI() {
+        DispatchQueue.main.async { [weak self] in
+            self?.contentCollectionView.reloadData()
+        }
+    }
 }
 
 // MARK: - Setup UI
@@ -67,14 +80,23 @@ private extension MainViewController {
 // MARK: - Setup layout
 private extension MainViewController {
     func setupLayout() {
+        setupHeaderViewLayout()
         setupOrderViewLayout()
         setupContentCollectionViewLayout()
         setupCartButtonLayout()
     }
 
+    func setupHeaderViewLayout() {
+        NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+    }
+
     func setupOrderViewLayout() {
         NSLayoutConstraint.activate([
-            orderView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset),
+            orderView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
             orderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             orderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
@@ -113,7 +135,7 @@ private extension MainViewController {
             let item = catalog[IndexPath.item]
             storage.fetchToppings()
             sendSelectedItemToStorage(item)
-            showProductDetail()
+            onProductDetailsTapped?()
         }
 
         contentCollectionView.onStoriesCellTapped = { [weak self] IndexPath in
@@ -125,23 +147,25 @@ private extension MainViewController {
             let specialOfferArray = storage.getSpecialOffersArray()
             let item = specialOfferArray[IndexPath.item]
             sendSelectedItemToStorage(item)
-            showProductDetail()
+            onProductDetailsTapped?()
         }
     }
 
     func setupHeaderView() {
         headerView.onProfileButtonTapped = { [weak self] in
-            self?.showProfileVC()
+            self?.onProfileButtonTapped?()
         }
 
         headerView.onAddressTapped = { [weak self] in
-            self?.showAddressVC()
+            self?.onAddressButtonTapped?()
         }
     }
 
     func setupCartButtonActions() {
         cartButton.onButtonTapped = { [weak self] in
-            self?.showCartVC()
+            self?.onCartButtonTapped?()
+
+//            showCartVC()
         }
     }
 
@@ -160,25 +184,25 @@ private extension MainViewController {
 // MARK: - View controller navigation
 private extension MainViewController { // Тут все переходы между экранами
 
-    func showProfileVC() {
-        router.showProfileScreen()
-    }
+//    func showProfileVC() {
+//        router.showProfileScreen()
+//    }
 
-    func showProductDetail() {
-        router.showProductDetailsScreen() { [weak self] in
-            self?.updateCart()
-        }
-    }
+//    func showProductDetail() {
+
+
+//        router.showProductDetailsScreen() { [weak self] in
+//            self?.updateCart()
+//        }
+//    }
 
     func showStoriesVC(_ indexPath: IndexPath) {
-        router.showStories(indexPath) { [weak self] in
-            self?.updateUI()
-        }
+        onStoryTapped?(indexPath)
     }
 
-    func showAddressVC() {
-        router.showAddress()
-    }
+//    func showAddressVC() {
+//        router.showAddress()
+//    }
 
     func showCartVC() {
         router.showCart { [weak self] in
@@ -268,13 +292,6 @@ private extension MainViewController {
     // Передает каталог в contentCollectionView
     func passCatalogToContentCollectionView(_ catalogue: [Item]) {
         contentCollectionView.getCatalog(catalogue)
-    }
-
-    // Обновление коллекции
-    func updateUI() {
-        DispatchQueue.main.async { [weak self] in
-            self?.contentCollectionView.reloadData()
-        }
     }
 
     // При каждом показе экрана мы запрашиваем актуальную корзину и если там есть позиции, то обновляем сумму на кнопке

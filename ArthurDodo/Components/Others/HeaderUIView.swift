@@ -5,10 +5,11 @@ final class HeaderView: UIView {
     // MARK: - Properties
     private let imageSize: CGFloat = 30
     private let buttonSize: CGFloat = 30
-    private let viewHeight: CGFloat = 30
 
-    private let leftPadding: CGFloat = 20
-    private let rightPadding: CGFloat = -20
+    private let topInset: CGFloat = 10
+    private let leftInset: CGFloat = 20
+    private let rightInset: CGFloat = -20
+    private let bottomInset: CGFloat = -5
 
     var onProfileButtonTapped: (() -> Void)?
     var onAddressTapped: (() -> Void)?
@@ -54,22 +55,28 @@ final class HeaderView: UIView {
         button.addTarget(self, action: #selector(profileButtonTapped), for: .touchUpInside)
         return button
     }()
-    private lazy var contentContainer = UIView()
+
+    private lazy var contentStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [addressStackView, UIView(), profileButton])
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        stackView.alignment = .center
+        return stackView
+    }()
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    override func didMoveToSuperview() {
-        setupLayout()
-    }
-
+// MARK: - Setup button actions
+extension HeaderView {
     @objc private func profileButtonTapped() {
         onProfileButtonTapped?()
     }
@@ -77,43 +84,21 @@ final class HeaderView: UIView {
     @objc private func addressTapped() {
         onAddressTapped?()
     }
+}
 
-    // MARK: - Private methods
-    private func setupLayout() {
-        guard let superview else { print("You must add HeaderView to a view before setting up layout"); return }
-
-        NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.topAnchor),
-            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: leftPadding),
-            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: rightPadding),
-            heightAnchor.constraint(equalToConstant: viewHeight)
-        ])
+// MARK: - Setup UI
+private extension HeaderView {
+    func setupUI() {
+        addSubviews(contentStackView)
+        setupLayout()
     }
 
-    private func setupUI() {
-        translatesAutoresizingMaskIntoConstraints = false
-
-        addSubviews(contentContainer)
-
+    func setupLayout() {
         NSLayoutConstraint.activate([
-            contentContainer.topAnchor.constraint(equalTo: topAnchor),
-            contentContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-
-        setupContentContainer()
-    }
-
-    private func setupContentContainer() {
-        contentContainer.addSubviews(addressStackView, profileButton)
-
-        NSLayoutConstraint.activate([
-            addressStackView.topAnchor.constraint(equalTo: contentContainer.topAnchor),
-            addressStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-
-            profileButton.topAnchor.constraint(equalTo: contentContainer.topAnchor),
-            profileButton.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor)
+            contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: topInset),
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
+            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomInset)
         ])
     }
 }

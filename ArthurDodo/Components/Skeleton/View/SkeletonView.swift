@@ -3,6 +3,9 @@ import SkeletonView
 
 final class SkeletonView: UIView {
 
+    // MARK: - Properties
+    private let viewHeight: CGFloat = 300
+
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -17,9 +20,14 @@ final class SkeletonView: UIView {
 // MARK: - Setup UI
 private extension SkeletonView {
     func setupUI() {
-        heightAnchor.constraint(equalToConstant: 300).isActive = true
+        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
+        setupSkeleton()
+    }
+
+    func setupSkeleton() {
         isSkeletonable = true
 
-        showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .darkClouds))
+        let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .topBottom)
+        showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .darkClouds), animation: animation)
     }
 }

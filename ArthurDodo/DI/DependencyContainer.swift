@@ -6,21 +6,21 @@ final class DependencyContainer {
     let storage: DataStorage
     let screenFactory: ScreenFactory
     let router: Router
-    let navigationController: UINavigationController
+    let appCoordinator: AppCoordinator
 
     init() {
-        let navigationController = UINavigationController()
         let decoder = JSONDecoder()
         let encoder = JSONEncoder()
         let session = URLSession(configuration: .default)
 
-        self.navigationController = navigationController
         networkManager = NetworkManager(decoder: decoder, encoder: encoder, session: session)
         storage = DataStorage(networkManager: networkManager)
         screenFactory = ScreenFactory(storage: storage)
 
-        router = Router(navigationController: navigationController, screenFactory: screenFactory)
+        router = Router(screenFactory: screenFactory)
 
         screenFactory.router = router
+
+        appCoordinator = AppCoordinator(storage: storage, router: router, screenFactory: screenFactory)
     }
 }

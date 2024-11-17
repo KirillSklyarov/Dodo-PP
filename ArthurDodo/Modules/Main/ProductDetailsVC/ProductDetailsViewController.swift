@@ -18,18 +18,18 @@ final class ProductDetailsViewController: UIViewController {
 
     // MARK: - Other Properties
     private let storage: DataStorage
-    private let router: Router
 
     private var item: Item?
     private var order: Order?
     private var toppings: [Topping] = []
 
     var onCartButtonTapped: ( () -> Void )?
+    var onDismissButtonTapped: ( () -> Void )?
+    var onShowPopupVC: ( (CpfcPopupView) -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -122,7 +122,8 @@ private extension ProductDetailsViewController {
 
     func setupHeaderAction() {
         headerView.onCloseButtonTapped = { [weak self] in
-            self?.router.dismissCurrentVC()
+            self?.onDismissButtonTapped?()
+//            self?.router.dismissCurrentVC()
         }
     }
 
@@ -130,14 +131,14 @@ private extension ProductDetailsViewController {
         infoAndToppingsContainer.getCartView(cartButtonView)
     }
 
-    // Когда нажимаем на кнопку корзины на экране, то формируем позицию (кастим Item -> CartItem) для корзины, и добавляем позицию для заказа в хранилище
+    // Когда нажимаем на кнопку корзины на экране, то формируем позицию (кастим Item -> CartItem) для корзины, добавляем позицию для заказа в хранилище и закрываем окно
     func setupCartViewAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
             guard let itemToCart = configureCart() else { return }
             storage.addItemToCart(item: itemToCart)
             onCartButtonTapped?()
-            router.dismissCurrentVC()
+            onDismissButtonTapped?()
         }
     }
 
@@ -201,7 +202,8 @@ private extension ProductDetailsViewController {
             guard let self else { print("Self is nil"); return }
             guard let popupVC = popupVC as? CpfcPopupView else {
                 print("No popupVC"); return }
-            router.showPopUpView(popupVC)
+            onShowPopupVC?(popupVC)
+//            router.showPopUpView(popupVC)
         }
     }
 }
@@ -289,6 +291,6 @@ private extension ProductDetailsViewController {
     }
 
     @objc private func vcSwiped() {
-        router.dismissCurrentVC()
+        onDismissButtonTapped?()
     }
 }

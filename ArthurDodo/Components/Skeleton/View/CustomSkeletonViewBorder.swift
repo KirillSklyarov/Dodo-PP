@@ -1,6 +1,6 @@
 import UIKit
 
-final class SkeletonViewWithBorderView: UIView {
+final class CustomSkeletonViewBorder: UIView {
 
     // MARK: - Properties
     private let cornerRadius: CGFloat = 10
@@ -33,7 +33,7 @@ final class SkeletonViewWithBorderView: UIView {
 }
 
 // MARK: - Setup UI
-private extension SkeletonViewWithBorderView {
+private extension CustomSkeletonViewBorder {
     func setupUI() {
         layer.cornerRadius = cornerRadius
         backgroundColor = AppColors.backgroundGray
@@ -56,7 +56,7 @@ private extension SkeletonViewWithBorderView {
 }
 
 // MARK: - Setup gradient&animation
-private extension SkeletonViewWithBorderView {
+private extension CustomSkeletonViewBorder {
     // Настраиваем градиент
     func setupGradient() {
         gradientLayer.locations = [0, 0.25, 0.5, 0.75, 1]

@@ -1,6 +1,6 @@
 import UIKit
 
-// Роутер отвечает за навигацию в приложении. Мы сразу в ините передаем его навигационный контроллер. C помощью замыканий (completion) мы отрабатываем обратные действия, которые вызываются уже на самом главном экране (это может быть MainVC или CartVC). Мы используем visibleViewController так как иногда встречаются вложенные модальные экраны и они без visibleViewController работать не будут.
+//  Роутер отвечает за навигацию в приложении. Мы сразу в ините передаем его навигационный контроллер. C помощью замыканий (completion) мы отрабатываем обратные действия, которые вызываются уже на самом главном экране (это может быть MainVC или CartVC). Мы используем visibleViewController так как иногда встречаются вложенные модальные экраны и они без visibleViewController работать не будут.
 final class Router {
 
     // MARK: - Properties
@@ -10,23 +10,70 @@ final class Router {
     var onAllScreenDismissed: (() -> Void)?
 
     // MARK: - Init
-    init(navigationController: UINavigationController, screenFactory: ScreenFactory) {
-        self.navigationController = navigationController
+    init(screenFactory: ScreenFactory) {
         self.screenFactory = screenFactory
+        self.navigationController = UINavigationController()
+    }
+}
+
+// MARK: - Navigation methods - Version 2
+extension Router {
+    // Метод present навигации.
+    // На вход приходят:
+    //              vc - какой экран нужно показать,
+    //              parentVC - с какого экрана идет показ (опционально, потому что может быть показ через навигационный контроллер)
+    //              modalPresentation - показывать ли на весь экран
+    //              animated - понятно, с анимацией или сразу показать
+    func present(vc: UIViewController,
+                 parentVC: UIViewController? = nil,
+                 modalPresentation: UIModalPresentationStyle = .fullScreen,
+                 animated: Bool = true) {
+        vc.modalPresentationStyle = modalPresentation
+        if let parentVC {
+            present(parent: parentVC, vc: vc, animated: animated)
+        } else {
+            present(vc: vc, animated: animated)
+        }
+    }
+
+    func dismissVC(vc: UIViewController) {
+        vc.dismiss(animated: true)
+    }
+
+    // Метод present, когда у нам необходим родитель, от которого будет исходить показ нового экрана
+    private func present(parent: UIViewController, vc: UIViewController, animated: Bool) {
+        parent.present(vc, animated: animated)
+    }
+
+    // Метод present, когда сам навигационный контроллер показывает новый экран
+    private func present(vc: UIViewController, animated: Bool) {
+        navigationController.present(vc, animated: animated)
     }
 }
 
 // MARK: - Navigation methods
 extension Router {
+    func setRootNavigation() -> UINavigationController {
+        navigationController
+    }
+
     func showMainScreen() {
-        let vc = screenFactory.makeMainScreen()
-        navigationController.pushViewController(vc, animated: true)
+        let main = screenFactory.makeMainScreen()
+        let vc = UINavigationController(rootViewController: main)
+        vc.modalPresentationStyle = .fullScreen
+        navigationController.present(vc, animated: false)
     }
 
     func showProfileScreen() {
-        let profileVC = screenFactory.makeProfileScreen()
-        let vc = UINavigationController(rootViewController: profileVC)
-        navigationController.present(vc, animated: true)
+        let vc = screenFactory.makeProfileScreen()
+        navigationController.visibleViewController?.present(vc, animated: true)
+    }
+
+    func showChatAlert() {
+        let vc = screenFactory.makeChatAlertScreen()
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        navigationController.visibleViewController?.present(vc, animated: false)
     }
 
     func showProductDetailsScreen(completion: (() -> Void)?) {
@@ -47,23 +94,17 @@ extension Router {
     func showAddress() {
         let vc = screenFactory.makeAddressScreen()
         vc.modalPresentationStyle = .fullScreen
-        navigationController.present(vc, animated: true)
+        navigationController.visibleViewController?.present(vc, animated: true)
     }
 
     func showCart(completion: (() -> Void)?) {
         let cartVC = screenFactory.makeCartScreen()
         let vc = UINavigationController(rootViewController: cartVC)
-        navigationController.present(vc, animated: true)
+        navigationController.visibleViewController?.present(vc, animated: true)
 
-        cartVC.onCartVCDismissed = completion
+//        cartVC.onCartVCDismissed = completion
     }
 
-    func showChatAlert() {
-        let vc = screenFactory.makeChatAlertScreen()
-        vc.modalPresentationStyle = .overFullScreen
-        vc.modalTransitionStyle = .crossDissolve
-        navigationController.visibleViewController?.present(vc, animated: false)
-    }
 
     func showPersonalData() {
         let vc = screenFactory.makePersonalDataScreen()
