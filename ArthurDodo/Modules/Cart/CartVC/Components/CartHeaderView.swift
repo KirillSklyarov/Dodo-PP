@@ -1,6 +1,6 @@
 import UIKit
 
-final class CartVCHeader: UIView {
+final class CartHeaderView: UIView {
 
     // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
@@ -20,13 +20,14 @@ final class CartVCHeader: UIView {
 
     // MARK: - Properties&Callbacks
     private let viewHeight: CGFloat = 60
-    private let leftInset: CGFloat = 20
+    private let leftInset: CGFloat = 10
 
-    var onCloseButtonTapped: (() -> Void)?
+    var onDismissButtonTapped: (() -> Void)?
 
     // MARK: - Init
-    override init(frame: CGRect) {
+    init(frame: CGRect = .zero, title: String? = nil) {
         super.init(frame: frame)
+        setTitle(title)
         configUI()
     }
 
@@ -34,9 +35,13 @@ final class CartVCHeader: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private func setTitle(_ title: String?) {
+        if let title { titleLabel.text = title }
+    }
+
     // MARK: - IB Actions
     @objc private func closeButtonTapped() {
-        onCloseButtonTapped?()
+        onDismissButtonTapped?()
     }
 
     // MARK: - Public methods
@@ -46,7 +51,7 @@ final class CartVCHeader: UIView {
 }
 
 // MARK: - Setup UI
-private extension CartVCHeader {
+private extension CartHeaderView {
     func configUI() {
         addSubviews(dismissButton, titleLabel)
         setupLayout()

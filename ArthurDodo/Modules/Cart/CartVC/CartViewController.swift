@@ -3,6 +3,7 @@ import UIKit
 final class CartViewController: UIViewController {
 
     // MARK: - UI Properties
+    private lazy var headerView = CartHeaderView() // Заголовок с кнопкой
     private lazy var orderStackView = OrderStackView() // Хэдер и таблица с заказами
     private lazy var itemsToAddStackView = ItemsToAddStackView() // Добавки к заказу
     private lazy var promoStackView = PromoStackView() // Акции
@@ -18,24 +19,23 @@ final class CartViewController: UIViewController {
     }()
     private lazy var scrollView = UIScrollView()
 
-    private lazy var headerView = CartVCHeader()
-
     // MARK: - Other Properties
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let topInset: CGFloat = 10
 
     private let storage: DataStorage
-    private let router: Router
 
     private var state: ScreenState = .loading
 
     var onCartVCDismissed: (() -> Void)?
+    var onShowEditProductVC: (() -> Void)?
+    var onShowPromoVC: ((Promo) -> Void)?
+    var onShowDeliveryVC: (() -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -59,6 +59,10 @@ final class CartViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         onCartVCDismissed?()
+    }
+
+    func updateCart() {
+        fetchCart()
     }
 }
 
@@ -171,7 +175,7 @@ private extension CartViewController {
     }
 
     func setupHeaderViewAction() {
-        headerView.onCloseButtonTapped = { [weak self] in
+        headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
             onCartVCDismissed?()
         }
@@ -180,7 +184,7 @@ private extension CartViewController {
     func setupCartProductTableViewAction() {
         orderStackView.onEmptyCart = { [weak self] in
             guard let self else { return }
-            router.dismissCurrentVC()
+            onCartVCDismissed?()
         }
 
         // Удаляем позицию из заказа и опять фетчим заказы
@@ -198,9 +202,10 @@ private extension CartViewController {
         orderStackView.onItemCellSelected = { [weak self] item in
             guard let self else { return }
             storage.setChangingItem(item) //
-            router.showEditProductVC() { [weak self] in
-                self?.fetchCart()
-            }
+            onShowEditProductVC?()
+//            router.showEditProductVC() { [weak self] in
+//                self?.fetchCart()
+//            }
         }
     }
 
@@ -214,8 +219,8 @@ private extension CartViewController {
 
     func setupSpecialViewActions() {
         promoStackView.onPromoSelected = { [weak self] specialOffer in
-            guard let self else { return }
-            router.showApplySpecialOffer(specialOffer)
+            guard let self else { print("We can't show promoVC"); return }
+            onShowPromoVC?(specialOffer)
         }
     }
 
@@ -230,7 +235,7 @@ private extension CartViewController {
     func setupCartButtonAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
-            router.showDelivery()
+            onShowDeliveryVC?()
         }
     }
 }
@@ -238,33 +243,12 @@ private extension CartViewController {
 // MARK: - Setup UI
 private extension CartViewController {
     func setupUI() {
-//        setupNavigationBar()
         view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(headerView, scrollView, cartButtonView)
 
         setupScrollView()
         setupLayout()
     }
-
-//    func setupNavigationBar() {
-//        navigationController?.isNavigationBarHidden = false
-//        navigationController?.navigationBar.barTintColor = AppColors.backgroundBlack
-//        navigationController?.navigationBar.backgroundColor = AppColors.backgroundBlack
-//        navigationController?.navigationBar.isTranslucent = false
-//
-//        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-//        navigationItem.title = "Корзина"
-//
-//        let dismissButton = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(dismissButtonTapped))
-//        dismissButton.tintColor = AppColors.buttonOrange
-//        dismissButton.setTitleTextAttributes([NSAttributedString.Key .font: AppFonts.semibold18], for: .normal)
-//        navigationItem.leftBarButtonItem = dismissButton
-//    }
-//
-//    @objc func dismissButtonTapped() {
-//        onCartVCDismissed?()
-////        router.dismissCurrentVC()
-//    }
 
     func setupScrollView() {
         scrollView.addSubviews(contentStackView, scrollUpButton)

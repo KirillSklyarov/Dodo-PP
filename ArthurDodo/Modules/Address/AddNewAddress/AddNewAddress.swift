@@ -2,10 +2,6 @@ import UIKit
 
 final class AddNewAddressViewController: UIViewController {
 
-    // MARK: - Properties
-    private var addressToEdit: Address?
-    private let leftInset: CGFloat = 20
-
     // MARK: - UI Properties
     private lazy var mapView = MapView()
     private lazy var addressContainerView = EditAddressView()
@@ -18,17 +14,11 @@ final class AddNewAddressViewController: UIViewController {
     }()
     private lazy var dismissButton = DismissButtonView(isChevron: true)
 
-    private let router: Router
+    // MARK: - Properties
+    private var addressToEdit: Address?
+    private let leftInset: CGFloat = 20
 
-    // MARK: - Init
-    init(router: Router) {
-        self.router = router
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    var onDismissButtonTapped: (() -> Void)?
 
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -37,7 +27,10 @@ final class AddNewAddressViewController: UIViewController {
         updateUIWithData()
         setupActions()
     }
+}
 
+// MARK: - Public methods
+extension AddNewAddressViewController {
     func updateUIWithData() {
         guard let addressToEdit else { print("We have no address to edit"); return }
         print(addressToEdit)
@@ -103,7 +96,7 @@ private extension AddNewAddressViewController {
     // Настраиваем кнопку Закрыть
     func setupDismissButtonAction() {
         dismissButton.onButtonTapped = { [weak self] in
-            self?.router.dismissCurrentVC()
+            self?.onDismissButtonTapped?()
         }
     }
 }

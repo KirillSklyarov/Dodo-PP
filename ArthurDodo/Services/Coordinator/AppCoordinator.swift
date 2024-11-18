@@ -73,7 +73,7 @@ final class MainCoordinator: Coordinator {
 
         mainVC.onCartButtonTapped = { [weak self] in
             guard let self else { return }
-            let cartCoordinator = CartCoordinator(storage: storage, router: router, screenFactory: screenFactory)
+            let cartCoordinator = CartCoordinator(storage: storage, router: router, screenFactory: screenFactory, mainVC: mainVC)
             guard let mainCoordinator = mainCoordinator as? AppCoordinator else { print("Error: MainCoordinator is not AppCoordinator"); return }
             mainCoordinator.addChild(cartCoordinator)
             cartCoordinator.start(mainVC)
@@ -100,13 +100,17 @@ final class MainCoordinator: Coordinator {
 
     func showProfile() {
         let profileCoordinator = ProfileCoordinator(storage: storage, router: router, screenFactory: screenFactory)
-        guard let mainVC else { return }
+        guard let mainVC else { print(#function); return }
+        guard let mainCoordinator = mainCoordinator as? AppCoordinator else { print(#function); return }
+        mainCoordinator.addChild(profileCoordinator)
         profileCoordinator.start(mainVC)
     }
 
     func showAddress() {
         let addressCoordinator = AddressCoordinator(storage: storage, router: router, screenFactory: screenFactory)
         guard let mainVC else { return }
+        guard let mainCoordinator = mainCoordinator as? AppCoordinator else { return }
+        mainCoordinator.addChild(addressCoordinator)
         addressCoordinator.start(mainVC)
     }
 
@@ -120,81 +124,5 @@ final class MainCoordinator: Coordinator {
         vc.onDismissButtonTapped = { [weak self] in
             self?.router.dismissVC(vc: vc)
         }
-    }
-}
-
-final class CartCoordinator: Coordinator {
-   
-    // MARK: - Properties
-    private let storage: DataStorage
-    private let router: Router
-    private let screenFactory: ScreenFactory
-    private var mainVC: CartViewController?
-
-    // MARK: - Init
-    init(storage: DataStorage, router: Router, screenFactory: ScreenFactory) {
-        self.storage = storage
-        self.router = router
-        self.screenFactory = screenFactory
-    }
-
-    deinit {
-        print("CartCoordinator deinit")
-    }
-
-    func start(_ parentVC: UIViewController) {
-        let cartVC = screenFactory.makeCartScreen()
-        self.mainVC = cartVC
-
-        cartVC.onCartVCDismissed = { [weak self] in
-            guard let self else { print(#function); return }
-            self.router.dismissVC(vc: cartVC)
-        }
-
-        router.present(vc: cartVC, parentVC: parentVC, modalPresentation: .automatic)
-
-    }
-}
-
-
-final class ProfileCoordinator {
-    // MARK: - Properties
-    private let storage: DataStorage
-    private let router: Router
-    private let screenFactory: ScreenFactory
-    private var mainVC: UIViewController?
-
-    // MARK: - Init
-    init(storage: DataStorage, router: Router, screenFactory: ScreenFactory) {
-        self.storage = storage
-        self.router = router
-        self.screenFactory = screenFactory
-    }
-
-    func start(_ parentVC: UIViewController) {
-        let profileVC = screenFactory.makeProfileScreen()
-        self.mainVC = profileVC
-        router.present(vc: profileVC, parentVC: parentVC, modalPresentation: .automatic)
-    }
-}
-
-final class AddressCoordinator {
-    // MARK: - Properties
-    private let storage: DataStorage
-    private let router: Router
-    private let screenFactory: ScreenFactory
-    private var mainVC: UIViewController?
-
-    // MARK: - Init
-    init(storage: DataStorage, router: Router, screenFactory: ScreenFactory) {
-        self.storage = storage
-        self.router = router
-        self.screenFactory = screenFactory
-    }
-
-    func start(_ parentVC: UIViewController) {
-        let addressVC = screenFactory.makeAddressScreen()
-        self.mainVC = addressVC
-        router.present(vc: addressVC, parentVC: parentVC)
     }
 }

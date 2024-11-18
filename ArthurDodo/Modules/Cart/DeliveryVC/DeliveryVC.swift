@@ -3,6 +3,14 @@ import UIKit
 final class DeliveryVC: UIViewController {
 
     // MARK: - UI Properties
+    private lazy var headerView = CartHeaderView(title: "Доставка") // Заголовок с кнопкой
+    private lazy var addressLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Адрес доставки"
+        label.font = AppFonts.semibold20
+        label.textColor = .white
+        return label
+    }() // Адрес доставки
     private lazy var addressTableView = DeliveryTableView() // Таблица с адресом
     private lazy var timeLabel: UILabel = {
         let label = UILabel()
@@ -33,12 +41,15 @@ final class DeliveryVC: UIViewController {
     private var preferredPaymentMethod: PaymentMethod = .cbp
 
     private let storage: DataStorage
-    private let router: Router
+
+    var onDismissButtonTapped: (() -> Void)?
+    var onShowChooseAddress: (() -> Void)?
+    var onShowChoosePaymentMethod: (() -> Void)?
+    var onShowFinalVC: (() -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -100,32 +111,15 @@ private extension DeliveryVC {
 // MARK: - Setup UI
 private extension DeliveryVC {
     func setupUI() {
-        setupNavigationBar()
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(addressTableView, timeLabel, timeCollection, paymentLabel, paymentTableView, orderDetailsView, totalPriceView, payButton)
+        view.addSubviews(headerView, addressLabel, addressTableView, timeLabel, timeCollection, paymentLabel, paymentTableView, orderDetailsView, totalPriceView, payButton)
 
         setupLayout()
     }
 
-    func setupNavigationBar() {
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.barTintColor = AppColors.backgroundGray
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
-        navigationItem.title = "Доставка"
-
-        let dismissButton = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(dismissButtonTapped))
-        dismissButton.tintColor = AppColors.buttonOrange
-        dismissButton.setTitleTextAttributes([NSAttributedString.Key .font: AppFonts.semibold18], for: .normal)
-        navigationItem.leftBarButtonItem = dismissButton
-    }
-
-    @objc func dismissButtonTapped() {
-        router.dismissCurrentVC()
-    }
-
     func setupLayout() {
+        setupHeaderViewLayout()
+        setupAddressLabelLayout()
         setupAddressTableLayout()
         setupTimeLabelLayout()
         setupTimeCollectionLayout()
@@ -136,9 +130,25 @@ private extension DeliveryVC {
         setupPayButtonLayout()
     }
 
+    func setupHeaderViewLayout() {
+        NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+
+    func setupAddressLabelLayout() {
+        NSLayoutConstraint.activate([
+            addressLabel.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset * 3),
+            addressLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
+            addressLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
+        ])
+    }
+
     func setupAddressTableLayout() {
         NSLayoutConstraint.activate([
-            addressTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topInset),
+            addressTableView.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: topInset),
             addressTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
             addressTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
         ])
@@ -146,7 +156,7 @@ private extension DeliveryVC {
 
     func setupTimeLabelLayout() {
         NSLayoutConstraint.activate([
-            timeLabel.topAnchor.constraint(equalTo: addressTableView.bottomAnchor, constant: topInset*3),
+            timeLabel.topAnchor.constraint(equalTo: addressTableView.bottomAnchor, constant: topInset * 3),
             timeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
             timeLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
         ])
@@ -164,7 +174,7 @@ private extension DeliveryVC {
 
     func setupPaymentLabelLayout() {
         NSLayoutConstraint.activate([
-            paymentLabel.topAnchor.constraint(equalTo: timeCollection.bottomAnchor, constant: topInset*3),
+            paymentLabel.topAnchor.constraint(equalTo: timeCollection.bottomAnchor, constant: topInset * 3),
             paymentLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
             paymentLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
         ])
@@ -206,18 +216,28 @@ private extension DeliveryVC {
 // MARK: - Setup Actions
 private extension DeliveryVC {
     func setupActions() {
+        setupHeaderViewAction()
         setupAddressTableViewAction()
         setupTimeCollectionAction()
         setupPaymentTableView()
         setupPayButtonActions()
     }
 
+    func setupHeaderViewAction() {
+        headerView.onDismissButtonTapped = { [weak self] in
+            guard let self else { return }
+            onDismissButtonTapped?()
+        }
+    }
+
     func setupAddressTableViewAction() {
         addressTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            router.showChooseAddress { addressName in
-                self.updateAddress(addressName)
-            }
+            onShowChooseAddress?()
+
+//            router.showChooseAddress { addressName in
+//                self.updateAddress(addressName)
+//            }
         }
     }
 
@@ -230,9 +250,7 @@ private extension DeliveryVC {
     func setupPaymentTableView() {
         paymentTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            router.showChoosePaymentMethod { paymentMethod in
-                self.updateUI(paymentMethod)
-            }
+            onShowChoosePaymentMethod?()
         }
     }
 
@@ -242,7 +260,7 @@ private extension DeliveryVC {
             storage.configureOrder()
             guard let order = storage.getOrderFromStorage() else { print("We have no order"); return }
             setActiveOrderToUserDefaults(order)
-            router.showFinalVC()
+            onShowFinalVC?()
         }
     }
 }

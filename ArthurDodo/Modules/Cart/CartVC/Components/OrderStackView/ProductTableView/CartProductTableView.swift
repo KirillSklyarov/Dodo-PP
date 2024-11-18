@@ -54,7 +54,7 @@ private extension CartProductTableView {
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
-extension CartProductTableView: UITableViewDataSource, UITableViewDelegate {
+extension CartProductTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch state {
         case .loading: return 1

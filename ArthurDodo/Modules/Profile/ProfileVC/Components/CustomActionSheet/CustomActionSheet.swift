@@ -6,11 +6,16 @@ final class CustomActionSheet: UIViewController {
     private lazy var callButton = ActionSheetButton(title: "Позвонить")
     private lazy var chatButton = ActionSheetButton(title: "Написать в чат")
     private lazy var dismissButton = ActionSheetButton(title: "Отменить", roundedCorners: true)
+    private lazy var separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = AppColors.buttonGray
+        view.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        return view
+    }()
 
     private lazy var callAndChatStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [callButton, chatButton])
+        let stack = UIStackView(arrangedSubviews: [callButton, separatorView, chatButton])
         stack.axis = .vertical
-        stack.distribution = .fillEqually
         stack.layer.cornerRadius = 10
         stack.layer.masksToBounds = true
         return stack
@@ -22,32 +27,12 @@ final class CustomActionSheet: UIViewController {
         stack.distribution = .fillProportionally
         return stack
     }()
-    private lazy var separatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = AppColors.buttonGray
-        view.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        return view
-    }()
-    private lazy var contentContainer: UIView = {
-        let view = UIView()
-        view.addSubviews(contentStack)
-        return view
-    }()
 
     // MARK: - Other Properties
     private var bottomConstraint: NSLayoutConstraint!
-    private let router: Router
 
-    // MARK: - Init
-    init(router: Router) {
-        self.router = router
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+    var onDismissButtonTapped: (() -> Void)?
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,13 +42,25 @@ final class CustomActionSheet: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        showActionSheet()
+        showContentStack()
+    }
+}
+
+// MARK: - Supporting methods
+private extension CustomActionSheet {
+    // Плавно показываем окно - это достигается тем, что мы ставим нижний констреинт 0 - то есть нижняя граница стека = нижней границы окна
+    func showContentStack() {
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.bottomConstraint.constant = 0
+            self?.view.layoutIfNeeded()
+        }
     }
 
-    func showActionSheet() {
-        UIView.animate(withDuration: 0.2) {
-            self.bottomConstraint.constant = 0
-            self.view.layoutIfNeeded()
+    // Плавно закрываем окно вниз - ставим нижний констреинт на 250, что ниже экрана устройства, тем самым стек уходит за пределы экрана и как бы скрывается
+    func hideContentStack() {
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            self?.bottomConstraint.constant = 250
+            self?.view.layoutIfNeeded()
         }
     }
 }
@@ -73,8 +70,8 @@ private extension CustomActionSheet {
     func setupAction() {
         dismissButton.onButtonTapped = { [weak self] in
             guard let self else { return }
-            moveDownContentContainer()
-            router.dismissCurrentVC()
+            hideContentStack()
+            onDismissButtonTapped?()
         }
 
         chatButton.onButtonTapped = {
@@ -85,57 +82,29 @@ private extension CustomActionSheet {
             print(#function)
         }
     }
-
-    // Плавно закрываем окно вниз
-    func moveDownContentContainer() {
-        bottomConstraint.constant = 250
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
-    }
 }
 
 // MARK: - Setup UI
 private extension CustomActionSheet {
     func setupUI() {
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        view.addSubviews(contentContainer, separatorView)
+        view.addSubviews(contentStack)
 
         setupLayout()
         setupGesture()
     }
 
     func setupLayout() {
-        contentContainerLayout()
         contentStackLayout()
-        separatorLayout()
-    }
-
-    func contentContainerLayout() {
-        bottomConstraint =  contentContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 250)
-        bottomConstraint.isActive = true
-
-        NSLayoutConstraint.activate([
-            contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            contentContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: 200),
-        ])
-    }
-
-    func separatorLayout() {
-        NSLayoutConstraint.activate([
-            separatorView.topAnchor.constraint(equalTo: callButton.bottomAnchor),
-            separatorView.leadingAnchor.constraint(equalTo: callButton.leadingAnchor),
-            separatorView.trailingAnchor.constraint(equalTo: callButton.trailingAnchor)
-        ])
     }
 
     func contentStackLayout() {
+        bottomConstraint = contentStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 250)
+        bottomConstraint.isActive = true
+
         NSLayoutConstraint.activate([
-            contentStack.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor, constant: 10),
-            contentStack.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor, constant: -10),
-            contentStack.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor, constant: -10),
+            contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
         ])
     }
 }
@@ -149,7 +118,7 @@ private extension CustomActionSheet {
 
     // Окно закрывается, если нажали не на кнопки
     @objc private func viewTapped() {
-        moveDownContentContainer()
-        router.dismissCurrentVC()
+        hideContentStack()
+        onDismissButtonTapped?()
     }
 }

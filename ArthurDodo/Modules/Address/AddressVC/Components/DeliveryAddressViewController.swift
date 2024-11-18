@@ -46,12 +46,12 @@ final class DeliveryAddressViewController: UIViewController {
     }()
 
     private let storage: DataStorage
-    private let router: Router
+
+    var onShowEditAddressVC: ((Address) -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -88,14 +88,12 @@ private extension DeliveryAddressViewController {
     func setupAddressTableViewActions() {
         addressTableView.onEditAddressButtonTapped = { [weak self] address in
             guard let self else { return }
-//            let address = storage.fetchedUserAddresses[indexPath.row]
             showEditAddressVC(address)
         }
     }
 
     func showEditAddressVC(_ address: Address) {
-        print(#function)
-        router.showEditAddressVC(address)
+        onShowEditAddressVC?(address)
     }
 
     func setupDeliveryButtonAction() {

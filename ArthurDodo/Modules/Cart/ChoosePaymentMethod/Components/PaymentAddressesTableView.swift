@@ -43,7 +43,6 @@ private extension PaymentAddressesTableView {
         registerCell(PaymentMethodsTableViewCell.self)
         separatorStyle = .singleLine
         separatorColor = .darkGray
-        separatorInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         tableHeaderView = UIView(frame: .zero)
         rowHeight = tableRowHeight
         isScrollEnabled = false
@@ -61,7 +60,7 @@ private extension PaymentAddressesTableView {
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
-extension PaymentAddressesTableView: UITableViewDataSource, UITableViewDelegate {
+extension PaymentAddressesTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         PaymentMethod.allCases.count
     }

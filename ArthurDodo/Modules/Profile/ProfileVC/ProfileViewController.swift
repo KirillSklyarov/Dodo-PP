@@ -24,12 +24,15 @@ final class ProfileViewController: UIViewController {
     private var state: ScreenState = .loading
 
     private let storage: DataStorage
-    private let router: Router
+
+    var onShowChatAlert: (() -> Void)?
+    var onDismissButtonTapped: (() -> Void)?
+    var onShowPersonalData: (() -> Void)?
+    var onShowPromoVC: ((Promo) -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -109,22 +112,23 @@ private extension ProfileViewController {
     func setupSpecialOfferActions() {
         promoStackView.onPromoSelected = { [weak self] specialOffer in
             guard let self else { return }
-            showSpecialOfferView(specialOffer)
+            onShowPromoVC?(specialOffer)
+//            showSpecialOfferView(specialOffer)
         }
     }
 
     // Настройка действий header view (где 3 кнопки)
     func setupHeaderViewActions() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.dismissVC()
+            self?.onDismissButtonTapped?()
         }
 
         headerView.onChatButtonTapped = { [weak self] in
-            self?.showChatAlert()
+            self?.onShowChatAlert?()
         }
 
         headerView.onProfileButtonTapped = { [weak self] in
-            self?.showPersonalVC()
+            self?.onShowPersonalData?()
         }
     }
 }
@@ -183,25 +187,6 @@ private extension ProfileViewController { // Запрашиваем данные
             setState(view: .promo, state: .success)
             completion()
         }
-    }
-}
-
-// MARK: - Setup router
-private extension ProfileViewController { // Здесь все переходы между экранами
-    func showChatAlert() {
-        router.showChatAlert()
-    }
-
-    func showPersonalVC() {
-        router.showPersonalData()
-    }
-
-    func showSpecialOfferView(_ specialOffer: Promo) {
-        router.showApplySpecialOffer(specialOffer)
-    }
-
-    func dismissVC() {
-        router.dismissCurrentVC()
     }
 }
 

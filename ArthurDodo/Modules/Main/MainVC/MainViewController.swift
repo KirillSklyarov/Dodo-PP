@@ -17,7 +17,6 @@ final class MainViewController: UIViewController {
     private var state: ScreenState = .loading
 
     private let storage: DataStorage
-    private let router: Router
 
     var onProfileButtonTapped: (() -> Void)?
     var onAddressButtonTapped: (() -> Void)?
@@ -26,9 +25,8 @@ final class MainViewController: UIViewController {
     var onCartButtonTapped: (() -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -43,20 +41,40 @@ final class MainViewController: UIViewController {
         setupActions()
         fetchData()
 
-//        showIsActiveOrder()
+        //        showIsActiveOrder()
     }
 
     // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print(#function)
         updateCart()
     }
+}
 
+// MARK: - Public methods
+extension MainViewController {
     // Обновление коллекции
     func updateUI() {
         DispatchQueue.main.async { [weak self] in
             self?.contentCollectionView.reloadData()
         }
+    }
+
+    // При каждом показе экрана мы запрашиваем актуальную корзину и если там есть позиции, то обновляем сумму на кнопке
+    func updateCart() {
+        let totalPrice = storage.getTotalCartPrice()
+        cartButton.updateCart(with: totalPrice)
+    }
+
+    // Показать или не показать вью с заказом
+    func isNeedToShowOrderView() {
+        let isActiveOrder = UserDefaults.standard.getIsActiveOrder() // Проверяет у UserDefaults есть ли активный заказ
+
+        // Только если заказ есть, то пересылаем данные во вью
+        if isActiveOrder { passOrderToView() }
+
+        updateUI(isActiveOrder)
     }
 }
 
@@ -125,7 +143,6 @@ private extension MainViewController {
         setupCollectionView()
         setupHeaderView()
         setupCartButtonActions()
-        setupRouterAction()
     }
 
     func setupCollectionView() {
@@ -173,12 +190,12 @@ private extension MainViewController {
         storage.sendSelectedItemToStorage(item)
     }
 
-    func setupRouterAction() {
-        router.onAllScreenDismissed = { [weak self] in
-            guard let self else { return }
-            self.isNeedToShowOrderView()
-        }
-    }
+//    func setupRouterAction() {
+//        router.onAllScreenDismissed = { [weak self] in
+//            guard let self else { return }
+//            self.isNeedToShowOrderView()
+//        }
+//    }
 }
 
 // MARK: - View controller navigation
@@ -204,12 +221,12 @@ private extension MainViewController { // Тут все переходы меж�
 //        router.showAddress()
 //    }
 
-    func showCartVC() {
-        router.showCart { [weak self] in
-            guard let self else { print("CartCoordinator is deallocated"); return }
-            updateCart()
-        }
-    }
+//    func showCartVC() {
+//        router.showCart { [weak self] in
+//            guard let self else { print("CartCoordinator is deallocated"); return }
+//            updateCart()
+//        }
+//    }
 }
 
 // MARK: - Fetch data from server
@@ -292,22 +309,6 @@ private extension MainViewController {
     // Передает каталог в contentCollectionView
     func passCatalogToContentCollectionView(_ catalogue: [Item]) {
         contentCollectionView.getCatalog(catalogue)
-    }
-
-    // При каждом показе экрана мы запрашиваем актуальную корзину и если там есть позиции, то обновляем сумму на кнопке
-    func updateCart() {
-        let totalPrice = storage.getTotalCartPrice()
-        cartButton.updateCart(with: totalPrice)
-    }
-
-    // Показать или не показать вью с заказом
-    func isNeedToShowOrderView() {
-        let isActiveOrder = UserDefaults.standard.getIsActiveOrder() // Проверяет у UserDefaults есть ли активный заказ
-
-        // Только если заказ есть, то пересылаем данные во вью
-        if isActiveOrder { passOrderToView() }
-
-        updateUI(isActiveOrder)
     }
 
     // Либо показывает orderView, либо не показывает (выставляет высоту 0)

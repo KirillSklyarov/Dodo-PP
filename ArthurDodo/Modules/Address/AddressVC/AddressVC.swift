@@ -18,12 +18,14 @@ final class AddressViewController: UIViewController {
     private var addresses: [Address]?
 
     private let storage: DataStorage
-    private let router: Router
+
+    var onDismissButtonTapped: (() -> Void)?
+    var onShowEditAddressVC: ((Address) -> Void)?
+    var onShowAddNewAddressVC: (() -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -105,19 +107,19 @@ private extension AddressViewController {
 
     func setupAddressHeaderAction() {
         addressHeaderStackView.onDismissButtonTapped = { [weak self] in
-            self?.router.dismissCurrentVC()
+            self?.onDismissButtonTapped?()
         }
     }
 
     func setupAddressViewAction() {
         // Нажатие на кнопку редактирования адреса
         addressView.onEditAddressCellTapped = { [weak self] address in
-            self?.router.showEditAddressVC(address)
+            self?.onShowEditAddressVC?(address)
         }
 
         // Нажатие на кнопку "+ Новый адрес"
         addressView.onAddNewAddressButtonTapped = { [weak self] in
-            self?.router.showAddNewAddressVC()
+            self?.onShowAddNewAddressVC?()
         }
     }
 }

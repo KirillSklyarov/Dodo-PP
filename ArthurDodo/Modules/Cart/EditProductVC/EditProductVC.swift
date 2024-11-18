@@ -19,17 +19,17 @@ final class EditProductViewController: UIViewController {
 
     // MARK: - Other Properties
     private let storage: DataStorage
-    private let router: Router
 
     private var cartItem: CartItem?
     private var toppings: [Topping] = []
 
     var onCartButtonTapped: ( () -> Void )?
+    var onDismissButtonTapped: ( () -> Void )?
+    var onShowPopupVC: ( (CpfcPopupView) -> Void )?
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -121,9 +121,10 @@ private extension EditProductViewController {
         setupInfoButtonAction()
     }
 
+    // Отрабатываем коллбэк для закрытия окна
     func setupHeaderAction() {
         headerView.onCloseButtonTapped = { [weak self] in
-            self?.router.dismissCurrentVC()
+            self?.onDismissButtonTapped?()
         }
     }
 
@@ -139,7 +140,7 @@ private extension EditProductViewController {
 
             storage.changeItemInCart(cartItem)
             onCartButtonTapped?()
-            router.dismissCurrentVC()
+//            onDismissButtonTapped?()
         }
     }
 
@@ -171,7 +172,7 @@ private extension EditProductViewController {
             guard let self else { print("Self is nil"); return }
             guard let popupVC = popupVC as? CpfcPopupView else {
                 print("No popupVC"); return }
-            router.showPopUpView(popupVC)
+            onShowPopupVC?(popupVC)
         }
     }
 }

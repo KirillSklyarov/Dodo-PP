@@ -3,6 +3,7 @@ import UIKit
 final class ChooseAddressVC: UIViewController {
 
     // MARK: - UI Properties
+    private lazy var headerView = CartHeaderView(title: "Адреса доставки") // Заголовок с кнопкой
     private lazy var addressTableView = DeliveryAddressListTableView()
 
     // MARK: - Other Properties
@@ -13,14 +14,15 @@ final class ChooseAddressVC: UIViewController {
     private var addresses: [Address] = []
 
     private let storage: DataStorage
-    private let router: Router
 
     var onAddressCellTapped: ((String) -> Void)?
+    var onDismissButtonTapped: (() -> Void)?
+    var onEditAddressCellTapped: ( (Address) -> Void)?
+    var onShowAddNewAddress: (() -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -61,27 +63,27 @@ private extension ChooseAddressVC {
 private extension ChooseAddressVC {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(addressTableView)
+        view.addSubviews(headerView, addressTableView)
 
-        setupNavigationBar()
         setupLayout()
     }
 
-    func setupNavigationBar() {
-        navigationItem.title = "Адреса доставки"
-
-        navigationController?.navigationBar.barTintColor = AppColors.backgroundGray
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-        let dismissButton = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(dismissButtonTapped))
-        dismissButton.tintColor = AppColors.buttonOrange
-        dismissButton.setTitleTextAttributes([NSAttributedString.Key .font: AppFonts.semibold18], for: .normal)
-        navigationItem.leftBarButtonItem = dismissButton
+    func setupLayout() {
+        setupHeaderViewLayout()
+        setupAddressTableViewLayout()
     }
 
-    func setupLayout() {
+    func setupHeaderViewLayout() {
         NSLayoutConstraint.activate([
-            addressTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
+        ])
+    }
+
+    func setupAddressTableViewLayout() {
+        NSLayoutConstraint.activate([
+            addressTableView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset),
             addressTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
             addressTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
         ])
@@ -91,7 +93,15 @@ private extension ChooseAddressVC {
 // MARK: - Setup Actions
 private extension ChooseAddressVC {
     func setupActions() {
+        setupHeaderViewAction()
         setupAddressTableViewActions()
+    }
+
+    func setupHeaderViewAction() {
+        headerView.onDismissButtonTapped = { [weak self] in
+            guard let self else { return }
+            onDismissButtonTapped?()
+        }
     }
 
     // Настраиваем action: нажатие на ячейку
@@ -99,23 +109,19 @@ private extension ChooseAddressVC {
         addressTableView.onAddressCellTapped = { [weak self] addressName in
             guard let self else { return }
             onAddressCellTapped?(addressName)
-            router.dismissCurrentVC()
+            onDismissButtonTapped?()
         }
 
         // Настраиваем action: нажатие на редактирование адреса
         addressTableView.onEditAddressButtonTapped = { [weak self] indexPath in
             guard let self else { return }
             let address = addresses[indexPath.row]
-            router.showEditAddressVC(address)
+            onEditAddressCellTapped?(address)
         }
 
         // Настраиваем action: переход на экран добавления нового адреса
         addressTableView.onAddNewAddressCellTapped = { [weak self] in
-            self?.router.showAddNewAddressVC()
+            self?.onShowAddNewAddress?()
         }
-    }
-
-    @objc func dismissButtonTapped() {
-        router.dismissCurrentVC()
     }
 }

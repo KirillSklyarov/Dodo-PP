@@ -13,12 +13,12 @@ final class FinalVC: UIViewController {
     private var dismissDelay = 2
 
     private let storage: DataStorage
-    private let router: Router
+
+    var onFinalVCDismissed: (() -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router) {
+    init(storage: DataStorage) {
         self.storage = storage
-        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -41,13 +41,7 @@ private extension FinalVC {
         view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(contentStack)
 
-        setupNavigationBar()
         setupLayout()
-    }
-
-    func setupNavigationBar() {
-        let dismissButton = UIBarButtonItem(customView: dismissButton)
-        navigationItem.leftBarButtonItem = dismissButton
     }
 
     func setupLayout() {
@@ -97,7 +91,8 @@ private extension FinalVC {
     func dismissVC() {
         countDownTimer?.invalidate()
         storage.eraseCart()
-        router.dismissAllVC()
+        onFinalVCDismissed?()
+//        router.dismissAllVC()
     }
 
     func updateTitle(_ seconds: Int) {

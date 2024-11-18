@@ -13,14 +13,19 @@ final class DependencyContainer {
         let encoder = JSONEncoder()
         let session = URLSession(configuration: .default)
 
+        // Создаем сетевой слой
         networkManager = NetworkManager(decoder: decoder, encoder: encoder, session: session)
+
+        // Создаем хранилище
         storage = DataStorage(networkManager: networkManager)
+
+        // Создаем фабрику экранов
         screenFactory = ScreenFactory(storage: storage)
 
-        router = Router(screenFactory: screenFactory)
+        // Создаем роутер
+        router = Router()
 
-        screenFactory.router = router
-
+        // Создаем главный координатор
         appCoordinator = AppCoordinator(storage: storage, router: router, screenFactory: screenFactory)
     }
 }

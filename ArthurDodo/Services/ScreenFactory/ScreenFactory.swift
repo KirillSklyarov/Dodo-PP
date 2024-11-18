@@ -4,7 +4,6 @@ import UIKit
 final class ScreenFactory {
     // MARK: - Properties
     private let storage: DataStorage
-    weak var router: Router!
 
     // MARK: - Init
     init(storage: DataStorage) {
@@ -15,11 +14,11 @@ final class ScreenFactory {
 // MARK: - Methods
 extension ScreenFactory {
     func makeMainScreen() -> MainViewController {
-        return MainViewController(storage: storage, router: router)
+        return MainViewController(storage: storage)
     }
     
     func makeProfileScreen() -> ProfileViewController {
-        return ProfileViewController(storage: storage, router: router)
+        return ProfileViewController(storage: storage)
     }
     
     func makeProductDetailsScreen() -> ProductDetailsViewController {
@@ -32,60 +31,50 @@ extension ScreenFactory {
     }
     
     func makeAddressScreen() -> AddressViewController {
-        return AddressViewController(storage: storage, router: router)
+        return AddressViewController(storage: storage)
     }
     
     func makeCartScreen() -> CartViewController {
-        return CartViewController(storage: storage, router: router)
+        return CartViewController(storage: storage)
     }
     
     func makeChatAlertScreen() -> CustomActionSheet {
-        return CustomActionSheet(router: router)
+        return CustomActionSheet()
     }
     
-    func makePersonalDataScreen() -> UINavigationController {
-        let personalDataVC = PersonalViewController(router: router)
-        let vc = UINavigationController(rootViewController: personalDataVC)
-        return vc
+    func makePersonalDataScreen() -> PersonalViewController {
+        return PersonalViewController()
     }
     
     func makeApplySpecialOfferScreen(_ offer: Promo) -> ApplyOfferViewController {
         return ApplyOfferViewController(with: offer)
     }
 
-    func makeDeliveryScreen() -> UINavigationController {
-        let deliveryVC = DeliveryVC(storage: storage, router: router)
-        let vc = UINavigationController(rootViewController: deliveryVC)
-        return vc
+    func makeDeliveryScreen() -> DeliveryVC {
+        return  DeliveryVC(storage: storage)
     }
 
-    func makeChooseAddressScreen() -> UINavigationController {
-        let chooseVC = ChooseAddressVC(storage: storage, router: router)
-        let vc = UINavigationController(rootViewController: chooseVC)
-        return vc
+    func makeChooseAddressScreen() -> ChooseAddressVC {
+        return ChooseAddressVC(storage: storage)
     }
 
-    func makeChoosePaymentMethodScreen() -> UINavigationController {
-        let paymentVC = ChoosePaymentMethodVC(storage: storage, router: router)
-        let vc = UINavigationController(rootViewController: paymentVC)
-        return vc
+    func makeChoosePaymentMethodScreen() -> ChoosePaymentMethodVC {
+        return ChoosePaymentMethodVC(storage: storage)
     }
 
-    func makeFinalVCScreen() -> UINavigationController {
-        let finalVC = FinalVC(storage: storage, router: router)
-        let vc = UINavigationController(rootViewController: finalVC)
-        return vc
+    func makeFinalVCScreen() -> FinalVC {
+        return FinalVC(storage: storage)
     }
 
     func makeEditAddressScreen(_ address: Address) -> EditAddressViewController {
-        return EditAddressViewController(address, storage: storage, router: router)
+        return EditAddressViewController(address, storage: storage)
     }
 
     func makeAddNewAddressScreen() -> AddNewAddressViewController {
-        return AddNewAddressViewController(router: router)
+        return AddNewAddressViewController()
     }
 
     func makeEditProductScreen() -> EditProductViewController {
-        return EditProductViewController(storage: storage, router: router)
+        return EditProductViewController(storage: storage)
     }
 }

@@ -42,7 +42,7 @@ private extension AddressListTableView {
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
-extension AddressListTableView: UITableViewDataSource, UITableViewDelegate {
+extension AddressListTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         addresses.count
     }
