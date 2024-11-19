@@ -47,7 +47,6 @@ final class MainViewController: UIViewController {
     // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print(#function)
         updateCart()
     }
 }
@@ -156,7 +155,7 @@ private extension MainViewController {
         }
 
         contentCollectionView.onStoriesCellTapped = { [weak self] IndexPath in
-            self?.showStoriesVC(IndexPath)
+            self?.onStoryTapped?(IndexPath)
         }
 
         contentCollectionView.onSpecialOfferCellTapped = { [weak self] IndexPath in
@@ -181,52 +180,12 @@ private extension MainViewController {
     func setupCartButtonActions() {
         cartButton.onButtonTapped = { [weak self] in
             self?.onCartButtonTapped?()
-
-//            showCartVC()
         }
     }
 
     func sendSelectedItemToStorage(_ item: Item) {
         storage.sendSelectedItemToStorage(item)
     }
-
-//    func setupRouterAction() {
-//        router.onAllScreenDismissed = { [weak self] in
-//            guard let self else { return }
-//            self.isNeedToShowOrderView()
-//        }
-//    }
-}
-
-// MARK: - View controller navigation
-private extension MainViewController { // Тут все переходы между экранами
-
-//    func showProfileVC() {
-//        router.showProfileScreen()
-//    }
-
-//    func showProductDetail() {
-
-
-//        router.showProductDetailsScreen() { [weak self] in
-//            self?.updateCart()
-//        }
-//    }
-
-    func showStoriesVC(_ indexPath: IndexPath) {
-        onStoryTapped?(indexPath)
-    }
-
-//    func showAddressVC() {
-//        router.showAddress()
-//    }
-
-//    func showCartVC() {
-//        router.showCart { [weak self] in
-//            guard let self else { print("CartCoordinator is deallocated"); return }
-//            updateCart()
-//        }
-//    }
 }
 
 // MARK: - Fetch data from server

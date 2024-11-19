@@ -1,128 +1,113 @@
 import UIKit
 
 protocol Coordinator: AnyObject {
-//    var navigationController: UINavigationController { get }
-//    func start()
+    func start()
 }
 
 // Этот класс отвечает за создание экранов и навигацию внутри приложения. Класс использует помощников по блокам: главный экран, профиль, корзина, адреса.
 final class AppCoordinator: Coordinator {
 
     // MARK: - Properties
-    private let storage: DataStorage
     private let router: Router
     private let screenFactory: ScreenFactory
-    private var mainCoordinator: MainCoordinator?
     private var childCoordinators: [Coordinator] = []
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router, screenFactory: ScreenFactory) {
-        self.storage = storage
+    init(router: Router, screenFactory: ScreenFactory) {
         self.router = router
         self.screenFactory = screenFactory
     }
 
+    // Делаем такую обертку, чтобы AppCoordinator соответствовал протоколу Coordinator
     func start() {
-        let mainCoordinator = MainCoordinator(storage: storage, router: router, screenFactory: screenFactory, mainCoordinator: self)
-        self.mainCoordinator = mainCoordinator
-        addChild(mainCoordinator)
-        mainCoordinator.start()
+        startMainFlow()
     }
 
-    func addChild(_ child: Coordinator) {
-        childCoordinators.append(child)
-    }
-}
+    func startMainFlow() {
+        let mainCoordinator = MainCoordinator(router: router, screenFactory: screenFactory) // Создаем экран
 
-final class MainCoordinator: Coordinator {
-    // MARK: - Properties
-    private let storage: DataStorage
-    private let router: Router
-    private let screenFactory: ScreenFactory
-    private var mainVC: MainViewController?
-    private var mainCoordinator: Coordinator
+        // Настраиваем замыкания
+        mainCoordinator.onShowCart = { [weak self] in
+            self?.showCart()
+        }
 
-    // MARK: - Init
-    init(storage: DataStorage, router: Router, screenFactory: ScreenFactory, mainCoordinator: Coordinator) {
-        self.storage = storage
-        self.router = router
-        self.screenFactory = screenFactory
-        self.mainCoordinator = mainCoordinator
-    }
-
-    func start() {
-        let mainVC = screenFactory.makeMainScreen()
-        self.mainVC = mainVC
-        router.present(vc: mainVC, animated: false)
-
-        mainVC.onProfileButtonTapped = { [weak self] in
+        mainCoordinator.onShowProfile = { [weak self] mainVC in
             self?.showProfile()
         }
 
-        mainVC.onAddressButtonTapped = { [weak self] in
-            self?.showAddress()
+        mainCoordinator.onShowAddress = { [weak self] mainVC in
+            self?.showAddress(mainVC)
         }
 
-        mainVC.onStoryTapped = { [weak self] indexPath in
-            self?.showStories(indexPath)
-        }
-
-        mainVC.onProductDetailsTapped = { [weak self] in
-            self?.showProductDetails()
-        }
-
-        mainVC.onCartButtonTapped = { [weak self] in
-            guard let self else { return }
-            let cartCoordinator = CartCoordinator(storage: storage, router: router, screenFactory: screenFactory, mainVC: mainVC)
-            guard let mainCoordinator = mainCoordinator as? AppCoordinator else { print("Error: MainCoordinator is not AppCoordinator"); return }
-            mainCoordinator.addChild(cartCoordinator)
-            cartCoordinator.start(mainVC)
-        }
+        addChild(mainCoordinator) // Добавляем координатор в массив
+        mainCoordinator.start() // Стартуем координатор
     }
 
-    // Показ экрана деталей товара и связанные с ним операции
-    private func showProductDetails() {
-        let vc = screenFactory.makeProductDetailsScreen()
-        router.present(vc: vc, parentVC: mainVC, animated: true)
+    func showCart() {
+        let cartCoordinator = CartCoordinator(router: router, screenFactory: screenFactory)
 
-        vc.onCartButtonTapped = { [weak self] in
-            self?.mainVC?.updateUI()
+        cartCoordinator.onCartDismissed = { [weak self] in
+            self?.start()
         }
 
-        vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismissVC(vc: vc)
+        // Обрабатываем замыкание когда у нас завершается флоу корзины (то есть когда весь заказ оформлен и оплачен)
+        cartCoordinator.onFinishFlow = { [weak self] in
+            guard let self else { print("mainCoordinator not found"); return }
+            startMainFlow() // Переходим на главный экран
+            removeChild(cartCoordinator) // Удаляем координатор из массива
         }
 
-        vc.onShowPopupVC = { [weak self] popUpView in
-            self?.router.present(vc: popUpView, parentVC: vc, modalPresentation: .popover, animated: true)
-        }
+        addChild(cartCoordinator)
+        cartCoordinator.start()
     }
 
     func showProfile() {
-        let profileCoordinator = ProfileCoordinator(storage: storage, router: router, screenFactory: screenFactory)
-        guard let mainVC else { print(#function); return }
-        guard let mainCoordinator = mainCoordinator as? AppCoordinator else { print(#function); return }
-        mainCoordinator.addChild(profileCoordinator)
-        profileCoordinator.start(mainVC)
+        let profileCoordinator = ProfileCoordinator(router: router, screenFactory: screenFactory) // Создаем координатор
+
+        // Настраиваем замыкания: как только флоу профиля завершен, то начинаем новый главный поток
+        profileCoordinator.onProfileFlowFinished = { [weak self] in
+            guard let self else { return }
+            startMainFlow() // Начинаем новый главный поток
+            removeChild(profileCoordinator) // Удаляем координатор из массива
+        }
+
+        addChild(profileCoordinator) // Добавляем координатор в массив
+        profileCoordinator.start() // Стартуем поток координатор в массив
     }
 
-    func showAddress() {
-        let addressCoordinator = AddressCoordinator(storage: storage, router: router, screenFactory: screenFactory)
-        guard let mainVC else { return }
-        guard let mainCoordinator = mainCoordinator as? AppCoordinator else { return }
-        mainCoordinator.addChild(addressCoordinator)
-        addressCoordinator.start(mainVC)
+    func showAddress(_ parentVC: UIViewController) {
+        let addressCoordinator = AddressCoordinator(router: router, screenFactory: screenFactory)
+
+        addressCoordinator.onAddressFlowFinished = { [weak self] in
+            guard let self else { return }
+            startMainFlow()
+            removeChild(addressCoordinator)
+        }
+
+        addChild(addressCoordinator)
+        addressCoordinator.start()
+    }
+}
+
+// MARK: - Supporting methods
+private extension AppCoordinator {
+    // Добавляем координатор в массив координаторов
+    func addChild(_ child: Coordinator) {
+        childCoordinators.append(child)
     }
 
-    func showStories(_ indexPath: IndexPath) {
-        let vc = screenFactory.makeStoriesScreen(indexPath: indexPath)
-        router.present(vc: vc, parentVC: mainVC)
-        vc.onStoriesVCDismissed = { [weak self] in
-            self?.mainVC?.updateUI()
-        }
-        
-        vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismissVC(vc: vc)
-        }
+    // Удаляем координатор из массива координаторов (здесь важно использовать ===, чтобы быть уверенным, что удаляется именно этот объект из памяти)
+    func removeChild(_ child: Coordinator) {
+        childCoordinators.removeAll { $0 === child }
+    }
+
+//    func mainVCUpdateUI() {
+//        let mainCoordinator = getMainCoordinator()
+//        mainCoordinator?.updateUI()
+//    }
+
+    func getMainCoordinator() -> MainCoordinator? {
+        guard let mainCoordinator = childCoordinators.first(where: { $0 is MainCoordinator }) as? MainCoordinator else { print("mainCoordinator not found"); return nil}
+        return mainCoordinator
     }
 }

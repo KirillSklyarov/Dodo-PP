@@ -3,33 +3,32 @@ import UIKit
 final class CartCoordinator: Coordinator {
 
     // MARK: - Properties
-    private let storage: DataStorage
     private let router: Router
     private let screenFactory: ScreenFactory
     private var cartVC: CartViewController?
-    private var mainVC: MainViewController
+
+    var onFinishFlow: (() -> Void)?
+    var onCartDismissed: (() -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router, screenFactory: ScreenFactory, mainVC: MainViewController) {
-        self.storage = storage
+    init(router: Router, screenFactory: ScreenFactory) {
         self.router = router
         self.screenFactory = screenFactory
-        self.mainVC = mainVC
     }
 
     deinit {
         print("CartCoordinator deinit")
     }
 
-    func start(_ parentVC: UIViewController) {
+    func start() {
         let cartVC = screenFactory.makeCartScreen()
         self.cartVC = cartVC
-        router.present(vc: cartVC, parentVC: parentVC, modalPresentation: .automatic)
+        router.setRootModule(cartVC, animation: false)
 
         cartVC.onCartVCDismissed = { [weak self] in
             guard let self else { print(#function); return }
-            router.dismissVC(vc: cartVC)
-            mainVC.updateCart()
+            router.dismiss()
+            onCartDismissed?()
         }
 
         cartVC.onShowEditProductVC = { [weak self] in
@@ -44,40 +43,43 @@ final class CartCoordinator: Coordinator {
             self?.showDelivery()
         }
     }
+}
 
-    private func showApplySpecialOffer(_ offer: Promo) {
+// MARK: - Supporting methods
+private extension CartCoordinator {
+    func showApplySpecialOffer(_ offer: Promo) {
         let vc = screenFactory.makeApplySpecialOfferScreen(offer)
         guard let configureSheet = vc.sheetPresentationController else { return }
         configureSheet.detents = [.medium()]
         configureSheet.prefersGrabberVisible = true
-        router.present(vc: vc, parentVC: cartVC, modalPresentation: .automatic)
+        router.present(vc, modalPresentation: .automatic)
     }
 
-    private func showEditProduct() {
+    func showEditProduct() {
         let vc = screenFactory.makeEditProductScreen()
-        router.present(vc: vc, parentVC: cartVC, modalPresentation: .automatic)
+        router.present(vc, modalPresentation: .automatic)
 
         vc.onCartButtonTapped = { [weak self] in
             guard let self else { print(#function); return }
             cartVC?.updateCart() // Говорим главному экрану обновить корзину
-            router.dismissVC(vc: vc) // Закрываем текущий экран
+            router.dismiss() // Закрываем текущий экран
         }
 
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismissVC(vc: vc) // Закрываем текущий экран
+            self?.router.dismiss() // Закрываем текущий экран
         }
 
         vc.onShowPopupVC = { [weak self] popUpView in
-            self?.router.present(vc: popUpView, parentVC: vc, modalPresentation: .popover, animated: true)
+            self?.router.present(popUpView, parentVC: vc, modalPresentation: .popover, animated: true)
         }
     }
 
     func showDelivery() {
         let vc = screenFactory.makeDeliveryScreen()
-        router.present(vc: vc, parentVC: cartVC, modalPresentation: .automatic)
+        router.present(vc, modalPresentation: .automatic)
 
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismissVC(vc: vc)
+            self?.router.dismiss()
         }
 
         vc.onShowChooseAddress = { [weak self] in
@@ -89,42 +91,40 @@ final class CartCoordinator: Coordinator {
         }
 
         vc.onShowFinalVC = { [weak self] in
-            self?.showFinalVC(parentVC: vc)
+            self?.showFinalVC()
         }
     }
 
-    private func showFinalVC(parentVC: DeliveryVC) {
+    func showFinalVC() {
+        print(#function)
         let vc = screenFactory.makeFinalVCScreen()
-        router.present(vc: vc, parentVC: parentVC)
+        router.present(vc)
 
         vc.onFinalVCDismissed = { [weak self] in
-            guard let self else { print(#function); return }
-            print("mainVC \(mainVC)")
-            router.dismissVC(vc: self.mainVC)
-            mainVC.isNeedToShowOrderView()
+            self?.onFinishFlow?()
         }
     }
 
-    private func showChoosePaymentMethod(parentVC: DeliveryVC) {
+    func showChoosePaymentMethod(parentVC: DeliveryVC) {
         let vc = screenFactory.makeChoosePaymentMethodScreen()
-        router.present(vc: vc, parentVC: parentVC)
+        router.present(vc, parentVC: parentVC)
 
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismissVC(vc: vc)
+            self?.router.dismiss()
         }
 
         vc.onPaymentMethodSelected = { [weak self] paymentMethod in
             parentVC.updateUI(paymentMethod)
-            self?.router.dismissVC(vc: vc)
+            self?.router.dismiss()
         }
     }
 
     func showChooseAddress(parentVC: DeliveryVC) {
         let vc = screenFactory.makeChooseAddressScreen()
-        router.present(vc: vc, parentVC: parentVC)
+        router.present(vc, parentVC: parentVC)
 
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismissVC(vc: vc)
+            self?.router.dismiss()
         }
 
         vc.onAddressCellTapped = { addressName in
@@ -140,17 +140,17 @@ final class CartCoordinator: Coordinator {
         }
     }
 
-    private func showEditAddressVC(_ address: Address, parentVC: ChooseAddressVC) {
+    func showEditAddressVC(_ address: Address, parentVC: ChooseAddressVC) {
         let vc = screenFactory.makeEditAddressScreen(address)
-        router.present(vc: vc, parentVC: parentVC)
+        router.present(vc, parentVC: parentVC)
     }
 
-    private func showAddNewAddressVC(parentVC: ChooseAddressVC) {
+    func showAddNewAddressVC(parentVC: ChooseAddressVC) {
         let vc = screenFactory.makeAddNewAddressScreen()
-        router.present(vc: vc, parentVC: parentVC)
+        router.present(vc, parentVC: parentVC)
 
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismissVC(vc: vc)
+            self?.router.dismiss()
         }
     }
 }

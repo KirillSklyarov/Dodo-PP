@@ -1,79 +1,96 @@
 import UIKit
 
-final class MainCoordinator2: Coordinator {
-
+final class MainCoordinator: Coordinator {
     // MARK: - Properties
-    var storage: DataStorage
-    var navigationController: UINavigationController
-    var callback: ((UIViewController) -> Void)?
-    weak var viewController: MainViewController?
-    var childCoordinators: [Coordinator] = []
+    private let router: Router
+    private let screenFactory: ScreenFactory
+    private var mainVC: MainViewController?
+
+    var onShowCart: (() -> Void)?
+    var onShowProfile: ((UIViewController) -> Void)?
+    var onShowAddress: ((UIViewController) -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, navigationController: UINavigationController) {
-        self.storage = storage
-        self.navigationController = navigationController
+    init(router: Router, screenFactory: ScreenFactory) {
+        self.router = router
+        self.screenFactory = screenFactory
     }
 
-    deinit {
-        print("MainCoordinator deinit")
+    func start() {
+        let mainVC = screenFactory.makeMainScreen() // Создаем экран
+        self.mainVC = mainVC
+
+        // Настраиваем замыкания
+        mainVC.onProfileButtonTapped = { [weak self] in
+            self?.onShowProfile?(mainVC)
+        }
+
+        mainVC.onAddressButtonTapped = { [weak self] in
+            self?.onShowAddress?(mainVC)
+        }
+
+        mainVC.onStoryTapped = { [weak self] indexPath in
+            self?.showStories(indexPath)
+        }
+
+        mainVC.onProductDetailsTapped = { [weak self] in
+            self?.showProductDetails()
+        }
+
+        mainVC.onCartButtonTapped = { [weak self] in
+            self?.onShowCart?()
+        }
+
+        router.setRootModule(mainVC) // Устанавливаем как главный и показываем его
+    }
+
+    // Решаем показывать или нет экран с активным заказом
+    func updateUI() {
+        guard let mainVC else { print("MainVC is nil"); return }
+        mainVC.isNeedToShowOrderView()
+    }
+
+    func updateCart() {
+        guard let mainVC else { print("MainVC is nil"); return }
+        mainVC.updateCart()
+    }
+
+    func showMain() {
+        router.dismiss()
     }
 }
 
-// MARK: - Public methods
-extension MainCoordinator2 {
-    func start() {
-//        let vc = MainViewController(storage: storage)
-//        viewController = vc
-//        vc.coordinator = self
-//        navigationController.pushViewController(vc, animated: true)
-    }
-
-//    func showProfile() {
-//        let profileCoordinator = ProfileCoordinator(storage: storage, navigationController: navigationController)
-//        childCoordinators.append(profileCoordinator)
-//        profileCoordinator.start()
-//    }
-
+private extension MainCoordinator {
+    // Показ экрана деталей товара и связанные с ним операции
     func showProductDetails() {
-//        let vc = ProductDetailsViewController(storage: storage)
-//        vc.coordinator = self
-//        vc.modalPresentationStyle = .fullScreen
-//        navigationController.visibleViewController?.present(vc, animated: true)
-//
-//        vc.onCartButtonTapped = { [weak self] in
-//            guard let self else { print("Self is nil, can't set price"); return }
-//            viewController?.updateCart()
-//        }
+        let vc = screenFactory.makeProductDetailsScreen() // Создаем экран
+
+        // Настраиваем замыкания
+        vc.onCartButtonTapped = { [weak self] in
+            self?.mainVC?.updateUI()
+        }
+
+        vc.onDismissButtonTapped = { [weak self] in
+            self?.router.dismiss()
+        }
+
+        vc.onShowPopupVC = { [weak self] popUpView in
+            self?.router.present(popUpView, parentVC: vc, modalPresentation: .popover)
+        }
+
+        router.present(vc) // Показываем экран
+
     }
 
     func showStories(_ indexPath: IndexPath) {
-//        let vc = StoriesVC()
-//        vc.modalPresentationStyle = .fullScreen
-//        navigationController.present(vc, animated: true)
-//        vc.showStories(indexPath)
-//
-//        vc.onStoriesVCDismissed = { [weak self] in
-//            self?.viewController?.updateUI()
-//        }
+        let vc = screenFactory.makeStoriesScreen(indexPath: indexPath)
+        router.present(vc)
+        vc.onStoriesVCDismissed = { [weak self] in
+            self?.mainVC?.updateUI()
+        }
+
+        vc.onDismissButtonTapped = { [weak self] in
+            self?.router.dismiss()
+        }
     }
-
-//    func showAddress() {
-//        let addressCoordinator = AddressCoordinator(storage: storage, navigationController: navigationController)
-//        childCoordinators.append(addressCoordinator)
-//        addressCoordinator.parentCoordinator = self
-//        addressCoordinator.start()
-//    }
-
-//    func showCart() {
-//        let cartCoordinator = CartCoordinator(storage: storage, navigationController: navigationController)
-//        cartCoordinator.parentCoordinator = self
-//        childCoordinators.append(cartCoordinator)
-//        cartCoordinator.start()
-//    }
-
-//    func showPopUpView(_ popUpView: CpfcPopupView?) {
-//        guard let popUpView else { print("PopUpView is nil"); return }
-//        navigationController.visibleViewController?.present(popUpView, animated: true)
-//    }
 }

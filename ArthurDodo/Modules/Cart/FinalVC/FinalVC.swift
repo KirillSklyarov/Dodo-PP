@@ -92,7 +92,6 @@ private extension FinalVC {
         countDownTimer?.invalidate()
         storage.eraseCart()
         onFinalVCDismissed?()
-//        router.dismissAllVC()
     }
 
     func updateTitle(_ seconds: Int) {

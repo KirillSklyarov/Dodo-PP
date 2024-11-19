@@ -203,9 +203,6 @@ private extension CartViewController {
             guard let self else { return }
             storage.setChangingItem(item) //
             onShowEditProductVC?()
-//            router.showEditProductVC() { [weak self] in
-//                self?.fetchCart()
-//            }
         }
     }
 
@@ -270,7 +267,7 @@ private extension CartViewController {
 
     func setupHeaderViewLayout() {
         NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])

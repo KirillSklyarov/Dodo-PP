@@ -26,6 +26,6 @@ final class DependencyContainer {
         router = Router()
 
         // Создаем главный координатор
-        appCoordinator = AppCoordinator(storage: storage, router: router, screenFactory: screenFactory)
+        appCoordinator = AppCoordinator(router: router, screenFactory: screenFactory)
     }
 }

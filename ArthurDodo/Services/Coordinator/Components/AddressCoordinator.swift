@@ -2,25 +2,25 @@ import UIKit
 
 final class AddressCoordinator: Coordinator {
     // MARK: - Properties
-    private let storage: DataStorage
     private let router: Router
     private let screenFactory: ScreenFactory
-    private var mainVC: UIViewController?
+
+    var onAddressFlowFinished: (() -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage, router: Router, screenFactory: ScreenFactory) {
-        self.storage = storage
+    init(router: Router, screenFactory: ScreenFactory) {
         self.router = router
         self.screenFactory = screenFactory
     }
 
-    func start(_ parentVC: UIViewController) {
+    func start() {
         let addressVC = screenFactory.makeAddressScreen()
-        self.mainVC = addressVC
-        router.present(vc: addressVC, parentVC: parentVC)
+        router.setRootModule(addressVC)
 
         addressVC.onDismissButtonTapped = { [weak self] in
-            self?.router.dismissVC(vc: addressVC)
+            guard let self else { return }
+            router.dismiss()
+            onAddressFlowFinished?()
         }
 
         addressVC.onShowEditAddressVC = { [weak self] address in
@@ -31,23 +31,25 @@ final class AddressCoordinator: Coordinator {
             self?.showAddNewAddressVC()
         }
     }
+}
 
-    private func showEditAddressVC(_ address: Address) {
+// MARK: - Supporting methods
+private extension AddressCoordinator {
+    func showEditAddressVC(_ address: Address) {
         let editAddressVC = screenFactory.makeEditAddressScreen(address)
-        router.present(vc: editAddressVC, parentVC: mainVC)
+        router.present(editAddressVC)
 
         editAddressVC.onDismissButtonTapped = { [weak self] in
-            self?.router.dismissVC(vc: editAddressVC)
+            self?.router.dismiss()
         }
     }
 
-    private func showAddNewAddressVC() {
+    func showAddNewAddressVC() {
         let vc = screenFactory.makeAddNewAddressScreen()
-        router.present(vc: vc, parentVC: mainVC)
+        router.present(vc)
 
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismissVC(vc: vc)
+            self?.router.dismiss()
         }
     }
 }
-

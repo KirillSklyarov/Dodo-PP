@@ -234,10 +234,6 @@ private extension DeliveryVC {
         addressTableView.onCellSelected = { [weak self] in
             guard let self else { return }
             onShowChooseAddress?()
-
-//            router.showChooseAddress { addressName in
-//                self.updateAddress(addressName)
-//            }
         }
     }
 

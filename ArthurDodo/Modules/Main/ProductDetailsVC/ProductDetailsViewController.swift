@@ -123,7 +123,6 @@ private extension ProductDetailsViewController {
     func setupHeaderAction() {
         headerView.onCloseButtonTapped = { [weak self] in
             self?.onDismissButtonTapped?()
-//            self?.router.dismissCurrentVC()
         }
     }
 
@@ -203,7 +202,6 @@ private extension ProductDetailsViewController {
             guard let popupVC = popupVC as? CpfcPopupView else {
                 print("No popupVC"); return }
             onShowPopupVC?(popupVC)
-//            router.showPopUpView(popupVC)
         }
     }
 }
