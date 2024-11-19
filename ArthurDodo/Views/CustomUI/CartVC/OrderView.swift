@@ -12,10 +12,8 @@ final class OrderView: UIView {
     // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "1 товар на 549 ₽"
         label.textColor = .white
-        label.font = .systemFont(ofSize: 26, weight: .bold)
-        label.numberOfLines = 1
+        label.font = AppFonts.bold26
         return label
     }()
 
@@ -52,8 +50,8 @@ final class OrderView: UIView {
 
     private func setupTitleLabelConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])

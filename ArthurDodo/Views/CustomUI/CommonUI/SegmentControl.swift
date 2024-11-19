@@ -21,7 +21,7 @@ final class SegmentControlView: UIView {
         super.init(frame: frame)
         segmentControl = CustomSegmentControl(items: items, defaultSelection: defaultSelection)
         setupUI()
-        dataBinding()
+        setupActions()
     }
 
     required init?(coder: NSCoder) {
@@ -45,7 +45,7 @@ final class SegmentControlView: UIView {
         ])
     }
 
-    private func dataBinding() {
+    private func setupActions() {
         segmentControl?.onSegmentControllerValueChanged = { [weak self] index in
             self?.onSegmentControllerValueChanged?(index)
         }

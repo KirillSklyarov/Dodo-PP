@@ -9,11 +9,13 @@ import UIKit
 
 final class CategoryHeaderCollectionView: UICollectionView {
 
-    var onUpdateProductsCollectionView: ( (CategoriesNames) -> Void )?
+    var onUpdateProductsCollectionView: ( (CategoryName) -> Void )?
 
     private let viewHeight: CGFloat = 50
     private let cornerRadius: CGFloat = 0
     private var previousInd = IndexPath(row: 0, section: 0)
+
+    private lazy var categories: [CategoryName] = []
 
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let layout = UICollectionViewFlowLayout()
@@ -31,6 +33,11 @@ final class CategoryHeaderCollectionView: UICollectionView {
 
     override func didMoveToSuperview() {
         setupLayout()
+    }
+
+    func updateUI() {
+        categories = DataStorage.shared.getCategories()
+        reloadData()
     }
 
     func getPreviousInd() -> IndexPath {
@@ -51,7 +58,7 @@ final class CategoryHeaderCollectionView: UICollectionView {
     }
 
     func selectCat(_ categoryName: String) {
-        for (index, cat) in categories.enumerated() where cat.header.rawValue == categoryName {
+        for (index, cat) in categories.enumerated() where cat.rawValue == categoryName {
             let indexPath = IndexPath(row: index, section: 0)
             selectCell(indexPath)
         }
@@ -93,14 +100,14 @@ extension CategoryHeaderCollectionView: UICollectionViewDataSource, UICollection
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryViewCell.identifier, for: indexPath) as? CategoryViewCell else { return UICollectionViewCell() }
-        let title = categories[indexPath.row].header.rawValue
+        let title = categories[indexPath.row].rawValue
         cell.configHeader(title, indexPath: indexPath)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectCell(indexPath)
-        let categoryName = categories[indexPath.row].header
+        let categoryName = categories[indexPath.row]
         onUpdateProductsCollectionView?(categoryName)
     }
     

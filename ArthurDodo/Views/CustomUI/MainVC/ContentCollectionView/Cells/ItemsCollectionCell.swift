@@ -68,15 +68,15 @@ final class ItemsCollectionCell: UICollectionViewCell {
     }
 
     // MARK: - Public methods
-    func configureCell(pizza: FoodItems) {
+    func configureCell(pizza: Item) {
         pizzaImageView.image = UIImage(named: pizza.imageName)
         titleLabel.text = pizza.name
         ingredientsLabel.text = pizza.ingredients
 
-        var itemPrice = pizza.itemSize[.medium]?.price.description ?? ""
-        if let pizza = pizza as? Pizza {
-            itemPrice = pizza.itemSize[.small]?.price.description ?? ""
-        }
+        let itemPrice = pizza.itemSize.medium?.price.description ?? ""
+//        if let pizza = pizza as? Pizza2 {
+//            itemPrice = pizza.itemSize.small?.price.description ?? ""
+//        }
 
         let price = "от \(itemPrice) ₽"
         priceButton.setTitle(price, for: .normal)

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXFileReference section */
@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		737D0E072C99C09200B7D739 /* Exceptions for "ArthurDodo" folder in "ArthurDodo" target */ = {
+		737D0E072C99C09200B7D739 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Resources/Info.plist,
@@ -21,14 +21,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		737D0DD72C99BF7000B7D739 /* ArthurDodo */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				737D0E072C99C09200B7D739 /* Exceptions for "ArthurDodo" folder in "ArthurDodo" target */,
-			);
-			path = ArthurDodo;
-			sourceTree = "<group>";
-		};
+		737D0DD72C99BF7000B7D739 /* ArthurDodo */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (737D0E072C99C09200B7D739 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ArthurDodo; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +92,7 @@
 				};
 			};
 			buildConfigurationList = 737D0DD02C99BF7000B7D739 /* Build configuration list for PBXProject "ArthurDodo" */;
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -107,7 +101,6 @@
 			);
 			mainGroup = 737D0DCC2C99BF7000B7D739;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			productRefGroup = 737D0DD62C99BF7000B7D739 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
