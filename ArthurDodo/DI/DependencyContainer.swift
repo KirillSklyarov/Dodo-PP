@@ -6,7 +6,7 @@ final class DependencyContainer {
     let storage: DataStorage
     let screenFactory: ScreenFactory
     let router: Router
-    let appCoordinator: AppCoordinator
+    let coordinatorFactory: CoordinatorFactory
 
     init() {
         let decoder = JSONDecoder()
@@ -25,7 +25,7 @@ final class DependencyContainer {
         // Создаем роутер
         router = Router()
 
-        // Создаем главный координатор
-        appCoordinator = AppCoordinator(router: router, screenFactory: screenFactory)
+        // Создаем фабрику координаторов
+        coordinatorFactory = CoordinatorFactory(router: router, screenFactory: screenFactory)
     }
 }

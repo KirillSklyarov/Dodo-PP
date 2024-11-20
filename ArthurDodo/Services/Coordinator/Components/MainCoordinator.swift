@@ -4,7 +4,7 @@ final class MainCoordinator: Coordinator {
     // MARK: - Properties
     private let router: Router
     private let screenFactory: ScreenFactory
-    weak var mainVC: MainViewController?
+    private var mainVC: MainViewController?
 
     var onShowCart: (() -> Void)?
     var onShowProfile: (() -> Void)?
@@ -49,6 +49,7 @@ final class MainCoordinator: Coordinator {
     }
 }
 
+// MARK: - Product details
 private extension MainCoordinator {
     // Показ экрана деталей товара и связанные с ним операции
     func showProductDetails() {
