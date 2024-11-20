@@ -27,46 +27,34 @@ final class AppCoordinator: Coordinator {
         let mainCoordinator = MainCoordinator(router: router, screenFactory: screenFactory) // Создаем экран
 
         // Настраиваем замыкания
-        mainCoordinator.onShowCart = { [weak self] in
-            self?.showCart()
+        mainCoordinator.onShowCart = { [weak self, weak mainCoordinator] in
+            guard let self, let mainCoordinator else { return }
+            startCartFlow()
+            removeChild(mainCoordinator)
         }
 
-        mainCoordinator.onShowProfile = { [weak self] mainVC in
-            self?.showProfile()
+        mainCoordinator.onShowProfile = { [weak self, weak mainCoordinator] in
+            guard let self, let mainCoordinator else { return }
+            showProfile()
+            removeChild(mainCoordinator)
         }
 
-        mainCoordinator.onShowAddress = { [weak self] mainVC in
-            self?.showAddress(mainVC)
+        mainCoordinator.onShowAddress = { [weak self, weak mainCoordinator] in
+            guard let self, let mainCoordinator else { return }
+            showAddress()
+            removeChild(mainCoordinator)
         }
 
         addChild(mainCoordinator) // Добавляем координатор в массив
         mainCoordinator.start() // Стартуем координатор
     }
 
-    func showCart() {
-        let cartCoordinator = CartCoordinator(router: router, screenFactory: screenFactory)
-
-        cartCoordinator.onCartDismissed = { [weak self] in
-            self?.start()
-        }
-
-        // Обрабатываем замыкание когда у нас завершается флоу корзины (то есть когда весь заказ оформлен и оплачен)
-        cartCoordinator.onFinishFlow = { [weak self] in
-            guard let self else { print("mainCoordinator not found"); return }
-            startMainFlow() // Переходим на главный экран
-            removeChild(cartCoordinator) // Удаляем координатор из массива
-        }
-
-        addChild(cartCoordinator)
-        cartCoordinator.start()
-    }
-
     func showProfile() {
         let profileCoordinator = ProfileCoordinator(router: router, screenFactory: screenFactory) // Создаем координатор
 
         // Настраиваем замыкания: как только флоу профиля завершен, то начинаем новый главный поток
-        profileCoordinator.onProfileFlowFinished = { [weak self] in
-            guard let self else { return }
+        profileCoordinator.onFlowFinished = { [weak self, weak profileCoordinator] in
+            guard let self, let profileCoordinator else { return }
             startMainFlow() // Начинаем новый главный поток
             removeChild(profileCoordinator) // Удаляем координатор из массива
         }
@@ -75,11 +63,11 @@ final class AppCoordinator: Coordinator {
         profileCoordinator.start() // Стартуем поток координатор в массив
     }
 
-    func showAddress(_ parentVC: UIViewController) {
+    func showAddress() {
         let addressCoordinator = AddressCoordinator(router: router, screenFactory: screenFactory)
 
-        addressCoordinator.onAddressFlowFinished = { [weak self] in
-            guard let self else { return }
+        addressCoordinator.onAddressFlowFinished = { [weak self, weak addressCoordinator] in
+            guard let self, let addressCoordinator else { return }
             startMainFlow()
             removeChild(addressCoordinator)
         }
@@ -87,27 +75,64 @@ final class AppCoordinator: Coordinator {
         addChild(addressCoordinator)
         addressCoordinator.start()
     }
+
+    func startCartFlow() {
+        let cartCoordinator = CartCoordinator(router: router, screenFactory: screenFactory)
+
+        // Если корзину закрываем, то стартуем главный поток
+        cartCoordinator.onCartDismissed = { [weak self, weak cartCoordinator] in
+            guard let self, let cartCoordinator else { print("CartCoordinator not found"); return }
+            startMainFlow()
+            removeChild(cartCoordinator)
+        }
+
+        // Обрабатываем замыкание когда у нас завершается флоу корзины и мы переходим к флоу доставки и оплаты
+        cartCoordinator.onFinishFlow = { [weak self, weak cartCoordinator] in
+            guard let self, let cartCoordinator else { print("CartCoordinator not found"); return }
+            startDeliveryFlow() // Переходим на экран доставки (оплаты)
+            removeChild(cartCoordinator) // Удаляем координатор из массива
+        }
+
+        addChild(cartCoordinator)
+        cartCoordinator.start()
+    }
+
+    func startDeliveryFlow() {
+        let deliveryCoordinator = DeliveryCoordinator(router: router, screenFactory: screenFactory)
+
+        deliveryCoordinator.onFinishFlow = { [weak self, weak deliveryCoordinator] in
+            guard let self, let deliveryCoordinator else { print("DeliveryCoordinator not found"); return }
+            startMainFlow()
+            removeChild(deliveryCoordinator)
+        }
+
+        addChild(deliveryCoordinator)
+        deliveryCoordinator.start()
+    }
 }
 
 // MARK: - Supporting methods
 private extension AppCoordinator {
-    // Добавляем координатор в массив координаторов
+    // Добавляем координатор в массив координаторов, предварительно проверяем есть ли нет ли там уже ранее созданного такого же координатора
     func addChild(_ child: Coordinator) {
-        childCoordinators.append(child)
+//        print("child: \(child)")
+//        print("Array of child coordinators BEFORE ADDING: \(childCoordinators)")
+        if !childCoordinators.contains(where: { $0 === child }) {
+            childCoordinators.append(child)
+        }
+//        print("Array of child coordinators AFTER ADDING: \(childCoordinators)")
     }
 
     // Удаляем координатор из массива координаторов (здесь важно использовать ===, чтобы быть уверенным, что удаляется именно этот объект из памяти)
     func removeChild(_ child: Coordinator) {
+//        print("child: \(child)")
+//        print("Array of coordinators BEFORE REMOVING: \(childCoordinators)")
         childCoordinators.removeAll { $0 === child }
+//        print("Array of coordinators AFTER REMOVING: \(childCoordinators)")
     }
 
-//    func mainVCUpdateUI() {
-//        let mainCoordinator = getMainCoordinator()
-//        mainCoordinator?.updateUI()
+//    func getMainCoordinator() -> MainCoordinator? {
+//        guard let mainCoordinator = childCoordinators.first(where: { $0 is MainCoordinator }) as? MainCoordinator else { print("mainCoordinator not found"); return nil}
+//        return mainCoordinator
 //    }
-
-    func getMainCoordinator() -> MainCoordinator? {
-        guard let mainCoordinator = childCoordinators.first(where: { $0 is MainCoordinator }) as? MainCoordinator else { print("mainCoordinator not found"); return nil}
-        return mainCoordinator
-    }
 }

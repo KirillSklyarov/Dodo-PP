@@ -5,7 +5,7 @@ final class ProfileCoordinator: Coordinator {
     private let router: Router
     private let screenFactory: ScreenFactory
 
-    var onProfileFlowFinished: (() -> Void)?
+    var onFlowFinished: (() -> Void)?
 
     // MARK: - Init
     init(router: Router, screenFactory: ScreenFactory) {
@@ -13,16 +13,21 @@ final class ProfileCoordinator: Coordinator {
         self.screenFactory = screenFactory
     }
 
+    deinit {
+        print("ProfileCoordinator deinit")
+    }
+
     func start() {
         let profileVC = screenFactory.makeProfileScreen()
-        router.setRootModule(profileVC, animation: true)
-
-        profileVC.onShowChatAlert = { [weak self] in
-            self?.showChatAlert()
-        }
+        router.present(profileVC, parentVC: true, modalPresentation: .automatic)
 
         profileVC.onDismissButtonTapped = { [weak self] in
-            self?.onProfileFlowFinished?()
+            self?.router.dismiss()
+            self?.onFlowFinished?()
+        }
+        
+        profileVC.onShowChatAlert = { [weak self] in
+            self?.showChatAlert()
         }
 
         profileVC.onShowPersonalData = { [weak self] in
@@ -45,22 +50,22 @@ private extension ProfileCoordinator {
         router.present(vc, modalPresentation: .automatic)
     }
 
-    func showPersonalData() {
-        let vc = screenFactory.makePersonalDataScreen()
-        router.present(vc)
-
-        vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
-        }
-    }
-
     func showChatAlert() {
         let vc = screenFactory.makeChatAlertScreen()
         vc.modalTransitionStyle = .crossDissolve
-        router.present(vc, modalPresentation: .overFullScreen, animated: false)
+        router.present(vc, parentVC: true, modalPresentation: .overFullScreen, animated: false)
 
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
+            self?.router.dismiss(isParent: true)
+        }
+    }
+
+    func showPersonalData() {
+        let vc = screenFactory.makePersonalDataScreen()
+        router.present(vc, parentVC: true, modalPresentation: .automatic)
+
+        vc.onDismissButtonTapped = { [weak self] in
+            self?.router.dismiss(isParent: true)
         }
     }
 }

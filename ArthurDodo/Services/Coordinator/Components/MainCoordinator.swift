@@ -4,16 +4,20 @@ final class MainCoordinator: Coordinator {
     // MARK: - Properties
     private let router: Router
     private let screenFactory: ScreenFactory
-    private var mainVC: MainViewController?
+    weak var mainVC: MainViewController?
 
     var onShowCart: (() -> Void)?
-    var onShowProfile: ((UIViewController) -> Void)?
-    var onShowAddress: ((UIViewController) -> Void)?
+    var onShowProfile: (() -> Void)?
+    var onShowAddress: (() -> Void)?
 
     // MARK: - Init
     init(router: Router, screenFactory: ScreenFactory) {
         self.router = router
         self.screenFactory = screenFactory
+    }
+
+    deinit {
+        print("MainCoordinator deinit")
     }
 
     func start() {
@@ -22,11 +26,11 @@ final class MainCoordinator: Coordinator {
 
         // Настраиваем замыкания
         mainVC.onProfileButtonTapped = { [weak self] in
-            self?.onShowProfile?(mainVC)
+            self?.onShowProfile?()
         }
 
         mainVC.onAddressButtonTapped = { [weak self] in
-            self?.onShowAddress?(mainVC)
+            self?.onShowAddress?()
         }
 
         mainVC.onStoryTapped = { [weak self] indexPath in
@@ -42,21 +46,6 @@ final class MainCoordinator: Coordinator {
         }
 
         router.setRootModule(mainVC) // Устанавливаем как главный и показываем его
-    }
-
-    // Решаем показывать или нет экран с активным заказом
-    func updateUI() {
-        guard let mainVC else { print("MainVC is nil"); return }
-        mainVC.isNeedToShowOrderView()
-    }
-
-    func updateCart() {
-        guard let mainVC else { print("MainVC is nil"); return }
-        mainVC.updateCart()
-    }
-
-    func showMain() {
-        router.dismiss()
     }
 }
 
@@ -75,7 +64,7 @@ private extension MainCoordinator {
         }
 
         vc.onShowPopupVC = { [weak self] popUpView in
-            self?.router.present(popUpView, parentVC: vc, modalPresentation: .popover)
+            self?.router.present(popUpView, parentVC: true, modalPresentation: .popover)
         }
 
         router.present(vc) // Показываем экран

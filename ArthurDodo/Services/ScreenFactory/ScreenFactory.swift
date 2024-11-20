@@ -51,7 +51,7 @@ extension ScreenFactory {
     }
 
     func makeDeliveryScreen() -> DeliveryVC {
-        return  DeliveryVC(storage: storage)
+        return DeliveryVC(storage: storage)
     }
 
     func makeChooseAddressScreen() -> ChooseAddressVC {
