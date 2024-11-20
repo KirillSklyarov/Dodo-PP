@@ -92,7 +92,7 @@
 		73B9697F2CC7C78700A2415A /* OrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969022CC7C78700A2415A /* OrderView.swift */; };
 		73B969802CC7C78700A2415A /* PromoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969032CC7C78700A2415A /* PromoButton.swift */; };
 		73B969812CC7C78700A2415A /* ScrollUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969042CC7C78700A2415A /* ScrollUpButton.swift */; };
-		73B969822CC7C78700A2415A /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969062CC7C78700A2415A /* CartViewController.swift */; };
+		73B969822CC7C78700A2415A /* CartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969062CC7C78700A2415A /* CartVC.swift */; };
 		73B969832CC7C78700A2415A /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969082CC7C78700A2415A /* MapView.swift */; };
 		73B969842CC7C78700A2415A /* PinAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969092CC7C78700A2415A /* PinAnnotation.swift */; };
 		73B969852CC7C78700A2415A /* CartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9690B2CC7C78700A2415A /* CartButton.swift */; };
@@ -278,7 +278,7 @@
 		73B969022CC7C78700A2415A /* OrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderView.swift; sourceTree = "<group>"; };
 		73B969032CC7C78700A2415A /* PromoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoButton.swift; sourceTree = "<group>"; };
 		73B969042CC7C78700A2415A /* ScrollUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollUpButton.swift; sourceTree = "<group>"; };
-		73B969062CC7C78700A2415A /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
+		73B969062CC7C78700A2415A /* CartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartVC.swift; sourceTree = "<group>"; };
 		73B969082CC7C78700A2415A /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		73B969092CC7C78700A2415A /* PinAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinAnnotation.swift; sourceTree = "<group>"; };
 		73B9690B2CC7C78700A2415A /* CartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartButton.swift; sourceTree = "<group>"; };
@@ -386,7 +386,7 @@
 		73031AEC2CDE2B4B005928D2 /* CartVC */ = {
 			isa = PBXGroup;
 			children = (
-				73B969062CC7C78700A2415A /* CartViewController.swift */,
+				73B969062CC7C78700A2415A /* CartVC.swift */,
 				73B969052CC7C78700A2415A /* Components */,
 			);
 			path = CartVC;
@@ -606,6 +606,17 @@
 			children = (
 				73B969582CC7C78700A2415A /* ArthurDodo */,
 			);
+			sourceTree = "<group>";
+		};
+		737E85282CEE6A1E00A496C9 /* Delivery */ = {
+			isa = PBXGroup;
+			children = (
+				73159A722CCC20EE002CFB76 /* DeliveryVC */,
+				736B0D222CCF804F00975195 /* ChooseAddressVC */,
+				736F04532CD17A5A00BC59CA /* ChoosePaymentMethod */,
+				732309E22CD2C15D00062C8C /* FinalVC */,
+			);
+			path = Delivery;
 			sourceTree = "<group>";
 		};
 		73B968B82CC7C78700A2415A /* Address */ = {
@@ -873,10 +884,6 @@
 			children = (
 				73031AEC2CDE2B4B005928D2 /* CartVC */,
 				73C067DD2CE7538300AEB125 /* EditProductVC */,
-				73159A722CCC20EE002CFB76 /* DeliveryVC */,
-				736B0D222CCF804F00975195 /* ChooseAddressVC */,
-				736F04532CD17A5A00BC59CA /* ChoosePaymentMethod */,
-				732309E22CD2C15D00062C8C /* FinalVC */,
 			);
 			path = Cart;
 			sourceTree = "<group>";
@@ -1108,9 +1115,10 @@
 			isa = PBXGroup;
 			children = (
 				73B969262CC7C78700A2415A /* Main */,
-				73B969072CC7C78700A2415A /* Cart */,
 				73B969512CC7C78700A2415A /* Profile */,
 				73B968EF2CC7C78700A2415A /* Address */,
+				73B969072CC7C78700A2415A /* Cart */,
+				737E85282CEE6A1E00A496C9 /* Delivery */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -1392,7 +1400,7 @@
 				73B969802CC7C78700A2415A /* PromoButton.swift in Sources */,
 				73B969812CC7C78700A2415A /* ScrollUpButton.swift in Sources */,
 				73E6EB462CC97741006831F2 /* Info&ToppingsView.swift in Sources */,
-				73B969822CC7C78700A2415A /* CartViewController.swift in Sources */,
+				73B969822CC7C78700A2415A /* CartVC.swift in Sources */,
 				733A01D82CDBBF380013D3EB /* ScreenFactory.swift in Sources */,
 				73B969832CC7C78700A2415A /* MapView.swift in Sources */,
 				73B969842CC7C78700A2415A /* PinAnnotation.swift in Sources */,

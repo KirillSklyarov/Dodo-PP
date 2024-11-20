@@ -30,8 +30,10 @@ final class CartCoordinator: Coordinator {
             onCartDismissed?()
         }
 
-        cartVC.onShowEditProductVC = { [weak self] in
-            self?.showEditProduct()
+        cartVC.onShowEditProductVC = { [weak self, weak cartVC] in
+            self?.showEditProduct {
+                cartVC?.updateCart() // При вызове комплишна мы обновляем корзину на экране
+            }
         }
 
         cartVC.onShowPromoVC = { [weak self] promo in
@@ -46,13 +48,13 @@ final class CartCoordinator: Coordinator {
 
 // MARK: - Supporting methods
 private extension CartCoordinator {
-    func showEditProduct() {
+    func showEditProduct(completion: @escaping (() -> Void)) {
         let vc = screenFactory.makeEditProductScreen()
         router.present(vc, modalPresentation: .automatic)
 
         vc.onCartButtonTapped = { [weak self] in
             guard let self else { print(#function); return }
-            cartVCUpdateCart() // Говорим главному экрану обновить корзину
+            completion() // Вызываем комплишн
             router.dismiss() // Закрываем текущий экран
         }
 
@@ -71,11 +73,5 @@ private extension CartCoordinator {
         vc.sheetPresentationController?.detents = [.medium()]
         vc.sheetPresentationController?.prefersGrabberVisible = true
         router.present(vc, modalPresentation: .automatic)
-    }
-
-    // Получаем cartVC из роутера и обновляем корзину
-    func cartVCUpdateCart() {
-        guard let newCartVC = router.getTopViewController() as? CartViewController else { return }
-        newCartVC.updateCart()
     }
 }

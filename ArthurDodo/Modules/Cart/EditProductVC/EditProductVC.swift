@@ -115,7 +115,6 @@ private extension EditProductViewController {
 private extension EditProductViewController {
     func setupActions() {
         setupHeaderAction()
-        sendCartToInfoView()
         setupCartViewAction()
         setupSizeSegmentAction()
         setupInfoButtonAction()
@@ -128,10 +127,6 @@ private extension EditProductViewController {
         }
     }
 
-    func sendCartToInfoView() {
-//        infoAndToppingsContainer.getCartView(tempCartButtonView)
-    }
-
     // Когда нажимаем на кнопку корзины на экране, то формируем позицию (кастим Item -> CartItem) для корзины, и добавляем позицию для заказа в хранилище
     func setupCartViewAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
@@ -140,7 +135,6 @@ private extension EditProductViewController {
 
             storage.changeItemInCart(cartItem)
             onCartButtonTapped?()
-//            onDismissButtonTapped?()
         }
     }
 
@@ -232,14 +226,10 @@ private extension EditProductViewController {
     func updateUIWithSelectedItem() {
         updateUIWithItem()
         isItemPizza()
-//        isOneSize()
     }
 
     func updateUIWithItem() {
         guard let cartItem else { return }
-
-//        guard let itemIngredients = storage.getIngredients(for: cartItem) else { return }
-//        let weight = cartItem.weight
         let item = cartItem.item
 
         headerView.updateTitle(cartItem.item.name)
@@ -254,56 +244,4 @@ private extension EditProductViewController {
             itemDetailsView.hideDoughSegment()
         }
     }
-}
-
-// MARK: - Supporting methods
-private extension EditProductViewController {
-    //    func configureCart() -> CartItem? {
-    //        guard let item else { return nil}
-    //        let chosenSize = getCorrectSize()
-    //        let chosenDough = getCorrectDough()
-    //        let weight = getCorrectWeight()
-    //        let price = item.getPrice(size: chosenSize)
-    //        let isOneSize = item.hasOneSize()
-    //
-    //        let positionToAddToCart = CartItem(id: item.id, name: item.name, imageName: item.imageName, size: chosenSize, dough: chosenDough, weight: weight, price: price, isHit: item.isHit, isOneSize: isOneSize)
-    //        return positionToAddToCart
-    //    }
-
-//    func getCorrectWeight() -> Int {
-//        guard let item else { return 0 }
-//        var weight: Int?
-//        if item.hasOneSize() {
-//            weight = item.itemSize.oneSize?.weight
-//        } else {
-//            weight = item.itemSize.medium?.weight
-//        }
-//        return weight ?? 0
-//    }
-//
-//    // Если есть размер oneSize, то берем его, если нет - выбранный размер
-//    func getCorrectSize() -> Size {
-//        guard let item else { return .oneSize }
-//        let correctSize: Size = if item.hasOneSize() {
-//            .oneSize
-//        } else { itemDetailsView.getChosenSize() }
-//        return correctSize
-//    }
-
-    // Если товар - пицца, то берем тесто, если нет - ничего
-//    func getCorrectDough() -> Dough? {
-//        guard let item else { return nil }
-//        let chosenDough: Dough? = if item.category == .pizza {
-//            itemDetailsView.getChosenDough()
-//        } else { nil }
-//        return chosenDough
-//    }
-
-    // Если размер один, то не нужно показывать поле с размерами, обновляем вес и цену товара
-//    func isOneSize() {
-//        if let oneSize = item?.itemSize.oneSize {
-//            itemDetailsView.hideSizeSegment()
-//            infoAndToppingsContainer.updateWeight(oneSize.weight)
-//        }
-//    }
 }
