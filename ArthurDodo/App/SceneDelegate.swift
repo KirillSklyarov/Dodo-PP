@@ -16,11 +16,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         appCoordinator?.start()
 
         resetActiveOrder() // Сбрасывает активный заказ (использую для тестирования)
+        resetStories() // Сбрасывает просмотренные сторисы (использую для тестирования)
 
     }
 
     // Метод сбрасывает активный заказ для отладки,
     private func resetActiveOrder() {
         UserDefaults.standard.resetActiveOrder()
+    }
+
+    private func resetStories() {
+        UserDefaults.standard.resetViewedStories()
     }
 }

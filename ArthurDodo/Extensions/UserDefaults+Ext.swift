@@ -26,6 +26,11 @@ extension UserDefaults {
         let viewedStories = self.getArrayOfViewedStories()
         return viewedStories.contains(storyID)
     }
+
+    // Сброс просмотренных историй (для отладки)
+    func resetViewedStories() {
+        self.set([], forKey: Keys.viewedStories)
+    }
 }
 
 // MARK: - Preferred payment method

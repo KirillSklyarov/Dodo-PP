@@ -4,7 +4,6 @@ final class MainCoordinator: Coordinator {
     // MARK: - Properties
     private let router: Router
     private let screenFactory: ScreenFactory
-    private var mainVC: MainViewController?
 
     var onShowCart: (() -> Void)?
     var onShowProfile: (() -> Void)?
@@ -19,10 +18,12 @@ final class MainCoordinator: Coordinator {
     deinit {
         print("MainCoordinator deinit")
     }
+}
 
+// MARK: - Start
+extension MainCoordinator {
     func start() {
         let mainVC = screenFactory.makeMainScreen() // Создаем экран
-        self.mainVC = mainVC
 
         // Настраиваем замыкания
         mainVC.onProfileButtonTapped = { [weak self] in
@@ -56,10 +57,6 @@ private extension MainCoordinator {
         let vc = screenFactory.makeProductDetailsScreen() // Создаем экран
 
         // Настраиваем замыкания
-        vc.onCartButtonTapped = { [weak self] in
-            self?.mainVC?.updateUI()
-        }
-
         vc.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss()
         }
@@ -69,18 +66,29 @@ private extension MainCoordinator {
         }
 
         router.present(vc) // Показываем экран
-
     }
+}
 
+// MARK: - Stories
+private extension MainCoordinator {
     func showStories(_ indexPath: IndexPath) {
         let vc = screenFactory.makeStoriesScreen(indexPath: indexPath)
-        router.present(vc)
-        vc.onStoriesVCDismissed = { [weak self] in
-            self?.mainVC?.updateUI()
+
+        // Когда экран сторис закрыт, то обновляем сторисы на главном экране и закрываем окно
+        vc.onDismissed = { [weak self] in
+            self?.mainVCUpdateStories() // Обновляем сторисы на главном экране
+            self?.router.dismiss() // Закрываем окно
         }
 
-        vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
-        }
+        router.present(vc) // Показываем экран
+    }
+}
+
+// MARK: - Supporting methods
+private extension MainCoordinator {
+    // Находит в стеке родительский экран и вызывает обновление сторисов
+    func mainVCUpdateStories() {
+        guard let mainVC = router.getParentViewController() as? MainViewController else { print("Error: mainVC is not MainViewController"); return }
+        mainVC.updateStories()
     }
 }

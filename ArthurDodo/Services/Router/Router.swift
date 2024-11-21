@@ -95,9 +95,9 @@ extension Router {
     func getTopViewController() -> UIViewController? {
         navigationController.visibleViewController
     }
+
+    // Метод при показе present возвращает родительский ViewController
+    func getParentViewController() -> UIViewController? {
+        navigationController.viewControllers.last
+    }
 }
-
-
-//private func presentFromParent(_ vc: UIViewController, parent: UIViewController, animated: Bool) {
-//    parent.present(vc, animated: animated)
-//}

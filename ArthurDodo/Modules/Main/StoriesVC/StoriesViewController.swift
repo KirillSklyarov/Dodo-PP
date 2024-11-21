@@ -7,8 +7,8 @@ final class StoriesVC: UIViewController {
 
     private var story: [Story]
 
-    var onStoriesVCDismissed: (() -> Void)?
-    var onDismissButtonTapped: (() -> Void)?
+    var onDismissed: (() -> Void)?
+//    var onDismissButtonTapped: (() -> Void)?
 
     // MARK: - Init
     init(indexPath: IndexPath, story: [Story]) {
@@ -39,8 +39,8 @@ private extension StoriesVC {
      func setupActions() {
         backgroundView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            onStoriesVCDismissed?()
-            onDismissButtonTapped?()
+            onDismissed?()
+//            onDismissButtonTapped?()
         }
     }
 }

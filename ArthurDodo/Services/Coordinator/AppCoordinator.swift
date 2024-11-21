@@ -52,7 +52,6 @@ private extension AppCoordinator {
 
         addChild(mainCoordinator) // Добавляем координатор в массив
         mainCoordinator.start() // Стартуем координатор
-        print(childCoordinators)
     }
 }
 

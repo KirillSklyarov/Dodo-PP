@@ -41,13 +41,14 @@ final class MainViewController: UIViewController {
         setupActions()
         fetchData()
 
-        //        showIsActiveOrder()
     }
 
     // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print(#function)
         updateCart()
+//        updateUI()
     }
 }
 
@@ -57,6 +58,12 @@ extension MainViewController {
     func updateUI() {
         DispatchQueue.main.async { [weak self] in
             self?.contentCollectionView.reloadData()
+        }
+    }
+
+    func updateStories() {
+        DispatchQueue.main.async { [weak self] in
+            self?.contentCollectionView.reloadSections(IndexSet(integer: 0))
         }
     }
 
