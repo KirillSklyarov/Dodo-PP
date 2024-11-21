@@ -19,7 +19,7 @@ final class ProfileCoordinator: Coordinator {
 
     func start() {
         let profileVC = screenFactory.makeProfileScreen()
-        router.present(profileVC, parentVC: true, modalPresentation: .automatic)
+        router.present(profileVC, isParentVC: true, modalPresentation: .automatic)
 
         profileVC.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss()
@@ -53,7 +53,7 @@ private extension ProfileCoordinator {
     func showChatAlert() {
         let vc = screenFactory.makeChatAlertScreen()
         vc.modalTransitionStyle = .crossDissolve
-        router.present(vc, parentVC: true, modalPresentation: .overFullScreen, animated: false)
+        router.present(vc, isParentVC: true, modalPresentation: .overFullScreen, animated: false)
 
         vc.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
@@ -62,7 +62,7 @@ private extension ProfileCoordinator {
 
     func showPersonalData() {
         let vc = screenFactory.makePersonalDataScreen()
-        router.present(vc, parentVC: true, modalPresentation: .automatic)
+        router.present(vc, isParentVC: true, modalPresentation: .automatic)
 
         vc.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)

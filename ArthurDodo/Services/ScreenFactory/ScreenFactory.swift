@@ -43,7 +43,7 @@ extension ScreenFactory {
     }
     
     func makePersonalDataScreen() -> PersonalViewController {
-        return PersonalViewController()
+        return PersonalViewController(storage: storage)
     }
     
     func makeApplySpecialOfferScreen(_ offer: Promo) -> ApplyOfferViewController {
@@ -71,7 +71,7 @@ extension ScreenFactory {
     }
 
     func makeAddNewAddressScreen() -> AddNewAddressViewController {
-        return AddNewAddressViewController()
+        return AddNewAddressViewController(storage: storage)
     }
 
     func makeEditProductScreen() -> EditProductViewController {

@@ -70,10 +70,63 @@ final class NetworkManager {
         task.resume()
     }
 
+    func fetchAddressesWithID(_ userId: String, completion: @escaping (Result<[Address], NetworkError>) -> Void) {
+        guard let url = endPoint.userAddress.getURL(with: userId) else {
+            DispatchQueue.main.async {
+                completion(.failure(.invalidURL))
+            }
+            return
+        }
+
+        let request = URLRequest(url: url)
+
+        let task = session.dataTask(with: request) { (data, response, error) in
+            if let error {
+                DispatchQueue.main.async {
+                    completion(.failure(.requestFailed(error)))
+                }
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                DispatchQueue.main.async {
+                    completion(.failure(.invalidResponse))
+                }
+                return
+            }
+
+            guard httpResponse.statusCode == 200 else {
+                DispatchQueue.main.async {
+                    completion(.failure(.httpError(httpResponse.statusCode)))
+                }
+                return
+            }
+
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(.noData))
+                }
+                return
+            }
+
+            do {
+                let fetchedData = try self.decoder.decode([Address].self, from: data)
+                DispatchQueue.main.async {
+                    completion(.success(fetchedData))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(NetworkError.decodingError(error)))
+                }
+            }
+        }
+        task.resume()
+    }
+
 
     // Это put-запрос чтобы отправить новый адрес на сервер
     func updateUserAddress(_ address: Address, completion: @escaping (Result<Address, NetworkError>) -> Void) {
-        guard let url = endPoint.userAddress.getURL(with: address.userId) else {
+        guard let url = endPoint.userAddress.getURL(with: "1") else {
             DispatchQueue.main.async {
                 completion(.failure(.invalidURL))
             }

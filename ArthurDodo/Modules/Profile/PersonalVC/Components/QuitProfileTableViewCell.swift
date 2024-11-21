@@ -1,13 +1,7 @@
 import UIKit
 
 final class QuitProfileTableViewCell: UITableViewCell {
-
-    // MARK: - Properties
-    private let leftPadding: CGFloat = 10
-    private let rightPadding: CGFloat = -10
-    private let topPadding: CGFloat = 10
-    private let bottomPadding: CGFloat = -10
-
+    
     // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -43,10 +37,8 @@ private extension QuitProfileTableViewCell {
 
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightPadding),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
 }
-
-

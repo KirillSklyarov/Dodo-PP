@@ -20,11 +20,11 @@ extension Router {
     //              modalPresentation - показывать ли на весь экран
     //              animated - понятно, с анимацией или сразу показать
     func present(_ vc: UIViewController,
-                 parentVC: Bool = false,
+                 isParentVC: Bool = false,
                  modalPresentation: UIModalPresentationStyle = .fullScreen,
                  animated: Bool = true) {
         vc.modalPresentationStyle = modalPresentation
-        switch parentVC {
+        switch isParentVC {
         case true: presentWithParent(vc, animated: animated)
         case false: presentFromNavigation(vc, animated: animated)
         }
@@ -56,24 +56,36 @@ extension Router {
 // MARK: - Dismiss
 extension Router {
     // Есть основной метод Dismiss, который в зависимости от признака isParent либо будет вызывать dismiss от navigationController (при значении false), либо будет вызывать dismiss от родительского экрана (при значении true). Это нужно когда у нас идет каскад модельных экранов и тк они не ложатся в navigationController, то при использовании navigationController он будет разом закрывать все эти экраны, что не всегда удобно.
-    func dismiss(isParent: Bool = false) {
+    func dismiss(isParent: Bool = false, animated: Bool = true, completion: (() -> Void)? = nil) {
         switch isParent {
-        case false: dismiss()
-        case true: dismissWithParent()
+        case false: dismiss(animated: animated, completion: completion)
+        case true: dismissWithParent(animated: animated, completion: completion)
         }
     }
 
-    func dismiss() {
-        navigationController.dismiss(animated: true)
+    func dismiss(animated: Bool, completion: (() -> Void)?) {
+        navigationController.dismiss(animated: animated, completion: completion)
     }
 
-    func dismissWithParent() {
-        guard let parent = navigationController.visibleViewController else { return }
-        parent.dismiss(animated: true)
+    func dismissWithParent(animated: Bool, completion: (() -> Void)?) {
+        guard let parent = navigationController.visibleViewController else { print("Error: No parent"); return }
+        parent.dismiss(animated: animated, completion: completion)
     }
+
 
     func pop() {
+        setDismissAnimation(true)
         navigationController.popViewController(animated: true)
+    }
+
+    private func setDismissAnimation(_ isSet: Bool) {
+        if isSet {
+            let transition = CATransition()
+            transition.duration = 1.3
+            transition.type = .moveIn
+            transition.subtype = .fromBottom
+            navigationController.view.layer.add(transition, forKey: "transition")
+        }
     }
 
     func setRootNavigation() -> UINavigationController {

@@ -62,7 +62,7 @@ private extension MainCoordinator {
         }
 
         vc.onShowPopupVC = { [weak self] popUpView in
-            self?.router.present(popUpView, parentVC: true, modalPresentation: .popover)
+            self?.router.present(popUpView, isParentVC: true, modalPresentation: .popover)
         }
 
         router.present(vc) // Показываем экран

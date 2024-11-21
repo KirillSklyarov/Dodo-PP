@@ -52,6 +52,7 @@ private extension AppCoordinator {
 
         addChild(mainCoordinator) // Добавляем координатор в массив
         mainCoordinator.start() // Стартуем координатор
+        print(childCoordinators)
     }
 }
 
@@ -69,6 +70,7 @@ private extension AppCoordinator {
 
         addChild(profileCoordinator) // Добавляем координатор в массив
         profileCoordinator.start() // Стартуем поток координатор в массив
+
     }
 }
 
@@ -116,6 +118,13 @@ private extension AppCoordinator {
 private extension AppCoordinator {
     func startDeliveryFlow() {
         let deliveryCoordinator = coordinatorFactory.makeDeliveryCoordinator()
+
+        // Когда юзер нажал на кнопку закрыть в DeliveryFlow, то мы возвращаемся в корзину
+        deliveryCoordinator.onDismissed = { [weak self, weak deliveryCoordinator] in
+            guard let self, let deliveryCoordinator else { print("DeliveryCoordinator not found"); return }
+            startCartFlow() // Стартуем флоу корзины
+            removeChild(deliveryCoordinator) // Удаляем из массива координатор
+        }
 
         deliveryCoordinator.onFinishFlow = { [weak self, weak deliveryCoordinator] in
             guard let self, let deliveryCoordinator else { print("DeliveryCoordinator not found"); return }

@@ -21,13 +21,12 @@ final class CartCoordinator: Coordinator {
 
     func start() {
         let cartVC = screenFactory.makeCartScreen() // Создаем экран
-        router.setRootModule(cartVC, animation: true) // Устанавливаем модуль как основной для показа
 
         // Отрабатываем замыкания
         cartVC.onCartVCDismissed = { [weak self] in
-            guard let self else { print(#function); return }
-            router.dismiss()
+            guard let self else { return }
             onCartDismissed?()
+            router.dismiss()
         }
 
         cartVC.onShowEditProductVC = { [weak self, weak cartVC] in
@@ -43,17 +42,21 @@ final class CartCoordinator: Coordinator {
         cartVC.onShowDeliveryVC = { [weak self] in
             self?.onFinishFlow?()
         }
+
+//        router.present(cartVC, isParentVC: true, modalPresentation: .automatic) // Показываем экран модульно
+
+        router.setRootModule(cartVC, animation: true)
     }
 }
 
 // MARK: - Supporting methods
 private extension CartCoordinator {
     func showEditProduct(completion: @escaping (() -> Void)) {
-        let vc = screenFactory.makeEditProductScreen()
-        router.present(vc, modalPresentation: .automatic)
+        let vc = screenFactory.makeEditProductScreen() // Создаем экран
 
+        // Настраиваем замыкания
         vc.onCartButtonTapped = { [weak self] in
-            guard let self else { print(#function); return }
+            guard let self else { print("Error: self is nil: showEditProduct vc.onCartButtonTapped"); return }
             completion() // Вызываем комплишн
             router.dismiss() // Закрываем текущий экран
         }
@@ -62,9 +65,13 @@ private extension CartCoordinator {
             self?.router.dismiss() // Закрываем текущий экран
         }
 
+        // Показываем всплывающий экран с КБЖУ
         vc.onShowPopupVC = { [weak self] popUpView in
-            self?.router.present(popUpView, parentVC: true, modalPresentation: .popover) // Показываем всплывающий экран с КБЖУ
+            self?.router.present(popUpView, isParentVC: true, modalPresentation: .popover)
         }
+
+        // Показываем экран
+        router.present(vc, modalPresentation: .automatic)
     }
 
     // Показываем всплывающий экран для акций

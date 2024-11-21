@@ -2,12 +2,6 @@ import UIKit
 
 final class PersonalTableViewCell: UITableViewCell {
 
-    // MARK: - Properties
-    private let leftPadding: CGFloat = 10
-    private let rightPadding: CGFloat = -10
-    private let topPadding: CGFloat = 10
-    private let bottomPadding: CGFloat = -10
-
     // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -80,8 +74,8 @@ private extension PersonalTableViewCell {
 
         NSLayoutConstraint.activate([
             contentStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftPadding),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightPadding),
+            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
 }

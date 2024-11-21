@@ -11,7 +11,7 @@ final class CoinsOrdersCollectionView: UICollectionView {
 
     var onToppingSelected: ( (Int) -> Void )?
 
-    private var personalData: Personal?
+    private var personalData: User?
     private var state: ScreenState = .loading
 
     // MARK: - Init
@@ -30,7 +30,7 @@ final class CoinsOrdersCollectionView: UICollectionView {
 
 // MARK: - Public methods
 extension CoinsOrdersCollectionView {
-    func getPersonalData(_ personalData: Personal) {
+    func getPersonalData(_ personalData: User) {
         self.personalData = personalData
         reloadData()
     }

@@ -58,7 +58,7 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
     }
 
     // MARK: - Public methods
-    func configureCell(_ indexPath: IndexPath, data: Personal) {
+    func configureCell(_ indexPath: IndexPath, data: User) {
         let data = data
         let item = indexPath.item
 
@@ -71,35 +71,87 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
     }
 }
 
-// MARK: - Supporting methods
+// MARK: - Design Coins Cell
 private extension CoinsOrdersCollectionViewCell {
-    func designDodoCoinsCell(_ data: Personal) {
-        contentView.backgroundColor = AppColors.dodoCoinsBlue
-        let image = UIImage(named: "dodoCoinsImage")
-        iconImageView.image = image
-        let dodoCoins = data.dodoCoins.description
-        titleLabel.text = dodoCoins
+    // Отрисовываем ячейку с додокоинами
+    func designDodoCoinsCell(_ data: User) {
+        designCoinsImage()
+        designCoinsLabel(data)
         setButtonTitle("додокоины")
     }
 
-    func designOrdersCell(_ data: Personal) {
+    // Устанавливаем картинку
+    func designCoinsImage() {
+        contentView.backgroundColor = AppColors.dodoCoinsBlue
         let image = UIImage(named: "dodoCoinsImage")
         iconImageView.image = image
+    }
+
+    // Настраиваем лейбл
+    func designCoinsLabel(_ data: User) {
+        let dodoCoins = data.dodoCoins.description
+        titleLabel.text = dodoCoins
+    }
+}
+
+// MARK: - Design Orders Cell
+private extension CoinsOrdersCollectionViewCell {
+    // Отрисовываем ячейку с заказами
+    func designOrdersCell(_ data: User) {
+        designOrderImage()
+        designOrderLabel()
+        designOrderButton(data)
+    }
+
+    // Устанавливаем картинку
+    func designOrderImage() {
+        contentView.backgroundColor = AppColors.backgroundGray
+        let image = UIImage(named: "dodoCoinsImage")
+        iconImageView.image = image
+    }
+
+    // Настраиваем лейбл
+    func designOrderLabel() {
         titleLabel.text = "Mои заказы"
         titleLabel.font = AppFonts.bold22
+    }
+
+    // Настраиваем кнопку с заказами
+    func designOrderButton(_ data: User) {
         let countOfOrders = data.orders
         let title = "заказ".pluralize(for: countOfOrders)
         setButtonTitle("\(countOfOrders) \(title)")
     }
+}
 
-    func designAddressCell(_ data: Personal) {
+// MARK: - Design Address Cell
+private extension CoinsOrdersCollectionViewCell {
+    // Отрисовываем ячейку с адресами
+    func designAddressCell(_ data: User) {
+        setImage()
+        setTitle()
+        setAddressTitle(data)
+    }
+
+    // Устанавливаем картинку
+    func setImage() {
         let image = UIImage(named: "mapPin")
         iconImageView.image = image
+    }
+
+    // Устанавливаем лейбл
+    func setTitle() {
         titleLabel.text = "Адреса доставки"
         titleLabel.numberOfLines = 0
         titleLabel.font = AppFonts.bold22
-        let countOfAddress = data.address.count.description
-        setButtonTitle("\(countOfAddress) адрес")
+    }
+
+    // Устанавливаем адреса
+    func setAddressTitle(_ data: User) {
+        let countOfAddress = data.address.count
+        let addressWord = "адрес".pluralize(for: countOfAddress)
+        let title = "\(addressWord) \(countOfAddress)"
+        setButtonTitle(title)
     }
 
     func setButtonTitle(_ title: String) {

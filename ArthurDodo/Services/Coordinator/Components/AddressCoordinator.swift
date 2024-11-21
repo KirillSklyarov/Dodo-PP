@@ -19,8 +19,7 @@ final class AddressCoordinator: Coordinator {
 
     func start() {
         let addressVC = screenFactory.makeAddressScreen()
-        router.present(addressVC, parentVC: true, modalPresentation: .fullScreen)
-//        router.setRootModule(addressVC)
+        router.setRootModule(addressVC)
 
         addressVC.onDismissButtonTapped = { [weak self] in
             guard let self else { return }

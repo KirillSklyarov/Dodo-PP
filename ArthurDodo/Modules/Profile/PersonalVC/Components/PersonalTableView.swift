@@ -1,35 +1,13 @@
-//
-//  PersonalTableView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 11.10.2024.
-//
-
 import UIKit
-
-enum PersonalData: Int, CaseIterable {
-    case name
-    case phone
-    case email
-    case dateOfBirth
-    case agreeOfSending
-
-    var title: String {
-        switch self {
-        case .name: return "Имя"
-        case .phone: return "Телефон"
-        case .email: return "Почта"
-        case .dateOfBirth: return "День рождения"
-        case .agreeOfSending: return "Разрешить уведомления"
-        }
-    }
-}
 
 final class PersonalTableView: UITableView {
 
     // MARK: - Properties&Callbacks
-    private let tableRowHeightSection1: CGFloat = 80
-    private let tableRowHeightSection2: CGFloat = 60
+    private let tableRowHeightSection1: CGFloat = 75
+    private let tableRowHeightSection2: CGFloat = 55
+    private let footerHeight: CGFloat = 12
+
+    private var userData: User?
 
     var onShowURL: (() -> Void)?
 
@@ -41,6 +19,11 @@ final class PersonalTableView: UITableView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func getUserData(_ userData: User) {
+        self.userData = userData
+        reloadData()
     }
 
     // MARK: - Private methods
@@ -56,6 +39,7 @@ final class PersonalTableView: UITableView {
         separatorColor = .darkGray
         separatorInset = .init(top: 0, left: 10, bottom: 0, right: 0)
         tableHeaderView = UIView(frame: .zero)
+        isScrollEnabled = false
     }
 }
 
@@ -81,9 +65,10 @@ extension PersonalTableView: UITableViewDataSource, UITableViewDelegate {
         switch section {
         case 0:
             let cell = tableView.dequeueCell(indexPath) as PersonalTableViewCell
-            guard let row = PersonalData(rawValue: indexPath.row) else { return UITableViewCell() }
+            guard let row = PersonalData(rawValue: indexPath.row),
+                  let userData else { return UITableViewCell() }
             let cellName = row.title
-            let cellData = getRowDataFromModel(row, testUser)
+            let cellData = getRowDataFromModel(row, userData)
             cell.configureCell(title: cellName, data: cellData)
             return cell
         case 1:
@@ -107,8 +92,8 @@ extension PersonalTableView: UITableViewDataSource, UITableViewDelegate {
 
     func getRowDataFromModel(_ row: PersonalData, _ data: User) -> String {
         switch row {
-        case .name: return data.name
-        case .phone: return data.phone
+        case .name: return data.firstName
+        case .phone: return data.phoneNumber
         case .email: return data.email
         case .dateOfBirth: return data.dateOfBirth
         case .agreeOfSending: return data.agreeOfSending.description
@@ -140,6 +125,6 @@ extension PersonalTableView: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        15
+        footerHeight
     }
 }

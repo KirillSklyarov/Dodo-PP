@@ -22,8 +22,9 @@ final class ProfileViewController: UIViewController {
     private let bottomInset: CGFloat = -10
 
     private var state: ScreenState = .loading
-
     private let storage: DataStorage
+
+    private var personalData: User?
 
     var onShowChatAlert: (() -> Void)?
     var onDismissButtonTapped: (() -> Void)?
@@ -192,7 +193,11 @@ private extension ProfileViewController { // Запрашиваем данные
 
 // MARK: - Supporting methods
 private extension ProfileViewController {
-    func passPersonalDataToCollectionView(_ personalData: Personal) {
+    func passPersonalDataToCollectionView(_ personalData: User) {
+        personalDataCollectionView.getPersonalData(personalData)
+    }
+
+    func passPersonalDataToTableView(_ personalData: User) {
         personalDataCollectionView.getPersonalData(personalData)
     }
 

@@ -1,6 +1,6 @@
 import UIKit
 
-final class EditAddressStackView: UIStackView {
+final class AddNewAddressStackView: UIStackView {
 
     // MARK: - UI Properties
     private lazy var editStreetAndFlatAddressView = EditAddressTextFieldView(.streetAndFlat)
@@ -26,14 +26,15 @@ final class EditAddressStackView: UIStackView {
     private lazy var editCommentToAddressView = EditAddressTextFieldView(.comment)
     private lazy var saveAddressButton = CartButton(title: "Сохранить", isCart: false)
 
-    var onSaveNewAddress: ((Address) -> Void)?
+    var onSaveButtonTapped: (() -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupAction()
     }
-    
+
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -56,7 +57,7 @@ final class EditAddressStackView: UIStackView {
 }
 
 // MARK: - Setup UI
-private extension EditAddressStackView {
+private extension AddNewAddressStackView {
     func setupUI() {
         [editStreetAndFlatAddressView, editNameOfAddressView, entranceAndCodeStackView, floorAndFlatStackView, editCommentToAddressView, saveAddressButton].forEach { addArrangedSubview($0) }
         axis = .vertical
@@ -67,14 +68,17 @@ private extension EditAddressStackView {
 }
 
 // MARK: - Setup Actions
-extension EditAddressStackView {
+extension AddNewAddressStackView {
+    func setupAction() {
+        setupButtonAction()
+    }
 
     // В качестве примера отправляем новый адрес на сервер
-    func setupButtonAction(_ newAddress: Address) {
+    func setupButtonAction() {
         saveAddressButton.onButtonTapped = { [weak self] in
             guard let self else { print("Error: self is nil"); return }
             print(#function)
-            onSaveNewAddress?(newAddress)
+            onSaveButtonTapped?()
         }
     }
 }

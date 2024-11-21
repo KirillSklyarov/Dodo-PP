@@ -7,6 +7,7 @@ final class DeliveryCoordinator: Coordinator {
     private let screenFactory: ScreenFactory
 
     var onFinishFlow: (() -> Void)?
+    var onDismissed: (() -> Void)?
 
     // MARK: - Init
     init(router: Router, screenFactory: ScreenFactory) {
@@ -23,10 +24,10 @@ final class DeliveryCoordinator: Coordinator {
 extension DeliveryCoordinator {
     func start() {
         let vc = screenFactory.makeDeliveryScreen()
-        router.present(vc, modalPresentation: .automatic)
 
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
+            self?.router.dismiss(isParent: true, animated: false)
+            self?.onDismissed?()
         }
 
         vc.onShowChooseAddress = { [weak self] in
@@ -40,6 +41,9 @@ extension DeliveryCoordinator {
         vc.onShowFinalVC = { [weak self] in
             self?.showFinalVC()
         }
+
+        router.setRootModule(vc, animation: true)
+//        router.present(vc, isParentVC: true, modalPresentation: .automatic)
     }
 }
 
@@ -47,7 +51,7 @@ extension DeliveryCoordinator {
 private extension DeliveryCoordinator {
     func showChooseAddress() {
         let vc = screenFactory.makeChooseAddressScreen()
-        router.presentWithParent(vc)
+        router.present(vc, isParentVC: true)
 
         vc.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
@@ -73,7 +77,7 @@ private extension DeliveryCoordinator {
 
     func showAddNewAddressVC() {
         let vc = screenFactory.makeAddNewAddressScreen()
-        router.presentWithParent(vc)
+        router.present(vc, isParentVC: true)
 
         vc.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss()
@@ -82,7 +86,7 @@ private extension DeliveryCoordinator {
 
     func showChoosePaymentMethod() {
         let vc = screenFactory.makeChoosePaymentMethodScreen()
-        router.present(vc, parentVC: true)
+        router.present(vc, isParentVC: true)
 
         vc.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
@@ -96,7 +100,7 @@ private extension DeliveryCoordinator {
 
     func showFinalVC() {
         let vc = screenFactory.makeFinalVCScreen()
-        router.present(vc, parentVC: true)
+        router.present(vc, isParentVC: true)
 
         vc.onFinalVCDismissed = { [weak self] in
             self?.router.dismiss()
@@ -109,7 +113,7 @@ private extension DeliveryCoordinator {
 private extension DeliveryCoordinator {
     // Обновляет данные на главном экране этого потока (в данном случае экрана "Доставка"). Сначала находим верхний экран, потом обновляем те данные, которые не nil.
     func updateUI(addressName: String? = nil, paymentMethod: PaymentMethod? = nil) {
-        guard let deliveryVC = router.getTopViewController() as? DeliveryVC else { print("Error: Top view controller is not DeliveryVC"); return }
+        guard let deliveryVC = router.getParentViewController() as? DeliveryVC else { print("Error: Top view controller is not DeliveryVC"); return }
 
         if let addressName {
             deliveryVC.updateAddress(addressName)

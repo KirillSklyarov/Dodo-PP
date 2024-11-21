@@ -7,18 +7,39 @@ final class PersonalViewController: UIViewController {
     private lazy var headerView = CartHeaderView(title: "Личные данные") // Заголовок с кнопкой
     private lazy var personalTableView = PersonalTableView()
 
+    private lazy var contentStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [headerView, personalTableView])
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+
     private let topInset: CGFloat = 10
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let bottomInset: CGFloat = -10
 
+    private let storage: DataStorage
+    private var personalData: User?
+
     var onDismissButtonTapped: (() -> Void)?
+
+    // MARK: - Init
+    init(storage: DataStorage) {
+        self.storage = storage
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
+        fetchData()
     }
 }
 
@@ -26,30 +47,21 @@ final class PersonalViewController: UIViewController {
 private extension PersonalViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundGray
-        view.addSubviews(headerView, personalTableView)
+        view.addSubviews(contentStackView)
 
         setupLayout()
     }
 
     func setupLayout() {
-        setupHeaderViewLayout()
-        setupPersonalTableViewLayout()
+        setupContentStackViewLayout()
     }
 
-    func setupHeaderViewLayout() {
+    func setupContentStackViewLayout() {
         NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-        ])
-    }
-
-    func setupPersonalTableViewLayout() {
-        NSLayoutConstraint.activate([
-            personalTableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
-            personalTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            personalTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-            personalTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset)
+            contentStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
+            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
+            contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset)
         ])
     }
 }
@@ -71,6 +83,22 @@ private extension PersonalViewController {
     func setupPersonalTableViewAction() {
         personalTableView.onShowURL = { [weak self] in
             self?.showURL()
+        }
+    }
+}
+
+// MARK: - Fetch Data
+private extension PersonalViewController {
+    // Забираем данные с сервера и передаем их для отображения
+    func fetchData() {
+        self.personalData = storage.getPersonalData()
+        passUserDataToTableView()
+    }
+
+    // Передаем данные на tableView для отображения
+    func passUserDataToTableView() {
+        if let personalData {
+            personalTableView.getUserData(personalData)
         }
     }
 }

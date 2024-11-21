@@ -8,7 +8,7 @@ final class DataStorage {
     private var fetchedStories: [Story] = []
     private var fetchedItems: [Item] = []
     private var fetchedPromo: [Promo] = []
-    private var fetchedPersonalData: Personal?
+    private var fetchedPersonalData: User?
     private var category: [Category] = []
     private var order: Order?
     private var cart: Cart?
@@ -27,7 +27,7 @@ final class DataStorage {
     var onStoriesFetchedSuccessfully: (([Story]) -> Void)?
     var onItemsFetchedSuccessfully: (() -> Void)?
     var onPromoFetchedSuccessfully: (([Promo]) -> Void)?
-    var onPersonalDataFetchedSuccessfully: ((Personal) -> Void)?
+    var onPersonalDataFetchedSuccessfully: ((User) -> Void)?
 
     var onError: ((Error) -> Void)?
 
@@ -108,7 +108,7 @@ extension DataStorage {
 extension DataStorage {
     // Фетчим личные данные
     func fetchPersonalData() {
-        networkManager.fetchData(.error) { [weak self] (result: Result<Personal, NetworkError>) in
+        networkManager.fetchData(.personal) { [weak self] (result: Result<User, NetworkError>) in
             guard let self else { return }
             switch result {
             case .success(let personalData):
@@ -122,7 +122,7 @@ extension DataStorage {
     }
 
     // Отдаем личные данные
-    func getPersonalData() -> Personal? {
+    func getPersonalData() -> User? {
         fetchedPersonalData
     }
 
@@ -134,12 +134,14 @@ extension DataStorage {
 
 // MARK: - User Addresses
 extension DataStorage {
+
+    // Запрашиваем из сети данные по адреса конкретного юзера по ID (сейчас для теста просто взяли "1")
     func fetchUserAddresses() {
-        networkManager.fetchData(.userAddress) { [weak self] (result: Result<[Address], NetworkError>) in
+        networkManager.fetchAddressesWithID("1") { [weak self] (result: Result<[Address], NetworkError>) in
             guard let self else { return }
             switch result {
-            case .success(let addresses):
-                fetchedUserAddresses = addresses
+            case .success(let address):
+                fetchedUserAddresses = address
                 onDataFetchedSuccessfully?()
             case .failure(let error):
                 print(error)
@@ -420,8 +422,6 @@ extension DataStorage {
 
     // По cartItem находим Item
     private func getItem(for cartItem: CartItem) -> Item? {
-//        let itemId = cartItem.id
-//        guard let item = fetchedItems.first(where: { $0.id == itemId }) else { return nil }
         return cartItem.item
     }
 }
