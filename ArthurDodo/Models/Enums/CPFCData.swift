@@ -1,10 +1,3 @@
-//
-//  CPFC.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 19.10.2024.
-//
-
 import Foundation
 
 enum CPFCData: String, Codable, CaseIterable {
@@ -14,4 +7,3 @@ enum CPFCData: String, Codable, CaseIterable {
     case fats = "Жиры"
     case carbohydrates = "Углеводы"
 }
-

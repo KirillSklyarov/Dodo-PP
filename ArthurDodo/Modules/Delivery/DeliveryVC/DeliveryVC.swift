@@ -4,33 +4,26 @@ final class DeliveryVC: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = CartHeaderView(title: "Доставка") // Заголовок с кнопкой
-    private lazy var addressLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Адрес доставки"
-        label.font = AppFonts.semibold20
-        label.textColor = .white
-        return label
-    }() // Адрес доставки
-    private lazy var addressTableView = DeliveryTableView() // Таблица с адресом
-    private lazy var timeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Время доставки"
-        label.font = AppFonts.semibold20
-        label.textColor = .white
-        return label
-    }() // Время доставки
+    private lazy var addressLabel = DeliveryVCLabel(title: "Адрес доставки") // Адрес доставки
+    private lazy var addressTableView = AddressTableView() // Таблица с адресом
+    private lazy var timeLabel = DeliveryVCLabel(title: "Время доставки") // Время доставки
     private lazy var timeCollection = TimeCollectionView() // Коллекция со временем
-    private lazy var paymentLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Оплата"
-        label.font = AppFonts.semibold20
-        label.textColor = .white
-        return label
-    }() // Оплата
+    private lazy var paymentLabel = DeliveryVCLabel(title: "Оплата") // Оплата
     private lazy var paymentTableView = PreferredPaymentMethodTableView(preferredPaymentMethod) // Коллекция с методами оплаты
     private lazy var orderDetailsView = DodoCoinsView(title: "Доставка", value: "Бесплатно", textColor: AppColors.grayFont) // Блок с доставкой
     private lazy var totalPriceView = OrderTotalPriceView() // Общая стоимость заказа
     private lazy var payButton = PaymentButtonView(preferredPaymentMethod) // Кнопка оплатить
+
+    private lazy var addressStackView = DeliveryCustomStackView(addressLabel, addressTableView)
+    private lazy var deliveryTimeStackView = DeliveryCustomStackView(timeLabel, timeCollection)
+
+    private lazy var paymentMethodStackView = DeliveryCustomStackView(paymentLabel, paymentTableView)
+
+    private lazy var tablesStackView = DeliveryCustomStackView(headerView, addressStackView, deliveryTimeStackView, paymentMethodStackView, spacing: 30)
+
+    private lazy var orderDetailsStackView = DeliveryCustomStackView(orderDetailsView, totalPriceView, payButton)
+
+    private lazy var contentStackView = DeliveryCustomStackView(tablesStackView, UIView(), orderDetailsStackView, spacing: 0)
 
     // MARK: - Other properties
     private let topInset: CGFloat = 10
@@ -112,103 +105,22 @@ private extension DeliveryVC {
 private extension DeliveryVC {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(headerView, addressLabel, addressTableView, timeLabel, timeCollection, paymentLabel, paymentTableView, orderDetailsView, totalPriceView, payButton)
+        view.addSubviews(contentStackView)
 
         setupLayout()
     }
 
     func setupLayout() {
-        setupHeaderViewLayout()
-        setupAddressLabelLayout()
-        setupAddressTableLayout()
-        setupTimeLabelLayout()
-        setupTimeCollectionLayout()
-        setupPaymentLabelLayout()
-        setupPaymentTableLayout()
-        setupOrderDetailsViewLayout()
-        setupTotalPriceViewLayout()
-        setupPayButtonLayout()
+        setupContentStackViewLayout()
     }
 
-    func setupHeaderViewLayout() {
+    func setupContentStackViewLayout() {
         NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-    }
+            contentStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
+            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
+            orderDetailsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
 
-    func setupAddressLabelLayout() {
-        NSLayoutConstraint.activate([
-            addressLabel.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset * 3),
-            addressLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            addressLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
-        ])
-    }
-
-    func setupAddressTableLayout() {
-        NSLayoutConstraint.activate([
-            addressTableView.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: topInset),
-            addressTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            addressTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
-        ])
-    }
-
-    func setupTimeLabelLayout() {
-        NSLayoutConstraint.activate([
-            timeLabel.topAnchor.constraint(equalTo: addressTableView.bottomAnchor, constant: topInset * 3),
-            timeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            timeLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
-        ])
-    }
-
-    func setupTimeCollectionLayout() {
-        NSLayoutConstraint.activate([
-            timeCollection.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: topInset),
-            timeCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            timeCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-
-            timeCollection.heightAnchor.constraint(equalToConstant: 50)
-        ])
-    }
-
-    func setupPaymentLabelLayout() {
-        NSLayoutConstraint.activate([
-            paymentLabel.topAnchor.constraint(equalTo: timeCollection.bottomAnchor, constant: topInset * 3),
-            paymentLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            paymentLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
-        ])
-    }
-
-    func setupPaymentTableLayout() {
-        NSLayoutConstraint.activate([
-            paymentTableView.topAnchor.constraint(equalTo: paymentLabel.bottomAnchor, constant: topInset),
-            paymentTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            paymentTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
-        ])
-    }
-
-    func setupOrderDetailsViewLayout() {
-        NSLayoutConstraint.activate([
-            orderDetailsView.bottomAnchor.constraint(equalTo: totalPriceView.topAnchor, constant: bottomInset),
-            orderDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            orderDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
-        ])
-    }
-
-    func setupTotalPriceViewLayout() {
-        NSLayoutConstraint.activate([
-            totalPriceView.bottomAnchor.constraint(equalTo: payButton.topAnchor, constant: bottomInset),
-            totalPriceView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            totalPriceView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
-        ])
-    }
-
-    func setupPayButtonLayout() {
-        NSLayoutConstraint.activate([
-            payButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
-            payButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            payButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset)
         ])
     }
 }
@@ -263,12 +175,6 @@ private extension DeliveryVC {
 
 // MARK: - Supporting methods
 private extension DeliveryVC {
-    // Из массива всех адресов находим основной адрес
-    func getMainAddressName(from addresses: [Address]) -> String {
-        let mainAddressName = addresses.filter { $0.isMain == true }.first?.name ?? ""
-        return mainAddressName
-    }
-
     // Отправляет в UserDefaults инфу, что есть активный заказ
     func setActiveOrderToUserDefaults(_ order: Order) {
         UserDefaults.standard.sendOrder(order)

@@ -46,9 +46,7 @@ final class MainViewController: UIViewController {
     // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print(#function)
         updateCart()
-//        updateUI()
     }
 }
 

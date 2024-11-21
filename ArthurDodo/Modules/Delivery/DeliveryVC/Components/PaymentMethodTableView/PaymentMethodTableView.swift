@@ -48,6 +48,7 @@ private extension PreferredPaymentMethodTableView {
         rowHeight = cellHeight
         separatorStyle = .none
         tableHeaderView = UIView(frame: .zero)
+        isScrollEnabled = false
 
         setupLayout()
     }

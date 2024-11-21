@@ -34,7 +34,13 @@ private extension TimeCollectionView {
         backgroundColor = .clear
         showsHorizontalScrollIndicator = false
 
+        setupLayout()
+
         selectFirstCell()
+    }
+
+    func setupLayout() {
+        heightAnchor.constraint(equalToConstant: collectionHeight).isActive = true
     }
 }
 

@@ -1,18 +1,5 @@
 import UIKit
 
-struct WeightPrice: Equatable, Codable {
-    let weight: Int
-    let price: Int
-    let cpfc: CPFC
-}
-
-struct CPFC: Equatable, Codable {
-    let calories: Float
-    let protein: Float
-    let fat: Float
-    let carbohydrates: Float
-}
-
 struct AppConstants {
     static let sizeCases = ["25 cм", "30 см", "35 см"]
     static let doughCases = ["Традиционное", "Тонкое"]

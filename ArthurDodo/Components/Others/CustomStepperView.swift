@@ -1,10 +1,3 @@
-//
-//  CustomStepperView.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 24.09.2024.
-//
-
 import UIKit
 
 final class CustomStepperView: UIView {

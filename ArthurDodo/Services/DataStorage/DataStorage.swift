@@ -414,7 +414,7 @@ extension DataStorage {
         let item = cartItem.item
         let index = size.rawValue
 
-        guard let productDetails = item.itemSize.getWeightAndPriceViaIndex(index) else {print("We have some problems here"); return nil }
+        guard let productDetails = item.itemSize.getWeightAndPriceViaIndex(index) else {print("3. We have some problems here"); return nil }
         return productDetails
     }
 

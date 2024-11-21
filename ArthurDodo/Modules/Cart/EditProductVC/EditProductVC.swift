@@ -141,7 +141,7 @@ private extension EditProductViewController {
     func setupSizeSegmentAction() {
         itemDetailsView.onSizeValueChanged = { [weak self] size in
             guard let self else { return }
-            guard let size else { print("We have some problems here"); return }
+            guard let size else { print("1. We have some problems here"); return }
             cartItem?.chosenSize = size
             updateUIWithChosenSize(size)
         }
@@ -154,7 +154,7 @@ private extension EditProductViewController {
 
     func updateUIWithChosenSize(_ size: Size) {
         guard let cartItem else { print("CartItem is nil"); return }
-        guard let productDetails = storage.getProductDetails(cartItem, size: size) else {print("We have some problems here"); return }
+        guard let productDetails = storage.getProductDetails(cartItem, size: size) else {print("2. We have some problems here"); return }
         infoAndToppingsContainer.updateUI(productDetails: productDetails)
         let price = productDetails.price
         self.cartItem?.price = price

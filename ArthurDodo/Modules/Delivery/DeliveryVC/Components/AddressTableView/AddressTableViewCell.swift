@@ -1,6 +1,6 @@
 import UIKit
 
-final class DeliveryTableViewCell: UITableViewCell {
+final class AddressTableViewCell: UITableViewCell {
 
     // MARK: - Properties
     private let cornerRadius: CGFloat = 10
@@ -27,14 +27,14 @@ final class DeliveryTableViewCell: UITableViewCell {
     }
 }
 
-extension DeliveryTableViewCell {
+extension AddressTableViewCell {
     func configureCell(_ title: String) {
         titleLabel.text = title
     }
 }
 
 // MARK: - Setup UI
-private extension DeliveryTableViewCell {
+private extension AddressTableViewCell {
     func setupCell() {
         backgroundColor = AppColors.backgroundGray
         contentView.addSubviews(titleLabel)

@@ -1,6 +1,6 @@
 import UIKit
 
-final class DeliveryTableView: UITableView {
+final class AddressTableView: UITableView {
 
     // MARK: - Properties
     private let cellHeight: CGFloat = 60
@@ -21,7 +21,7 @@ final class DeliveryTableView: UITableView {
 }
 
 // MARK: - Public methods
-extension DeliveryTableView {
+extension AddressTableView {
     func updateUI(with addressName: String) {
         self.name = addressName
         reloadData()
@@ -29,15 +29,16 @@ extension DeliveryTableView {
 }
 
 // MARK: - Setup UI
-private extension DeliveryTableView {
+private extension AddressTableView {
     func setupTableView() {
         backgroundColor = .clear
         dataSource = self
         delegate = self
-        registerCell(DeliveryTableViewCell.self)
+        registerCell(AddressTableViewCell.self)
         rowHeight = cellHeight
         separatorStyle = .none
         tableHeaderView = UIView(frame: .zero)
+        isScrollEnabled = false
 
         setupLayout()
     }
@@ -48,13 +49,13 @@ private extension DeliveryTableView {
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
-extension DeliveryTableView: UITableViewDataSource, UITableViewDelegate {
+extension AddressTableView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         countOfRows
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueCell(indexPath) as DeliveryTableViewCell
+        let cell = tableView.dequeueCell(indexPath) as AddressTableViewCell
         cell.configureCell(name)
         return cell
     }
