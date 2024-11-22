@@ -76,7 +76,7 @@ extension AddressListTableViewCell {
 }
 
 // MARK: - Supporting methods
-private extension AddressListTableViewCell {
+extension AddressListTableViewCell {
     func setCorrectCircleImage(_ isMain: Bool) -> UIImage? {
 
         let image: UIImage? = if isMain {
@@ -85,6 +85,16 @@ private extension AddressListTableViewCell {
            UIImage(systemName: "circle.fill")?.withTintColor(AppColors.backgroundGray, renderingMode: .alwaysOriginal)
         }
         return image
+    }
+
+    func selectedCell() {
+        let circleImage = setCorrectCircleImage(true)
+        orangePoint.image = circleImage
+    }
+
+    func deSelectedCell() {
+        let circleImage = setCorrectCircleImage(false)
+        orangePoint.image = circleImage
     }
 }
 

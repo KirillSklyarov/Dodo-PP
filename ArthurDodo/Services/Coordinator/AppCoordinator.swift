@@ -79,7 +79,7 @@ private extension AppCoordinator {
     func startAddressFlow() {
         let addressCoordinator = coordinatorFactory.makeAddressCoordinator()
 
-        addressCoordinator.onAddressFlowFinished = { [weak self, weak addressCoordinator] in
+        addressCoordinator.onFlowFinished = { [weak self, weak addressCoordinator] in
             guard let self, let addressCoordinator else { return }
             startMainFlow()
             removeChild(addressCoordinator)

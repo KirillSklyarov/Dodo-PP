@@ -114,7 +114,7 @@ private extension AddNewAddressViewController {
     // Настраиваем кнопку Сохранить
     func setupSaveButtonAction() {
         addressView.onSaveButtonTapped = { [weak self] in
-            print(self?.newAddress)
+            print(self?.newAddress! ?? "Stop")
         }
     }
 

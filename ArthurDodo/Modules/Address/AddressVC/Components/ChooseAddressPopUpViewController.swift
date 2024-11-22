@@ -1,6 +1,6 @@
 import UIKit
 
-final class DeliveryAddressViewController: UIViewController {
+final class AddressPopUpViewController: UIViewController {
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 10
@@ -69,7 +69,7 @@ final class DeliveryAddressViewController: UIViewController {
 }
 
 // MARK: - Fetch data from Network
-extension DeliveryAddressViewController {
+extension AddressPopUpViewController {
     func fetchData() {
         storage.fetchUserAddresses()
         storage.onDataFetchedSuccessfully = { [weak self] in
@@ -79,7 +79,7 @@ extension DeliveryAddressViewController {
 }
 
 // MARK: - Setup Actions
-private extension DeliveryAddressViewController {
+private extension AddressPopUpViewController {
     func setupActions() {
         setupAddressTableViewActions()
         setupDeliveryButtonAction()
@@ -104,7 +104,7 @@ private extension DeliveryAddressViewController {
 }
 
 // MARK: - Setup UI
-private extension DeliveryAddressViewController {
+private extension AddressPopUpViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(contentStackView)

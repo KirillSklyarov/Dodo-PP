@@ -7,6 +7,7 @@ final class AddressListTableView: AppTableView {
     private var addresses: [Address] = []
 
     var onEditAddressButtonTapped: ( (Address) -> Void)?
+    var onCellTapped: ( (Address) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect, style: UITableView.Style) {
@@ -48,7 +49,7 @@ extension AddressListTableView: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueCell(indexPath) as AddressListTableViewCell 
+        let cell = tableView.dequeueCell(indexPath) as AddressListTableViewCell
         let address = addresses[indexPath.row]
         let addressName = address.name
         let isMain = address.isMain
@@ -59,7 +60,31 @@ extension AddressListTableView: UITableViewDataSource {
             let address = addresses[indexPath.row]
             onEditAddressButtonTapped?(address)
         }
-        
+
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? AddressListTableViewCell else { return }
+        deselectMainAddress(indexPath: indexPath, tableView: tableView)
+        cell.selectedCell()
+        onCellTapped?(addresses[indexPath.row])
+    }
+
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? AddressListTableViewCell else { return }
+        cell.deSelectedCell()
+    }
+}
+
+// MARK: - Supporting methods
+private extension AddressListTableView {
+    // Убираем выделение с первой ячейки (она же основная)
+    func deselectMainAddress(indexPath: IndexPath, tableView: UITableView) {
+        if indexPath.row != 0 {
+            let firstIndexPath = IndexPath(row: 0, section: 0)
+            let firstCell = tableView.cellForRow(at: firstIndexPath) as? AddressListTableViewCell
+            firstCell?.deSelectedCell()
+        }
     }
 }

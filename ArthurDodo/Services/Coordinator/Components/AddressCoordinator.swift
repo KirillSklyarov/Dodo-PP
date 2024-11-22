@@ -5,7 +5,7 @@ final class AddressCoordinator: Coordinator {
     private let router: Router
     private let screenFactory: ScreenFactory
 
-    var onAddressFlowFinished: (() -> Void)?
+    var onFlowFinished: (() -> Void)?
 
     // MARK: - Init
     init(router: Router, screenFactory: ScreenFactory) {
@@ -24,7 +24,7 @@ final class AddressCoordinator: Coordinator {
         addressVC.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
             router.dismiss()
-            onAddressFlowFinished?()
+            onFlowFinished?()
         }
 
         addressVC.onShowEditAddressVC = { [weak self] address in
@@ -33,6 +33,12 @@ final class AddressCoordinator: Coordinator {
 
         addressVC.onShowAddNewAddressVC = { [weak self] in
             self?.showAddNewAddressVC()
+        }
+
+        // Нажали на кнопку "Доставить сюда"
+        addressVC.onDeliveryButtonTapped = { [weak self] in
+            self?.router.dismiss()
+            self?.onFlowFinished?()
         }
     }
 }

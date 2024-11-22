@@ -176,10 +176,10 @@ extension DataStorage {
     }
 
     // Мы обнуляем для всех isMain и назначаем для нового, и потом сортируем чтобы isMain был первым
-    func setNewMainAddress(_ newMainAddress: String) {
+    func setNewMainAddress(_ newMainAddressName: String) {
         let newAddresses = fetchedUserAddresses.map { address in
             var newAddress = address
-            newAddress.isMain = (newAddress.name == newMainAddress)
+            newAddress.isMain = (newAddress.name == newMainAddressName)
             return newAddress
         }
         fetchedUserAddresses = newAddresses.sortedMainFirst()

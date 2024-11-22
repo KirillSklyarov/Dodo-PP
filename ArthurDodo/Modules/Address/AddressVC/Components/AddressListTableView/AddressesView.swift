@@ -11,6 +11,8 @@ final class DeliveryAddressView: UIView {
 
     var onEditAddressCellTapped: ((Address) -> Void)?
     var onAddNewAddressButtonTapped: (() -> Void)?
+    var onAddressCellTapped: ((Address) -> Void)?
+    var onDeliveryButtonTapped: (() -> Void)?
 
     // MARK: - UI Properties
     private lazy var titleLabel: UILabel = {
@@ -101,11 +103,15 @@ private extension DeliveryAddressView {
             guard let self else { return }
             onEditAddressCellTapped?(address)
         }
+
+        addressTableView.onCellTapped = { [weak self] address in
+            self?.onAddressCellTapped?(address)
+        }
     }
 
     func setupDeliveryButtonAction() {
-        deliveryButton.onButtonTapped = {
-            print("We're here")
+        deliveryButton.onButtonTapped = { [weak self] in
+            self?.onDeliveryButtonTapped?()
         }
     }
 

@@ -197,8 +197,34 @@ private extension MainViewController {
 private extension MainViewController {
     // Обращаемся к хранилищу за необходимыми данными
     func fetchData() {
+        getMainAddressFromStorage()
         getStoriesFromServer()
         getCatalogAndSpecialOffersFromServer()
+    }
+
+    // Так как у нас адреса лежат в личных данных, то проверяем если данные НЕ были ранее загружены, то инициируем сетевой запрос и обновляем header, а если данные уже есть, то забираем данные с сервера
+    func getMainAddressFromStorage() {
+        if storage.isAddressesEmpty() {
+            fetchDataFromServer()
+        } else {
+            getDataFromStorageAndUpdateUI()
+        }
+    }
+
+    // Делаем сетевой запрос и потом забираем данные с хранилища
+    func fetchDataFromServer() {
+        storage.fetchUserAddresses()
+        storage.onDataFetchedSuccessfully = { [weak self] in
+            guard let self else { return }
+            getDataFromStorageAndUpdateUI()
+        }
+    }
+
+    // Забираем данные из хранилища
+    func getDataFromStorageAndUpdateUI() {
+        guard let mainAddress = storage.getMainAddress() else { return }
+        let addressName = mainAddress.name
+        headerView.updateAddress(addressName)
     }
 
     // Мы обращаемся к хранилищу за сторисами, инициируем сетевой запрос, забираем результаты и передаем их в коллекцию

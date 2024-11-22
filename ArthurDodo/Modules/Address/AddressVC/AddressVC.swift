@@ -22,6 +22,7 @@ final class AddressViewController: UIViewController {
     var onDismissButtonTapped: (() -> Void)?
     var onShowEditAddressVC: ((Address) -> Void)?
     var onShowAddNewAddressVC: (() -> Void)?
+    var onDeliveryButtonTapped: (() -> Void)?
 
     // MARK: - Init
     init(storage: DataStorage) {
@@ -31,6 +32,10 @@ final class AddressViewController: UIViewController {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        print("AddressViewController deinit")
     }
 
     // MARK: - Life cycles
@@ -77,7 +82,7 @@ private extension AddressViewController {
         dispatchGroup.notify(queue: .main) { [weak self] in
             guard let self else { print("We have no self"); return }
             passAddressToNextScreen()
-            moveMapToMainAddress()
+            showMainAddressOnMap()
         }
     }
 
@@ -98,7 +103,7 @@ private extension AddressViewController {
 // MARK: - Setup UI
 private extension AddressViewController {
     func setupUI() {
-        view.backgroundColor = AppColors.backgroundGray
+        view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(contentStack, addressHeaderStackView)
         setupConstraints()
         setupMapView()
@@ -137,9 +142,20 @@ private extension AddressViewController {
             self?.onShowEditAddressVC?(address)
         }
 
+        // Когда юзер нажал на новый адрес мы показываем его на карте и ставим этот адрес как main
+        addressView.onAddressCellTapped = { [weak self] address in
+            guard let self else { return }
+            storage.setNewMainAddress(address.name) // Устанавливаем новые главный адрес
+            showAddressOnMap(address) // Показываем новый адресс на карте
+        }
+
         // Нажатие на кнопку "+Новый адрес"
         addressView.onAddNewAddressButtonTapped = { [weak self] in
             self?.onShowAddNewAddressVC?()
+        }
+
+        addressView.onDeliveryButtonTapped = { [weak self] in
+            self?.onDeliveryButtonTapped?()
         }
     }
 }
@@ -147,9 +163,12 @@ private extension AddressViewController {
 // MARK: - Supporting methods
 private extension AddressViewController {
     // Двигаем карту на главный адрес
-    func moveMapToMainAddress() {
-        guard let shortAddress = mainAddress?.cityStreetHouse else { print("We have no main address"); return }
-        print("shortAddress \(shortAddress)")
+    func showMainAddressOnMap() {
+        if let mainAddress { showAddressOnMap(mainAddress) }
+    }
+
+    func showAddressOnMap(_ address: Address) {
+        let shortAddress = address.cityStreetHouse
         mapView.showAddressOnMap(shortAddress)
     }
 }

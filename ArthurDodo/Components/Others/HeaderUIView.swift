@@ -33,7 +33,6 @@ final class HeaderView: UIView {
         imageView.image = UIImage(systemName: "chevron.down")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         return imageView
     }()
-
     private lazy var addressStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [courierImageView, addressLabel, chevronImageView])
         stackView.axis = .horizontal
@@ -43,7 +42,6 @@ final class HeaderView: UIView {
         stackView.addGestureRecognizer(tapGesture)
         return stackView
     }()
-
     private lazy var profileButton: UIButton = {
         let button = UIButton()
         let image = UIImage(systemName: "person.circle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -55,7 +53,6 @@ final class HeaderView: UIView {
         button.addTarget(self, action: #selector(profileButtonTapped), for: .touchUpInside)
         return button
     }()
-
     private lazy var contentStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [addressStackView, UIView(), profileButton])
         stackView.axis = .horizontal
@@ -75,13 +72,20 @@ final class HeaderView: UIView {
     }
 }
 
-// MARK: - Setup button actions
+// MARK: - Public methods
 extension HeaderView {
-    @objc private func profileButtonTapped() {
+    func updateAddress(_ address: String) {
+        addressLabel.text = address
+    }
+}
+
+// MARK: - Setup button actions
+private extension HeaderView {
+    @objc func profileButtonTapped() {
         onProfileButtonTapped?()
     }
 
-    @objc private func addressTapped() {
+    @objc func addressTapped() {
         onAddressTapped?()
     }
 }
