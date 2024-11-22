@@ -2,10 +2,48 @@ import UIKit
 
 final class HeaderView: UIView {
 
-    // MARK: - Properties
-    private let imageSize: CGFloat = 30
-    private let buttonSize: CGFloat = 30
+    // MARK: - UI Properties
+    private lazy var courierView = CourierView()
 
+    private lazy var addressLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Укажите адрес доставки"
+        label.font = AppFonts.regular14
+        label.textColor = .white
+        return label
+    }()
+    private lazy var deliveryTimeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "около 40 минут"
+        label.textColor = AppColors.sberGreen
+        label.font = AppFonts.regular12
+        return label
+    }()
+    private lazy var chevronImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(systemName: "chevron.down")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        return imageView
+    }()
+
+    private lazy var profileContainerView: ProfileMainHeaderView = {
+        let view = ProfileMainHeaderView()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped))
+        view.addGestureRecognizer(tapGesture)
+        return view
+    }()
+
+    private lazy var addressNameStackView = AppStackView([addressLabel, chevronImageView], axis: .horizontal, spacing: 5)
+    private lazy var labelStackView = AppStackView([addressNameStackView, deliveryTimeLabel], axis: .vertical, spacing: 0, alignment: .leading)
+    private lazy var addressStackView: AppStackView = {
+        let stackView = AppStackView([courierView, labelStackView], axis: .horizontal, spacing: 20)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addressTapped))
+        stackView.addGestureRecognizer(tapGesture)
+        return stackView
+    }()
+    private lazy var contentStackView = AppStackView([addressStackView, UIView(), profileContainerView], axis: .horizontal, spacing: 10)
+
+    // MARK: - Properties
     private let topInset: CGFloat = 10
     private let leftInset: CGFloat = 20
     private let rightInset: CGFloat = -20
@@ -14,68 +52,40 @@ final class HeaderView: UIView {
     var onProfileButtonTapped: (() -> Void)?
     var onAddressTapped: (() -> Void)?
 
-    // MARK: - UI Properties
-    private lazy var courierImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "figure.walk.circle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
-        return imageView
-    }()
-    private lazy var addressLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Укажите адрес доставки"
-        label.textColor = .white
-        return label
-    }()
-    private lazy var chevronImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "chevron.down")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        return imageView
-    }()
-    private lazy var addressStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [courierImageView, addressLabel, chevronImageView])
-        stackView.axis = .horizontal
-        stackView.spacing = 5
-        stackView.alignment = .center
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addressTapped))
-        stackView.addGestureRecognizer(tapGesture)
-        return stackView
-    }()
-    private lazy var profileButton: UIButton = {
-        let button = UIButton()
-        let image = UIImage(systemName: "person.circle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        button.setImage(image, for: .normal)
-        button.contentVerticalAlignment = .fill
-        button.contentHorizontalAlignment = .fill
-        button.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
-        button.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
-        button.addTarget(self, action: #selector(profileButtonTapped), for: .touchUpInside)
-        return button
-    }()
-    private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [addressStackView, UIView(), profileButton])
-        stackView.axis = .horizontal
-        stackView.spacing = 10
-        stackView.alignment = .center
-        return stackView
-    }()
-
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        isUIVisible(false)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        courierView.layer.cornerRadius = contentStackView.frame.height / 2
+    }
 }
 
 // MARK: - Public methods
 extension HeaderView {
-    func updateAddress(_ address: String) {
+    // Обновление всех UI на вью
+    func updateUI(_ address: String, _ coins: Int) {
+        updateAddress(address)
+        updateProfileCoins(coins)
+    }
+
+    // Обновляем название адреса (Дом, офис и тп)
+    private func updateAddress(_ address: String) {
         addressLabel.text = address
+        isUIVisible(true)
+    }
+
+    // Обновляем кол-во монет на профиле
+    private func updateProfileCoins(_ coins: Int) {
+        profileContainerView.updateCoinsLabel(with: coins)
     }
 }
 
@@ -98,11 +108,24 @@ private extension HeaderView {
     }
 
     func setupLayout() {
+        contentStackViewLayout()
+    }
+
+    func contentStackViewLayout() {
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: topInset),
             contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
             contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomInset)
+            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomInset),
+            courierView.widthAnchor.constraint(equalTo: courierView.heightAnchor)
         ])
+    }
+}
+
+// MARK: - Supporting methods
+private extension HeaderView {
+    // Показываем или скрываем все UI элементы на вьюхе (нужно в процессе загрузки экрана)
+    func isUIVisible(_ isVisible: Bool) {
+        [addressLabel, chevronImageView, deliveryTimeLabel, courierView, profileContainerView].forEach { $0.isHidden = !isVisible }
     }
 }

@@ -164,7 +164,7 @@
 		73CBABB32CEF2E500018936C /* AddressTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABB02CEF2E500018936C /* AddressTableView.swift */; };
 		73CBABB42CEF2E500018936C /* AddressTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABB12CEF2E500018936C /* AddressTableViewCell.swift */; };
 		73CBABB62CEF36020018936C /* DeliveryVCLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABB52CEF36020018936C /* DeliveryVCLabel.swift */; };
-		73CBABB82CEF37C90018936C /* DeliveryCustomStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABB72CEF37C90018936C /* DeliveryCustomStack.swift */; };
+		73CBABB82CEF37C90018936C /* AppStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABB72CEF37C90018936C /* AppStackView.swift */; };
 		73CBABBC2CEF3D8C0018936C /* WeightPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABBB2CEF3D8C0018936C /* WeightPrice.swift */; };
 		73CBABC22CEF3DB40018936C /* CPFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABC02CEF3DB40018936C /* CPFC.swift */; };
 		73D0FAAD2CCA3FA90009AEE5 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D0FAAC2CCA3FA90009AEE5 /* AppCoordinator.swift */; };
@@ -177,6 +177,8 @@
 		73E6EB462CC97741006831F2 /* Info&ToppingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E6EB452CC97741006831F2 /* Info&ToppingsView.swift */; };
 		73EA17332CCB9ED90079A16C /* AppLoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EA17322CCB9ED90079A16C /* AppLoadingIndicator.swift */; };
 		73EA17352CCBE21E0079A16C /* String+Plural.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EA17342CCBE21E0079A16C /* String+Plural.swift */; };
+		73EE04562CF10E5E0031CC37 /* CourierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EE04552CF10E5E0031CC37 /* CourierView.swift */; };
+		73EE04582CF113C70031CC37 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EE04572CF113C70031CC37 /* ProfileView.swift */; };
 		73F169312CEE5ABE009B8532 /* CoordinatorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1692F2CEE5ABE009B8532 /* CoordinatorFactory.swift */; };
 		73F3EDC42CEDCB9300BFD147 /* DeliveryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F3EDC32CEDCB9300BFD147 /* DeliveryCoordinator.swift */; };
 		73FD889E2CD28DE9007E0C82 /* PaymentMethodTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FD889D2CD28DE9007E0C82 /* PaymentMethodTableViewCell.swift */; };
@@ -344,7 +346,7 @@
 		73CBABB02CEF2E500018936C /* AddressTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTableView.swift; sourceTree = "<group>"; };
 		73CBABB12CEF2E500018936C /* AddressTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTableViewCell.swift; sourceTree = "<group>"; };
 		73CBABB52CEF36020018936C /* DeliveryVCLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryVCLabel.swift; sourceTree = "<group>"; };
-		73CBABB72CEF37C90018936C /* DeliveryCustomStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryCustomStack.swift; sourceTree = "<group>"; };
+		73CBABB72CEF37C90018936C /* AppStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStackView.swift; sourceTree = "<group>"; };
 		73CBABBB2CEF3D8C0018936C /* WeightPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightPrice.swift; sourceTree = "<group>"; };
 		73CBABC02CEF3DB40018936C /* CPFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPFC.swift; sourceTree = "<group>"; };
 		73D0FAAC2CCA3FA90009AEE5 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
@@ -357,6 +359,8 @@
 		73E6EB452CC97741006831F2 /* Info&ToppingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Info&ToppingsView.swift"; sourceTree = "<group>"; };
 		73EA17322CCB9ED90079A16C /* AppLoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingIndicator.swift; sourceTree = "<group>"; };
 		73EA17342CCBE21E0079A16C /* String+Plural.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Plural.swift"; sourceTree = "<group>"; };
+		73EE04552CF10E5E0031CC37 /* CourierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourierView.swift; sourceTree = "<group>"; };
+		73EE04572CF113C70031CC37 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		73F1692F2CEE5ABE009B8532 /* CoordinatorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorFactory.swift; sourceTree = "<group>"; };
 		73F3EDC32CEDCB9300BFD147 /* DeliveryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryCoordinator.swift; sourceTree = "<group>"; };
 		73FD889D2CD28DE9007E0C82 /* PaymentMethodTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodTableViewCell.swift; sourceTree = "<group>"; };
@@ -524,6 +528,7 @@
 		7362805A2CE607CD00DD6FD7 /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				73CBABB72CEF37C90018936C /* AppStackView.swift */,
 				73243B032CE66EE100608FAB /* HeaderView.swift */,
 				73B9690B2CC7C78700A2415A /* CartButton.swift */,
 				73B9690C2CC7C78700A2415A /* CustomBlurView.swift */,
@@ -575,7 +580,6 @@
 				736B0D142CCD811E00975195 /* OrderTotalPriceView.swift */,
 				736B0D152CCD811E00975195 /* PaymentButton.swift */,
 				73CBABB52CEF36020018936C /* DeliveryVCLabel.swift */,
-				73CBABB72CEF37C90018936C /* DeliveryCustomStack.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -978,6 +982,7 @@
 		73B969242CC7C78700A2415A /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				73EE04542CF10E420031CC37 /* HeaderView */,
 				73B969232CC7C78700A2415A /* ContentCollectionView */,
 				73FE978D2CE257F20056D53D /* OrderMainVCView.swift */,
 			);
@@ -1279,6 +1284,15 @@
 			path = CpfcPopupView;
 			sourceTree = "<group>";
 		};
+		73EE04542CF10E420031CC37 /* HeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				73EE04552CF10E5E0031CC37 /* CourierView.swift */,
+				73EE04572CF113C70031CC37 /* ProfileView.swift */,
+			);
+			path = HeaderView;
+			sourceTree = "<group>";
+		};
 		73F169302CEE5ABE009B8532 /* CoordinatorFactory */ = {
 			isa = PBXGroup;
 			children = (
@@ -1418,6 +1432,7 @@
 				73B9696E2CC7C78700A2415A /* AddressListTableView.swift in Sources */,
 				73B9696F2CC7C78700A2415A /* AddressListTableViewCell.swift in Sources */,
 				73B969702CC7C78700A2415A /* AddressHeaderView.swift in Sources */,
+				73EE04562CF10E5E0031CC37 /* CourierView.swift in Sources */,
 				73B969712CC7C78700A2415A /* ChooseAddressPopUpViewController.swift in Sources */,
 				7330232F2CD7D5B7003E9818 /* SkeletonPlaceholderCell.swift in Sources */,
 				73B969732CC7C78700A2415A /* DodoCoinsStackView.swift in Sources */,
@@ -1454,7 +1469,7 @@
 				73B969872CC7C78700A2415A /* CustomStepperView.swift in Sources */,
 				73B969DE2CC7C7C500A2415A /* AppDelegate.swift in Sources */,
 				73B969DF2CC7C7C500A2415A /* SceneDelegate.swift in Sources */,
-				73CBABB82CEF37C90018936C /* DeliveryCustomStack.swift in Sources */,
+				73CBABB82CEF37C90018936C /* AppStackView.swift in Sources */,
 				73D0FAAD2CCA3FA90009AEE5 /* AppCoordinator.swift in Sources */,
 				73B969882CC7C78700A2415A /* HeaderUIView.swift in Sources */,
 				732309E42CD2C18100062C8C /* FinalVC.swift in Sources */,
@@ -1506,6 +1521,7 @@
 				73B969A62CC7C78700A2415A /* ActionSheetButton.swift in Sources */,
 				73CBABB32CEF2E500018936C /* AddressTableView.swift in Sources */,
 				73CBABB42CEF2E500018936C /* AddressTableViewCell.swift in Sources */,
+				73EE04582CF113C70031CC37 /* ProfileView.swift in Sources */,
 				731C4F792CD912EE0088CF51 /* MainCoordinator.swift in Sources */,
 				73B969A72CC7C78700A2415A /* CustomActionSheet.swift in Sources */,
 				73C067D92CE73FA500AEB125 /* UICollectionViewCell.swift in Sources */,

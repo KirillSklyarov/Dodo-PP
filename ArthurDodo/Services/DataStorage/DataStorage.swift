@@ -121,6 +121,15 @@ extension DataStorage {
         }
     }
 
+    func getMainAddress() -> Address? {
+        fetchedUserData?.address.first(where: \.isMain)
+    }
+
+    func getDodoCoins() -> Int {
+        guard let fetchedUserData else { return 0 }
+        return fetchedUserData.dodoCoins
+    }
+
     // Отдаем личные данные
     func getPersonalData() -> User? {
         fetchedUserData
@@ -169,10 +178,6 @@ extension DataStorage {
         guard let fetchedUserData else { print("fetchedUserData is nil"); return [] }
         fetchedUserAddresses = fetchedUserData.address
         return fetchedUserAddresses
-    }
-
-    func getMainAddress() -> Address? {
-        fetchedUserAddresses.first(where: \.isMain)
     }
 
     // Мы обнуляем для всех isMain и назначаем для нового, и потом сортируем чтобы isMain был первым

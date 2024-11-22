@@ -213,8 +213,8 @@ private extension MainViewController {
 
     // Делаем сетевой запрос и потом забираем данные с хранилища
     func fetchDataFromServer() {
-        storage.fetchUserAddresses()
-        storage.onDataFetchedSuccessfully = { [weak self] in
+        storage.fetchUserData()
+        storage.onUserDataFetchedSuccessfully = { [weak self] personalData in
             guard let self else { return }
             getDataFromStorageAndUpdateUI()
         }
@@ -224,7 +224,8 @@ private extension MainViewController {
     func getDataFromStorageAndUpdateUI() {
         guard let mainAddress = storage.getMainAddress() else { return }
         let addressName = mainAddress.name
-        headerView.updateAddress(addressName)
+        let userDodoCoins = storage.getDodoCoins()
+        headerView.updateUI(addressName, userDodoCoins)
     }
 
     // Мы обращаемся к хранилищу за сторисами, инициируем сетевой запрос, забираем результаты и передаем их в коллекцию

@@ -14,16 +14,16 @@ final class DeliveryVC: UIViewController {
     private lazy var totalPriceView = OrderTotalPriceView() // Общая стоимость заказа
     private lazy var payButton = PaymentButtonView(preferredPaymentMethod) // Кнопка оплатить
 
-    private lazy var addressStackView = DeliveryCustomStackView(addressLabel, addressTableView)
-    private lazy var deliveryTimeStackView = DeliveryCustomStackView(timeLabel, timeCollection)
+    private lazy var addressStackView = AppStackView([addressLabel, addressTableView])
+    private lazy var deliveryTimeStackView = AppStackView([timeLabel, timeCollection])
 
-    private lazy var paymentMethodStackView = DeliveryCustomStackView(paymentLabel, paymentTableView)
+    private lazy var paymentMethodStackView = AppStackView([paymentLabel, paymentTableView])
 
-    private lazy var tablesStackView = DeliveryCustomStackView(headerView, addressStackView, deliveryTimeStackView, paymentMethodStackView, spacing: 30)
+    private lazy var tablesStackView = AppStackView([headerView, addressStackView, deliveryTimeStackView, paymentMethodStackView], spacing: 30)
 
-    private lazy var orderDetailsStackView = DeliveryCustomStackView(orderDetailsView, totalPriceView, payButton)
+    private lazy var orderDetailsStackView = AppStackView([orderDetailsView, totalPriceView, payButton])
 
-    private lazy var contentStackView = DeliveryCustomStackView(tablesStackView, UIView(), orderDetailsStackView, spacing: 0)
+    private lazy var contentStackView = AppStackView([tablesStackView, UIView(), orderDetailsStackView], spacing: 0)
 
     // MARK: - Other properties
     private let topInset: CGFloat = 10
