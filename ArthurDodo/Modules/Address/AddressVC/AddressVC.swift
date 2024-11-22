@@ -4,7 +4,7 @@ final class AddressViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var addressHeaderStackView = AddressHeaderView()
-    private lazy var mapView = MapView(isPinHidden: false, isTrackingButtonHidden: true)
+    private lazy var mapView = MapView()
     private lazy var addressView = DeliveryAddressView()
     private lazy var contentStack: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [mapView, addressView])
@@ -43,29 +43,49 @@ final class AddressViewController: UIViewController {
 }
 
 // MARK: - Fetch data from Network
-extension AddressViewController {
+private extension AddressViewController {
+    // Если личные данные уже были загружены, то забираем из хранилища, если нет, то инициируем сетевой запрос
     func fetchData() {
-        if storage.isAddressesEmpty() {
-            fetchAddresses()
-        } else {
+        if storage.isUserDataLoaded() {
             getAddressFromStorage()
+        } else {
+            fetchAddresses()
+
         }
-        moveMapToMainAddress()
     }
 
     // Запрашиваем данные с сервера и когда все получено, то просто забираем с него данные
     func fetchAddresses() {
-        storage.fetchUserAddresses()
-        storage.onDataFetchedSuccessfully = { [weak self] in
-            guard let self else { return }
+        storage.fetchUserData()
+        storage.onUserDataFetchedSuccessfully = { [weak self] userData in
+            guard let self else { print("Error: We have no self"); return }
             getAddressFromStorage()
         }
     }
 
+    // Получаем данные из хранилища
     func getAddressFromStorage() {
-        mainAddress = storage.getMainAddress()
+        let dispatchGroup = DispatchGroup()
+
+        // Сначала получаем все данные
+        dispatchGroup.enter()
+        getAddressesAndMainAddress {
+            dispatchGroup.leave()
+        }
+
+        // Потом уже передаем адреса на карту
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            guard let self else { print("We have no self"); return }
+            passAddressToNextScreen()
+            moveMapToMainAddress()
+        }
+    }
+
+    // Забираем данные из хранилища
+    func getAddressesAndMainAddress(completion: (() -> Void)?) {
         addresses = storage.getAddresses()
-        passAddressToNextScreen()
+        mainAddress = storage.getMainAddress()
+        completion?()
     }
 
     // Передаем адреса на следующий вью
@@ -117,7 +137,7 @@ private extension AddressViewController {
             self?.onShowEditAddressVC?(address)
         }
 
-        // Нажатие на кнопку "+ Новый адрес"
+        // Нажатие на кнопку "+Новый адрес"
         addressView.onAddNewAddressButtonTapped = { [weak self] in
             self?.onShowAddNewAddressVC?()
         }
@@ -128,9 +148,8 @@ private extension AddressViewController {
 private extension AddressViewController {
     // Двигаем карту на главный адрес
     func moveMapToMainAddress() {
-        guard let mainAddress else {print("We have no main address"); return }
-        let shortAddress = mainAddress.cityStreetHouse
+        guard let shortAddress = mainAddress?.cityStreetHouse else { print("We have no main address"); return }
         print("shortAddress \(shortAddress)")
-        mapView.getCoordinates(from: shortAddress)
+        mapView.showAddressOnMap(shortAddress)
     }
 }

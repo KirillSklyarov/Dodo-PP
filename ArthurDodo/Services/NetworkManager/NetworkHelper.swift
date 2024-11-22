@@ -31,12 +31,12 @@ enum HttpMethod: String {
 
 // Точки доступа
 enum BaseURL: String {
-    case ngrok = "https://06e7-2a00-1370-8180-197c-cd0c-b96c-333a-ef5d.ngrok-free.app"
+    case ngrok = "https://871d-213-183-59-146.ngrok-free.app"
     case mockoon = "http://localhost:3001"
 }
 
 enum endPoint: String {
-    private static let baseURL: BaseURL = .mockoon
+    private static let baseURL: BaseURL = .ngrok
 
     case userAddress = "/userAddress"
     case toppings = "/toppings"

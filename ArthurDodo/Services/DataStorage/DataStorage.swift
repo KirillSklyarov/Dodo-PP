@@ -8,7 +8,7 @@ final class DataStorage {
     private var fetchedStories: [Story] = []
     private var fetchedItems: [Item] = []
     private var fetchedPromo: [Promo] = []
-    private var fetchedPersonalData: User?
+    private var fetchedUserData: User?
     private var category: [Category] = []
     private var order: Order?
     private var cart: Cart?
@@ -27,7 +27,7 @@ final class DataStorage {
     var onStoriesFetchedSuccessfully: (([Story]) -> Void)?
     var onItemsFetchedSuccessfully: (() -> Void)?
     var onPromoFetchedSuccessfully: (([Promo]) -> Void)?
-    var onPersonalDataFetchedSuccessfully: ((User) -> Void)?
+    var onUserDataFetchedSuccessfully: ((User) -> Void)?
 
     var onError: ((Error) -> Void)?
 
@@ -107,13 +107,13 @@ extension DataStorage {
 // MARK: - Personal
 extension DataStorage {
     // Фетчим личные данные
-    func fetchPersonalData() {
+    func fetchUserData() {
         networkManager.fetchData(.personal) { [weak self] (result: Result<User, NetworkError>) in
             guard let self else { return }
             switch result {
             case .success(let personalData):
-                fetchedPersonalData = personalData
-                onPersonalDataFetchedSuccessfully?(personalData)
+                fetchedUserData = personalData
+                onUserDataFetchedSuccessfully?(personalData)
             case .failure(let error):
                 onError?(error)
                 print(error)
@@ -123,12 +123,12 @@ extension DataStorage {
 
     // Отдаем личные данные
     func getPersonalData() -> User? {
-        fetchedPersonalData
+        fetchedUserData
     }
 
     // Проверяем были ли ранее загружены данные
-    func isPersonalDataLoaded() -> Bool {
-        fetchedPersonalData != nil
+    func isUserDataLoaded() -> Bool {
+        fetchedUserData != nil
     }
 }
 
@@ -166,7 +166,9 @@ extension DataStorage {
     }
 
     func getAddresses() -> [Address] {
-        fetchedUserAddresses
+        guard let fetchedUserData else { print("fetchedUserData is nil"); return [] }
+        fetchedUserAddresses = fetchedUserData.address
+        return fetchedUserAddresses
     }
 
     func getMainAddress() -> Address? {

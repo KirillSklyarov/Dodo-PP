@@ -165,8 +165,8 @@ private extension ProfileViewController { // Запрашиваем данные
 
     // Запрашиваем персональные данные с сервера: додокоины, кол-во заказов, адреса
     func fetchPersonalData(completion: @escaping (() -> Void)) {
-        storage.fetchPersonalData()
-        storage.onPersonalDataFetchedSuccessfully = { [weak self] personalData in
+        storage.fetchUserData()
+        storage.onUserDataFetchedSuccessfully = { [weak self] personalData in
             guard let self else { return }
             passPersonalDataToCollectionView(personalData)
             setState(view: .personalData, state: .success)

@@ -8,6 +8,7 @@ final class MapView: UIView {
     private let rightInset: CGFloat = -20
     private let bottomInset: CGFloat = -20
     private let pinImageSize: CGFloat = 50
+    private let locationRadius: CLLocationDistance = 500
 
     private var isAnimating = false
     private let geocoder = CLGeocoder()
@@ -33,13 +34,16 @@ final class MapView: UIView {
         return view
     }()
 
+    private var address: String?
+
     // MARK: - Init
-    init(frame: CGRect = .zero, isPinHidden: Bool = false, isTrackingButtonHidden: Bool = false) {
+    init(frame: CGRect = .zero, isHidden: Bool = true, isPinHidden: Bool = false, isTrackingButtonHidden: Bool = false, address: String? = nil) {
         super.init(frame: frame)
         setupUI()
         setupMapView()
         pinView.isHidden = isPinHidden
         userTrackingButton.isHidden = isTrackingButtonHidden
+        hideEmptyMap(isHidden)
     }
 
     required init?(coder: NSCoder) {
@@ -73,12 +77,12 @@ private extension MapView {
 // MARK: - Setup Map
 private extension MapView {
     func setupMapView() {
-        mapView.delegate = self
-        configureLocationManager()
+//        mapView.delegate = self
+//        configureLocationManager()
     }
 
     func configureLocationManager() {
-        locationManager.delegate = self
+//        locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -97,6 +101,7 @@ private extension MapView {
         if !isAnimating { showAnimation() }
     }
 
+    // Настраиваем анимацию булавки
     func showAnimation() {
         isAnimating = true
         let pinAnimation = CAKeyframeAnimation(keyPath: "transform.translation.y")
@@ -111,32 +116,32 @@ private extension MapView {
 }
 
 // MARK: - CLLocationManagerDelegate
-extension MapView: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        print("Получено местоположение: \(location.coordinate)")
-        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
-        mapView.setRegion(region, animated: true)
-        showPinAnimation()
-
-        locationManager.stopUpdatingLocation()
-        print("Обновление местоположения остановлено.")
-    }
-
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
-        print("Невозможно получить месторасположение: \(error.localizedDescription)")
-    }
-}
+//extension MapView: CLLocationManagerDelegate {
+//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//        guard let location = locations.last else { return }
+//        print("Получено местоположение: \(location.coordinate)")
+//        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
+//        mapView.setRegion(region, animated: true)
+//        showPinAnimation()
+//
+//        locationManager.stopUpdatingLocation()
+//        print("Обновление местоположения остановлено.")
+//    }
+//
+//    func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
+//        print("Невозможно получить месторасположение: \(error.localizedDescription)")
+//    }
+//}
 
 // MARK: - MKMapViewDelegate
-extension MapView: MKMapViewDelegate {
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        let mapCenter = mapView.centerCoordinate
-        showPinAnimation()
-        print("New coordinates: \(mapCenter.latitude), \(mapCenter.longitude)")
-        getAddress(mapCenter)
-    }
-}
+//extension MapView: MKMapViewDelegate {
+//    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+//        let mapCenter = mapView.centerCoordinate
+//        showPinAnimation()
+//        print("New coordinates: \(mapCenter.latitude), \(mapCenter.longitude)")
+//        getAddress(mapCenter)
+//    }
+//}
 
 // MARK: - Get Address from coordinates
 extension MapView {
@@ -153,11 +158,44 @@ extension MapView {
             let apart = placemark.subThoroughfare ?? ""
 
             let newAddress = "\(city), \(street), \(apart)"
+            print("Address: \(newAddress)")
             self.onChangeAddress?(newAddress)
         }
     }
+}
+
+extension MapView {
+    // Показываем точку на карте по адресу
+    func showAddressOnMap(_ address: String) {
+        getCoordinates2(from: address) { [weak self] coordinates, error in // Получаем координаты
+            guard let self, let coordinates else { return }
+            showMap() // Показываем карту
+            setMapViewCenter(coordinates, radius: locationRadius) // Показываем карту по координатам
+        }
+    }
+
 
     // Получаем координаты из адреса
+    private func getCoordinates2(from address: String, completion: @escaping (CLLocationCoordinate2D?, Error?) -> Void) {
+        geocoder.geocodeAddressString(address) { placemarks, error in
+            if let error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+            guard let placemark = placemarks?.first,
+                  let coordinates = placemark.location?.coordinate else {
+                print("No placemark found"); return }
+
+            return completion(coordinates, nil)
+        }
+    }
+    
+    // Устанавливаем карту по координатам
+    private func setMapViewCenter(_ coordinates: CLLocationCoordinate2D, radius: Double) {
+        let region = MKCoordinateRegion(center: coordinates, latitudinalMeters: radius, longitudinalMeters: radius)
+        mapView.setRegion(region, animated: false)
+    }
+    
     func getCoordinates(from address: String) {
         geocoder.geocodeAddressString(address) { placemarks, error in
             if let error = error {
@@ -167,16 +205,25 @@ extension MapView {
             if let coordinates = placemark.location?.coordinate {
                 print("coordinates: \(coordinates)")
                 self.addressCoordinates = coordinates
-                self.setMapViewCenter(coordinates, radius: 500)
+                self.setMapViewCenter(coordinates, radius: self.locationRadius)
             }
         }
     }
+}
 
-    // Устанавливаем карту по координатам
-    func setMapViewCenter(_ coordinates: CLLocationCoordinate2D, radius: Double) {
-        if let addressCoordinates {
-            let region = MKCoordinateRegion(center: addressCoordinates, latitudinalMeters: radius, longitudinalMeters: radius)
-            mapView.setRegion(region, animated: true)
+// MARK: - Show and Hide Map (это делаем для того, чтобы не появлялась пустая карта, а потом она перескакивала на правильный адрес, а так он сразу показывает правильный адрес)
+private extension MapView {
+    // Прячем карту
+    func hideEmptyMap(_ isHidden: Bool) {
+        if isHidden { self.mapView.alpha = 0 }
+    }
+
+    // Показываем карту
+    func showMap() {
+        DispatchQueue.main.async { [weak self] in
+            UIView.animate(withDuration: 0.1) { [weak self] in
+                self?.mapView.alpha = 1
+            }
         }
     }
 }
