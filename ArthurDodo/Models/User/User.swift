@@ -9,5 +9,5 @@ struct User: Codable {
     let agreeOfSending: Bool
     let dodoCoins: Int
     let orders: Int
-    let address: [Address]
+    var address: [Address]
 }

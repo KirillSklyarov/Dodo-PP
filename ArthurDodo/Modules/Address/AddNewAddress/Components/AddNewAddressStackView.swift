@@ -16,17 +16,13 @@ final class AddNewAddressStackView: UIStackView {
     }()
     private lazy var editFloorOfAddressView = EditAddressTextFieldView(.floor)
     private lazy var editFlatOfAddressView = EditAddressTextFieldView(.flat)
-    private lazy var floorAndFlatStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [editFloorOfAddressView, editFlatOfAddressView])
-        stack.axis = .horizontal
-        stack.distribution = .fillEqually
-        stack.spacing = 10
-        return stack
-    }()
+    private lazy var floorAndFlatStackView = AppStackView([editFloorOfAddressView, editFlatOfAddressView], axis: .horizontal, spacing: 10, distribution: .fillEqually)
     private lazy var editCommentToAddressView = EditAddressTextFieldView(.comment)
     private lazy var saveAddressButton = CartButton(title: "Сохранить", isCart: false)
 
-    var onSaveButtonTapped: (() -> Void)?
+    private var newShortAddress: String?
+
+    var onSaveButtonTapped: ((String) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -38,21 +34,14 @@ final class AddNewAddressStackView: UIStackView {
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // Обновляем UI в соответствии с полученными данными (заполняем адрес)
-    func updateUIWithData(_ addressToEdit: Address) {
-        editStreetAndFlatAddressView.configureView(addressToEdit.cityStreetHouse)
-        editNameOfAddressView.configureView(addressToEdit.name)
-        editEntranceOfAddressView.configureView(addressToEdit.entrance?.description)
-        editCodeOfAddressView.configureView(addressToEdit.entranceCode)
-        editFloorOfAddressView.configureView(addressToEdit.floor?.description)
-        editFlatOfAddressView.configureView(addressToEdit.apartment?.description)
-        editCommentToAddressView.configureView(addressToEdit.comments)
-    }
-
+// MARK: - Public methods
+extension AddNewAddressStackView {
     // Обновляем только улицу и дом
-    func updateUIBasicAddress(_ newBasicAddress: String) {
-        editStreetAndFlatAddressView.configureView(newBasicAddress)
+    func updateUIShortAddress(_ newShortAddress: String) {
+        editStreetAndFlatAddressView.configureView(newShortAddress)
+        self.newShortAddress = newShortAddress
     }
 }
 
@@ -76,9 +65,10 @@ extension AddNewAddressStackView {
     // В качестве примера отправляем новый адрес на сервер
     func setupButtonAction() {
         saveAddressButton.onButtonTapped = { [weak self] in
-            guard let self else { print("Error: self is nil"); return }
+            guard let self,
+                  let newShortAddress else { print("Error: self is nil"); return }
             print(#function)
-            onSaveButtonTapped?()
+            onSaveButtonTapped?(newShortAddress)
         }
     }
 }

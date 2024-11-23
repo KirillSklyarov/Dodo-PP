@@ -3,26 +3,19 @@ import UIKit
 final class AddNewAddressViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var mapView = MapView()
+    private lazy var mapView = AddAddressMapView()
     private lazy var addressView = AddAddressView()
-    private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [mapView, addressView])
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = -5
-        return stackView
-    }()
+    private lazy var contentStackView = AppStackView([mapView, addressView], axis: .vertical, spacing: -5, distribution: .fillEqually)
     private lazy var dismissButton = DismissButtonView(isChevron: true)
 
     // MARK: - Properties
-    private var newAddress: Address?
-    private var mainAddress: Address?
-
     private let leftInset: CGFloat = 20
 
+    private var mainAddress: Address?
     private let storage: DataStorage
 
     var onDismissButtonTapped: (() -> Void)?
+    var onSaveNewAddressButtonTapped: (() -> Void)?
 
     // MARK: - Init
     init(storage: DataStorage) {
@@ -38,40 +31,35 @@ final class AddNewAddressViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        updateUIWithData()
         setupActions()
+        fetchData()
+    }
+}
 
-        getMainAddressFromStorage()
-        configNewAddress()
+// MARK: - Fetch Data
+private extension AddNewAddressViewController {
+    // Запрашиваем основной адрес у хранилища и показываем его на карте
+    func fetchData() {
+        mainAddress = storage.getMainAddress()
+        showMainAddressOnMap() // Показываем основной адрес на карте
+        updateUIWithData() // Обновляем таблицу с данными адреса (город, дом и проч.)
     }
 }
 
 // MARK: - Public methods
 extension AddNewAddressViewController {
     func updateUIWithData() {
-        guard let newAddress else { print("We have no address to edit"); return }
-        print(newAddress)
-//         addressContainerView.updateUIWithAddress(newAddress)
-    }
-
-    func getAddressToEdit(_ addressToEdit: Address) {
-        self.newAddress = addressToEdit
-        getCoord()
-    }
-
-    // Запрашиваем координаты у хранилища и находим место на карте по ним
-    func getMainAddressFromStorage() {
-        mainAddress = storage.getMainAddress()
-        getCoord()
+        guard let mainAddress else { print("We have no address to edit"); return }
+        addressView.updateUIWithAddress(mainAddress)
     }
 }
 
 // MARK: - Supporting methods
 private extension AddNewAddressViewController {
     // Метод находит координаты по адресу и центрирует карту по ним
-    func getCoord() {
-        guard let shortAddress = newAddress?.cityStreetHouse else { print("We have no address"); return }
-        mapView.getCoordinates(from: shortAddress)
+    func showMainAddressOnMap() {
+        guard let shortAddress = mainAddress?.cityStreetHouse else { print("We have no address"); return }
+        mapView.showAddressOnMap(shortAddress)
     }
 }
 
@@ -111,25 +99,35 @@ private extension AddNewAddressViewController {
         }
     }
 
-    // Настраиваем кнопку Сохранить
+    // Настраиваем кнопку Сохранить - формируем новый адрес и отправляем его на сервер
     func setupSaveButtonAction() {
-        addressView.onSaveButtonTapped = { [weak self] in
-            print(self?.newAddress! ?? "Stop")
+        addressView.onSaveButtonTapped = { [weak self] newShortAddress in
+            guard let self else { return }
+            passNewAddressToStorage(newShortAddress)
+            onSaveNewAddressButtonTapped?()
         }
     }
 
     // Настраиваем когда двигается карта, то двигается и адрес в таблице
     func setupMapViewAction() {
         mapView.onChangeAddress = { [weak self] address in
-            self?.newAddress?.cityStreetHouse = address
-            self?.addressView.updateBasicAddress(address)
+            self?.addressView.updateShortAddress(address)
         }
     }
 
-    func configNewAddress(_ shortAddress: String = "") {
-        let countOfAddresses = storage.getAddresses()
-        print(countOfAddresses)
+    // Формируем из короткого адреса полный адрес и отправляем его в хранилище
+    func passNewAddressToStorage(_ shortAddress: String) {
+        let newAddress = castAddressFromShortAddress(shortAddress)
+//        let addresses = storage.getAddresses()
+//        print("addresses \(addresses.count)")
+        storage.addAddress(newAddress)
+    }
 
-//        newAddress = Address(userId: mainAddress?.userId, addressId: <#T##String#>, isMain: <#T##Bool#>, name: <#T##String#>, cityStreetHouse: <#T##String#>)
+    // Формируем из короткого адреса полный адрес
+    func castAddressFromShortAddress(_ shortAddress: String) -> Address {
+        let countOfAddresses = storage.getCountOfAddresses()
+        let newAddressId = "\(countOfAddresses + 1)"
+        let newAddress = Address(addressId: newAddressId, isMain: false, name: shortAddress, cityStreetHouse: shortAddress, apartment: nil, floor: nil, entrance: nil, entranceCode: nil, comments: nil)
+        return newAddress
     }
 }

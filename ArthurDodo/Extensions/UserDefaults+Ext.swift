@@ -51,11 +51,9 @@ extension UserDefaults {
 
 // MARK: - Active order
 extension UserDefaults {
-//    func setActiveOrderIsTrue() {
-//        set(true, forKey: Keys.isActiveOrder)
-//    }
-//
-    func getIsActiveOrder() -> Bool {
+
+    // Показываем есть ли активный заказ у пользователя
+    func isActiveOrder() -> Bool {
         return data(forKey: Keys.order) != nil
     }
 

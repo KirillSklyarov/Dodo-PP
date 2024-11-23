@@ -150,7 +150,7 @@ private extension CoinsOrdersCollectionViewCell {
     func setAddressTitle(_ data: User) {
         let countOfAddress = data.address.count
         let addressWord = "адрес".pluralize(for: countOfAddress)
-        let title = "\(addressWord) \(countOfAddress)"
+        let title = "\(countOfAddress) \(addressWord)"
         setButtonTitle(title)
     }
 

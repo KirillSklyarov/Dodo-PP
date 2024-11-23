@@ -8,6 +8,8 @@ final class MainViewController: UIViewController {
     private lazy var contentCollectionView = ContentCollectionView() // Основная коллекция с товарами
     private lazy var cartButton = CartButton(isHidden: true, isNeedImage: true) // Кнопка корзины
 
+    private lazy var contentStackView = AppStackView([headerView, orderView, contentCollectionView], axis: .vertical, spacing: 5)
+
     // MARK: - Other properties
     private let topInset: CGFloat = 10
     private let bottomInset: CGFloat = -20
@@ -73,7 +75,7 @@ extension MainViewController {
 
     // Показать или не показать вью с заказом
     func isNeedToShowOrderView() {
-        let isActiveOrder = UserDefaults.standard.getIsActiveOrder() // Проверяет у UserDefaults есть ли активный заказ
+        let isActiveOrder = UserDefaults.standard.isActiveOrder() // Проверяет у UserDefaults есть ли активный заказ
 
         // Только если заказ есть, то пересылаем данные во вью
         if isActiveOrder { passOrderToView() }
@@ -85,54 +87,32 @@ extension MainViewController {
 // MARK: - Setup UI
 private extension MainViewController {
     func setupUI() {
-        setupNavigationBar()
-
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(headerView, orderView, contentCollectionView, cartButton)
+        view.addSubviews(contentStackView, cartButton)
         setupLayout()
 
         isNeedToShowOrderView()
-    }
-
-    func setupNavigationBar() {
-        navigationController?.isNavigationBarHidden = true
     }
 }
 
 // MARK: - Setup layout
 private extension MainViewController {
     func setupLayout() {
-        setupHeaderViewLayout()
-        setupOrderViewLayout()
-        setupContentCollectionViewLayout()
+        setupContentStackViewLayout()
         setupCartButtonLayout()
     }
 
-    func setupHeaderViewLayout() {
+    // Настраиваем расположение стека с контентом
+    func setupContentStackViewLayout() {
         NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
 
-    func setupOrderViewLayout() {
-        NSLayoutConstraint.activate([
-            orderView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
-            orderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            orderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ])
-    }
-
-    func setupContentCollectionViewLayout() {
-        NSLayoutConstraint.activate([
-            contentCollectionView.topAnchor.constraint(equalTo: orderView.bottomAnchor, constant: topInset),
-            contentCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-    }
-
+    // Настраиваем расположение кнопки
     func setupCartButtonLayout() {
         NSLayoutConstraint.activate([
             cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
@@ -223,6 +203,7 @@ private extension MainViewController {
     // Забираем данные из хранилища
     func getDataFromStorageAndUpdateUI() {
         guard let mainAddress = storage.getMainAddress() else { return }
+        print("mainAddress \(mainAddress.name)")
         let addressName = mainAddress.name
         let userDodoCoins = storage.getDodoCoins()
         headerView.updateUI(addressName, userDodoCoins)
@@ -314,7 +295,7 @@ private extension MainViewController {
     }
 
     func showIsActiveOrder() {
-        let isActiveOrder = UserDefaults.standard.getIsActiveOrder()
+        let isActiveOrder = UserDefaults.standard.isActiveOrder()
         print("isActiveOrder \(isActiveOrder)")
     }
 }

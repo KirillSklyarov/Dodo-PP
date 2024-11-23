@@ -18,5 +18,6 @@ private extension AppStackView {
         self.axis = axis
         self.spacing = spacing
         self.alignment = alignment
+        self.distribution = distribution
     }
 }

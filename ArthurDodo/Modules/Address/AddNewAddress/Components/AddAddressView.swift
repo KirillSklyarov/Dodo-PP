@@ -3,14 +3,14 @@ import UIKit
 final class AddAddressView: UIView {
 
     // MARK: - Properties
+    private lazy var addressStackView = AddNewAddressStackView()
+
     private let topInset: CGFloat = 10
     private let bottomInset: CGFloat = -10
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
 
-    private lazy var addressStackView = AddNewAddressStackView()
-
-    var onSaveButtonTapped: (() -> Void)?
+    var onSaveButtonTapped: ((String) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -26,24 +26,25 @@ final class AddAddressView: UIView {
 
 // MARK: - Public methods
 extension AddAddressView {
-    func updateUIWithAddress(_ addressToEdit: Address) {
-        addressStackView.updateUIWithData(addressToEdit)
+    func updateUIWithAddress(_ addressToShow: Address) {
+        let shortAddress = addressToShow.cityStreetHouse
+        addressStackView.updateUIShortAddress(shortAddress)
     }
 
     func setupSaveButtonAction(_ addressToEdit: Address) {
         addressStackView.setupButtonAction()
     }
 
-    func updateBasicAddress(_ basicAddress: String) {
-        addressStackView.updateUIBasicAddress(basicAddress)
+    func updateShortAddress(_ shortAddress: String) {
+        addressStackView.updateUIShortAddress(shortAddress)
     }
 }
 
 // MARK: - Setup actions
 private extension AddAddressView {
     func setupAction() {
-        addressStackView.onSaveButtonTapped = { [weak self] in
-            self?.onSaveButtonTapped?()
+        addressStackView.onSaveButtonTapped = { [weak self] newShortAddress in
+            self?.onSaveButtonTapped?(newShortAddress)
         }
     }
 }

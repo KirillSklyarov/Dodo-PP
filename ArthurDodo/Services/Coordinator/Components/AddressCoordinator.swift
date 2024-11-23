@@ -61,5 +61,9 @@ private extension AddressCoordinator {
         vc.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss()
         }
+
+        vc.onSaveNewAddressButtonTapped = { [weak self] in
+            self?.router.dismiss()
+        }
     }
 }

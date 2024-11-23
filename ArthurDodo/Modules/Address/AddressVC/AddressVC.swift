@@ -4,7 +4,7 @@ final class AddressViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var addressHeaderStackView = AddressHeaderView()
-    private lazy var mapView = MapView()
+    private lazy var mapView = MapView(isTrackingButtonHidden: true)
     private lazy var addressView = DeliveryAddressView()
     private lazy var contentStack: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [mapView, addressView])
@@ -44,6 +44,14 @@ final class AddressViewController: UIViewController {
         setupUI()
         setupActions()
         fetchData()
+    }
+
+    // Когда экран опять появляется (после закрытия предыдущих, то мы обновляем данные из хранилища)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getAddressFromStorage()
+        let ad = storage.getAddresses()
+        print("ad: \(ad)")
     }
 }
 
@@ -146,7 +154,7 @@ private extension AddressViewController {
         addressView.onAddressCellTapped = { [weak self] address in
             guard let self else { return }
             storage.setNewMainAddress(address.name) // Устанавливаем новые главный адрес
-            showAddressOnMap(address) // Показываем новый адресс на карте
+            showAddressOnMap(address) // Показываем новый адрес на карте
         }
 
         // Нажатие на кнопку "+Новый адрес"

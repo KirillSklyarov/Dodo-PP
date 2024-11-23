@@ -121,10 +121,6 @@ extension DataStorage {
         }
     }
 
-    func getMainAddress() -> Address? {
-        fetchedUserData?.address.first(where: \.isMain)
-    }
-
     func getDodoCoins() -> Int {
         guard let fetchedUserData else { return 0 }
         return fetchedUserData.dodoCoins
@@ -170,27 +166,42 @@ extension DataStorage {
         }
     }
 
+    // Если данные юзера еще не были запрошены (то есть fetchedUserData == nil), то возвращаем true, в противном случае возвращаем false
     func isAddressesEmpty() -> Bool {
-        fetchedUserAddresses.isEmpty
+        return fetchedUserData == nil ? true : false
+    }
+
+    func getMainAddress() -> Address? {
+        fetchedUserData?.address.first(where: \.isMain)
     }
 
     func getAddresses() -> [Address] {
         guard let fetchedUserData else { print("fetchedUserData is nil"); return [] }
-        fetchedUserAddresses = fetchedUserData.address
-        return fetchedUserAddresses
+        return fetchedUserData.address
     }
 
     // Мы обнуляем для всех isMain и назначаем для нового, и потом сортируем чтобы isMain был первым
     func setNewMainAddress(_ newMainAddressName: String) {
-        let newAddresses = fetchedUserAddresses.map { address in
+        guard let fetchedUserData else { print("fetchedUserData is nil"); return }
+        let addresses = fetchedUserData.address
+        let newAddresses = addresses.map { address in
             var newAddress = address
             newAddress.isMain = (newAddress.name == newMainAddressName)
             return newAddress
         }
-        fetchedUserAddresses = newAddresses.sortedMainFirst()
+        self.fetchedUserData?.address = newAddresses.sortedMainFirst()
     }
 
-    
+    // Получаем кол-во адресов у юзера
+    func getCountOfAddresses() -> Int {
+        guard let fetchedUserData else { return 0 }
+        return fetchedUserData.address.count
+    }
+
+    // Добавляем адрес в список адресов (но только в хранилище)
+    func addAddress(_ address: Address) {
+        self.fetchedUserData?.address.append(address)
+    }
 }
 
 // MARK: - Stories

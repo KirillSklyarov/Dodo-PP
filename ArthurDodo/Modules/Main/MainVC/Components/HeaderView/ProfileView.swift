@@ -103,7 +103,7 @@ private extension ProfileMainHeaderView {
             coinsStackView.topAnchor.constraint(equalTo: coinsView.topAnchor, constant: 1),
             coinsStackView.bottomAnchor.constraint(equalTo: coinsView.bottomAnchor, constant: -1),
 
-            coinsImageView.widthAnchor.constraint(equalTo: coinsStackView.widthAnchor, multiplier: 0.4),
+            coinsImageView.widthAnchor.constraint(equalTo: coinsStackView.heightAnchor),
         ])
     }
 
