@@ -154,16 +154,12 @@ extension DataStorage {
         }
     }
 
-    // Отправляем новый адрес на сервер и выводим сообщение о результате
-    func sendNewAddressToServer(addressToEdit: Address) {
-        networkManager.updateUserAddress(addressToEdit) { (result: Result<Address, NetworkError>) in
-            switch result {
-            case .success(let address):
-                print("Данные успешно обновлены: \(address)")
-            case .failure(let error):
-                print("Данные НЕ обновлены: \(error)")
-            }
-        }
+    // Отправляем новый адрес в хранилище
+    func updateAddressesAfterEdition(correctAddress: Address) {
+        var deleteOldAddress = fetchedUserData?.address.filter { $0.addressId != correctAddress.addressId }
+        deleteOldAddress?.append(correctAddress)
+        guard let deleteOldAddress else { return }
+        fetchedUserData?.address = deleteOldAddress
     }
 
     // Если данные юзера еще не были запрошены (то есть fetchedUserData == nil), то возвращаем true, в противном случае возвращаем false

@@ -52,6 +52,10 @@ private extension AddressCoordinator {
         editAddressVC.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss()
         }
+
+        editAddressVC.onSaveButtonTapped = { [weak self] in
+            self?.router.dismiss()
+        }
     }
 
     func showAddNewAddressVC() {

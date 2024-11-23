@@ -11,6 +11,7 @@ final class AddAddressView: UIView {
     private let rightInset: CGFloat = -10
 
     var onSaveButtonTapped: ((String) -> Void)?
+    var onTextFieldBeginEditing: (() -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -46,6 +47,10 @@ private extension AddAddressView {
         addressStackView.onSaveButtonTapped = { [weak self] newShortAddress in
             self?.onSaveButtonTapped?(newShortAddress)
         }
+
+        addressStackView.onTextFieldBeginEditing = { [weak self] in
+            self?.onTextFieldBeginEditing?()
+        }
     }
 }
 
@@ -69,4 +74,3 @@ private extension AddAddressView {
         ])
     }
 }
-

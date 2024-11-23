@@ -1,7 +1,7 @@
 import UIKit
 import MapKit
 
-final class AddAddressMapView: UIView {
+final class EditAddressMapView: UIView {
 
     // MARK: - UI Properties
     private lazy var mapView = MKMapView()
@@ -47,11 +47,12 @@ final class AddAddressMapView: UIView {
 }
 
 // MARK: - Public methods
-extension AddAddressMapView {
+extension EditAddressMapView {
     // Показываем адрес на карте
-    func showAddressOnMap(_ address: String) {
-        getCoordinates(from: address) { [weak self] coordinates, error in // Получаем координаты
-            guard let self, let coordinates else { return }
+    func showAddressOnMap(_ address: Address) {
+        let shortAddress = address.cityStreetHouse
+        getCoordinates(from: shortAddress) { [weak self] coordinates, error in // Получаем координаты
+            guard let self, let coordinates else { print("123"); return }
             showMap() // Показываем карту
             setMapViewCenter(coordinates, radius: locationRadius) // Показываем карту по координатам
         }
@@ -59,7 +60,7 @@ extension AddAddressMapView {
 }
 
 // MARK: - Setup UI
-private extension AddAddressMapView {
+private extension EditAddressMapView {
     func setupUI() {
         addSubviews(mapView, userTrackingButton, pinView)
         setupLayout()
@@ -82,14 +83,14 @@ private extension AddAddressMapView {
 }
 
 // MARK: - Setup Map
-private extension AddAddressMapView {
+private extension EditAddressMapView {
     func setupMapView() {
         mapView.delegate = self
     }
 }
 
 // MARK: - Setup Animation
-private extension AddAddressMapView {
+private extension EditAddressMapView {
     func showPinAnimation() {
         DispatchQueue.main.async {
             self.animatePin()
@@ -115,7 +116,7 @@ private extension AddAddressMapView {
 }
 
 // MARK: - MKMapViewDelegate
-extension AddAddressMapView: MKMapViewDelegate {
+extension EditAddressMapView: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let mapCenter = mapView.centerCoordinate
         showPinAnimation()
@@ -124,7 +125,7 @@ extension AddAddressMapView: MKMapViewDelegate {
 }
 
 // MARK: - Get Address from coordinates
-extension AddAddressMapView {
+private extension EditAddressMapView {
     // Получаем адрес из координат и передаем его для обновления таблицы
     func getAddress(from coordinates: CLLocationCoordinate2D) {
         geocoder.reverseGeocodeLocation(CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)) { [weak self] placemarks, error in
@@ -135,14 +136,14 @@ extension AddAddressMapView {
             guard let placemark = placemarks?.first else {
                 print("No placemark found"); return }
 
-            let newAddress = getAddress(from: placemark)
-            onChangeAddress?(newAddress)
+            let newShortAddress = getAddress(from: placemark)
+            onChangeAddress?(newShortAddress)
         }
     }
 }
 
 // MARK: - Show and Hide Map (это делаем для того, чтобы не появлялась пустая карта, а потом она перескакивала на правильный адрес, а так он сразу показывает правильный адрес)
-private extension AddAddressMapView {
+private extension EditAddressMapView {
     // Прячем карту
     func hideEmptyMap(_ isHidden: Bool) {
         if isHidden { self.mapView.alpha = 0 }
@@ -159,13 +160,12 @@ private extension AddAddressMapView {
 }
 
 // MARK: - Supporting methods
-private extension AddAddressMapView {
+private extension EditAddressMapView {
     // Получаем город, улицу, дом и убираем nil (с помощью compactMap)
     func getAddress(from placemark: CLPlacemark) -> String {
         let components = [placemark.locality, placemark.thoroughfare, placemark.subThoroughfare].compactMap { $0 }
         // Склеиваем массив в строку
         let newAddress = components.joined(separator: ", ")
-        print("Address: \(newAddress)")
         return newAddress
     }
 
@@ -190,4 +190,3 @@ private extension AddAddressMapView {
         mapView.setRegion(region, animated: false)
     }
 }
-

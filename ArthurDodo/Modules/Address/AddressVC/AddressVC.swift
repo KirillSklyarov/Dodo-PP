@@ -6,12 +6,7 @@ final class AddressViewController: UIViewController {
     private lazy var addressHeaderStackView = AddressHeaderView()
     private lazy var mapView = MapView(isTrackingButtonHidden: true)
     private lazy var addressView = DeliveryAddressView()
-    private lazy var contentStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [mapView, addressView])
-        stackView.axis = .vertical
-        stackView.spacing = -10
-        return stackView
-    }()
+    private lazy var contentStack = AppStackView([mapView, addressView], axis: .vertical, spacing: -10)
 
     // MARK: - Other Properties
     private var mainAddress: Address?
@@ -50,8 +45,6 @@ final class AddressViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getAddressFromStorage()
-        let ad = storage.getAddresses()
-        print("ad: \(ad)")
     }
 }
 
@@ -172,11 +165,10 @@ private extension AddressViewController {
 private extension AddressViewController {
     // Двигаем карту на главный адрес
     func showMainAddressOnMap() {
-        if let mainAddress { showAddressOnMap(mainAddress) }
+        if let mainAddress { showAddressOnMap(mainAddress) } else { print("Warning: No main address") }
     }
 
     func showAddressOnMap(_ address: Address) {
-        let shortAddress = address.cityStreetHouse
-        mapView.showAddressOnMap(shortAddress)
+        mapView.showAddressOnMap(address)
     }
 }

@@ -158,7 +158,6 @@ extension MapView {
             let apart = placemark.subThoroughfare ?? ""
 
             let newAddress = "\(city), \(street), \(apart)"
-            print("Address: \(newAddress)")
             self.onChangeAddress?(newAddress)
         }
     }
@@ -166,8 +165,10 @@ extension MapView {
 
 extension MapView {
     // Показываем точку на карте по адресу
-    func showAddressOnMap(_ address: String) {
-        getCoordinates2(from: address) { [weak self] coordinates, error in // Получаем координаты
+    func showAddressOnMap(_ address: Address) {
+        let shortAddress = address.cityStreetHouse
+
+        getCoordinates2(from: shortAddress) { [weak self] coordinates, error in // Получаем координаты
             guard let self, let coordinates else { return }
             showMap() // Показываем карту
             setMapViewCenter(coordinates, radius: locationRadius) // Показываем карту по координатам

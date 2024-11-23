@@ -3,14 +3,14 @@ import UIKit
 final class EditAddressView: UIView {
 
     // MARK: - Properties
+    private lazy var addressStackView = EditAddressStackView()
+
     private let topInset: CGFloat = 10
     private let bottomInset: CGFloat = -10
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
 
-    private lazy var addressStackView = EditAddressStackView()
-
-    var onSaveAddressTapped: ((Address) -> Void)?
+    var onSaveAddressTapped: (() -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -30,20 +30,16 @@ extension EditAddressView {
         addressStackView.updateUIWithData(addressToEdit)
     }
 
-    func setupSaveButtonAction(_ addressToEdit: Address) {
-        addressStackView.setupButtonAction(addressToEdit)
-    }
-
-    func updateBasicAddress(_ basicAddress: String) {
-        addressStackView.updateUIBasicAddress(basicAddress)
+    func updateShortAddress(_ basicAddress: String) {
+        addressStackView.updateUIShortAddress(basicAddress)
     }
 }
 
 // MARK: - Setup actions
 private extension EditAddressView {
     func setupAction() {
-        addressStackView.onSaveNewAddress = { [weak self] address in
-            self?.onSaveAddressTapped?(address)
+        addressStackView.onSaveNewAddress = { [weak self] in
+            self?.onSaveAddressTapped?()
         }
     }
 }
@@ -51,7 +47,7 @@ private extension EditAddressView {
 // MARK: - Setup UI
 private extension EditAddressView {
     func setupUI() {
-        backgroundColor = AppColors.backgroundGray
+        backgroundColor = AppColors.backgroundBlack
         layer.cornerRadius = 10
         clipsToBounds = true
         addSubviews(addressStackView)

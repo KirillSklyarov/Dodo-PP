@@ -3,35 +3,27 @@ import UIKit
 final class EditAddressStackView: UIStackView {
 
     // MARK: - UI Properties
-    private lazy var editStreetAndFlatAddressView = EditAddressTextFieldView(.streetAndFlat)
-    private lazy var editNameOfAddressView = EditAddressTextFieldView(.nameOfAddress)
-    private lazy var editEntranceOfAddressView = EditAddressTextFieldView(.entrance)
-    private lazy var editCodeOfAddressView = EditAddressTextFieldView(.codeOfEntrance)
-    private lazy var entranceAndCodeStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [editEntranceOfAddressView, editCodeOfAddressView])
-        stack.axis = .horizontal
-        stack.distribution = .fillEqually
-        stack.spacing = 10
-        return stack
-    }()
-    private lazy var editFloorOfAddressView = EditAddressTextFieldView(.floor)
-    private lazy var editFlatOfAddressView = EditAddressTextFieldView(.flat)
-    private lazy var floorAndFlatStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [editFloorOfAddressView, editFlatOfAddressView])
-        stack.axis = .horizontal
-        stack.distribution = .fillEqually
-        stack.spacing = 10
-        return stack
-    }()
-    private lazy var editCommentToAddressView = EditAddressTextFieldView(.comment)
+    private lazy var editStreetAndFlatAddressView = AddressTextFieldView(.streetAndFlat)
+    private lazy var editNameOfAddressView = AddressTextFieldView(.nameOfAddress)
+    private lazy var editEntranceOfAddressView = AddressTextFieldView(.entrance)
+    private lazy var editCodeOfAddressView = AddressTextFieldView(.codeOfEntrance)
+    private lazy var entranceAndCodeStackView = AppStackView([editEntranceOfAddressView, editCodeOfAddressView], axis: .horizontal, spacing: 10, distribution: .fillEqually)
+    private lazy var editFloorOfAddressView = AddressTextFieldView(.floor)
+    private lazy var editFlatOfAddressView = AddressTextFieldView(.flat)
+    private lazy var floorAndFlatStackView = AppStackView([editFloorOfAddressView, editFlatOfAddressView], axis: .horizontal, spacing: 10, distribution: .fillEqually)
+    private lazy var editCommentToAddressView = AddressTextFieldView(.comment)
     private lazy var saveAddressButton = CartButton(title: "Сохранить", isCart: false)
+    private lazy var deleteAddressButton = CartButton(title: "Удалить", isCart: false, backgroundColor: AppColors.buttonGray)
 
-    var onSaveNewAddress: ((Address) -> Void)?
+    private lazy var buttonsStackView = AppStackView([deleteAddressButton, saveAddressButton], axis: .horizontal, spacing: 10, distribution: .fillEqually)
+
+    var onSaveNewAddress: (() -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupActions()
     }
     
     required init(coder: NSCoder) {
@@ -50,15 +42,15 @@ final class EditAddressStackView: UIStackView {
     }
 
     // Обновляем только улицу и дом
-    func updateUIBasicAddress(_ newBasicAddress: String) {
-        editStreetAndFlatAddressView.configureView(newBasicAddress)
+    func updateUIShortAddress(_ newShortAddress: String) {
+        editStreetAndFlatAddressView.configureView(newShortAddress)
     }
 }
 
 // MARK: - Setup UI
 private extension EditAddressStackView {
     func setupUI() {
-        [editStreetAndFlatAddressView, editNameOfAddressView, entranceAndCodeStackView, floorAndFlatStackView, editCommentToAddressView, saveAddressButton].forEach { addArrangedSubview($0) }
+        [editStreetAndFlatAddressView, editNameOfAddressView, entranceAndCodeStackView, floorAndFlatStackView, editCommentToAddressView, buttonsStackView].forEach { addArrangedSubview($0) }
         axis = .vertical
         distribution = .equalSpacing
         layer.cornerRadius = 10
@@ -68,13 +60,14 @@ private extension EditAddressStackView {
 
 // MARK: - Setup Actions
 extension EditAddressStackView {
+    func setupActions() {
+        setupButtonAction()
+    }
 
-    // В качестве примера отправляем новый адрес на сервер
-    func setupButtonAction(_ newAddress: Address) {
+    func setupButtonAction() {
         saveAddressButton.onButtonTapped = { [weak self] in
             guard let self else { print("Error: self is nil"); return }
-            print(#function)
-            onSaveNewAddress?(newAddress)
+            onSaveNewAddress?()
         }
     }
 }

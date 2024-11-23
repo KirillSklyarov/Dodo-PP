@@ -2,31 +2,26 @@ import UIKit
 
 final class EditAddressViewController: UIViewController {
 
-    // MARK: - Properties
-    private var addressToEdit: Address?
-    private let leftInset: CGFloat = 20
-
     // MARK: - UI Properties
-    private lazy var mapView = MapView()
+    private lazy var mapView = EditAddressMapView()
     private lazy var addressContainerView = EditAddressView()
-    private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [mapView, addressContainerView])
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = -5
-        return stackView
-    }()
+    private lazy var contentStackView = AppStackView([mapView, addressContainerView], axis: .vertical, spacing: -5, distribution: .fillEqually)
     private lazy var dismissButton = DismissButtonView(isChevron: true)
 
+    // MARK: - Other properties
+    private var addressToEdit: Address?
     private let storage: DataStorage
 
+    private let leftInset: CGFloat = 20
+
     var onDismissButtonTapped: (() -> Void)?
+    var onSaveButtonTapped: (() -> Void)?
 
     // MARK: - Init
     init(_ addressToEdit: Address, storage: DataStorage) {
         self.storage = storage
+        self.addressToEdit = addressToEdit
         super.init(nibName: nil, bundle: nil)
-        getAddressToEdit(addressToEdit)
     }
 
     required init?(coder: NSCoder) {
@@ -42,32 +37,29 @@ final class EditAddressViewController: UIViewController {
     }
 }
 
-// MARK: - Public methods
-extension EditAddressViewController {
+// MARK: - Supporting methods
+private extension EditAddressViewController {
     func updateUIWithData() {
+        updateAddressDetailsView()
+        showAddressOnMap()
+    }
+
+    func updateAddressDetailsView() {
         guard let addressToEdit else { print("We have no address to edit"); return }
-        print(addressToEdit)
         addressContainerView.updateUIWithAddress(addressToEdit)
     }
 
-    func getAddressToEdit(_ addressToEdit: Address) {
-        self.addressToEdit = addressToEdit
-        getCoord()
-    }
-}
 
-// MARK: - Supporting methods
-extension EditAddressViewController {
-    private func getCoord() {
-        guard let shortAddress = addressToEdit?.cityStreetHouse else { print("We have no address"); return }
-        mapView.getCoordinates(from: shortAddress)
+    func showAddressOnMap() {
+        guard let addressToEdit else { print("We have no address to edit"); return }
+        mapView.showAddressOnMap(addressToEdit)
     }
 }
 
 // MARK: - Setup UI
 private extension EditAddressViewController {
     func setupUI() {
-        view.backgroundColor = AppColors.backgroundGray
+        view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(contentStackView, dismissButton)
         setupLayout()
     }
@@ -90,28 +82,24 @@ private extension EditAddressViewController {
     func setupActions() {
         setupAddressContainerViewAction()
         setupDismissButtonAction()
-        setupSaveButtonAction()
         setupMapViewAction()
     }
 
     // Отрабатываем нажатие на кнопку сохранить новый адрес
     func setupAddressContainerViewAction() {
-        addressContainerView.onSaveAddressTapped = { [weak self] address in
-            guard let self else { print("We have no self"); return }
-            storage.sendNewAddressToServer(addressToEdit: address)
+        addressContainerView.onSaveAddressTapped = { [weak self] in
+            guard let self,
+                  let addressToEdit else { print("We have no self"); return }
+            storage.updateAddressesAfterEdition(correctAddress: addressToEdit)
+            onSaveButtonTapped?()
         }
-    }
-
-    // Настраиваем кнопку Сохранить
-    func setupSaveButtonAction() {
-        guard let addressToEdit else { print("We have no address to edit"); return }
-        addressContainerView.setupSaveButtonAction(addressToEdit)
     }
 
     // Настраиваем когда двигается карта, то двигается и адрес в таблице
     func setupMapViewAction() {
-        mapView.onChangeAddress = { [weak self] address in
-            self?.addressContainerView.updateBasicAddress(address)
+        mapView.onChangeAddress = { [weak self] shortAddress in
+            self?.addressToEdit?.cityStreetHouse = shortAddress
+            self?.addressContainerView.updateShortAddress(shortAddress)
         }
     }
 

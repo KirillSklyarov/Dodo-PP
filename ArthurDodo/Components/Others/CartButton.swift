@@ -12,10 +12,10 @@ final class CartButton: UIButton {
     var onButtonTapped: (() -> Void)?
 
     // MARK: - Init
-    init(frame: CGRect = .zero, isHidden: Bool = false, title: String? = nil, isNeedImage: Bool = false, isCart: Bool = false) {
+    init(frame: CGRect = .zero, isHidden: Bool = false, title: String? = nil, isNeedImage: Bool = false, isCart: Bool = false, backgroundColor: UIColor = AppColors.buttonOrange) {
         self.isCart = isCart
         super.init(frame: frame)
-        configButton(isHidden: isHidden)
+        configButton(isHidden: isHidden, backgroundColor: backgroundColor)
         setupLayout()
         if let title { setNewTitle(title) }
         if !isNeedImage { self.configuration?.image = nil }
@@ -70,7 +70,7 @@ private extension CartButton {
 
 // MARK: - Setup UI
 private extension CartButton {
-    func configButton(isHidden: Bool) {
+    func configButton(isHidden: Bool, backgroundColor: UIColor) {
         let image = UIImage(systemName: "cart.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         let title = "0 ₽"
 
@@ -82,7 +82,7 @@ private extension CartButton {
             .foregroundColor: UIColor.white,
             .font: AppFonts.bold18]
         ))
-        config.background.backgroundColor = AppColors.buttonOrange
+        config.background.backgroundColor = backgroundColor
         config.cornerStyle = .capsule
         configuration = config
 

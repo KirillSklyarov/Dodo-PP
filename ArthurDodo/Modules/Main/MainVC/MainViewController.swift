@@ -203,7 +203,6 @@ private extension MainViewController {
     // Забираем данные из хранилища
     func getDataFromStorageAndUpdateUI() {
         guard let mainAddress = storage.getMainAddress() else { return }
-        print("mainAddress \(mainAddress.name)")
         let addressName = mainAddress.name
         let userDodoCoins = storage.getDodoCoins()
         headerView.updateUI(addressName, userDodoCoins)
