@@ -10,7 +10,7 @@ final class AddAddressView: UIView {
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
 
-    var onSaveButtonTapped: ((String) -> Void)?
+    var onSaveButtonTapped: ((Address) -> Void)?
     var onTextFieldBeginEditing: (() -> Void)?
 
     // MARK: - Init
@@ -44,11 +44,11 @@ extension AddAddressView {
 // MARK: - Setup actions
 private extension AddAddressView {
     func setupAction() {
-        addressStackView.onSaveButtonTapped = { [weak self] newShortAddress in
-            self?.onSaveButtonTapped?(newShortAddress)
+        addressStackView.onSaveButtonTapped = { [weak self] newAddress in
+            self?.onSaveButtonTapped?(newAddress)
         }
 
-        addressStackView.onTextFieldBeginEditing = { [weak self] in
+        addressStackView.onTextFieldEndEditing = { [weak self] text in
             self?.onTextFieldBeginEditing?()
         }
     }

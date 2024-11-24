@@ -70,7 +70,7 @@ private extension AddNewAddressViewController {
             contentStackView.topAnchor.constraint(equalTo: view.topAnchor),
             contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: bottomInset),
+            contentStackView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: bottomInset).withPriority(.defaultLow), // Позволяет убирать конфликты с клавиатурой
 
             dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             dismissButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
@@ -100,11 +100,11 @@ private extension AddNewAddressViewController {
         }
     }
 
-    // Настраиваем кнопку Сохранить - формируем новый адрес и отправляем его на сервер
+    // Настраиваем кнопку Сохранить - отправляем новый адрес на сервер
     func setupSaveButtonAction() {
-        addressView.onSaveButtonTapped = { [weak self] newShortAddress in
+        addressView.onSaveButtonTapped = { [weak self] newAddress in
             guard let self else { return }
-            passNewAddressToStorage(newShortAddress)
+            passNewAddressToStorage(newAddress)
             onSaveNewAddressButtonTapped?()
         }
     }
@@ -118,18 +118,9 @@ private extension AddNewAddressViewController {
         mapView.showAddressOnMap(mainAddress)
     }
 
-    // Формируем из короткого адреса полный адрес и отправляем его в хранилище
-    func passNewAddressToStorage(_ shortAddress: String) {
-        let newAddress = castAddressFromShortAddress(shortAddress)
+    // Отправляем новый адрес в хранилище
+    func passNewAddressToStorage(_ newAddress: Address) {
         storage.addAddress(newAddress)
-    }
-
-    // Формируем из короткого адреса полный адрес
-    func castAddressFromShortAddress(_ shortAddress: String) -> Address {
-        let countOfAddresses = storage.getCountOfAddresses()
-        let newAddressId = "\(countOfAddresses + 1)"
-        let newAddress = Address(addressId: newAddressId, isMain: false, name: shortAddress, cityStreetHouse: shortAddress, apartment: nil, floor: nil, entrance: nil, entranceCode: nil, comments: nil)
-        return newAddress
     }
 }
 

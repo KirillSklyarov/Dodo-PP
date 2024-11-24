@@ -64,6 +64,10 @@ final class AddressTextFieldView: UIView {
             textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "", attributes: [.foregroundColor: AppColors.grayFont])
         }
     }
+
+    func getTextfieldText() -> String? {
+        textField.text
+    }
 }
 
 // MARK: - Setup UI

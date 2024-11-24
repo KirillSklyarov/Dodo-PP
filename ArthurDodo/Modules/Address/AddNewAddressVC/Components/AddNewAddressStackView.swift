@@ -16,7 +16,7 @@ final class AddNewAddressStackView: UIStackView {
 
     private var newShortAddress: String?
 
-    var onSaveButtonTapped: ((String) -> Void)?
+    var onSaveButtonTapped: ((Address) -> Void)?
     var onTextFieldEndEditing: ((String) -> Void)?
 
     // MARK: - Init
@@ -53,29 +53,32 @@ private extension AddNewAddressStackView {
 extension AddNewAddressStackView {
     func setupAction() {
         setupButtonAction()
-        setupTextFieldAction() 
     }
 
     // В качестве примера отправляем новый адрес на сервер
     func setupButtonAction() {
         saveAddressButton.onButtonTapped = { [weak self] in
-            guard let self,
-                  let newShortAddress else { print("Error: self is nil"); return }
-            onSaveButtonTapped?(newShortAddress)
+            guard let self else { print("Error: self is nil"); return }
+            let newAddress = configureAddressDetails() // Создаем новый адрес
+            onSaveButtonTapped?(newAddress) // Прокидываем нажатие
         }
     }
+}
 
-    func setupTextFieldAction() {
-//        editStreetAndFlatAddressView.onTextFieldBegin = { [weak self] text in
-//            self?.onTextFieldBegin?(text)
-//        }
+// MARK: - Supporting methods
+private extension AddNewAddressStackView {
+    // Формируем адрес из полей
+    func configureAddressDetails() -> Address {
+        let name = editNameOfAddressView.getTextfieldText() ?? ""
+        let shortAddress = editStreetAndFlatAddressView.getTextfieldText() ?? ""
+        let apartment = editFlatOfAddressView.getTextfieldText()
+        let floor = editFloorOfAddressView.getTextfieldText()
+        let entrance = editEntranceOfAddressView.getTextfieldText()
+        let entranceCode = editCodeOfAddressView.getTextfieldText()
+        let comment = editCommentToAddressView.getTextfieldText()
 
-        editNameOfAddressView.onTextFieldEndEditing = { [weak self] text in
-            self?.onTextFieldEndEditing?(text)
-        }
+        let newAddress = Address(addressId: "", isMain: false, name: name, cityStreetHouse: shortAddress, apartment: apartment, floor: floor, entrance: entrance, entranceCode: entranceCode, comments: comment)
 
-        editCodeOfAddressView.onTextFieldBeginEditing = { [weak self] in
-            self?.onTextFieldBeginEditing?()
-        }
+        return newAddress
     }
 }

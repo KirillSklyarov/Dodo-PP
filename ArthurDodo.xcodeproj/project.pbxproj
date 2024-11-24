@@ -22,6 +22,7 @@
 		73238EFB2CD219FF006F3A92 /* PaymentMethodsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73238EFA2CD219FF006F3A92 /* PaymentMethodsTableViewCell.swift */; };
 		73238EFD2CD21ACF006F3A92 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73238EFC2CD21ACF006F3A92 /* PaymentMethod.swift */; };
 		73243B042CE66EE100608FAB /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73243B032CE66EE100608FAB /* HeaderView.swift */; };
+		73272C942CF37C6200AEAF09 /* Layout+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73272C932CF37C6200AEAF09 /* Layout+Ext.swift */; };
 		7330232F2CD7D5B7003E9818 /* SkeletonPlaceholderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330232E2CD7D5B7003E9818 /* SkeletonPlaceholderCell.swift */; };
 		733023332CD80A5B003E9818 /* Int+Seconds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733023322CD80A5B003E9818 /* Int+Seconds.swift */; };
 		733023372CD80F7F003E9818 /* ContentStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733023362CD80F7F003E9818 /* ContentStack.swift */; };
@@ -205,6 +206,7 @@
 		73238EFA2CD219FF006F3A92 /* PaymentMethodsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodsTableViewCell.swift; sourceTree = "<group>"; };
 		73238EFC2CD21ACF006F3A92 /* PaymentMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethod.swift; sourceTree = "<group>"; };
 		73243B032CE66EE100608FAB /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		73272C932CF37C6200AEAF09 /* Layout+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Layout+Ext.swift"; sourceTree = "<group>"; };
 		7330232E2CD7D5B7003E9818 /* SkeletonPlaceholderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonPlaceholderCell.swift; sourceTree = "<group>"; };
 		733023322CD80A5B003E9818 /* Int+Seconds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Seconds.swift"; sourceTree = "<group>"; };
 		733023362CD80F7F003E9818 /* ContentStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentStack.swift; sourceTree = "<group>"; };
@@ -1160,6 +1162,7 @@
 			isa = PBXGroup;
 			children = (
 				73B969D22CC7C7C000A2415A /* UICollection+Ext.swift */,
+				73272C932CF37C6200AEAF09 /* Layout+Ext.swift */,
 				73C067D82CE73FA500AEB125 /* UICollectionViewCell.swift */,
 				73B969D32CC7C7C000A2415A /* UIColor+hex .swift */,
 				73B969D42CC7C7C000A2415A /* UIView+Ext.swift */,
@@ -1445,6 +1448,7 @@
 				73B969732CC7C78700A2415A /* DodoCoinsStackView.swift in Sources */,
 				73238EF92CD219C8006F3A92 /* PaymentAddressesTableView.swift in Sources */,
 				73C067D72CE73B7000AEB125 /* UITableViewCell+Ext.swift in Sources */,
+				73272C942CF37C6200AEAF09 /* Layout+Ext.swift in Sources */,
 				73031AE82CDE2B19005928D2 /* AddressVC.swift in Sources */,
 				73B969742CC7C78700A2415A /* DodoCoinsView.swift in Sources */,
 				73A738A82CDFE4C5003BA211 /* CustomSkeletonViewBorder.swift in Sources */,
