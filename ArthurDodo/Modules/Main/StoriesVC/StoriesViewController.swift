@@ -8,7 +8,6 @@ final class StoriesVC: UIViewController {
     private var story: [Story]
 
     var onDismissed: (() -> Void)?
-//    var onDismissButtonTapped: (() -> Void)?
 
     // MARK: - Init
     init(indexPath: IndexPath, story: [Story]) {
@@ -40,7 +39,6 @@ private extension StoriesVC {
         backgroundView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
             onDismissed?()
-//            onDismissButtonTapped?()
         }
     }
 }

@@ -2,14 +2,14 @@ import UIKit
 
 final class InfoAndToppingsStack: UIStackView {
 
-    // MARK: - Properties
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-
     // MARK: - UI Properties
     private lazy var ingredientsView = IngredientsView()
     private lazy var toppingsCollectionView = AddToppingsCollectionView()
     private var cart: CartButtonView?
+
+    // MARK: - Properties
+    private let leftInset: CGFloat = 10
+    private let rightInset: CGFloat = -10
 
     var onShowPopupVC: ((UIViewController) -> Void)?
 

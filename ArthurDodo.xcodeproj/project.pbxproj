@@ -17,6 +17,10 @@
 		731C4F752CD90CCC0088CF51 /* CartCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731C4F742CD90CCC0088CF51 /* CartCoordinator.swift */; };
 		731C4F772CD911720088CF51 /* AddressCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731C4F762CD911720088CF51 /* AddressCoordinator.swift */; };
 		731C4F792CD912EE0088CF51 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731C4F782CD912EE0088CF51 /* MainCoordinator.swift */; };
+		7322F16B2CF4DBA600C59D60 /* AppImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7322F16A2CF4DBA600C59D60 /* AppImageView.swift */; };
+		7322F16D2CF4DC6100C59D60 /* AppImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7322F16C2CF4DC6100C59D60 /* AppImages.swift */; };
+		7322F16F2CF4E38700C59D60 /* AppLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7322F16E2CF4E38700C59D60 /* AppLabel.swift */; };
+		7322F1712CF50B9C00C59D60 /* AppButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7322F1702CF50B9C00C59D60 /* AppButton.swift */; };
 		732309E42CD2C18100062C8C /* FinalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732309E32CD2C18100062C8C /* FinalVC.swift */; };
 		73238EF92CD219C8006F3A92 /* PaymentAddressesTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73238EF82CD219C8006F3A92 /* PaymentAddressesTableView.swift */; };
 		73238EFB2CD219FF006F3A92 /* PaymentMethodsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73238EFA2CD219FF006F3A92 /* PaymentMethodsTableViewCell.swift */; };
@@ -201,6 +205,10 @@
 		731C4F742CD90CCC0088CF51 /* CartCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCoordinator.swift; sourceTree = "<group>"; };
 		731C4F762CD911720088CF51 /* AddressCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressCoordinator.swift; sourceTree = "<group>"; };
 		731C4F782CD912EE0088CF51 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
+		7322F16A2CF4DBA600C59D60 /* AppImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImageView.swift; sourceTree = "<group>"; };
+		7322F16C2CF4DC6100C59D60 /* AppImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImages.swift; sourceTree = "<group>"; };
+		7322F16E2CF4E38700C59D60 /* AppLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLabel.swift; sourceTree = "<group>"; };
+		7322F1702CF50B9C00C59D60 /* AppButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppButton.swift; sourceTree = "<group>"; };
 		732309E32CD2C18100062C8C /* FinalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalVC.swift; sourceTree = "<group>"; };
 		73238EF82CD219C8006F3A92 /* PaymentAddressesTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentAddressesTableView.swift; sourceTree = "<group>"; };
 		73238EFA2CD219FF006F3A92 /* PaymentMethodsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodsTableViewCell.swift; sourceTree = "<group>"; };
@@ -462,6 +470,16 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		7322F1692CF4DAFC00C59D60 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				7322F16A2CF4DBA600C59D60 /* AppImageView.swift */,
+				7322F16E2CF4E38700C59D60 /* AppLabel.swift */,
+				7322F1702CF50B9C00C59D60 /* AppButton.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		732309E22CD2C15D00062C8C /* FinalVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -664,6 +682,7 @@
 				73031AF32CDE6D88005928D2 /* ScreenState.swift */,
 				73FE97892CE253E40056D53D /* ProfileViews.swift */,
 				73E0EFF42CEF9FD9009520E0 /* PersonalData.swift */,
+				7322F16C2CF4DC6100C59D60 /* AppImages.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -1002,6 +1021,7 @@
 				73031AEA2CDE2B30005928D2 /* MainVC */,
 				73B969392CC7C78700A2415A /* ProductDetailsVC */,
 				736B0D092CCD811500975195 /* StoriesVC */,
+				7322F1692CF4DAFC00C59D60 /* Components */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -1408,11 +1428,13 @@
 				73B9695B2CC7C78700A2415A /* Category.swift in Sources */,
 				73B9695C2CC7C78700A2415A /* CPFCData.swift in Sources */,
 				73B9695D2CC7C78700A2415A /* Dough.swift in Sources */,
+				7322F16B2CF4DBA600C59D60 /* AppImageView.swift in Sources */,
 				73159A742CCC20F9002CFB76 /* DeliveryVC.swift in Sources */,
 				73B9695E2CC7C78700A2415A /* Size.swift in Sources */,
 				73C8C29E2CF1E16E00F9CACA /* AddAddressMapView.swift in Sources */,
 				736B0D0A2CCD811500975195 /* AppProgressView.swift in Sources */,
 				73FE978E2CE257F20056D53D /* OrderMainVCView.swift in Sources */,
+				7322F16F2CF4E38700C59D60 /* AppLabel.swift in Sources */,
 				73031AF22CDE3ABD005928D2 /* SkeletonTableViewCell.swift in Sources */,
 				73C067E32CE75A6F00AEB125 /* DetailsView2.swift in Sources */,
 				736B0D0B2CCD811500975195 /* BackgroundStoriesView.swift in Sources */,
@@ -1429,6 +1451,7 @@
 				73EA17332CCB9ED90079A16C /* AppLoadingIndicator.swift in Sources */,
 				73B969622CC7C78700A2415A /* Topping.swift in Sources */,
 				73B969632CC7C78700A2415A /* Order.swift in Sources */,
+				7322F16D2CF4DC6100C59D60 /* AppImages.swift in Sources */,
 				73B969652CC7C78700A2415A /* Promo.swift in Sources */,
 				73B969662CC7C78700A2415A /* SpecialOffer.swift in Sources */,
 				73B969672CC7C78700A2415A /* Story.swift in Sources */,
@@ -1450,6 +1473,7 @@
 				73C067D72CE73B7000AEB125 /* UITableViewCell+Ext.swift in Sources */,
 				73272C942CF37C6200AEAF09 /* Layout+Ext.swift in Sources */,
 				73031AE82CDE2B19005928D2 /* AddressVC.swift in Sources */,
+				7322F1712CF50B9C00C59D60 /* AppButton.swift in Sources */,
 				73B969742CC7C78700A2415A /* DodoCoinsView.swift in Sources */,
 				73A738A82CDFE4C5003BA211 /* CustomSkeletonViewBorder.swift in Sources */,
 				73E6EB3F2CC8D99C006831F2 /* PriceGrayButton.swift in Sources */,

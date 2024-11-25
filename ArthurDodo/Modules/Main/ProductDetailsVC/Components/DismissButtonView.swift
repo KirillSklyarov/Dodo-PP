@@ -2,18 +2,12 @@ import UIKit
 
 final class DismissButtonView: UIView {
 
+    // MARK: - UI Properties
+    private lazy var dismissButton = AppButton(type: .dismiss, imageColor: .white, target: self, action: #selector(closeButtonTapped))
+
     // MARK: - Properties&Callbacks
     private let viewSize: CGFloat = 40
     var onButtonTapped: (() -> Void)?
-
-    // MARK: - UI Properties
-    private lazy var dismissButton: UIButton = {
-        let button = UIButton()
-        let image = UIImage(systemName: "xmark")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        button.setImage(image, for: .normal)
-        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-        return button
-    }()
 
     // MARK: - Init
     init(frame: CGRect = .zero, xColor: UIColor = .white, backgroundColor: UIColor = AppColors.backgroundGray, isChevron: Bool = false) {

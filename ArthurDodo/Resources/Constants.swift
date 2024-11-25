@@ -38,6 +38,22 @@ struct AppFonts {
     static let bold40 = UIFont(name: "SFProRounded-Bold", size: 40) ?? basicFont
 }
 
+enum AppFontsEnum {
+    case regular(size: CGFloat)
+    case bold(size: CGFloat)
+    case semibold(size: CGFloat)
+    case medium(size: CGFloat)
+
+    var font: UIFont {
+        switch self {
+        case .regular(size: let size): return UIFont(name: "SFProRounded-Regular", size: size)!
+        case .medium(size: let size): return UIFont(name: "SFProRounded-Medium", size: size)!
+        case .semibold(size: let size): return UIFont(name: "SFProRounded-Semibold", size: size)!
+        case .bold(size: let size): return UIFont(name: "SFProRounded-Bold", size: size)!
+        }
+    }
+}
+
 struct AppColors {
     static let backgroundGray = UIColor(hex: "222222")
     static let backgroundBlack = UIColor.black
@@ -46,20 +62,48 @@ struct AppColors {
     static let buttonOrange = UIColor(hex: "ff6400")
     static let grayFont = UIColor(hex: "959595")
     static let sberGreen = UIColor(hex: "06c906")
+}
 
-    let peach = UIColor(hex: "f7d794")
-    let blue = UIColor(hex: "778beb")
-    let geranium = UIColor(hex: "cf6a87")
-    let orange = UIColor(hex: "e15f41")
-    let majesty = UIColor(hex: "786fa6")
-    let summer = UIColor(hex: "f5cd79")
-    let sky = UIColor(hex: "63cdda")
-    let pencil = UIColor(hex: "596275")
-    let wild = UIColor(hex: "574b90")
-    let rock = UIColor(hex: "303952")
+enum AppColorsEnum {
+    case backgroundBlack
+    case backgroundGray
+    case buttonGray
+    case buttonOrange
+    case dodoCoinsBlue
+    case grayFont
+    case sberGreen
+    case white
 
-    func getRandomColor() -> UIColor {
-        let colors = [peach, blue, geranium, orange, majesty, summer, sky, pencil, wild, rock]
-        return colors.randomElement() ?? UIColor.black
+    var color: UIColor {
+        switch self {
+        case .backgroundBlack: return .black
+        case .backgroundGray: return  UIColor(hex: "222222")
+        case .buttonGray: return UIColor(hex: "363636")
+        case .dodoCoinsBlue: return UIColor(hex: "5f4eca")
+        case .buttonOrange: return UIColor(hex: "ff6400")
+        case .grayFont: return UIColor(hex: "959595")
+        case .sberGreen: return UIColor(hex: "06c906")
+        case .white: return .white
+        }
     }
 }
+
+
+//    let peach = UIColor(hex: "f7d794")
+//    let blue = UIColor(hex: "778beb")
+//    let geranium = UIColor(hex: "cf6a87")
+//    let orange = UIColor(hex: "e15f41")
+//    let majesty = UIColor(hex: "786fa6")
+//    let summer = UIColor(hex: "f5cd79")
+//    let sky = UIColor(hex: "63cdda")
+//    let pencil = UIColor(hex: "596275")
+//    let wild = UIColor(hex: "574b90")
+//    let rock = UIColor(hex: "303952")
+
+//    func getRandomColor() -> UIColor {
+//        let colors = [peach, blue, geranium, orange, majesty, summer, sky, pencil, wild, rock]
+//        return colors.randomElement() ?? UIColor.black
+//    }
+//}
+
+

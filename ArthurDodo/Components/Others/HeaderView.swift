@@ -2,32 +2,21 @@ import UIKit
 
 final class ProfileHeaderView: UIView {
 
-    // MARK: - Properties
-    private let viewHeight: CGFloat = 40
-
-    // MARK: - Callbacks
-    var onDismissButtonTapped: (() -> Void)?
-    var onChatButtonTapped: (() -> Void)?
-    var onProfileButtonTapped: (() -> Void)?
-
     // MARK: - UI Properties
     private lazy var dismissButton = DismissButtonView()
     private lazy var chatButton = ProfileButtonView(type: .chat)
     private lazy var profileButton = ProfileButtonView(type: .profile)
 
-    private lazy var rightButtonsStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [chatButton, profileButton])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 10
-        return stackView
-    }()
-    private lazy var contentStackView: UIStackView = {
-        let spacer = UIView()
-        let stackView = UIStackView(arrangedSubviews: [dismissButton, spacer, rightButtonsStackView])
-        stackView.axis = .horizontal
-        return stackView
-    }()
+    private lazy var rightButtonsStackView = AppStackView([chatButton, profileButton], axis: .horizontal, spacing: 10, distribution: .fillEqually)
+
+    private lazy var contentStackView = AppStackView([dismissButton, UIView(), rightButtonsStackView], axis: .horizontal)
+
+    // MARK: - Properties
+    private let viewHeight: CGFloat = 40
+
+    var onDismissButtonTapped: (() -> Void)?
+    var onChatButtonTapped: (() -> Void)?
+    var onProfileButtonTapped: (() -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {

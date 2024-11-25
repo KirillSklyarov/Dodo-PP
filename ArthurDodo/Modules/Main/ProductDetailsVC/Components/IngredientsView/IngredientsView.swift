@@ -1,16 +1,11 @@
 import UIKit
 
+// Блок на экране с ингредиентами, весом и экраном с КБЖУ
 final class IngredientsView: UIView {
 
     // MARK: - UI Properties
-    private lazy var ingredientsLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.regular16
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        return label
-    }()
+    private lazy var ingredientsLabel = AppLabel(textColor: .white, font: .regular(size: 16), alignment: .left)
+
     private lazy var infoButton: UIButton = {
         let button = UIButton()
         let image = UIImage(systemName: "info.circle")?.withTintColor(.lightGray, renderingMode: .alwaysOriginal)
@@ -22,28 +17,12 @@ final class IngredientsView: UIView {
         button.contentHorizontalAlignment = .fill
         return button
     }()
-    private lazy var weightLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.semibold16
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var ingredientsAndInfoStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [ingredientsLabel, infoButton])
-        stack.axis = .horizontal
-        stack.spacing = 10
-        stack.alignment = .leading
-        return stack
-    }()
 
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [ingredientsAndInfoStack, weightLabel])
-        stack.axis = .vertical
-        stack.spacing = 10
-        return stack
-    }()
+    private lazy var weightLabel = AppLabel(textColor: .white, font: .semibold(size: 16), alignment: .left)
+
+    private lazy var ingredientsAndInfoStack = AppStackView([ingredientsLabel, infoButton], axis: .horizontal, spacing: 10, alignment: .leading)
+
+    private lazy var contentStack = AppStackView([ingredientsAndInfoStack, weightLabel], axis: .vertical, spacing: 10)
 
     private lazy var cpfcPopupView = CpfcPopupView(item: item)
 
@@ -141,6 +120,7 @@ private extension IngredientsView {
     }
 }
 
+// Настройка что экран должен показываться в стиле Popover
 extension IngredientsView: UIPopoverPresentationControllerDelegate {
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         .none

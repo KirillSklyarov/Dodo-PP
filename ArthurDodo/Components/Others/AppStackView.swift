@@ -2,7 +2,7 @@ import UIKit
 
 final class AppStackView: UIStackView {
 
-    init(_ arrangedSubviews: [UIView], axis: NSLayoutConstraint.Axis = .vertical, spacing: CGFloat = 10, alignment: Alignment = .fill, distribution: Distribution = .fill) {
+    init(_ arrangedSubviews: [UIView], axis: NSLayoutConstraint.Axis = .vertical, spacing: CGFloat = 0, alignment: Alignment = .fill, distribution: Distribution = .fill) {
         super.init(frame: .zero)
         setupUI(arrangedSubviews, spacing: spacing, axis: axis, alignment: alignment, distribution: distribution)
     }

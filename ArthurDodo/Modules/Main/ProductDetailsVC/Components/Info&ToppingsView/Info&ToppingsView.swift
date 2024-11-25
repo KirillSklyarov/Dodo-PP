@@ -2,12 +2,12 @@ import UIKit
 
 final class InfoAndToppingsView: UIView {
 
+    // MARK: - UI Properties
+    private lazy var infoAndToppingsStack = InfoAndToppingsStack()
+
     // MARK: - Properties
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
-
-    // MARK: - UI Properties
-    private lazy var infoAndToppingsStack = InfoAndToppingsStack()
 
     var onShowPopupVC: ((UIViewController) -> Void)?
 

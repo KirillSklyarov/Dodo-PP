@@ -1,28 +1,19 @@
 import UIKit
 
-enum ProfileButtonImages: String {
-    case chat = "phone.circle.fill"
-    case profile = "hexagon.fill"
-}
-
 final class ProfileButtonView: UIView {
+
+    // MARK: - UI Properties
+    private lazy var myButton = AppButton(imageColor: .white, target: self, action: #selector(myButtonTapped))
 
     // MARK: - Properties
     private let viewSize: CGFloat = 40
     var onButtonTapped: (() -> Void)?
 
-    // MARK: - UI Properties
-    private lazy var myButton: UIButton = {
-        let button = UIButton()
-        button.addTarget(self, action: #selector(myButtonTapped), for: .touchUpInside)
-        return button
-    }()
-
     // MARK: - Init
-    init(frame: CGRect = .zero, type: ProfileButtonImages) {
+    init(frame: CGRect = .zero, type: Button) {
         super.init(frame: frame)
         configUI()
-        setImage(type)
+        myButton.setImage(type: type, imageColor: .white)
     }
 
     required init?(coder: NSCoder) {
@@ -32,11 +23,6 @@ final class ProfileButtonView: UIView {
     // MARK: - IB Actions
     @objc private func myButtonTapped() {
         onButtonTapped?()
-    }
-
-    private func setImage(_ type: ProfileButtonImages) {
-        let image = UIImage(systemName: type.rawValue)?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        myButton.setImage(image, for: .normal)
     }
 
     // MARK: - Private methods

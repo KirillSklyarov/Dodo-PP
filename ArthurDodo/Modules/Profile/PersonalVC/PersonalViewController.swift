@@ -3,17 +3,12 @@ import SafariServices
 
 final class PersonalViewController: UIViewController {
 
-    // MARK: - Properties
+    // MARK: - UI Properties
     private lazy var headerView = CartHeaderView(title: "Личные данные") // Заголовок с кнопкой
     private lazy var personalTableView = PersonalTableView()
+    private lazy var contentStackView = AppStackView([headerView, personalTableView], axis: .vertical, spacing: 10)
 
-    private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [headerView, personalTableView])
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        return stackView
-    }()
-
+    // MARK: - Other Properties
     private let topInset: CGFloat = 10
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10

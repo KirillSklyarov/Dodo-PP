@@ -1,30 +1,15 @@
-//
-//  MissionView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 10.10.2024.
-//
-
 import UIKit
 
 final class MissionView: UIView {
+
+    // MARK: - UI Properties
+    private lazy var titleLabel = AppLabel(text: "Каждый месяц мы придумываем небольшие задания. Выполняйте их и получайте Dodo Coins. Это весело!", textColor: .grayFont, font: .semibold(size: 14), alignment: .center)
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
     private let bottomPadding: CGFloat = -10
     private let viewHeight: CGFloat = 250
-
-    // MARK: - UI Properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.semibold14
-        label.textColor = AppColors.grayFont
-        label.textAlignment = .center
-        label.text = "Каждый месяц мы придумываем небольшие задания. Выполняйте их и получайте Dodo Coins. Это весело!"
-        label.numberOfLines = 0
-        return label
-    }()
 
     // MARK: - Init
     override init(frame: CGRect) {

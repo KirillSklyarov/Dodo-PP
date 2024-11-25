@@ -2,6 +2,10 @@ import UIKit
 
 final class CartButtonView: UIView {
 
+    // MARK: - UI Properties
+    private var cartButton: CartButton
+    private lazy var blurView = CustomBlurView()
+
     // MARK: - Properties
     private let viewHeight: CGFloat = 90
     private let topInset: CGFloat = 10
@@ -11,10 +15,6 @@ final class CartButtonView: UIView {
     private var currentPrice = 0
 
     var onCartButtonTapped: ( () -> Void )?
-
-    // MARK: - UI Properties
-    private var cartButton: CartButton
-    private lazy var blurView = CustomBlurView()
 
     // MARK: - Init
     init(frame: CGRect = .zero, isHidden: Bool = false, title: String? = nil, isNeedImage: Bool = false, isCart: Bool = false) {

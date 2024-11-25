@@ -2,6 +2,12 @@ import UIKit
 
 final class BackgroundStoriesView: UIView {
 
+    // MARK: - UI Properties
+    private lazy var dismissButton = DismissButtonView(xColor: AppColors.buttonGray, backgroundColor: .white)
+    private lazy var storiesImageView = AppImageView()
+    private lazy var progressViewsStack = AppStackView([], axis: .horizontal, spacing: 15, alignment: .fill, distribution: .fillEqually)
+    private lazy var progressViews: [UIProgressView] = []
+
     // MARK: - Properties
     private let padding: CGFloat = 10
     private let progressViewHeight: CGFloat = 2
@@ -17,24 +23,6 @@ final class BackgroundStoriesView: UIView {
     private var displayLink: CADisplayLink?
     private lazy var elapsedTime: TimeInterval = 0.0
     private lazy var durationOfStory: TimeInterval = 2.0
-
-    // MARK: - UI Properties
-    private lazy var dismissButton = DismissButtonView(xColor: AppColors.buttonGray, backgroundColor: .white)
-    private lazy var storiesImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
-    private lazy var progressViewsStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.spacing = 15
-        stack.alignment = .fill
-        stack.distribution = .fillEqually
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
-    private lazy var progressViews: [UIProgressView] = []
 
     // MARK: - Init
     init(story: [Story]) {

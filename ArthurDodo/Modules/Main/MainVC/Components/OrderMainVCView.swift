@@ -2,67 +2,30 @@ import UIKit
 
 final class OrderMainVCView: UIView {
 
-    // MARK: - Properties
-    private let viewHeight: CGFloat = 100
-    private let cartImageViewSize: CGFloat = 60
-    private let cornerRadius: CGFloat = 10
-
-    private var viewHeightConstraint: NSLayoutConstraint?
-
     // MARK: - UI Properties
-    private lazy var cartImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "cart.circle")?.withTintColor(AppColors.grayFont, renderingMode: .alwaysOriginal)
-        imageView.heightAnchor.constraint(equalToConstant: cartImageViewSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: cartImageViewSize).isActive = true
-        return imageView
-    }()
-    private lazy var cartImageContainerView: UIView = {
-        let view = UIView()
-        view.addSubviews(cartImageView)
-        return view
-    }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = AppColors.grayFont
-        label.font = AppFonts.semibold18
-        return label
-    }()
-    private lazy var statusLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = AppColors.grayFont
-        label.font = AppFonts.semibold18
-        return label
-    }()
-    private lazy var timeLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = AppColors.backgroundBlack
-        label.font = AppFonts.bold20
-        label.backgroundColor = .systemYellow
+    private lazy var cartImageView = AppImageView(systemImage: AppImages.common(.cartCircle), tintColor: .grayFont)
+    private lazy var titleLabel = AppLabel(textColor: .grayFont, font: .semibold(size: 18))
+    private lazy var statusLabel = AppLabel(textColor: .grayFont, font: .semibold(size: 18))
+
+    private lazy var timeLabel: AppLabel = {
+        let label = AppLabel(textColor: .backgroundBlack, font: .bold(size: 20))
         label.textAlignment = .center
         label.layer.cornerRadius = cornerRadius
-        label.layer.masksToBounds = true
-        label.heightAnchor.constraint(equalToConstant: viewHeight / 2).isActive = true
+        label.backgroundColor = .systemYellow
+        label.clipsToBounds = true
         return label
     }()
-    private lazy var timeView: UIView = {
-        let view = UIView()
-        view.addSubviews(timeLabel)
-        return view
-    }()
-    private lazy var textStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [UIView(), titleLabel, statusLabel, UIView()])
-        stackView.axis = .vertical
-        stackView.alignment = .leading
-        stackView.distribution = .fillEqually
-        return stackView
-    }()
-    private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [cartImageContainerView, textStackView, timeView, UIView()])
-        stackView.axis = .horizontal
-        stackView.spacing = 10
-        return stackView
-    }()
+
+    private lazy var textStackView = AppStackView([titleLabel, statusLabel], axis: .vertical, spacing: 0, alignment: .leading, distribution: .fillEqually)
+    private lazy var contentStackView = AppStackView([cartImageView, textStackView, timeLabel], axis: .horizontal, spacing: 0, alignment: .center, distribution: .equalSpacing)
+
+    // MARK: - Properties
+    private let viewHeight: CGFloat = 100
+    private let cornerRadius: CGFloat = 10
+    private let leftInset: CGFloat = 10
+    private let rightInset: CGFloat = -10
+
+    private var viewHeightConstraint: NSLayoutConstraint?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -135,24 +98,19 @@ private extension OrderMainVCView {
     func setupContentStackViewLayout() {
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
 
     func setupElementsLayout() {
         NSLayoutConstraint.activate([
-            cartImageContainerView.widthAnchor.constraint(equalTo: contentStackView.widthAnchor, multiplier: 0.25),
+            cartImageView.heightAnchor.constraint(equalTo: contentStackView.heightAnchor, multiplier: 0.75),
+            cartImageView.widthAnchor.constraint(equalTo: cartImageView.heightAnchor),
 
-            cartImageView.centerXAnchor.constraint(equalTo: cartImageContainerView.centerXAnchor),
-            cartImageView.centerYAnchor.constraint(equalTo: cartImageContainerView.centerYAnchor),
-
-            timeLabel.centerXAnchor.constraint(equalTo: timeView.centerXAnchor),
-            timeLabel.centerYAnchor.constraint(equalTo: timeView.centerYAnchor),
-            timeView.widthAnchor.constraint(equalTo: contentStackView.widthAnchor, multiplier: 0.28),
-
-            timeLabel.widthAnchor.constraint(equalTo: timeView.widthAnchor, multiplier: 0.87),
+            timeLabel.heightAnchor.constraint(equalTo: contentStackView.heightAnchor, multiplier: 0.5),
+            timeLabel.widthAnchor.constraint(equalTo: contentStackView.widthAnchor, multiplier: 0.28),
         ])
     }
 }

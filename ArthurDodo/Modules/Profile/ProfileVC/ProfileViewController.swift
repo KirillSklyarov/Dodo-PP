@@ -7,12 +7,7 @@ final class ProfileViewController: UIViewController {
     private lazy var personalDataCollectionView = CoinsOrdersCollectionView()
     private lazy var promoStackView = PromoStackView()
     private lazy var missionStackView = MissionStackView()
-    private lazy var contentStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [personalDataCollectionView, promoStackView, missionStackView])
-        stack.axis = .vertical
-        stack.spacing = 10
-        return stack
-    }()
+    private lazy var contentStackView = AppStackView([personalDataCollectionView, promoStackView, missionStackView], axis: .vertical, spacing: 10)
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties

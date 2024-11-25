@@ -2,14 +2,6 @@ import UIKit
 
 final class AddressHeaderView: UIStackView {
 
-    // MARK: - Properties
-    private let leftPadding: CGFloat = 20
-    private let rightPadding: CGFloat = -20
-    private let topPadding: CGFloat = 10
-
-    var onDismissButtonTapped: (() -> Void)?
-    var onDeliveryButtonTapped: (() -> Void)?
-
     // MARK: - UI Properties
     private lazy var dismissButton = DismissButtonView()
     private lazy var segmentControl: SegmentControlView = {
@@ -18,6 +10,14 @@ final class AddressHeaderView: UIStackView {
         view.backgroundColor = AppColors.backgroundBlack
         return view
     }()
+
+    // MARK: - Properties
+    private let leftPadding: CGFloat = 20
+    private let rightPadding: CGFloat = -20
+    private let topPadding: CGFloat = 10
+
+    var onDismissButtonTapped: (() -> Void)?
+    var onDeliveryButtonTapped: (() -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {

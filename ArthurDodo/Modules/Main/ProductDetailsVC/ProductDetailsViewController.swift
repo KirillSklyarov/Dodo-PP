@@ -8,12 +8,8 @@ final class ProductDetailsViewController: UIViewController {
     private lazy var itemDetailsView = DetailsView()
     private lazy var infoAndToppingsContainer = InfoAndToppingsView()
     private lazy var cartButtonView = CartButtonView()
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [itemDetailsView, infoAndToppingsContainer])
-        stack.axis = .vertical
-        stack.spacing = 5
-        return stack
-    }()
+    private lazy var contentStack = AppStackView( [itemDetailsView, infoAndToppingsContainer], axis: .vertical, spacing: 5)
+   
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties

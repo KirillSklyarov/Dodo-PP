@@ -1,21 +1,9 @@
-//
-//  OrderView.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 24.09.2024.
-//
-
 import UIKit
 
 final class OrderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.bold26
-        return label
-    }()
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 26))
 
     // MARK: - Init
     init(frame: CGRect = .zero, title: String? = nil) {
@@ -27,7 +15,10 @@ final class OrderView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
+// MARK: - Public methods
+extension OrderView {
     func updateTitle(_ countOfItems: Int, totalPrice: Int) {
         let items = "товар".pluralize(for: countOfItems)
         let newText = "\(countOfItems) \(items) на \(totalPrice) ₽"

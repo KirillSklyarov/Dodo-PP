@@ -4,18 +4,6 @@ import CoreLocation
 
 final class MapView: UIView {
 
-    // MARK: - Properties
-    private let rightInset: CGFloat = -20
-    private let bottomInset: CGFloat = -20
-    private let pinImageSize: CGFloat = 50
-    private let locationRadius: CLLocationDistance = 500
-
-    private var isAnimating = false
-    private let geocoder = CLGeocoder()
-    private var addressCoordinates: CLLocationCoordinate2D?
-
-    var onChangeAddress: ((String) -> Void)?
-
     // MARK: - UI Properties
     private lazy var mapView = MKMapView()
     private lazy var locationManager = CLLocationManager()
@@ -25,16 +13,21 @@ final class MapView: UIView {
         button.tintColor = .white
         return button
     }()
-    private lazy var pinView: UIImageView = {
-        let image = UIImage(systemName: "mappin")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
-        let view = UIImageView(image: image)
-        view.contentMode = .scaleAspectFit
-        view.heightAnchor.constraint(equalToConstant: pinImageSize).isActive = true
-        view.widthAnchor.constraint(equalToConstant: pinImageSize).isActive = true
-        return view
-    }()
+    private lazy var pinView = AppImageView(systemImage: AppImages.common(.mapPin), tintColor: .buttonOrange, squareSize: pinImageSize)
+
+    // MARK: - Properties
+    private let rightInset: CGFloat = -20
+    private let bottomInset: CGFloat = -20
+    private let pinImageSize: CGFloat = 40
+    private let locationRadius: CLLocationDistance = 500
+
+    private var isAnimating = false
+    private let geocoder = CLGeocoder()
+    private var addressCoordinates: CLLocationCoordinate2D?
 
     private var address: String?
+
+    var onChangeAddress: ((String) -> Void)?
 
     // MARK: - Init
     init(frame: CGRect = .zero, isHidden: Bool = true, isPinHidden: Bool = false, isTrackingButtonHidden: Bool = false, address: String? = nil) {

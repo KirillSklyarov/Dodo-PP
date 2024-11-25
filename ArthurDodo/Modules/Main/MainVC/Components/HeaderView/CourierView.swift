@@ -2,15 +2,12 @@ import UIKit
 
 final class CourierView: UIView {
 
-    private lazy var courierImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(systemName: "figure.hiking")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
-        return imageView
-    }()
+    // MARK: - Properties
+    private lazy var courierImageView = AppImageView(systemImage: .common(.courier), tintColor: .buttonOrange)
 
     private let height: CGFloat = 40
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()

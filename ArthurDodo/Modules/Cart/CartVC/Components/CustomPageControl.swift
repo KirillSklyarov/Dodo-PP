@@ -1,10 +1,3 @@
-//
-//  CustomPageControl.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 27.09.2024.
-//
-
 import UIKit
 
 final class CustomPageControl: UIPageControl {
