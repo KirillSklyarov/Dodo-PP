@@ -3,36 +3,16 @@ import UIKit
 final class DetailsView2: UIView {
 
     // MARK: - UI Properties
-    private lazy var pizzaImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.heightAnchor.constraint(equalToConstant: pizzaImageSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: pizzaImageSize).isActive = true
-        return imageView
-    }()
-    private lazy var imageContainerView: UIView = {
-        let view = UIView()
-        view.addSubviews(pizzaImageView)
-        return view
-    }()
+    private lazy var pizzaImageView = AppImageView()
     private lazy var sizeSegmentControl = SegmentControlView(items: AppConstants.sizeCases, defaultSelection: 1)
     private lazy var doughSegmentControl = SegmentControlView(items: AppConstants.doughCases, defaultSelection: 0)
-    private lazy var segmentsControlStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [sizeSegmentControl, doughSegmentControl])
-        stackView.axis = .vertical
-        stackView.spacing = 5
-        return stackView
-    }()
+    private lazy var segmentsControlStackView = AppStackView([sizeSegmentControl, doughSegmentControl], axis: .vertical, spacing: 5)
 
-    private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [imageContainerView, segmentsControlStackView])
-        stackView.axis = .vertical
-        return stackView
-    }()
+    private lazy var contentStackView = AppStackView([pizzaImageView, segmentsControlStackView], axis: .vertical, spacing: 10)
 
     // MARK: - Size Properties
     private let pizzaImageSize: CGFloat = 340
-    private let blurHeaderHeight: CGFloat = 60
+    private let blurHeaderHeight: CGFloat = 70
     private let cornerRadius: CGFloat = 20
 
     private let topInset: CGFloat = 10
@@ -56,13 +36,6 @@ final class DetailsView2: UIView {
         setupDoughSegmentControl()
     }
 
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        setupUI()
-//        setupSizeSegmentControl()
-//        setupDoughSegmentControl()
-//    }
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -79,12 +52,10 @@ final class DetailsView2: UIView {
 extension DetailsView2 {
     func hideDoughSegment() {
         doughSegmentControl.isHidden = true
-//        placeImageInCenter()
     }
 
     func hideSizeSegment() {
         sizeSegmentControl.isHidden = true
-//        placeImageInCenter()
     }
 
     func updatePizzaImage(_ imageName: String) {
@@ -104,7 +75,7 @@ extension DetailsView2 {
 // MARK: - Setup UI
 private extension DetailsView2 {
     func setupUI() {
-        backgroundColor = UIColor(hex: "485460")
+        backgroundColor = AppColorsEnum.productBackground.color
         layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
 
@@ -114,7 +85,6 @@ private extension DetailsView2 {
     }
 
     func setupLayout() {
-        setupImageViewLayout()
         setupContentStackLayout()
     }
 
@@ -123,15 +93,10 @@ private extension DetailsView2 {
             contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: blurHeaderHeight),
             contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset*2),
             contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset*2),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomInset)
-        ])
-    }
+            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomInset),
 
-    func setupImageViewLayout() {
-        NSLayoutConstraint.activate([
-            pizzaImageView.topAnchor.constraint(equalTo: imageContainerView.topAnchor, constant: topInset),
-            pizzaImageView.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor, constant: bottomInset),
-            pizzaImageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor)
+            pizzaImageView.heightAnchor.constraint(equalToConstant: pizzaImageSize)
+
         ])
     }
 }

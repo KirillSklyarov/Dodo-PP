@@ -3,20 +3,9 @@ import UIKit
 final class CartHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Корзина"
-        label.textColor = .white
-        label.font = AppFonts.semibold18
-        return label
-    }()
-    private lazy var dismissButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Закрыть", for: .normal)
-        button.setTitleColor(AppColors.buttonOrange, for: .normal)
-        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-        return button
-    }()
+    private lazy var titleLabel = AppLabel(text: "Корзина", textColor: .white, font: .semibold(size: 18))
+
+    private lazy var dismissButton = DismissButton()
 
     // MARK: - Properties&Callbacks
     private let viewHeight: CGFloat = 60
@@ -29,24 +18,11 @@ final class CartHeaderView: UIView {
         super.init(frame: frame)
         setTitle(title)
         configUI()
+        setupAction()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    private func setTitle(_ title: String?) {
-        if let title { titleLabel.text = title }
-    }
-
-    // MARK: - IB Actions
-    @objc private func closeButtonTapped() {
-        onDismissButtonTapped?()
-    }
-
-    // MARK: - Public methods
-    func getViewHeight() -> CGFloat {
-        viewHeight
     }
 }
 
@@ -76,5 +52,21 @@ private extension CartHeaderView {
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
+    }
+}
+
+// MARK: - Setup Actions
+private extension CartHeaderView {
+    func setupAction() {
+        dismissButton.onDismissButtonTapped = { [weak self] in
+            self?.onDismissButtonTapped?()
+        }
+    }
+}
+
+// MARK: - Supporting methods
+private extension CartHeaderView {
+    func setTitle(_ title: String?) {
+        if let title { titleLabel.text = title }
     }
 }

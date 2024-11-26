@@ -71,6 +71,7 @@ enum AppColorsEnum {
     case buttonOrange
     case dodoCoinsBlue
     case grayFont
+    case productBackground
     case sberGreen
     case white
 
@@ -82,6 +83,7 @@ enum AppColorsEnum {
         case .dodoCoinsBlue: return UIColor(hex: "5f4eca")
         case .buttonOrange: return UIColor(hex: "ff6400")
         case .grayFont: return UIColor(hex: "959595")
+        case .productBackground: return UIColor(hex: "485460")
         case .sberGreen: return UIColor(hex: "06c906")
         case .white: return .white
         }

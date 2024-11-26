@@ -7,12 +7,7 @@ final class MapView: UIView {
     // MARK: - UI Properties
     private lazy var mapView = MKMapView()
     private lazy var locationManager = CLLocationManager()
-    private lazy var userTrackingButton: MKUserTrackingButton = {
-        let button = MKUserTrackingButton(mapView: mapView)
-        button.backgroundColor = AppColors.backgroundBlack
-        button.tintColor = .white
-        return button
-    }()
+    private lazy var userTrackingButton = UserTrackingButton(mapView: mapView)
     private lazy var pinView = AppImageView(systemImage: AppImages.common(.mapPin), tintColor: .buttonOrange, squareSize: pinImageSize)
 
     // MARK: - Properties

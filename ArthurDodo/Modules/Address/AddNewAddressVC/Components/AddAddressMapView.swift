@@ -5,25 +5,13 @@ final class AddAddressMapView: UIView {
 
     // MARK: - UI Properties
     private lazy var mapView = MKMapView()
-    private lazy var userTrackingButton: MKUserTrackingButton = {
-        let button = MKUserTrackingButton(mapView: mapView)
-        button.backgroundColor = AppColors.backgroundBlack
-        button.tintColor = .white
-        return button
-    }()
-    private lazy var pinView: UIImageView = {
-        let image = UIImage(systemName: "mappin")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
-        let view = UIImageView(image: image)
-        view.contentMode = .scaleAspectFit
-        view.heightAnchor.constraint(equalToConstant: pinImageSize).isActive = true
-        view.widthAnchor.constraint(equalToConstant: pinImageSize).isActive = true
-        return view
-    }()
+    private lazy var userTrackingButton = UserTrackingButton(mapView: mapView)
+    private lazy var pinView = AppImageView(systemImage: AppImages.common(.mapPin), tintColor: .buttonOrange, squareSize: pinImageSize)
 
     // MARK: - Other properties
     private let rightInset: CGFloat = -20
     private let bottomInset: CGFloat = -20
-    private let pinImageSize: CGFloat = 50
+    private let pinImageSize: CGFloat = 40
     private let locationRadius: CLLocationDistance = 500
 
     private var isAnimating = false

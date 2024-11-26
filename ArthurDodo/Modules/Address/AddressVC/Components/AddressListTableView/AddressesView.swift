@@ -4,25 +4,8 @@ final class DeliveryAddressView: UIView {
 
     // MARK: - UI Properties
     private lazy var titleLabel = AppLabel(text: "Мои адреса", textColor: .white, font: .bold(size: 26))
-
-    private lazy var addAddressButton: UIButton = {
-        let button = UIButton()
-        let title = "+ Новый адрес"
-        var config = UIButton.Configuration.filled()
-        config.title = title
-        config.attributedTitle = AttributedString(title, attributes:
-                                                    AttributeContainer([ .font: AppFonts.bold14]))
-        config.baseForegroundColor = .white
-        config.baseBackgroundColor = AppColors.buttonGray
-        config.cornerStyle = .capsule
-        button.configuration = config
-        button.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
-        button.addTarget(self, action: #selector(addAddressButtonTapped), for: .touchUpInside)
-        return button
-    }()
-
+    private lazy var addAddressButton = AddNewAddressButton()
     private lazy var headerStackView = AppStackView([titleLabel, addAddressButton], axis: .horizontal)
-
     private lazy var deliveryButton = CartButton(title: "Доставить сюда", isCart: false)
     private lazy var addressTableView = AddressListTableView()
     private lazy var contentStackView = AppStackView([headerStackView, addressTableView, deliveryButton], axis: .vertical, spacing: 10)
@@ -32,7 +15,6 @@ final class DeliveryAddressView: UIView {
     private let rightPadding: CGFloat = -10
     private let topPadding: CGFloat = 20
     private let bottomPadding: CGFloat = -10
-    private let buttonWidth: CGFloat = 150
 
     var onEditAddressCellTapped: ((Address) -> Void)?
     var onAddNewAddressButtonTapped: (() -> Void)?
@@ -45,15 +27,14 @@ final class DeliveryAddressView: UIView {
         setupUI()
         setupActions()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    func updateUI() {
-        addressTableView.reloadData()
-    }
-
+// MARK: - Public methods
+extension DeliveryAddressView {
     func getAddresses(_ addresses: [Address]) {
         addressTableView.getAddresses(addresses)
     }
@@ -84,6 +65,7 @@ private extension DeliveryAddressView {
     func setupActions() {
         setupAddressTableViewActions()
         setupDeliveryButtonAction()
+        setupAddNewAddressButtonAction()
     }
 
     func setupAddressTableViewActions() {
@@ -103,7 +85,9 @@ private extension DeliveryAddressView {
         }
     }
 
-    @objc func addAddressButtonTapped() {
-        onAddNewAddressButtonTapped?()
+    func setupAddNewAddressButtonAction() {
+        addAddressButton.onAddNewAddressButtonTapped = { [weak self] in
+            self?.onAddNewAddressButtonTapped?()
+        }
     }
 }

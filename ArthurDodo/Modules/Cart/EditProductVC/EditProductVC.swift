@@ -9,12 +9,7 @@ final class EditProductViewController: UIViewController {
     private lazy var infoAndToppingsContainer = InfoAndToppingsView() // Блок с составом и топпингами
     private lazy var cartButtonView = EditCartButtonView() // Блок с ценой и кнопкой
 
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [itemDetailsView, infoAndToppingsContainer])
-        stack.axis = .vertical
-        stack.spacing = 5
-        return stack
-    }()
+    private lazy var contentStack = AppStackView([itemDetailsView, infoAndToppingsContainer], axis: .vertical, spacing: 5)
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties

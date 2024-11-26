@@ -3,44 +3,15 @@ import UIKit
 final class DodoCoinsView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.regular18
-        label.numberOfLines = 1
-        return label
-    }()
-    private lazy var valueLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.regular18
-        label.numberOfLines = 1
-        return label
-    }()
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [titleLabel, valueLabel])
-        stack.axis = .horizontal
-        stack.distribution = .equalSpacing
-        return stack
-    }()
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .regular(size: 18), numberOfLines: 1)
+    private lazy var valueLabel = AppLabel(textColor: .white, font: .regular(size: 18), numberOfLines: 1)
+    private lazy var contentStack = AppStackView([titleLabel, valueLabel], axis: .horizontal, distribution: .equalSpacing)
 
     // MARK: - Init
-    override init(frame: CGRect) {
+    init(frame: CGRect = .zero, title: String? = nil, value: String? = nil, textColor: UIColor = .white) {
         super.init(frame: frame)
         setupUI()
-    }
-
-    init(frame: CGRect = .zero, textColor: UIColor = .white) {
-        super.init(frame: frame)
-        setupUI()
-        setTextColor(textColor)
-    }
-
-    init(frame: CGRect = .zero, title: String, value: String, textColor: UIColor = .white) {
-        super.init(frame: frame)
-        setupUI()
-        titleLabel.text = title
-        valueLabel.text = value
+        setText(title: title, value: value)
         setTextColor(textColor)
     }
 
@@ -80,6 +51,15 @@ private extension DodoCoinsView {
 
 // MARK: - Supporting methods
 private extension DodoCoinsView {
+    // Устанавливает текст
+    func setText(title: String?, value: String?) {
+        if let title, let value {
+            titleLabel.text = title
+            valueLabel.text = value
+        }
+    }
+
+    // Устанавливает цвет текста
     func setTextColor(_ color: UIColor) {
         titleLabel.textColor = color
         valueLabel.textColor = color

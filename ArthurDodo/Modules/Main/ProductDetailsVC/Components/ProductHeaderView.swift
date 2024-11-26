@@ -3,7 +3,7 @@ import UIKit
 final class ProductHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 20))
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 20), alignment: .center)
     private lazy var dismissButton = DismissButtonView()
     private lazy var blurView = CustomBlurView()
 
@@ -23,7 +23,7 @@ final class ProductHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        closeButtonTapped()
+        dismissButtonTapped()
     }
 
     required init?(coder: NSCoder) {
@@ -48,7 +48,7 @@ extension ProductHeaderView {
 
 // MARK: - Setup actions
 private extension ProductHeaderView {
-    func closeButtonTapped() {
+    func dismissButtonTapped() {
         dismissButton.onButtonTapped = { [weak self] in
             self?.onCloseButtonTapped?()
         }
@@ -90,7 +90,7 @@ private extension ProductHeaderView {
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: labelLeftPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: labelRightPadding)
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: labelRightPadding),
         ])
     }
 }

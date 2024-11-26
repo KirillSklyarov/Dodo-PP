@@ -1,17 +1,9 @@
-//
-//  PromoButton.swift
-//  ArthutDodo
-//
-//  Created by Kirill Sklyarov on 27.09.2024.
-//
-
 import UIKit
 
 final class PromoButton: UIButton {
 
     // MARK: - Properties
     private let buttonHeight: CGFloat = 50
-//    private let buttonWidth: CGFloat = 250
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -33,6 +25,5 @@ final class PromoButton: UIButton {
         layer.cornerRadius = 20
         layer.masksToBounds = true
         heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-//        widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
     }
 }

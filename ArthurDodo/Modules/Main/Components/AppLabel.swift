@@ -16,7 +16,7 @@ final class AppLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
+/Users/kirillsklyarov/Dodo-PP/ArthurDodo/Modules/Main/Components/AppImageView.swift
 
 
 private extension AppLabel {

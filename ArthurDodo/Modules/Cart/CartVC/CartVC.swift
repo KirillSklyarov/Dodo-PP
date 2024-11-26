@@ -11,12 +11,7 @@ final class CartViewController: UIViewController {
     private lazy var dodoCoinsView = DodoCoinsStackView() // Блок с додокоинами
     private lazy var cartButtonView = CartButtonView(isCart: true) // Кнопка корзины
     private lazy var scrollUpButton = ScrollUpButton() // Кнопка scrollToTop
-    private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [orderStackView, itemsToAddStackView, promoStackView, enterPromoCodeButton, dodoCoinsView])
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        return stackView
-    }()
+    private lazy var contentStackView = AppStackView([orderStackView, itemsToAddStackView, promoStackView, enterPromoCodeButton, dodoCoinsView], axis: .vertical, spacing: 10)
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties
