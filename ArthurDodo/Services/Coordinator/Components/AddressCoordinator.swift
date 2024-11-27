@@ -19,7 +19,6 @@ final class AddressCoordinator: Coordinator {
 
     func start() {
         let addressVC = screenFactory.makeAddressScreen()
-        router.setRootModule(addressVC)
 
         addressVC.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
@@ -40,6 +39,8 @@ final class AddressCoordinator: Coordinator {
             self?.router.dismiss()
             self?.onFlowFinished?()
         }
+
+        router.present(addressVC, modalPresentation: .fullScreen)
     }
 }
 
@@ -47,27 +48,27 @@ final class AddressCoordinator: Coordinator {
 private extension AddressCoordinator {
     func showEditAddressVC(_ address: Address) {
         let editAddressVC = screenFactory.makeEditAddressScreen(address)
-        router.present(editAddressVC)
+        router.present(editAddressVC, isParent: true, modalPresentation: .fullScreen)
 
         editAddressVC.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
+            self?.router.dismiss(isParent: true)
         }
 
         editAddressVC.onSaveButtonTapped = { [weak self] in
-            self?.router.dismiss()
+            self?.router.dismiss(isParent: true)
         }
     }
 
     func showAddNewAddressVC() {
         let vc = screenFactory.makeAddNewAddressScreen()
-        router.present(vc)
+        router.present(vc, isParent: true, modalPresentation: .fullScreen)
 
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
+            self?.router.dismiss(isParent: true)
         }
 
         vc.onSaveNewAddressButtonTapped = { [weak self] in
-            self?.router.dismiss()
+            self?.router.dismiss(isParent: true)
         }
     }
 }

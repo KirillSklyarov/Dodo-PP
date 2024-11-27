@@ -32,22 +32,23 @@ private extension AppCoordinator {
         let mainCoordinator = coordinatorFactory.makeMainCoordinator() // Создаем координатор
 
         // Настраиваем замыкания
-        mainCoordinator.onShowCart = { [weak self, weak mainCoordinator] in
-            guard let self, let mainCoordinator else { return }
-            startCartFlow()
-            removeChild(mainCoordinator)
+        mainCoordinator.onShowCart = { [weak self] in
+            guard let self else { return }
+
+            startCartFlow() {
+                // Вызываем обновление корзины на главном экране (так как у нас модальное представление .automatic, а не .fullScreen, то метод viewWillAppear у MainVC не сработает)
+                mainCoordinator.mainVCUpdateCart()
+            }
         }
 
-        mainCoordinator.onShowProfile = { [weak self, weak mainCoordinator] in
-            guard let self, let mainCoordinator else { return }
+        mainCoordinator.onShowProfile = { [weak self] in
+            guard let self else { return }
             startProfileFlow()
-            removeChild(mainCoordinator)
         }
 
-        mainCoordinator.onShowAddress = { [weak self, weak mainCoordinator] in
-            guard let self, let mainCoordinator else { return }
+        mainCoordinator.onShowAddress = { [weak self] in
+            guard let self else { return }
             startAddressFlow()
-            removeChild(mainCoordinator)
         }
 
         addChild(mainCoordinator) // Добавляем координатор в массив
@@ -64,13 +65,11 @@ private extension AppCoordinator {
         // Настраиваем замыкания: как только флоу профиля завершен, то начинаем новый главный поток
         profileCoordinator.onFlowFinished = { [weak self, weak profileCoordinator] in
             guard let self, let profileCoordinator else { return }
-            startMainFlow() // Начинаем новый главный поток
             removeChild(profileCoordinator) // Удаляем координатор из массива
         }
 
         addChild(profileCoordinator) // Добавляем координатор в массив
         profileCoordinator.start() // Стартуем поток координатор в массив
-
     }
 }
 
@@ -81,7 +80,6 @@ private extension AppCoordinator {
 
         addressCoordinator.onFlowFinished = { [weak self, weak addressCoordinator] in
             guard let self, let addressCoordinator else { return }
-            startMainFlow()
             removeChild(addressCoordinator)
         }
 
@@ -92,21 +90,22 @@ private extension AppCoordinator {
 
 // MARK: - Cart Flow
 private extension AppCoordinator {
-    func startCartFlow() {
+    func startCartFlow(completion: (() -> Void)? = nil) {
         let cartCoordinator = coordinatorFactory.makeCartCoordinator()
 
         // Если корзину закрываем, то стартуем главный поток
         cartCoordinator.onCartDismissed = { [weak self, weak cartCoordinator] in
             guard let self, let cartCoordinator else { print("CartCoordinator not found"); return }
-            startMainFlow()
+            completion?() // Вызываем замыкание чтобы вызвать обновление главного экрана
             removeChild(cartCoordinator)
         }
 
         // Обрабатываем замыкание когда у нас завершается флоу корзины и мы переходим к флоу доставки и оплаты
-        cartCoordinator.onFinishFlow = { [weak self, weak cartCoordinator] in
-            guard let self, let cartCoordinator else { print("CartCoordinator not found"); return }
-            startDeliveryFlow() // Переходим на экран доставки (оплаты)
-            removeChild(cartCoordinator) // Удаляем координатор из массива
+        cartCoordinator.onFinishFlow = { [weak self] in
+            guard let self else { print("CartCoordinator not found"); return }
+
+            // Переходим на экран доставки (оплаты)
+            startDeliveryFlow()
         }
 
         addChild(cartCoordinator)
@@ -122,14 +121,13 @@ private extension AppCoordinator {
         // Когда юзер нажал на кнопку закрыть в DeliveryFlow, то мы возвращаемся в корзину
         deliveryCoordinator.onDismissed = { [weak self, weak deliveryCoordinator] in
             guard let self, let deliveryCoordinator else { print("DeliveryCoordinator not found"); return }
-            startCartFlow() // Стартуем флоу корзины
             removeChild(deliveryCoordinator) // Удаляем из массива координатор
         }
 
-        deliveryCoordinator.onFinishFlow = { [weak self, weak deliveryCoordinator] in
-            guard let self, let deliveryCoordinator else { print("DeliveryCoordinator not found"); return }
+        deliveryCoordinator.onFinishFlow = { [weak self] in
+            guard let self else { print("DeliveryCoordinator not found"); return }
+            removeAllChildren()
             startMainFlow()
-            removeChild(deliveryCoordinator)
         }
 
         addChild(deliveryCoordinator)
@@ -149,5 +147,9 @@ private extension AppCoordinator {
     // Удаляем координатор из массива координаторов (здесь важно использовать ===, чтобы быть уверенным, что удаляется именно этот объект из памяти)
     func removeChild(_ child: Coordinator) {
         childCoordinators.removeAll { $0 === child }
+    }
+
+    func removeAllChildren() {
+        childCoordinators.removeAll()
     }
 }

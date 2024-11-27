@@ -5,6 +5,7 @@ final class DeliveryCoordinator: Coordinator {
     // MARK: - Properties
     private let router: Router
     private let screenFactory: ScreenFactory
+    private var deliveryVC: DeliveryVC?
 
     var onFinishFlow: (() -> Void)?
     var onDismissed: (() -> Void)?
@@ -24,83 +25,101 @@ final class DeliveryCoordinator: Coordinator {
 extension DeliveryCoordinator {
     func start() {
         let vc = screenFactory.makeDeliveryScreen()
+        self.deliveryVC = vc
 
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss(isParent: true, animated: false)
+            self?.router.dismiss(isParent: true)
             self?.onDismissed?()
         }
 
         vc.onShowChooseAddress = { [weak self] in
-            self?.showChooseAddress()
+            self?.showChooseAddress(vc)
         }
 
         vc.onShowChoosePaymentMethod = { [weak self] in
-            self?.showChoosePaymentMethod()
+            self?.showChoosePaymentMethod(vc)
         }
 
         vc.onShowFinalVC = { [weak self] in
-            self?.showFinalVC()
+            self?.showFinalVC(parentVC: vc)
         }
 
-        router.setRootModule(vc, animation: true)
-//        router.present(vc, isParentVC: true, modalPresentation: .automatic)
+        router.present(vc, isParent: true)
     }
 }
 
 // MARK: - Supporting methods
 private extension DeliveryCoordinator {
-    func showChooseAddress() {
+    func showChooseAddress(_ parentVC: UIViewController) {
         let vc = screenFactory.makeChooseAddressScreen()
-        router.present(vc, isParentVC: true)
+        router.present(parentVC, vcToShow: vc)
 
+        // Нажали на закрыть окно
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss(isParent: true)
+            self?.router.dismiss(from: parentVC)
         }
 
+        // Выбрали ячейку
         vc.onAddressCellTapped = { [weak self] addressName in
             self?.updateUI(addressName: addressName)
         }
 
+        // Нажали на редактирование адреса
         vc.onEditAddressCellTapped = { [weak self] address in
-            self?.showEditAddressVC(address)
+            self?.showEditAddressVC(vc, address: address)
         }
 
+        // Нажали на добавить новый адрес
         vc.onShowAddNewAddress = { [weak self] in
-            self?.showAddNewAddressVC()
+            self?.showAddNewAddressVC(vc)
         }
     }
 
-    func showEditAddressVC(_ address: Address) {
+    func showEditAddressVC(_ parentVC: UIViewController, address: Address) {
         let vc = screenFactory.makeEditAddressScreen(address)
-        router.present(vc)
-    }
-
-    func showAddNewAddressVC() {
-        let vc = screenFactory.makeAddNewAddressScreen()
-        router.present(vc, isParentVC: true)
 
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
+            self?.router.dismiss(from: parentVC)
         }
+
+        vc.onSaveButtonTapped = { [weak self] in
+            self?.router.dismiss(from: parentVC)
+        }
+
+        router.present(parentVC, vcToShow: vc, modalPresentation: .fullScreen)
     }
 
-    func showChoosePaymentMethod() {
-        let vc = screenFactory.makeChoosePaymentMethodScreen()
-        router.present(vc, isParentVC: true)
+    func showAddNewAddressVC(_ parentVC: UIViewController) {
+        let vc = screenFactory.makeAddNewAddressScreen()
 
         vc.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss(isParent: true)
+            self?.router.dismiss(from: parentVC)
+        }
+
+        vc.onSaveNewAddressButtonTapped = { [weak self] in
+            self?.router.dismiss(from: parentVC)
+        }
+
+        router.present(parentVC, vcToShow: vc, modalPresentation: .fullScreen)
+    }
+
+    func showChoosePaymentMethod(_ parentVC: UIViewController) {
+        let vc = screenFactory.makeChoosePaymentMethodScreen()
+        router.present(parentVC, vcToShow: vc)
+
+        vc.onDismissButtonTapped = { [weak self] in
+            self?.router.dismiss(from: parentVC)
         }
 
         vc.onPaymentMethodSelected = { [weak self] paymentMethod in
             self?.updateUI(paymentMethod: paymentMethod)
-            self?.router.dismiss(isParent: true)
+            self?.router.dismiss(from: parentVC)
         }
     }
 
-    func showFinalVC() {
+    func showFinalVC(parentVC: UIViewController) {
         let vc = screenFactory.makeFinalVCScreen()
-        router.present(vc, isParentVC: true)
+        router.present(parentVC, vcToShow: vc)
 
         vc.onFinalVCDismissed = { [weak self] in
             self?.router.dismiss()
@@ -113,13 +132,8 @@ private extension DeliveryCoordinator {
 private extension DeliveryCoordinator {
     // Обновляет данные на главном экране этого потока (в данном случае экрана "Доставка"). Сначала находим верхний экран, потом обновляем те данные, которые не nil.
     func updateUI(addressName: String? = nil, paymentMethod: PaymentMethod? = nil) {
-        guard let deliveryVC = router.getParentViewController() as? DeliveryVC else { print("Error: Top view controller is not DeliveryVC"); return }
-
-        if let addressName {
-            deliveryVC.updateAddress(addressName)
-        }
-        if let paymentMethod {
-            deliveryVC.updateUI(paymentMethod)
-        }
+        guard let deliveryVC else { print("Error: Top view controller is not DeliveryVC"); return }
+        if let addressName { deliveryVC.updateAddress(addressName) }
+        if let paymentMethod { deliveryVC.updateUI(paymentMethod) }
     }
 }

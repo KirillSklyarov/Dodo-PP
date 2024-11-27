@@ -16,14 +16,16 @@ final class ProfileCoordinator: Coordinator {
     deinit {
         print("ProfileCoordinator deinit")
     }
+}
 
+extension ProfileCoordinator {
     func start() {
         let profileVC = screenFactory.makeProfileScreen()
-        router.present(profileVC, isParentVC: true, modalPresentation: .automatic)
 
+        // Отрабатываем замыкания
         profileVC.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
-            self?.onFlowFinished?()
+            self?.router.dismiss() // Закрываем экран
+            self?.onFlowFinished?() // Говорим что флоу закончен
         }
         
         profileVC.onShowChatAlert = { [weak self] in
@@ -37,6 +39,8 @@ final class ProfileCoordinator: Coordinator {
         profileVC.onShowPromoVC = { [weak self] promo in
             self?.showApplySpecialOffer(promo)
         }
+
+        router.present(profileVC) // Показываем экран
     }
 }
 
@@ -47,13 +51,13 @@ private extension ProfileCoordinator {
         guard let configureSheet = vc.sheetPresentationController else { return }
         configureSheet.detents = [.medium()]
         configureSheet.prefersGrabberVisible = true
-        router.present(vc, modalPresentation: .automatic)
+        router.present(vc, isParent: true)
     }
 
     func showChatAlert() {
         let vc = screenFactory.makeChatAlertScreen()
         vc.modalTransitionStyle = .crossDissolve
-        router.present(vc, isParentVC: true, modalPresentation: .overFullScreen, animated: false)
+        router.present(vc, isParent: true, animated: false, modalPresentation: .overFullScreen)
 
         vc.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
@@ -62,7 +66,7 @@ private extension ProfileCoordinator {
 
     func showPersonalData() {
         let vc = screenFactory.makePersonalDataScreen()
-        router.present(vc, isParentVC: true, modalPresentation: .automatic)
+        router.present(vc, isParent: true, modalPresentation: .automatic)
 
         vc.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)

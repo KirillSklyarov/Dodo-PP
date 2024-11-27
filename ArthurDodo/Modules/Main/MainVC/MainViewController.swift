@@ -42,7 +42,6 @@ final class MainViewController: UIViewController {
         setupUI()
         setupActions()
         fetchData()
-
     }
 
     // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет

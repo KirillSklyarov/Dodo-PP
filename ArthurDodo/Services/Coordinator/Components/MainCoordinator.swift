@@ -48,6 +48,13 @@ extension MainCoordinator {
 
         router.setRootModule(mainVC) // Устанавливаем как главный и показываем его
     }
+
+    // Вызываем обновление корзины на главном экране
+    func mainVCUpdateCart() {
+        if let vc = router.getMainViewController() {
+            vc.updateCart()
+        }
+    }
 }
 
 // MARK: - Product details
@@ -62,10 +69,10 @@ private extension MainCoordinator {
         }
 
         vc.onShowPopupVC = { [weak self] popUpView in
-            self?.router.present(popUpView, isParentVC: true, modalPresentation: .popover)
+            self?.router.present(popUpView, isParent: true, modalPresentation: .popover)
         }
 
-        router.present(vc) // Показываем экран
+        router.present(vc, isParent: true , modalPresentation: .fullScreen) // Показываем экран
     }
 }
 
@@ -88,7 +95,8 @@ private extension MainCoordinator {
 private extension MainCoordinator {
     // Находит в стеке родительский экран и вызывает обновление сторисов
     func mainVCUpdateStories() {
-        guard let mainVC = router.getParentViewController() as? MainViewController else { print("Error: mainVC is not MainViewController"); return }
-        mainVC.updateStories()
+        if let mainVC = router.getMainViewController() {
+            mainVC.updateStories()
+        }
     }
 }

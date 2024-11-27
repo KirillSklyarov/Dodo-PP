@@ -11,105 +11,65 @@ final class Router {
     }
 }
 
-// MARK: - Present
+// MARK: - Main methods
 extension Router {
-    // Метод present навигации.
-    // На вход приходят:
-    //              vc - какой экран нужно показать,
-    //              parentVC - булевый, если false - то показ с navigationController, если true то показ с актуального экрана)
-    //              modalPresentation - показывать ли на весь экран
-    //              animated - понятно, с анимацией или сразу показать
-    func present(_ vc: UIViewController,
-                 isParentVC: Bool = false,
-                 modalPresentation: UIModalPresentationStyle = .fullScreen,
-                 animated: Bool = true) {
-        vc.modalPresentationStyle = modalPresentation
-        switch isParentVC {
-        case true: presentWithParent(vc, animated: animated)
-        case false: presentFromNavigation(vc, animated: animated)
-        }
+    // Устанавливаем экран как основной у navigationController и он его показывает в этом же методе. С помощью методе setViewControllers убираем действующие VC в навигации и устанавливаем новый VC, при этом navigationController остается тем же, то есть не создается новый экземпляр.
+    func setRootModule(_ module: UIViewController, animation: Bool = false) {
+        navigationController.setViewControllers([module], animated: false)
+        navigationController.isNavigationBarHidden = true
     }
 
-    // Метод present, когда у нам необходим родитель, от которого будет исходить показ нового экрана
-    func presentWithParent(_ vc: UIViewController, animated: Bool = true) {
-        guard let parent = navigationController.visibleViewController else { return }
-        parent.present(vc, animated: animated)
+    // Возвращает root VC (нужен для SceneDelegate)
+    func setRootNavigation() -> UINavigationController {
+        navigationController
+    }
+
+    // Метод при показе present возвращает родительский ViewController - так как он сейчас один и это MainVC, поэтому сразу кастим до него
+    func getMainViewController() -> MainViewController? {
+        guard let mainVC = navigationController.viewControllers.last as? MainViewController else {  print("Error: MainVC not found"); return nil}
+        return mainVC
+    }
+}
+
+// MARK: - Present
+extension Router {
+    // Метод present, когда у нас есть родитель, от которого будет исходить показ нового модального экрана (нужен когда происходит показ модального экрана с возможностью возврата на предыдущий экран)
+    func present(_ vc: UIViewController, isParent: Bool, animated: Bool = true, modalPresentation: UIModalPresentationStyle = .automatic) {
+        if isParent {
+            vc.modalPresentationStyle = modalPresentation
+            guard let parent = navigationController.visibleViewController else { return }
+            parent.present(vc, animated: animated)
+        }
     }
 
     // Метод present, когда сам навигационный контроллер показывает новый экран
-    private func presentFromNavigation(_ vc: UIViewController, animated: Bool) {
+    func present(_ vc: UIViewController, animated: Bool = true, modalPresentation: UIModalPresentationStyle = .automatic) {
+        vc.modalPresentationStyle = modalPresentation
         navigationController.present(vc, animated: animated)
     }
 
-    // Настройка анимации
-    private func setAnimation(_ isSet: Bool) {
-        if isSet {
-            let transition = CATransition()
-            transition.duration = 0.3
-            transition.type = .moveIn
-            transition.subtype = .fromTop
-            navigationController.view.layer.add(transition, forKey: "transition")
-        }
+    //  Метод present, когда у нас каскад модальных экранов и нам нужен вызывать новый экран именно на последнем экране (в этом случае visibleViewController не будет работать)
+    func present(_ parent: UIViewController, vcToShow: UIViewController, animated: Bool = true, modalPresentation: UIModalPresentationStyle = .automatic) {
+        vcToShow.modalPresentationStyle = modalPresentation
+        parent.present(vcToShow, animated: animated)
     }
 }
 
 // MARK: - Dismiss
 extension Router {
-    // Есть основной метод Dismiss, который в зависимости от признака isParent либо будет вызывать dismiss от navigationController (при значении false), либо будет вызывать dismiss от родительского экрана (при значении true). Это нужно когда у нас идет каскад модельных экранов и тк они не ложатся в navigationController, то при использовании navigationController он будет разом закрывать все эти экраны, что не всегда удобно.
-    func dismiss(isParent: Bool = false, animated: Bool = true, completion: (() -> Void)? = nil) {
-        switch isParent {
-        case false: dismiss(animated: animated, completion: completion)
-        case true: dismissWithParent(animated: animated, completion: completion)
-        }
-    }
-
-    func dismiss(animated: Bool, completion: (() -> Void)?) {
+    // Метод закрывает экран с navigationController
+    func dismiss(animated: Bool = true, completion: (() -> Void)? = nil) {
         navigationController.dismiss(animated: animated, completion: completion)
     }
 
-    func dismissWithParent(animated: Bool, completion: (() -> Void)?) {
+    // Метод закрывает экран с активного показанного экрана (не работает с каскадом модальных экранов)
+    func dismiss(isParent: Bool, animated: Bool = true, completion: (() -> Void)? = nil) {
         guard let parent = navigationController.visibleViewController else { print("Error: No parent"); return }
         parent.dismiss(animated: animated, completion: completion)
     }
 
-
-    func pop() {
-        setDismissAnimation(true)
-        navigationController.popViewController(animated: true)
-    }
-
-    private func setDismissAnimation(_ isSet: Bool) {
-        if isSet {
-            let transition = CATransition()
-            transition.duration = 1.3
-            transition.type = .moveIn
-            transition.subtype = .fromBottom
-            navigationController.view.layer.add(transition, forKey: "transition")
-        }
-    }
-
-    func setRootNavigation() -> UINavigationController {
-        navigationController
-    }
-
-    // Устанавливаем экран как основной у navigationController и он его показывает в этом же методе. С помощью методе setViewControllers убираем действующие VC в навигации и устанавливаем новый VC, при этом navigationController остается тем же, то есть не создается новый экземпляр.
-    func setRootModule(_ module: UIViewController, animation: Bool = false) {
-        setAnimation(animation)
-        navigationController.setViewControllers([module], animated: false)
-        navigationController.isNavigationBarHidden = true
-    }
-
-    func push(_ module: UIViewController, animation: Bool = true) {
-        setAnimation(animation)
-        navigationController.pushViewController(module, animated: false)
-    }
-
-    func getTopViewController() -> UIViewController? {
-        navigationController.visibleViewController
-    }
-
-    // Метод при показе present возвращает родительский ViewController
-    func getParentViewController() -> UIViewController? {
-        navigationController.viewControllers.last
+    // Метод закрывает экран с указанного экрана: работает с каскадом модальных экранов
+    func dismiss(from parentVC: UIViewController, animated: Bool = true) {
+        parentVC.dismiss(animated: animated)
     }
 }
