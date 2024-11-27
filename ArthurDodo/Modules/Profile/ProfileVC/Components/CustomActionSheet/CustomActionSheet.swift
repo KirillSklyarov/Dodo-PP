@@ -13,20 +13,9 @@ final class CustomActionSheet: UIViewController {
         return view
     }()
 
-    private lazy var callAndChatStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [callButton, separatorView, chatButton])
-        stack.axis = .vertical
-        stack.layer.cornerRadius = 10
-        stack.layer.masksToBounds = true
-        return stack
-    }()
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [callAndChatStack, dismissButton])
-        stack.axis = .vertical
-        stack.spacing = 5
-        stack.distribution = .fillProportionally
-        return stack
-    }()
+    private lazy var callAndChatStack = AppStackView([callButton, separatorView, chatButton], axis: .vertical, cornerRadius: 10)
+
+    private lazy var contentStack = AppStackView([callAndChatStack, dismissButton], axis: .vertical, spacing: 5, distribution: .fillProportionally)
 
     // MARK: - Other Properties
     private var bottomConstraint: NSLayoutConstraint!

@@ -2,20 +2,13 @@ import UIKit
 
 final class CategoryViewCell: UICollectionViewCell {
 
+    // MARK: - UI Properties
+    private lazy var titleLabel = AppLabel(textColor: .grayFont, font: .bold(size: 14), alignment: .center, height: viewHeight)
+
     // MARK: - Properties
     private let viewHeight: CGFloat = 40
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
-
-    // MARK: - UI Properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.bold14
-        label.textAlignment = .center
-        label.textColor = AppColors.grayFont
-        label.heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
-        return label
-    }()
 
     // MARK: - Init
     override init(frame: CGRect) {

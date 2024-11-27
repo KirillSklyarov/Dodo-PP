@@ -3,22 +3,10 @@ import UIKit
 final class EditCartButtonView: UIView {
 
     // MARK: - UI Properties
-    private lazy var blurView = CustomBlurView()
+    private lazy var blurView = AppBlurView()
     private lazy var cartButton = CartButton(title: "Готово")
-    private lazy var priceLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.bold22
-        label.textColor = .white
-        label.text = "700 ₽"
-        return label
-    }()
-
-    private lazy var contentStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [priceLabel, UIView(), cartButton])
-        stack.axis = .horizontal
-        stack.alignment = .top
-        return stack
-    }()
+    private lazy var priceLabel = AppLabel(textColor: .white, font: .bold(size: 22))
+    private lazy var contentStackView = AppStackView( [priceLabel, UIView(), cartButton], axis: .horizontal, alignment: .top)
 
     // MARK: - Properties
     private let viewHeight: CGFloat = 90

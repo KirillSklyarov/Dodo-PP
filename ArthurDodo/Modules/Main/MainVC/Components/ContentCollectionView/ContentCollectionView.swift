@@ -310,9 +310,18 @@ private extension ContentCollectionView {
         backgroundColor = AppColors.backgroundGray
         layer.cornerRadius = 14
         layer.masksToBounds = true
+
+        delegate = self
+        dataSource = self
+
+        // Регистрируем ячейки сторис
         registerCell(StoriesCollectionCell.self)
-        registerCell(SpecialOfferCollectionCell.self)
+
+        // Регистрируем ячейки спецпредложения
         registerHeader(SpecialOfferHeaderView.self)
+        registerCell(SpecialOfferCollectionCell.self)
+
+        // Регистрируем ячейки основного каталога
         registerHeader(CategoriesHeaderView.self)
         registerCell(ItemsHeaderView.self)
         registerCell(ItemsCollectionCell.self)
@@ -320,9 +329,6 @@ private extension ContentCollectionView {
         // Регистрируем скелетоны
         registerCell(SkeletonCollectionViewCell.self)
         registerCell(SkeletonCollectionViewCell2.self)
-
-        delegate = self
-        dataSource = self
     }
 }
 

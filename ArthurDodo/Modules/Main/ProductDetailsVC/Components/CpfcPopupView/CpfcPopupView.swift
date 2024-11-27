@@ -3,21 +3,10 @@ import UIKit
 final class CpfcPopupView: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.bold18
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var subLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.regular14
-        label.text = "Пищевая ценность на 100 г"
-        label.numberOfLines = 0
-        return label
-    }()
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 18))
+    private lazy var subLabel = AppLabel(text: "Пищевая ценность на 100 г", textColor: .white, font: .regular(size: 14))
+    private lazy var infoLabel = AppLabel(text: "Может содержать: глютен, молоко и продукты его переработки (в том числе лактозу), а так же некоторые другие аллергены", textColor: .white, font: .regular(size: 14), alignment: .left)
+
     private lazy var cpfcTableView: AppTableView = {
         let tableView = AppTableView()
         tableView.dataSource = self
@@ -29,21 +18,8 @@ final class CpfcPopupView: UIViewController {
         tableView.isScrollEnabled = false
         return tableView
     }()
-    private lazy var infoLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.regular14
-        label.text = "Может содержать: глютен, молоко и продукты его переработки (в том числе лактозу), а так же некоторые другие аллергены"
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [titleLabel, subLabel, cpfcTableView, infoLabel])
-        stack.axis = .vertical
-        stack.distribution = .equalSpacing
-        return stack
-    }()
+
+    private lazy var contentStack = AppStackView([titleLabel, subLabel, cpfcTableView, infoLabel], axis: .vertical, distribution: .equalSpacing)
 
     // MARK: - Properties
     private let leftInsets: CGFloat = 10

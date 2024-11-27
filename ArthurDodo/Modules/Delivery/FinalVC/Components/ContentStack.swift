@@ -3,23 +3,10 @@ import UIKit
 final class FinalVCContentStackView: UIStackView {
 
     // MARK: - UI properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Ваш заказ успешно оформлен"
-        label.textColor = AppColors.grayFont
-        label.font = AppFonts.bold34
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        return label
-    }()
-    private lazy var doneImageView: UIImageView = {
-        let imageView = UIImageView()
-        let image = UIImage(systemName: "checkmark.circle")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
-        imageView.image = image
-        imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
-        return imageView
-    }()
+    private lazy var titleLabel = AppLabel(text: "Ваш заказ успешно оформлен", textColor: .grayFont, font: .bold(size: 34), alignment: .center)
+
+    private lazy var doneImageView = AppImageView(viewImage: .common(.finalCheckmark), tintColor: .buttonOrange, squareSize: imageSize)
+
     private lazy var imageViewContainer: UIView = {
         let view = UIView()
         view.addSubviews(doneImageView)
@@ -27,15 +14,7 @@ final class FinalVCContentStackView: UIStackView {
         view.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
         return view
     }()
-    private lazy var dismissInfoLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = AppColors.grayFont
-        label.text = "Это окно закроется через \(dismissDelay ?? 5) секунд"
-        label.font = AppFonts.semibold16
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        return label
-    }()
+    private lazy var dismissInfoLabel = AppLabel(text: "Это окно закроется через \(dismissDelay ?? 5) секунд", textColor: .grayFont, font: .semibold(size: 16), alignment: .center)
 
     // MARK: - Other properties
     private let leftInset: CGFloat = 20

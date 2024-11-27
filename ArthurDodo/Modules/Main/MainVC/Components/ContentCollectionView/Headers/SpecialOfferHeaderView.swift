@@ -2,28 +2,30 @@ import UIKit
 
 final class SpecialOfferHeaderView: UICollectionReusableView {
 
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.semibold16
-        label.textColor = .white
-        label.textAlignment = .left
-        return label
-    }()
+    // MARK: - Properties
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .semibold(size: 16), alignment: .left)
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         configUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
+// MARK: - Public methods
+extension SpecialOfferHeaderView {
     func setTitle(_ title: String) {
         titleLabel.text = title
     }
+}
 
-    private func configUI() {
+// MARK: - Setup UI
+private extension SpecialOfferHeaderView {
+    func configUI() {
         addSubviews(titleLabel)
 
         NSLayoutConstraint.activate([

@@ -3,18 +3,9 @@ import UIKit
 final class PersonalTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = AppColors.grayFont
-        label.font = AppFonts.regular18
-        return label
-    }()
-    private lazy var dataLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.regular18
-        return label
-    }()
+    private lazy var titleLabel = AppLabel(textColor: .grayFont, font: .regular(size: 18))
+    private lazy var dataLabel = AppLabel(textColor: .white, font: .regular(size: 18))
+
     private lazy var switchLabel: UISwitch = {
         let switchLabel = UISwitch()
         switchLabel.isOn = false
@@ -62,13 +53,10 @@ private extension PersonalTableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
 
-        let labelsStack = UIStackView(arrangedSubviews: [titleLabel, dataLabel])
-        labelsStack.axis = .vertical
-        labelsStack.spacing = 5
+        let labelsStack = AppStackView([titleLabel, dataLabel], axis: .vertical, spacing: 5)
 
-        let contentStack = UIStackView(arrangedSubviews: [labelsStack, switchLabel])
-        contentStack.axis = .horizontal
-        contentStack.alignment = .center
+        let contentStack = AppStackView([labelsStack, switchLabel], axis: .horizontal, alignment: .center)
+
 
         contentView.addSubviews(contentStack)
 

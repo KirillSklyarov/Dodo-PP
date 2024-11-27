@@ -2,15 +2,6 @@ import UIKit
 
 final class PaymentButtonView: UIView {
 
-    // MARK: - Properties
-    private let buttonHeight: CGFloat = 50
-    private let cornerRadius: CGFloat = 20
-    private let imageSize: CGFloat = 24
-
-    private var preferredPaymentMethod: PaymentMethod?
-
-    var onPayButtonTapped: (() -> Void)?
-
     // MARK: - UI Properties
     private lazy var payContainerView: UIView = {
         let view = UIView()
@@ -19,20 +10,10 @@ final class PaymentButtonView: UIView {
         view.layer.masksToBounds = true
         return view
     }()
-    private lazy var paymentTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Оплатить"
-        label.textColor = AppColors.backgroundBlack
-        label.font = AppFonts.bold20
-        return label
-    }()
-    private lazy var paymentMethodLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = AppColors.backgroundBlack
-        label.font = AppFonts.bold20
-        label.text = preferredPaymentMethod?.title
-        return label
-    }()
+    private lazy var paymentTitleLabel = AppLabel(textColor: .backgroundBlack, font: .bold(size: 20))
+
+    private lazy var paymentMethodLabel = AppLabel(text: preferredPaymentMethod?.title, textColor: .backgroundBlack, font: .bold(size: 20))
+
     private lazy var paymentImageView: UIImageView = {
         let imageView = UIImageView()
         let image = preferredPaymentMethod?.image
@@ -41,19 +22,18 @@ final class PaymentButtonView: UIView {
         imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
         return imageView
     }()
-    private lazy var paymentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [paymentImageView, paymentMethodLabel])
-        stack.axis = .horizontal
-        stack.spacing = 5
-        return stack
-    }()
 
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [paymentTitleLabel, paymentStack])
-        stack.axis = .horizontal
-        stack.spacing = 10
-        return stack
-    }()
+    private lazy var paymentStack = AppStackView([paymentImageView, paymentMethodLabel], axis: .horizontal, spacing: 5)
+    private lazy var contentStack = AppStackView([paymentTitleLabel, paymentStack], axis: .horizontal, spacing: 10)
+
+    // MARK: - Properties
+    private let buttonHeight: CGFloat = 50
+    private let cornerRadius: CGFloat = 20
+    private let imageSize: CGFloat = 24
+
+    private var preferredPaymentMethod: PaymentMethod?
+
+    var onPayButtonTapped: (() -> Void)?
 
     // MARK: - Init
     init(frame: CGRect = .zero, _ preferredPaymentMethod: PaymentMethod) {

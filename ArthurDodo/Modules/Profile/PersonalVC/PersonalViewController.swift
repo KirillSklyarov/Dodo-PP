@@ -4,7 +4,7 @@ import SafariServices
 final class PersonalViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var headerView = CartHeaderView(title: "Личные данные") // Заголовок с кнопкой
+    private lazy var headerView = AppNavigationHeaderView(title: "Личные данные") // Заголовок с кнопкой
     private lazy var personalTableView = PersonalTableView()
     private lazy var contentStackView = AppStackView([headerView, personalTableView], axis: .vertical, spacing: 10)
 

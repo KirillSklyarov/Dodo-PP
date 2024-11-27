@@ -3,15 +3,10 @@ import UIKit
 final class ChoosePaymentMethodVC: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var headerView = CartHeaderView(title: "Оплата") // Заголовок с кнопкой
+    private lazy var headerView = AppNavigationHeaderView(title: "Оплата") // Заголовок с кнопкой
     private lazy var paymentMethodsTableView = PaymentAddressesTableView(preferredPaymentMethod: preferredPaymentMethod)
 
-    private lazy var contentStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [headerView, paymentMethodsTableView])
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        return stackView
-    }()
+    private lazy var contentStack = AppStackView([headerView, paymentMethodsTableView], axis: .vertical, spacing: 10)
 
     // MARK: - Other Properties
     private let userDefaults = UserDefaults.standard

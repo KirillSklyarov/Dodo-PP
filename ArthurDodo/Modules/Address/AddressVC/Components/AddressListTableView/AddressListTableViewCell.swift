@@ -14,20 +14,9 @@ final class AddressListTableViewCell: UITableViewCell {
     var onEditAddressButtonTapped: (() -> Void)?
 
     // MARK: - UI Properties
-    private lazy var orangePoint: UIImageView = {
-        let imageView = UIImageView()
-        let image = UIImage(systemName: "record.circle.fill")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
-        imageView.image = image
-        imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
-        return imageView
-    }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = AppColors.grayFont
-        label.font = AppFonts.semibold20
-        return label
-    }()
+    private lazy var orangePoint = AppImageView(viewImage: .address(.orangePoint), tintColor: .buttonOrange, squareSize: imageSize)
+    private lazy var titleLabel = AppLabel(textColor: .grayFont, font: .semibold(size: 20))
+
     private lazy var editAddressButton: UIButton = {
         let button = UIButton()
         let image = UIImage(systemName: "pencil")?.withTintColor(AppColors.buttonGray, renderingMode: .alwaysOriginal)
@@ -105,9 +94,7 @@ private extension AddressListTableViewCell {
         selectionStyle = .none
         accessoryView = editAddressButton
 
-        let contentStack = UIStackView(arrangedSubviews: [orangePoint, titleLabel])
-        contentStack.axis = .horizontal
-        contentStack.spacing = 10
+        let contentStack = AppStackView([orangePoint, titleLabel], axis: .horizontal, spacing: 10)
 
         contentView.addSubviews(contentStack)
 

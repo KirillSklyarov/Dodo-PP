@@ -1,23 +1,13 @@
 import UIKit
 
+// Это кнопка профиля на главном экране с додокоинами и картинкой
 final class ProfileMainHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var coinsLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.semibold12
-        label.adjustsFontSizeToFitWidth = true
-        label.text = "91"
-        label.textAlignment = .center
-        return label
-    }()
-    private lazy var coinsImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "dodoCoinsImage")
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
+    private lazy var coinsLabel = AppLabel(textColor: .white, font: .semibold(size: 12), alignment: .center)
+
+    private lazy var coinsImageView = AppImageView(viewImage: .common(.dodoCoins), isSystem: false)
+
     private lazy var coinsStackView = AppStackView([coinsLabel, coinsImageView], axis: .horizontal, spacing: 1)
 
     private lazy var coinsView: UIView = {
@@ -29,7 +19,7 @@ final class ProfileMainHeaderView: UIView {
         view.addSubviews(coinsStackView)
         return view
     }()
-    private lazy var profileImageView: UIView = {
+    private lazy var profileView: UIView = {
         let view = UIView()
         view.backgroundColor = AppColors.grayFont
         view.layer.masksToBounds = true
@@ -51,7 +41,7 @@ final class ProfileMainHeaderView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        profileImageView.layer.cornerRadius = frame.height / 2
+        profileView.layer.cornerRadius = frame.height / 2
     }
 }
 
@@ -65,7 +55,7 @@ extension ProfileMainHeaderView {
 // MARK: - Setup UI
 private extension ProfileMainHeaderView {
     func setupUI() {
-        addSubviews(profileImageView, coinsView)
+        addSubviews(profileView, coinsView)
 
         setupLayout()
     }
@@ -109,10 +99,10 @@ private extension ProfileMainHeaderView {
 
     func profileImageViewLayout() {
         NSLayoutConstraint.activate([
-            profileImageView.topAnchor.constraint(equalTo: topAnchor),
-            profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            profileImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            profileImageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            profileView.topAnchor.constraint(equalTo: topAnchor),
+            profileView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            profileView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            profileView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }

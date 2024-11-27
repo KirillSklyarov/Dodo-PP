@@ -2,55 +2,20 @@ import UIKit
 
 final class ItemsCollectionCell: UICollectionViewCell {
 
+    // MARK: - UI Properties
+    private lazy var pizzaImageView = AppImageView(squareSize: imageSize)
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .regular(size: 16))
+    private lazy var ingredientsLabel = AppLabel(textColor: .grayFont, font: .regular(size: 12))
+    private lazy var priceButton = AppPriceGrayButton()
+    private lazy var hitImageView = AppImageView(viewImage: .common(.hit), isSystem: false, squareSize: hitImageSize)
+
+    private lazy var detailsStackView = AppStackView( [titleLabel, ingredientsLabel, priceButton], axis: .vertical, spacing: 5, alignment: .leading)
+
+    private lazy var contentStackView = AppStackView([pizzaImageView, detailsStackView], axis: .horizontal, spacing: 10, alignment: .center)
+
     // MARK: - Properties
     private let imageSize: CGFloat = 130
     private let hitImageSize: CGFloat = 30
-
-    // MARK: - UI Properties
-    private lazy var pizzaImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
-        return imageView
-    }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var ingredientsLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .gray
-        label.font = AppFonts.regular12
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var priceButton = PriceGrayButton()
-    private lazy var hitImageView: UIImageView = {
-        let imageView = UIImageView()
-        let image = UIImage(named: "hit2")
-        imageView.image = image
-        imageView.heightAnchor.constraint(equalToConstant: hitImageSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: hitImageSize).isActive = true
-        imageView.isHidden = true
-        return imageView
-    }()
-    private lazy var detailsStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [titleLabel, ingredientsLabel, priceButton])
-        stack.axis = .vertical
-        stack.spacing = 10
-        stack.alignment = .leading
-        return stack
-    }()
-
-    private lazy var contentStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [pizzaImageView, detailsStackView])
-        stack.axis = .horizontal
-        stack.spacing = 10
-        stack.alignment = .center
-        return stack
-    }()
 
     // MARK: - Init
     override init(frame: CGRect) {

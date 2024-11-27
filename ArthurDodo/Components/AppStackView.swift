@@ -2,9 +2,10 @@ import UIKit
 
 final class AppStackView: UIStackView {
 
-    init(_ arrangedSubviews: [UIView], axis: NSLayoutConstraint.Axis = .vertical, spacing: CGFloat = 0, alignment: Alignment = .fill, distribution: Distribution = .fill) {
+    init(_ arrangedSubviews: [UIView], axis: NSLayoutConstraint.Axis, spacing: CGFloat = 0, alignment: Alignment = .fill, distribution: Distribution = .fill, cornerRadius: CGFloat? = nil) {
         super.init(frame: .zero)
         setupUI(arrangedSubviews, spacing: spacing, axis: axis, alignment: alignment, distribution: distribution)
+        setCornerRadius(cornerRadius)
     }
     
     required init(coder: NSCoder) {
@@ -19,5 +20,12 @@ private extension AppStackView {
         self.spacing = spacing
         self.alignment = alignment
         self.distribution = distribution
+    }
+
+    func setCornerRadius(_ radius: CGFloat?) {
+        if let radius {
+            layer.cornerRadius = radius
+            layer.masksToBounds = true
+        }
     }
 }

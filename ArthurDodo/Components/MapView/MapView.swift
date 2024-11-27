@@ -8,7 +8,7 @@ final class MapView: UIView {
     private lazy var mapView = MKMapView()
     private lazy var locationManager = CLLocationManager()
     private lazy var userTrackingButton = UserTrackingButton(mapView: mapView)
-    private lazy var pinView = AppImageView(systemImage: AppImages.common(.mapPin), tintColor: .buttonOrange, squareSize: pinImageSize)
+    private lazy var pinView = AppImageView(viewImage: AppImages.common(.mapPin), tintColor: .buttonOrange, squareSize: pinImageSize)
 
     // MARK: - Properties
     private let rightInset: CGFloat = -20

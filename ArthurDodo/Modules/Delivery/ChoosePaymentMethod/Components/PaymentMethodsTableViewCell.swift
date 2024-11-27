@@ -2,27 +2,16 @@ import UIKit
 
 final class PaymentMethodsTableViewCell: UITableViewCell {
 
+    // MARK: - UI Properties
+    private lazy var methodImage = AppImageView(squareSize: imageSize)
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .semibold(size: 20))
+
     // MARK: - Properties
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
     private let topPadding: CGFloat = 10
     private let bottomPadding: CGFloat = -10
     private let imageSize: CGFloat = 25
-
-    // MARK: - UI Properties
-    private lazy var methodImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
-        return imageView
-    }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.semibold20
-        return label
-    }()
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -41,8 +30,9 @@ extension PaymentMethodsTableViewCell {
         methodImage.image = image
         titleLabel.text = title
 
+        // Если способ оплаты главный, то выделяем его галкой
         if isMainMethod {
-            setAccessoryView()
+            setCheckMarkAccessoryView()
         }
     }
 }
@@ -58,9 +48,7 @@ private extension PaymentMethodsTableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
 
-        let contentStack = UIStackView(arrangedSubviews: [methodImage, titleLabel])
-        contentStack.axis = .horizontal
-        contentStack.spacing = 10
+        let contentStack = AppStackView([methodImage, titleLabel], axis: .horizontal, spacing: 10)
 
         contentView.addSubviews(contentStack)
 
@@ -71,7 +59,8 @@ private extension PaymentMethodsTableViewCell {
         ])
     }
 
-    func setAccessoryView() {
+    // Выделяет выбранный метод галкой
+    func setCheckMarkAccessoryView() {
         let image = UIImage(systemName: "checkmark")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
         let checkmarkView = UIImageView(image: image)
         accessoryView = checkmarkView

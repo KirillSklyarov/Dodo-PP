@@ -1,7 +1,7 @@
 import UIKit
 
 // Здесь делается фон и на него накладывается сегментКонтрол
-final class SegmentControlView: UIView {
+final class AppSegmentControlView: UIView {
 
     // MARK: - Properties&Callbacks
     private let viewHeight: CGFloat = 40
@@ -31,7 +31,7 @@ final class SegmentControlView: UIView {
 }
 
 // MARK: - Setup UI
-private extension SegmentControlView {
+private extension AppSegmentControlView {
      func setupUI() {
         backgroundColor = AppColors.backgroundGray
         layer.cornerRadius = viewHeight / 2
@@ -52,7 +52,7 @@ private extension SegmentControlView {
 }
 
 // MARK: - Setup Actions
-private extension SegmentControlView {
+private extension AppSegmentControlView {
      func setupActions() {
         segmentControl?.onSegmentControllerValueChanged = { [weak self] index in
             self?.onSegmentControllerValueChanged?(index)

@@ -3,7 +3,7 @@ import UIKit
 final class DeliveryVC: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var headerView = CartHeaderView(title: "Доставка") // Заголовок с кнопкой
+    private lazy var headerView = AppNavigationHeaderView(title: "Доставка") // Заголовок с кнопкой
     private lazy var addressLabel = DeliveryVCLabel(title: "Адрес доставки") // Адрес доставки
     private lazy var addressTableView = AddressTableView() // Таблица с адресом
     private lazy var timeLabel = DeliveryVCLabel(title: "Время доставки") // Время доставки
@@ -14,16 +14,16 @@ final class DeliveryVC: UIViewController {
     private lazy var totalPriceView = OrderTotalPriceView() // Общая стоимость заказа
     private lazy var payButton = PaymentButtonView(preferredPaymentMethod) // Кнопка оплатить
 
-    private lazy var addressStackView = AppStackView([addressLabel, addressTableView])
-    private lazy var deliveryTimeStackView = AppStackView([timeLabel, timeCollection])
+    private lazy var addressStackView = AppStackView([addressLabel, addressTableView], axis: .vertical, spacing: 10)
+    private lazy var deliveryTimeStackView = AppStackView([timeLabel, timeCollection], axis: .vertical, spacing: 10)
 
-    private lazy var paymentMethodStackView = AppStackView([paymentLabel, paymentTableView])
+    private lazy var paymentMethodStackView = AppStackView([paymentLabel, paymentTableView], axis: .vertical, spacing: 10)
 
-    private lazy var tablesStackView = AppStackView([headerView, addressStackView, deliveryTimeStackView, paymentMethodStackView], spacing: 30)
+    private lazy var tablesStackView = AppStackView([headerView, addressStackView, deliveryTimeStackView, paymentMethodStackView], axis: .vertical, spacing: 30)
 
-    private lazy var orderDetailsStackView = AppStackView([orderDetailsView, totalPriceView, payButton])
+    private lazy var orderDetailsStackView = AppStackView([orderDetailsView, totalPriceView, payButton], axis: .vertical, spacing: 10)
 
-    private lazy var contentStackView = AppStackView([tablesStackView, UIView(), orderDetailsStackView], spacing: 0)
+    private lazy var contentStackView = AppStackView([tablesStackView, UIView(), orderDetailsStackView], axis: .vertical)
 
     // MARK: - Other properties
     private let topInset: CGFloat = 10

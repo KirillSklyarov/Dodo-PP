@@ -3,12 +3,8 @@ import UIKit
 final class AddressTextFieldView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = AppColors.grayFont
-        label.font = AppFonts.regular12
-        return label
-    }()
+    private lazy var titleLabel = AppLabel(textColor: .grayFont, font: .regular(size: 12))
+   
     private lazy var clearButton: UIButton = {
         let button = UIButton()
         let image = UIImage(systemName: "xmark.circle.fill")

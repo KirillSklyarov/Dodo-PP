@@ -8,36 +8,11 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
     var onPriceButtonTapped: ( (String) -> Void )?
 
     // MARK: - UI Properties
-    private lazy var pizzaImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.heightAnchor.constraint(equalToConstant: imageViewSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: imageViewSize).isActive = true
-        return imageView
-    }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.semibold16
-        label.textColor = .white
-        label.numberOfLines = 3
-        label.adjustsFontSizeToFitWidth = true
-        return label
-    }()
-    private lazy var priceButton = PriceGrayButton()
-    private lazy var textStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [titleLabel, priceButton])
-        stack.axis = .vertical
-        stack.spacing = 5
-        stack.alignment = .leading
-        return stack
-    }()
-
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [pizzaImageView, textStack])
-        stack.axis = .horizontal
-        stack.spacing = 10
-        stack.alignment = .center
-        return stack
-    }()
+    private lazy var pizzaImageView = AppImageView(squareSize: imageViewSize)
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .semibold(size: 16), adjustsFontSizeToFitWidth: true)
+    private lazy var priceButton = AppPriceGrayButton()
+    private lazy var textStack = AppStackView([titleLabel, priceButton], axis: .vertical, spacing: 5, alignment: .leading)
+    private lazy var contentStack = AppStackView( [pizzaImageView, textStack], axis: .horizontal, spacing: 10, alignment: .center)
 
     // MARK: - Init
     override init(frame: CGRect) {

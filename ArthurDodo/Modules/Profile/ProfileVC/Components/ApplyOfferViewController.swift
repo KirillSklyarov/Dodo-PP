@@ -1,10 +1,3 @@
-//
-//  ApplyOfferViewController.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 11.10.2024.
-//
-
 import UIKit
 
 final class ApplyOfferViewController: UIViewController {
@@ -15,16 +8,11 @@ final class ApplyOfferViewController: UIViewController {
     private let rightPadding: CGFloat = -10
     private let topPadding: CGFloat = 10
     private let bottomPadding: CGFloat = -10
+    private let cornerRadius: CGFloat = 14
 
     // MARK: - UI Properties
-    private lazy var specialOfferImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 14
-        imageView.layer.masksToBounds = true
-        imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
-        return imageView
-    }()
+    private lazy var specialOfferImageView = AppImageView(squareSize: imageSize, cornerRadius: cornerRadius)
+   
     private lazy var imageContainer: UIView = {
         let view = UIView()
         view.addSubviews(specialOfferImageView)
@@ -32,36 +20,18 @@ final class ApplyOfferViewController: UIViewController {
         specialOfferImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         return view
     }()
-    private lazy var dateOfferLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.semibold16
-        label.textColor = AppColors.grayFont
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        label.text = "до 13 октября"
-        return label
-    }()
-    private lazy var detailsOfOfferLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.semibold20
-        label.textColor = .white
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        label.text = "Скидка 30% при заказе от 649 ₽"
 
-        return label
-    }()
-    private lazy var legalTextLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.regular16
-        label.textColor = AppColors.grayFont
-        label.textAlignment = .left
-        label.text = "Акция работает только в пиццерии при заказе в приложении. Не действует с другими акциями и при заказе с комбо. Примените до 13.10 включительно"
-        label.numberOfLines = 0
-        return label
-    }()
+    private lazy var dateOfferLabel = AppLabel(text: "до 13 октября", textColor: .grayFont, font: .semibold(size: 16), alignment: .left)
+
+    private lazy var detailsOfOfferLabel = AppLabel(text: "Скидка 30% при заказе от 649 ₽", textColor: .white, font: .semibold(size: 20), alignment: .left)
+
+    private lazy var legalTextLabel = AppLabel(text: "Акция работает только в пиццерии при заказе в приложении. Не действует с другими акциями и при заказе с комбо. Примените до 13.10 включительно", textColor: .grayFont, font: .regular(size: 16), alignment: .left)
+
     private lazy var applyButton = CartButton(isHidden: false, title: "Применить", isCart: false)
-    private lazy var contentStack = setupContentStack()
+
+    private lazy var detailsStack = AppStackView([dateOfferLabel, detailsOfOfferLabel, legalTextLabel, applyButton], axis: .vertical, distribution: .equalSpacing)
+
+    private lazy var contentStack = AppStackView([imageContainer, detailsStack], axis: .vertical, distribution: .fillEqually)
 
     // MARK: - Init
     init(with offer: Promo) {
@@ -120,16 +90,5 @@ private extension ApplyOfferViewController {
             contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightPadding),
             contentStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomPadding)
         ])
-    }
-
-    func setupContentStack() -> UIStackView {
-        let stack = UIStackView(arrangedSubviews: [dateOfferLabel, detailsOfOfferLabel, legalTextLabel, applyButton])
-        stack.axis = .vertical
-        stack.distribution = .equalSpacing
-
-        let finalStack = UIStackView(arrangedSubviews: [imageContainer, stack])
-        finalStack.axis = .vertical
-        finalStack.distribution = .fillEqually
-        return finalStack
     }
 }

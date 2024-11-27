@@ -4,8 +4,8 @@ final class DetailsView: UIView {
 
     // MARK: - UI Properties
     private lazy var pizzaImageView = AppImageView(squareSize: pizzaImageSize)
-    private lazy var sizeSegmentControl = SegmentControlView(items: AppConstants.sizeCases, defaultSelection: 1)
-    private lazy var doughSegmentControl = SegmentControlView(items: AppConstants.doughCases, defaultSelection: 0)
+    private lazy var sizeSegmentControl = AppSegmentControlView(items: AppConstants.sizeCases, defaultSelection: 1)
+    private lazy var doughSegmentControl = AppSegmentControlView(items: AppConstants.doughCases, defaultSelection: 0)
 
     // MARK: - Size Properties
     private let pizzaImageSize: CGFloat = 350

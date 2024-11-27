@@ -7,38 +7,14 @@ final class PromoCollectionCell: UICollectionViewCell {
     private let rightInset: CGFloat = -10
     private let topInset: CGFloat = 10
     private let bottomInset: CGFloat = -10
+    private let cornerRadius: CGFloat = 14
 
     // MARK: - UI Properties
-    private lazy var promoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
-        imageView.layer.cornerRadius = 14
-        imageView.layer.masksToBounds = true
-        return imageView
-    }()
-    private lazy var nameOfOfferLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.semibold14
-        label.textColor = AppColors.grayFont
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var detailsOfOfferLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.semibold16
-        label.textColor = .white
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var dateLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.regular14
-        label.textColor = AppColors.grayFont
-        label.textAlignment = .left
-        return label
-    }()
+    private lazy var promoImageView = AppImageView(cornerRadius: cornerRadius)
+    private lazy var nameOfOfferLabel = AppLabel(textColor: .grayFont, font: .semibold(size: 14), alignment: .left)
+    private lazy var detailsOfOfferLabel = AppLabel(textColor: .white, font: .semibold(size: 16), alignment: .left)
+    private lazy var dateLabel = AppLabel(textColor: .grayFont, font: .regular(size: 14), alignment: .left)
+
     private lazy var applyButton: UIButton = {
         let button = UIButton()
         let title = "Применить"
@@ -55,20 +31,9 @@ final class PromoCollectionCell: UICollectionViewCell {
         return button
     }()
 
-    private lazy var textStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [nameOfOfferLabel, detailsOfOfferLabel, dateLabel, applyButton])
-        stackView.axis = .vertical
-        stackView.alignment = .leading
-        stackView.distribution = .equalSpacing
-        return stackView
-    }()
-    private lazy var contentStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [textStack, promoImageView])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 10
-        return stackView
-    }()
+    private lazy var textStack = AppStackView( [nameOfOfferLabel, detailsOfOfferLabel, dateLabel, applyButton], axis: .vertical, alignment: .leading, distribution: .equalSpacing)
+    private lazy var contentStack = AppStackView([textStack, promoImageView], axis: .horizontal, spacing: 10, distribution: .fillEqually)
+
 
     // MARK: - Init
     override init(frame: CGRect) {

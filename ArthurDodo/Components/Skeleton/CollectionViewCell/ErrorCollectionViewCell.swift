@@ -2,39 +2,16 @@ import UIKit
 
 final class ErrorCollectionViewCell: UICollectionViewCell {
 
-    // MARK: - Properties
-    private let xmarkImageSize: CGFloat = 65
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-    private let topInset: CGFloat = 10
-    private let bottomInset: CGFloat = -10
-    private let cornerRadius: CGFloat = 14
-
-    var onRetryButtonTapped: (() -> Void)?
-
     // MARK: - UI Properties
-    private lazy var iconImageView: UIImageView = {
-        let imageView = UIImageView()
-        let image = UIImage(systemName: "xmark.circle")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
-        imageView.image = image
-        imageView.contentMode = .scaleAspectFill
-        imageView.heightAnchor.constraint(equalToConstant: xmarkImageSize).isActive = true
-        return imageView
-    }()
+    private lazy var iconImageView = AppImageView(viewImage: .common(.errorXmark), tintColor: .buttonOrange, squareSize: xmarkImageSize)
+    
     private lazy var containerImageView: UIView = {
         let view = UIView()
         view.addSubviews(iconImageView)
         return view
     }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.bold26
-        label.numberOfLines = 0
-        label.text = "Не удалось загрузить данные"
-        label.textColor = AppColors.grayFont
-        label.textAlignment = .center
-        return label
-    }()
+    private lazy var titleLabel = AppLabel(text: "Не удалось загрузить данные", textColor: .grayFont, font: .bold(size: 26), alignment: .center)
+
     private lazy var retryButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.filled()
@@ -48,13 +25,17 @@ final class ErrorCollectionViewCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(retryButtonTapped), for: .touchUpInside)
         return button
     }()
-    private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [containerImageView, titleLabel, retryButton])
-        stackView.axis = .vertical
-        stackView.distribution = .equalSpacing
-        stackView.alignment = .center
-        return stackView
-    }()
+    private lazy var contentStackView = AppStackView([containerImageView, titleLabel, retryButton], axis: .vertical, alignment: .center, distribution: .equalSpacing)
+
+    // MARK: - Properties
+    private let xmarkImageSize: CGFloat = 65
+    private let leftInset: CGFloat = 10
+    private let rightInset: CGFloat = -10
+    private let topInset: CGFloat = 10
+    private let bottomInset: CGFloat = -10
+    private let cornerRadius: CGFloat = 14
+
+    var onRetryButtonTapped: (() -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {

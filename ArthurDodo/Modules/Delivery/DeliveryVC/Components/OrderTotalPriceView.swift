@@ -3,25 +3,9 @@ import UIKit
 final class OrderTotalPriceView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.bold22
-        label.text = "Стоимость заказа"
-        return label
-    }()
-    private lazy var priceLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.bold22
-        label.textAlignment = .right
-        return label
-    }()
-    private lazy var contentStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, priceLabel])
-        stackView.axis = .horizontal
-        return stackView
-    }()
+    private lazy var titleLabel = AppLabel(text: "Стоимость заказа", textColor: .white, font: .bold(size: 22), numberOfLines: 1)
+    private lazy var priceLabel = AppLabel(textColor: .white, font: .bold(size: 22), alignment: .right)
+    private lazy var contentStack = AppStackView([titleLabel, priceLabel], axis: .horizontal, alignment: .center)
 
     // MARK: - Other Properties
     private let viewHeight: CGFloat = 50

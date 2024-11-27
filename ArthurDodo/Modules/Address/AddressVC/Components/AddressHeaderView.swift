@@ -4,8 +4,8 @@ final class AddressHeaderView: UIStackView {
 
     // MARK: - UI Properties
     private lazy var dismissButton = DismissButtonView()
-    private lazy var segmentControl: SegmentControlView = {
-        let view = SegmentControlView(items: ["Доставка", "В пиццерии"], defaultSelection: 0)
+    private lazy var segmentControl: AppSegmentControlView = {
+        let view = AppSegmentControlView(items: ["Доставка", "В пиццерии"], defaultSelection: 0)
         view.setSegmentColor(AppColors.buttonOrange)
         view.backgroundColor = AppColors.backgroundBlack
         return view

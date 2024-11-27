@@ -10,25 +10,13 @@ final class StoriesCollectionCell: UICollectionViewCell {
     private let bottomInset: CGFloat = -10
 
     // MARK: - UI Properties
-    private lazy var coverImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.regular12
-        label.textColor = .white
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        return label
-    }()
+    private lazy var coverImageView = AppImageView()
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .regular(size: 12), alignment: .left)
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        setupSkeleton()
     }
 
     required init?(coder: NSCoder) {
@@ -82,12 +70,5 @@ private extension StoriesCollectionCell {
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset)
         ])
-    }
-}
-
-// MARK: - Setup skeleton
-private extension StoriesCollectionCell {
-    func setupSkeleton() {
-//        isSkeletonable = true
     }
 }

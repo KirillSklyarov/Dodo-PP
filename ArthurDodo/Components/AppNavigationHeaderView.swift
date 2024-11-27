@@ -1,6 +1,7 @@
 import UIKit
 
-final class CartHeaderView: UIView {
+// Вью хэдера где указан заголовок и оранжевая кнопка Закрыть
+final class AppNavigationHeaderView: UIView {
 
     // MARK: - UI Properties
     private lazy var titleLabel = AppLabel(text: "Корзина", textColor: .white, font: .semibold(size: 18))
@@ -27,7 +28,7 @@ final class CartHeaderView: UIView {
 }
 
 // MARK: - Setup UI
-private extension CartHeaderView {
+private extension AppNavigationHeaderView {
     func configUI() {
         addSubviews(dismissButton, titleLabel)
         setupLayout()
@@ -56,7 +57,7 @@ private extension CartHeaderView {
 }
 
 // MARK: - Setup Actions
-private extension CartHeaderView {
+private extension AppNavigationHeaderView {
     func setupAction() {
         dismissButton.onDismissButtonTapped = { [weak self] in
             self?.onDismissButtonTapped?()
@@ -65,7 +66,7 @@ private extension CartHeaderView {
 }
 
 // MARK: - Supporting methods
-private extension CartHeaderView {
+private extension AppNavigationHeaderView {
     func setTitle(_ title: String?) {
         if let title { titleLabel.text = title }
     }

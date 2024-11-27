@@ -3,7 +3,7 @@ import UIKit
 final class CourierView: UIView {
 
     // MARK: - Properties
-    private lazy var courierImageView = AppImageView(systemImage: .common(.courier), tintColor: .buttonOrange)
+    private lazy var courierImageView = AppImageView(viewImage: .common(.courier), tintColor: .buttonOrange)
 
     private let height: CGFloat = 40
 

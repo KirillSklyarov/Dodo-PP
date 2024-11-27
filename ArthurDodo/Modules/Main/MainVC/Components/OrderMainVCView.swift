@@ -3,7 +3,7 @@ import UIKit
 final class OrderMainVCView: UIView {
 
     // MARK: - UI Properties
-    private lazy var cartImageView = AppImageView(systemImage: AppImages.common(.cartCircle), tintColor: .grayFont)
+    private lazy var cartImageView = AppImageView(viewImage: AppImages.common(.cartCircle), tintColor: .grayFont)
     private lazy var titleLabel = AppLabel(textColor: .grayFont, font: .semibold(size: 18))
     private lazy var statusLabel = AppLabel(textColor: .grayFont, font: .semibold(size: 18))
 

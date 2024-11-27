@@ -2,21 +2,9 @@ import UIKit
 
 final class AddressPopUpViewController: UIViewController {
 
-    // MARK: - Properties
-    private let leftPadding: CGFloat = 10
-    private let rightPadding: CGFloat = -10
-    private let topPadding: CGFloat = 30
-    private let bottomPadding: CGFloat = -10
-    private let buttonWidth: CGFloat = 150
-
     // MARK: - UI Properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Мои адреса"
-        label.font = AppFonts.bold26
-        label.textColor = .white
-        return label
-    }()
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 26))
+
     private lazy var addAddressButton: UIButton = {
         let button = UIButton()
         let title = "+ Новый адрес"
@@ -31,19 +19,19 @@ final class AddressPopUpViewController: UIViewController {
         button.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
         return button
     }()
-    private lazy var headerStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, addAddressButton])
-        stackView.axis = .horizontal
-        return stackView
-    }()
+    private lazy var headerStackView = AppStackView([titleLabel, addAddressButton], axis: .horizontal)
+
     private lazy var deliveryButton = CartButton(title: "Доставить сюда", isCart: false)
     private lazy var addressTableView = AddressListTableView()
-    private lazy var contentStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [headerStackView, addressTableView, deliveryButton])
-        stack.axis = .vertical
-        stack.spacing = 10
-        return stack
-    }()
+
+    private lazy var contentStackView = AppStackView([headerStackView, addressTableView, deliveryButton], axis: .vertical, spacing: 10)
+
+    // MARK: - Properties
+    private let leftPadding: CGFloat = 10
+    private let rightPadding: CGFloat = -10
+    private let topPadding: CGFloat = 30
+    private let bottomPadding: CGFloat = -10
+    private let buttonWidth: CGFloat = 150
 
     private let storage: DataStorage
 

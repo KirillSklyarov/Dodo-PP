@@ -4,7 +4,7 @@ final class CartButtonView: UIView {
 
     // MARK: - UI Properties
     private var cartButton: CartButton
-    private lazy var blurView = CustomBlurView()
+    private lazy var blurView = AppBlurView()
 
     // MARK: - Properties
     private let viewHeight: CGFloat = 90

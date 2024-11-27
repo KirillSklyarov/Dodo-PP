@@ -2,22 +2,12 @@ import UIKit
 
 final class CpfcTableViewCell: UITableViewCell {
 
+    // MARK: - UI Properties
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .regular(size: 14))
+    private lazy var cpfcValueLabel = AppLabel(textColor: .white, font: .regular(size: 14))
+
     // MARK: - Properties
     var onPriceButtonTapped: ( (String) -> Void )?
-
-    // MARK: - UI Properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.regular14
-        label.textColor = .white
-        return label
-    }()
-    private lazy var cpfcValueLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.regular14
-        label.textColor = .white
-        return label
-    }()
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

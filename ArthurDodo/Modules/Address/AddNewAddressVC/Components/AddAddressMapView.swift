@@ -6,7 +6,7 @@ final class AddAddressMapView: UIView {
     // MARK: - UI Properties
     private lazy var mapView = MKMapView()
     private lazy var userTrackingButton = UserTrackingButton(mapView: mapView)
-    private lazy var pinView = AppImageView(systemImage: AppImages.common(.mapPin), tintColor: .buttonOrange, squareSize: pinImageSize)
+    private lazy var pinView = AppImageView(viewImage: AppImages.common(.mapPin), tintColor: .buttonOrange, squareSize: pinImageSize)
 
     // MARK: - Other properties
     private let rightInset: CGFloat = -20

@@ -1,30 +1,13 @@
 import UIKit
 
-final class HeaderView: UIView {
+final class MainHeaderView: UIView {
 
     // MARK: - UI Properties
     private lazy var courierView = CourierView()
 
-    private lazy var addressLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Укажите адрес доставки"
-        label.font = AppFonts.regular14
-        label.textColor = .white
-        return label
-    }()
-    private lazy var deliveryTimeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "около 40 минут"
-        label.textColor = AppColors.sberGreen
-        label.font = AppFonts.regular12
-        return label
-    }()
-    private lazy var chevronImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(systemName: "chevron.down")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        return imageView
-    }()
+    private lazy var addressLabel = AppLabel(text: "Укажите адрес доставки", textColor: .white, font: .regular(size: 14))
+    private lazy var deliveryTimeLabel = AppLabel(text: "около 40 минут", textColor: .sberGreen, font: .regular(size: 12))
+    private lazy var chevronImageView = AppImageView(viewImage: .main(.chevronDown), tintColor: .white)
 
     private lazy var profileContainerView: ProfileMainHeaderView = {
         let view = ProfileMainHeaderView()
@@ -70,7 +53,7 @@ final class HeaderView: UIView {
 }
 
 // MARK: - Public methods
-extension HeaderView {
+extension MainHeaderView {
     // Обновление всех UI на вью
     func updateUI(_ address: String, _ coins: Int) {
         updateAddress(address)
@@ -90,7 +73,7 @@ extension HeaderView {
 }
 
 // MARK: - Setup button actions
-private extension HeaderView {
+private extension MainHeaderView {
     @objc func profileButtonTapped() {
         onProfileButtonTapped?()
     }
@@ -101,7 +84,7 @@ private extension HeaderView {
 }
 
 // MARK: - Setup UI
-private extension HeaderView {
+private extension MainHeaderView {
     func setupUI() {
         addSubviews(contentStackView)
         setupLayout()
@@ -123,7 +106,7 @@ private extension HeaderView {
 }
 
 // MARK: - Supporting methods
-private extension HeaderView {
+private extension MainHeaderView {
     // Показываем или скрываем все UI элементы на вьюхе (нужно в процессе загрузки экрана)
     func isUIVisible(_ isVisible: Bool) {
         [addressLabel, chevronImageView, deliveryTimeLabel, courierView, profileContainerView].forEach { $0.isHidden = !isVisible }

@@ -3,12 +3,7 @@ import UIKit
 final class QuitProfileTableViewCell: UITableViewCell {
     
     // MARK: - UI Properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.regular20
-        return label
-    }()
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .regular(size: 20))
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

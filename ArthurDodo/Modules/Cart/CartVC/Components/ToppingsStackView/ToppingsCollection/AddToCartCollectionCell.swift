@@ -19,55 +19,26 @@ final class AddToCartCollectionCell: UICollectionViewCell {
         view.layer.masksToBounds = true
         return view
     }()
-    private lazy var itemImageView: UIImageView = {
-        let imageView = UIImageView()
-        let image = UIImage(named: "pizza")
-        imageView.image = image
-        imageView.contentMode = .scaleAspectFill
-        imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
-        return imageView
-    }()
-    private lazy var priceLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.semibold12
+    private lazy var itemImageView = AppImageView(height: imageSize)
+
+    private lazy var priceLabel: AppLabel = {
+        let label = AppLabel(textColor: .white, font: .semibold(size: 12), alignment: .center, height: priceLabelHeight)
         label.backgroundColor = AppColors.buttonGray
-        label.textAlignment = .center
-        label.textColor = .white
         label.layer.cornerRadius = cornerRadius
         label.layer.masksToBounds = true
-        label.heightAnchor.constraint(equalToConstant: priceLabelHeight).isActive = true
         return label
     }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.bold14
-        label.numberOfLines = 2
-        label.adjustsFontSizeToFitWidth = true
-        label.textColor = .white
-        return label
-    }()
-    private lazy var detailsLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.regular12
-        label.numberOfLines = 0
-        label.textColor = .gray
-        label.adjustsFontSizeToFitWidth = true
-        return label
-    }()
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 14), numberOfLines: 3, adjustsFontSizeToFitWidth: true)
+
+    private lazy var detailsLabel = AppLabel(textColor: .grayFont, font: .regular(size: 12), adjustsFontSizeToFitWidth: true)
+
     private lazy var detailsLabelContainer: UIView = {
         let view = UIView()
         view.addSubviews(detailsLabel)
         return view
     }()
 
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [itemImageView, titleLabel, detailsLabelContainer, priceLabel])
-        stack.axis = .vertical
-        stack.spacing = 5
-        titleLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        detailsLabel.setContentHuggingPriority(.defaultLow, for: .vertical)
-        return stack
-    }()
+    private lazy var contentStack = AppStackView([itemImageView, titleLabel, detailsLabelContainer, priceLabel], axis: .vertical, spacing: 5)
 
     // MARK: - Init
     override init(frame: CGRect) {

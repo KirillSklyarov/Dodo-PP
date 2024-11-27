@@ -7,37 +7,12 @@ final class ItemsHeaderView: UICollectionViewCell {
     private let hitImageSize: CGFloat = 130
 
     // MARK: - UI Properties
-    private lazy var pizzaImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
-        return imageView
-    }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.bold20
-        label.textColor = .white
-        label.adjustsFontSizeToFitWidth = true
-        label.numberOfLines = 1
-        return label
-    }()
-    private lazy var ingredientsLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .gray
-        label.font = AppFonts.regular14
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var priceButton = PriceGrayButton()
-    private lazy var hitImageView: UIImageView = {
-        let imageView = UIImageView()
-        let image = UIImage(named: "hit2")
-        imageView.image = image
-        imageView.heightAnchor.constraint(equalToConstant: hitImageSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: hitImageSize).isActive = true
-        imageView.isHidden = true
-        return imageView
-    }()
+    private lazy var pizzaImageView = AppImageView(squareSize: imageSize)
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 20), numberOfLines: 1, adjustsFontSizeToFitWidth: true)
+    private lazy var ingredientsLabel = AppLabel(textColor: .grayFont, font: .regular(size: 14))
+    private lazy var priceButton = AppPriceGrayButton()
+    private lazy var hitImageView = AppImageView(viewImage: .common(.hit), isSystem: false, squareSize: hitImageSize)
+    
     private lazy var backView: UIView = {
         let view = UIView()
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -54,7 +29,6 @@ final class ItemsHeaderView: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        setupSkeleton()
     }
 
     required init?(coder: NSCoder) {
@@ -74,21 +48,6 @@ final class ItemsHeaderView: UICollectionViewCell {
         titleLabel.text = item.name
         ingredientsLabel.text = item.ingredients
         priceButton.setPrice(item)
-    }
-}
-
-// MARK: - Setup Skeleton
-private extension ItemsHeaderView {
-    func setupSkeleton() {
-//        isSkeletonable = true
-//        contentView.isSkeletonable = true
-//        contentContainer.isSkeletonable = true
-//        pizzaImageView.isSkeletonable = true
-//        titleLabel.isSkeletonable = true
-//        ingredientsLabel.isSkeletonable = true
-//        priceButton.isSkeletonable = true
-//        hitImageView.isSkeletonable = true
-//        backView.isSkeletonable = true
     }
 }
 

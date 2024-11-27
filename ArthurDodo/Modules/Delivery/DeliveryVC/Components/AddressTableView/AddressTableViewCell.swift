@@ -3,18 +3,13 @@ import UIKit
 final class AddressTableViewCell: UITableViewCell {
 
     // MARK: - Properties
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .semibold(size: 18))
+
     private let cornerRadius: CGFloat = 10
     private let topInset: CGFloat = 10
     private let leftInset: CGFloat = 20
     private let rightInset: CGFloat = -10
     private let bottomInset: CGFloat = -10
-
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.semibold18
-        label.textColor = .white
-        return label
-    }()
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -42,9 +37,7 @@ private extension AddressTableViewCell {
         layer.masksToBounds = true
         selectionStyle = .none
 
-        let image = UIImage(systemName: "chevron.right")?.withTintColor(AppColors.grayFont, renderingMode: .alwaysOriginal)
-        let chevronView = UIImageView(image: image)
-        accessoryView = chevronView
+        self.setupAccessoryView()
 
         setupLayout()
     }
@@ -58,5 +51,3 @@ private extension AddressTableViewCell {
         ])
     }
 }
-
-

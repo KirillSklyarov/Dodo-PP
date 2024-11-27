@@ -1,5 +1,6 @@
 import UIKit
 
+// Горизонтальная коллекция в профиле с додокоинами, заказами и адресами
 final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
@@ -11,25 +12,15 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
     private let cornerRadius: CGFloat = 14
 
     // MARK: - UI Properties
-    private lazy var iconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.heightAnchor.constraint(equalToConstant: coinsImageSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: coinsImageSize).isActive = true
-        return imageView
-    }()
+    private lazy var iconImageView = AppImageView(squareSize: coinsImageSize)
+
     private lazy var containerImageView: UIView = {
         let view = UIView()
         view.addSubviews(iconImageView)
         return view
     }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.bold40
-        label.textColor = .white
-        label.textAlignment = .left
-        return label
-    }()
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 40))
+
     private lazy var subTitleButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.filled()
@@ -39,13 +30,7 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
         button.configuration = config
         return button
     }()
-    private lazy var contentStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [containerImageView, titleLabel, subTitleButton])
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        stackView.alignment = .leading
-        return stackView
-    }()
+    private lazy var contentStackView = AppStackView([containerImageView, titleLabel, subTitleButton], axis: .vertical, spacing: 10, alignment: .leading)
 
     // MARK: - Init
     override init(frame: CGRect) {

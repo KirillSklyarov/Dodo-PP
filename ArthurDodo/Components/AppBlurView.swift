@@ -1,6 +1,6 @@
 import UIKit
 
-final class CustomBlurView: UIVisualEffectView {
+final class AppBlurView: UIVisualEffectView {
 
     private let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
 

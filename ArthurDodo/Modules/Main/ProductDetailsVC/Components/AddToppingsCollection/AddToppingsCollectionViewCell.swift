@@ -7,46 +7,13 @@ final class AddToppingsCollectionViewCell: UICollectionViewCell {
     private let cornerRadius: CGFloat = 10
 
     // MARK: - UI Properties
-    private lazy var toppingImageView: UIImageView = {
-        let imageView = UIImageView()
-        let image = UIImage(named: "tomato")
-        imageView.image = image
-        imageView.heightAnchor.constraint(equalToConstant: imageSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
-        return imageView
-    }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "cheese"
-        label.font = AppFonts.bold14
-        label.textAlignment = .center
-        label.numberOfLines = 1
-        label.textColor = .white
-        return label
-    }()
-    private lazy var priceLabel: UILabel = {
-        let label = UILabel()
-        label.text = "100 ₽"
-        label.font = AppFonts.bold14
-        label.textAlignment = .center
-        label.numberOfLines = 1
-        label.textColor = .white
-        return label
-    }()
-    private lazy var chosenImageView: UIImageView = {
-        let imageView = UIImageView()
-        let image = UIImage(systemName: "checkmark.circle.fill")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
-        imageView.image = image
-        imageView.isHidden = true
-        return imageView
-    }()
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [toppingImageView, titleLabel, priceLabel])
-        stack.axis = .vertical
-        stack.alignment = .center
-        stack.distribution = .equalSpacing
-        return stack
-    }()
+    private lazy var toppingImageView = AppImageView(squareSize: imageSize)
+    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 14), alignment: .center, numberOfLines: 1)
+    private lazy var priceLabel = AppLabel(textColor: .white, font: .bold(size: 14), alignment: .center, numberOfLines: 1)
+
+    private lazy var chosenImageView = AppImageView(viewImage: .common(.chosenTopping), tintColor: .buttonOrange, isHidden: true)
+
+    private lazy var contentStack = AppStackView([toppingImageView, titleLabel, priceLabel], axis: .vertical, spacing: 10, alignment: .center, distribution: .equalSpacing)
 
     // MARK: - Init
     override init(frame: CGRect) {

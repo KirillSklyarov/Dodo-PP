@@ -3,7 +3,7 @@ import UIKit
 final class ChooseAddressVC: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var headerView = CartHeaderView(title: "Адреса доставки") // Заголовок с кнопкой
+    private lazy var headerView = AppNavigationHeaderView(title: "Адреса доставки") // Заголовок с кнопкой
     private lazy var addressTableView = DeliveryAddressListTableView()
 
     // MARK: - Other Properties

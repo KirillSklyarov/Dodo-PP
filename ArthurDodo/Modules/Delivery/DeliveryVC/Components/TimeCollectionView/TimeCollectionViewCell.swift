@@ -3,16 +3,9 @@ import UIKit
 final class TimeCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
-    private let cornerRadius: CGFloat = 10
+    private lazy var timeLabel = AppLabel(text: "Побыстрее", textColor: .white, font: .semibold(size: 18), alignment: .center)
 
-    private lazy var timeLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFonts.semibold18
-        label.textColor = .white
-        label.text = "Побыстрее"
-        label.textAlignment = .center
-        return label
-    }()
+    private let cornerRadius: CGFloat = 10
 
     // MARK: - Init
     override init(frame: CGRect) {

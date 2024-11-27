@@ -4,8 +4,8 @@ final class DetailsView2: UIView {
 
     // MARK: - UI Properties
     private lazy var pizzaImageView = AppImageView()
-    private lazy var sizeSegmentControl = SegmentControlView(items: AppConstants.sizeCases, defaultSelection: 1)
-    private lazy var doughSegmentControl = SegmentControlView(items: AppConstants.doughCases, defaultSelection: 0)
+    private lazy var sizeSegmentControl = AppSegmentControlView(items: AppConstants.sizeCases, defaultSelection: 1)
+    private lazy var doughSegmentControl = AppSegmentControlView(items: AppConstants.doughCases, defaultSelection: 0)
     private lazy var segmentsControlStackView = AppStackView([sizeSegmentControl, doughSegmentControl], axis: .vertical, spacing: 5)
 
     private lazy var contentStackView = AppStackView([pizzaImageView, segmentsControlStackView], axis: .vertical, spacing: 10)

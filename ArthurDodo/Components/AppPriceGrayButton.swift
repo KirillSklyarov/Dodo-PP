@@ -1,17 +1,10 @@
-//
-//  PriceGrayButton.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 23.10.2024.
-//
-
 import UIKit
 
-final class PriceGrayButton: UIButton {
+final class AppPriceGrayButton: UIButton {
 
     // MARK: - Properties
     private let cornerRadius: CGFloat = 14
-    private let buttonWidth: CGFloat = 100
+    private let buttonWidth: CGFloat = 90
 
     var priceButtonTapped: ( () -> Void)?
 
@@ -27,7 +20,7 @@ final class PriceGrayButton: UIButton {
 }
 
 // MARK: - Setup UI
-private extension PriceGrayButton {
+private extension AppPriceGrayButton {
     private func setupUI() {
         titleLabel?.font = AppFonts.semibold14
         setTitleColor(.white, for: .normal)
@@ -50,7 +43,7 @@ private extension PriceGrayButton {
 }
 
 // MARK: - Set right price
-extension PriceGrayButton {
+extension AppPriceGrayButton {
     func setPrice(_ item: Item) {
         let itemPrice = getPrice(item)
         setTitle(itemPrice, for: .normal)

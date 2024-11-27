@@ -2,32 +2,16 @@ import UIKit
 
 final class SkeletonCollectionViewCell: UICollectionViewCell {
 
-    // MARK: - Properties
+    // MARK: - UI Properties
+    private lazy var darkPlaceholderTitle = AppLabel(text: "Загружаем", textColor: .darkGray, font: .bold(size: 30), alignment: .center, numberOfLines: 1, adjustsFontSizeToFitWidth: true)
+
+    private lazy var whitePlaceholderTitle = AppLabel(text: "Загружаем", textColor: .white, font: .bold(size: 30), alignment: .center, numberOfLines: 1, adjustsFontSizeToFitWidth: true)
+
     private var gradientLayer = CAGradientLayer()
 
+    // MARK: - Properties
     private let leftInset: CGFloat = 5
     private let rightInset: CGFloat = -5
-
-    private lazy var darkPlaceholderTitle: UILabel = {
-        let label = UILabel()
-        label.textColor = .darkGray
-        label.font = AppFonts.bold30
-        label.adjustsFontSizeToFitWidth = true
-        label.textAlignment = .center
-        label.numberOfLines = 1
-        label.text = "Загружаем"
-        return label
-    }()
-    private lazy var whitePlaceholderTitle: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.bold30
-        label.adjustsFontSizeToFitWidth = true
-        label.textAlignment = .center
-        label.numberOfLines = 1
-        label.text = "Загружаем"
-        return label
-    }()
 
     // MARK: - Init
     override init(frame: CGRect) {

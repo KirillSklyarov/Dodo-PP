@@ -3,7 +3,7 @@ import UIKit
 final class MainViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var headerView = HeaderView() // Заголовок с кнопками
+    private lazy var headerView = MainHeaderView() // Заголовок с кнопками
     private lazy var orderView = OrderMainVCView() // Вью с заказом (или скрыто или показывается)
     private lazy var contentCollectionView = ContentCollectionView() // Основная коллекция с товарами
     private lazy var cartButton = CartButton(isHidden: true, isNeedImage: true) // Кнопка корзины

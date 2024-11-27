@@ -32,20 +32,9 @@ final class CustomStepperView: UIView {
         button.addTarget(self, action: #selector(incrementButtonTapped), for: .touchUpInside)
         return button
     }()
-    private lazy var valueLabel: UILabel = {
-        let label = UILabel()
-        label.text = "\(value)"
-        label.textColor = .white
-        label.font = AppFonts.semibold14
-        label.textAlignment = .center
-        return label
-    }()
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [decrementButton, valueLabel, incrementButton])
-        stack.axis = .horizontal
-        stack.distribution = .fillEqually
-        return stack
-    }()
+    private lazy var valueLabel = AppLabel(text: "\(value)", textColor: .white, font: .semibold(size: 14), alignment: .center)
+
+    private lazy var contentStack = AppStackView([decrementButton, valueLabel, incrementButton], axis: .horizontal, distribution: .fillEqually)
 
     // MARK: - Init
     init(frame: CGRect = .zero, isHidden: Bool = false) {
