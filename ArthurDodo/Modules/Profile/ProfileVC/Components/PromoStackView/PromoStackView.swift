@@ -3,7 +3,7 @@ import UIKit
 final class PromoStackView: UIStackView {
 
     // MARK: - UI Properties
-    private lazy var promoHeaderView = OrderView(title: "Акции")
+    private lazy var headerLabel = AppLabelDS(type: .header, text: "Акции")
     private lazy var promoCollectionView = PromoCollectionView()
     private lazy var pageControl = CustomPageControl()
     private lazy var skeletonView = SkeletonView()
@@ -88,7 +88,7 @@ private extension PromoStackView {
     // Настраиваем показ загруженного экрана
     func showSuccessScreen() {
         skeletonView.removeFromSuperview()
-        addArrangedSubview(promoHeaderView)
+        addArrangedSubview(headerLabel)
         addArrangedSubview(promoCollectionView)
         addArrangedSubview(pageControl)
     }

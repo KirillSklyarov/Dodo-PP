@@ -3,10 +3,9 @@ import UIKit
 final class CategoryViewCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(textColor: .grayFont, font: .bold(size: 14), alignment: .center, height: viewHeight)
+    private lazy var titleLabel = AppLabelDS(type: .categoryTitle)
 
     // MARK: - Properties
-    private let viewHeight: CGFloat = 40
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
 

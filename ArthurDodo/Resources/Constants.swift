@@ -55,12 +55,12 @@ enum AppFontsEnum {
 }
 
 struct AppColors {
-    static let backgroundGray = UIColor(hex: "222222")
-    static let backgroundBlack = UIColor.black
+    static let backgroundGray = UIColor(hex: "242424")
+    static let backgroundBlack = UIColor(hex: "171717")
     static let buttonGray = UIColor(hex: "363636")
     static let dodoCoinsBlue = UIColor(hex: "5f4eca")
     static let buttonOrange = UIColor(hex: "ff6400")
-    static let grayFont = UIColor(hex: "959595")
+    static let grayFont = UIColor(hex: "727272")
     static let sberGreen = UIColor(hex: "06c906")
 }
 
@@ -91,23 +91,3 @@ enum AppColorsEnum {
         }
     }
 }
-
-
-//    let peach = UIColor(hex: "f7d794")
-//    let blue = UIColor(hex: "778beb")
-//    let geranium = UIColor(hex: "cf6a87")
-//    let orange = UIColor(hex: "e15f41")
-//    let majesty = UIColor(hex: "786fa6")
-//    let summer = UIColor(hex: "f5cd79")
-//    let sky = UIColor(hex: "63cdda")
-//    let pencil = UIColor(hex: "596275")
-//    let wild = UIColor(hex: "574b90")
-//    let rock = UIColor(hex: "303952")
-
-//    func getRandomColor() -> UIColor {
-//        let colors = [peach, blue, geranium, orange, majesty, summer, sky, pencil, wild, rock]
-//        return colors.randomElement() ?? UIColor.black
-//    }
-//}
-
-

@@ -3,25 +3,10 @@ import UIKit
 final class AddressTextFieldView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(textColor: .grayFont, font: .regular(size: 12))
-   
-    private lazy var clearButton: UIButton = {
-        let button = UIButton()
-        let image = UIImage(systemName: "xmark.circle.fill")
-        button.setImage(image, for: .normal)
-        button.tintColor = AppColors.grayFont
-        button.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
-        button.isHidden = true
-        return button
-    }()
-    private lazy var textField: UITextField = {
-        let textField = UITextField()
-        let placeholder = "123"
-        textField.textColor = .white
-        textField.font = AppFonts.semibold14
-        textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [.foregroundColor: AppColors.grayFont])
-        return textField
-    }()
+    private lazy var titleLabel = AppLabelDS(type: .itemSubtitle)
+    private lazy var clearButton = ClearTextFieldButton()
+    private lazy var textField = AppTextField()
+
     private lazy var textStack = AppStackView([titleLabel, textField], axis: .vertical, spacing: 0)
 
     private lazy var contentStack = AppStackView([textStack, clearButton], axis: .horizontal)
@@ -44,6 +29,7 @@ final class AddressTextFieldView: UIView {
         titleLabel.isHidden = true
         textField.placeholder = title.rawValue
         setupUI()
+        setupActions()
     }
     
     required init?(coder: NSCoder) {
@@ -90,6 +76,18 @@ private extension AddressTextFieldView {
     }
 }
 
+private extension AddressTextFieldView {
+    func setupActions() {
+        setupClearButtonAction()
+    }
+
+    func setupClearButtonAction() {
+        clearButton.onButtonTapped = { [weak self] in
+            self?.textField.text = nil
+        }
+    }
+}
+
 // MARK: - UITextFieldDelegate
 extension AddressTextFieldView: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -105,10 +103,6 @@ extension AddressTextFieldView: UITextFieldDelegate {
 
 // MARK: - Supporting methods
 private extension AddressTextFieldView {
-    @objc func clearButtonTapped() {
-        textField.text = nil
-    }
-
     func isTextFieldEditing(_ textField: UITextField, isEditing: Bool) {
         switch isEditing {
         case true:

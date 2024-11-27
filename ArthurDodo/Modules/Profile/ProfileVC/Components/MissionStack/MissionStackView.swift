@@ -3,7 +3,7 @@ import UIKit
 final class MissionStackView: UIStackView {
 
     // MARK: - UI Properties
-    private lazy var missionHeaderView = OrderView(title: "Миссии")
+    private lazy var headerLabel = AppLabelDS(type: .header, text: "Миссии")
     private lazy var missionView = MissionView()
     private lazy var skeletonView = CustomSkeletonViewBorder()
 
@@ -59,7 +59,7 @@ private extension MissionStackView {
 
     func showSuccessScreen() {
         skeletonView.removeFromSuperview()
-        addArrangedSubview(missionHeaderView)
+        addArrangedSubview(headerLabel)
         addArrangedSubview(missionView)
         missionView.setBorder()
     }

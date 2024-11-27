@@ -3,8 +3,8 @@ import UIKit
 final class CpfcTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .regular(size: 14))
-    private lazy var cpfcValueLabel = AppLabel(textColor: .white, font: .regular(size: 14))
+    private lazy var titleLabel = AppLabelDS(type: .topicsTitle)
+    private lazy var cpfcValueLabel = AppLabelDS(type: .topicsTitle)
 
     // MARK: - Properties
     var onPriceButtonTapped: ( (String) -> Void )?

@@ -3,8 +3,8 @@ import UIKit
 final class DodoCoinsView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .regular(size: 18), numberOfLines: 1)
-    private lazy var valueLabel = AppLabel(textColor: .white, font: .regular(size: 18), numberOfLines: 1)
+    private lazy var titleLabel = AppLabelDS(type: .name)
+    private lazy var valueLabel = AppLabelDS(type: .name)
     private lazy var contentStack = AppStackView([titleLabel, valueLabel], axis: .horizontal, distribution: .equalSpacing)
 
     // MARK: - Init

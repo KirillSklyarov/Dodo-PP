@@ -4,8 +4,7 @@ import UIKit
 final class ProfileMainHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var coinsLabel = AppLabel(textColor: .white, font: .semibold(size: 12), alignment: .center)
-
+    private lazy var coinsLabel = AppLabelDS(type: .coinsTitle)
     private lazy var coinsImageView = AppImageView(viewImage: .common(.dodoCoins), isSystem: false)
 
     private lazy var coinsStackView = AppStackView([coinsLabel, coinsImageView], axis: .horizontal, spacing: 1)

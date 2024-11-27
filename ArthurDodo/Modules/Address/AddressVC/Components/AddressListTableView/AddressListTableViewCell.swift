@@ -2,6 +2,12 @@ import UIKit
 
 final class AddressListTableViewCell: UITableViewCell {
 
+    // MARK: - UI Properties
+    private lazy var orangePoint = AppImageView(viewImage: .address(.orangePoint), tintColor: .buttonOrange, squareSize: imageSize)
+    private lazy var titleLabel = AppLabelDS(type: .addressTitle)
+
+    private lazy var editAddressButton = PencilButton()
+
     // MARK: - Properties
     private let leftPadding: CGFloat = 0
     private let rightPadding: CGFloat = -10
@@ -9,29 +15,15 @@ final class AddressListTableViewCell: UITableViewCell {
     private let bottomPadding: CGFloat = -10
 
     private let imageSize: CGFloat = 25
-    private let editAddressButtonSize: CGFloat = 25
 
     var onEditAddressButtonTapped: (() -> Void)?
 
-    // MARK: - UI Properties
-    private lazy var orangePoint = AppImageView(viewImage: .address(.orangePoint), tintColor: .buttonOrange, squareSize: imageSize)
-    private lazy var titleLabel = AppLabel(textColor: .grayFont, font: .semibold(size: 20))
-
-    private lazy var editAddressButton: UIButton = {
-        let button = UIButton()
-        let image = UIImage(systemName: "pencil")?.withTintColor(AppColors.buttonGray, renderingMode: .alwaysOriginal)
-        button.contentHorizontalAlignment = .fill
-        button.contentVerticalAlignment = .fill
-        button.setImage(image, for: .normal)
-        button.frame = CGRect(x: 0, y: 0, width: editAddressButtonSize, height: editAddressButtonSize)
-        button.addTarget(self, action: #selector(editAddressButtonTapped), for: .touchUpInside)
-        return button
-    }()
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        setupAction()
     }
 
     required init?(coder: NSCoder) {
@@ -108,7 +100,13 @@ private extension AddressListTableViewCell {
 
 // MARK: - Setup actions
 private extension AddressListTableViewCell {
-    @objc func editAddressButtonTapped() {
-        onEditAddressButtonTapped?()
+    func setupAction() {
+        setupPencilButtonAction()
+    }
+
+    func setupPencilButtonAction() {
+        editAddressButton.onButtonTapped = { [weak self] in
+            self?.onEditAddressButtonTapped?()
+        }
     }
 }

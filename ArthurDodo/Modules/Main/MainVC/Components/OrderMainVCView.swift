@@ -3,24 +3,14 @@ import UIKit
 final class OrderMainVCView: UIView {
 
     // MARK: - UI Properties
-    private lazy var cartImageView = AppImageView(viewImage: AppImages.common(.cartCircle), tintColor: .grayFont)
-    private lazy var titleLabel = AppLabel(textColor: .grayFont, font: .semibold(size: 18))
-    private lazy var statusLabel = AppLabel(textColor: .grayFont, font: .semibold(size: 18))
+    private lazy var orderLabel = AppLabelDS(type: .orderTitle)
+    private lazy var statusLabel = AppLabelDS(type: .orderStatus)
 
-    private lazy var timeLabel: AppLabel = {
-        let label = AppLabel(textColor: .backgroundBlack, font: .bold(size: 20))
-        label.textAlignment = .center
-        label.layer.cornerRadius = cornerRadius
-        label.backgroundColor = .systemYellow
-        label.clipsToBounds = true
-        return label
-    }()
-
-    private lazy var textStackView = AppStackView([titleLabel, statusLabel], axis: .vertical, spacing: 0, alignment: .leading, distribution: .fillEqually)
-    private lazy var contentStackView = AppStackView([cartImageView, textStackView, timeLabel], axis: .horizontal, spacing: 0, alignment: .center, distribution: .equalSpacing)
+    private lazy var labelsStackView = AppStackView([orderLabel, statusLabel], axis: .vertical, alignment: .leading, distribution: .fillEqually)
+    private lazy var contentStackView = AppStackView([labelsStackView], axis: .horizontal, alignment: .center)
 
     // MARK: - Properties
-    private let viewHeight: CGFloat = 100
+    private let viewHeight: CGFloat = 80
     private let cornerRadius: CGFloat = 10
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
@@ -54,20 +44,8 @@ extension OrderMainVCView {
 private extension OrderMainVCView {
     // Обновляем все лейблы
     func updateUI(with order: Order, _ totalPrice: Int) {
-        titleLabel.text = "Заказ на \(totalPrice) ₽"
+        orderLabel.text = "Заказ № \(totalPrice)"
         statusLabel.text = order.status.rawValue
-        updateTimeLabel(order)
-    }
-
-    // Показываем правильно время доставки
-    func updateTimeLabel(_ order: Order) {
-        var correctTime = "30 мин"
-        if order.deliveryTime != "" {
-            if let timeText = order.deliveryTime?.components(separatedBy: "-").last?.dropFirst() {
-                correctTime = "\(timeText)"
-            }
-        }
-        timeLabel.text = "~\(correctTime)"
     }
 }
 
@@ -77,7 +55,6 @@ private extension OrderMainVCView {
         backgroundColor = AppColors.backgroundGray
         layer.cornerRadius = cornerRadius
         clipsToBounds = true
-        setBorder(AppColors.buttonOrange)
 
         addSubviews(contentStackView)
 
@@ -92,7 +69,6 @@ private extension OrderMainVCView {
         viewHeightConstraint?.isActive = true
 
         setupContentStackViewLayout()
-        setupElementsLayout()
     }
 
     func setupContentStackViewLayout() {
@@ -101,16 +77,6 @@ private extension OrderMainVCView {
             contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-    }
-
-    func setupElementsLayout() {
-        NSLayoutConstraint.activate([
-            cartImageView.heightAnchor.constraint(equalTo: contentStackView.heightAnchor, multiplier: 0.75),
-            cartImageView.widthAnchor.constraint(equalTo: cartImageView.heightAnchor),
-
-            timeLabel.heightAnchor.constraint(equalTo: contentStackView.heightAnchor, multiplier: 0.5),
-            timeLabel.widthAnchor.constraint(equalTo: contentStackView.widthAnchor, multiplier: 0.28),
         ])
     }
 }

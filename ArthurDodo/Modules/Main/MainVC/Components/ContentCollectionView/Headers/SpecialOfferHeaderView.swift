@@ -3,7 +3,7 @@ import UIKit
 final class SpecialOfferHeaderView: UICollectionReusableView {
 
     // MARK: - Properties
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .semibold(size: 16), alignment: .left)
+    private lazy var titleLabel = AppLabelDS(type: .name)
 
     // MARK: - Init
     override init(frame: CGRect) {

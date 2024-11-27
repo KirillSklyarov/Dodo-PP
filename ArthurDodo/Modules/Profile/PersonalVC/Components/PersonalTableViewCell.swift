@@ -3,8 +3,8 @@ import UIKit
 final class PersonalTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(textColor: .grayFont, font: .regular(size: 18))
-    private lazy var dataLabel = AppLabel(textColor: .white, font: .regular(size: 18))
+    private lazy var titleLabel = AppLabelDS(type: .promoTitle)
+    private lazy var dataLabel = AppLabelDS(type: .name)
 
     private lazy var switchLabel: UISwitch = {
         let switchLabel = UISwitch()

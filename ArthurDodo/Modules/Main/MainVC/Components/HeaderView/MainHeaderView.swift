@@ -5,8 +5,9 @@ final class MainHeaderView: UIView {
     // MARK: - UI Properties
     private lazy var courierView = CourierView()
 
-    private lazy var addressLabel = AppLabel(text: "Укажите адрес доставки", textColor: .white, font: .regular(size: 14))
-    private lazy var deliveryTimeLabel = AppLabel(text: "около 40 минут", textColor: .sberGreen, font: .regular(size: 12))
+    private lazy var addressLabel = AppLabelDS(type: .addressName, text: "Укажите адрес доставки")
+    private lazy var deliveryTimeLabel = AppLabelDS(type: .addressTime, text: "около 40 минут")
+
     private lazy var chevronImageView = AppImageView(viewImage: .main(.chevronDown), tintColor: .white)
 
     private lazy var profileContainerView: ProfileMainHeaderView = {

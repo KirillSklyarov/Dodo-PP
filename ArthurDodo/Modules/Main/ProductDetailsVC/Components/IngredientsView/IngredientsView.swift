@@ -4,21 +4,9 @@ import UIKit
 final class IngredientsView: UIView {
 
     // MARK: - UI Properties
-    private lazy var ingredientsLabel = AppLabel(textColor: .white, font: .regular(size: 16), alignment: .left)
-
-    private lazy var infoButton: UIButton = {
-        let button = UIButton()
-        let image = UIImage(systemName: "info.circle")?.withTintColor(.lightGray, renderingMode: .alwaysOriginal)
-        button.setImage(image, for: .normal)
-        button.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
-        button.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
-        button.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
-        button.contentVerticalAlignment = .fill
-        button.contentHorizontalAlignment = .fill
-        return button
-    }()
-
-    private lazy var weightLabel = AppLabel(textColor: .white, font: .semibold(size: 16), alignment: .left)
+    private lazy var ingredientsLabel = AppLabelDS(type: .name)
+    private lazy var infoButton = InfoButton()
+    private lazy var weightLabel = AppLabelDS(type: .name)
 
     private lazy var ingredientsAndInfoStack = AppStackView([ingredientsLabel, infoButton], axis: .horizontal, spacing: 10, alignment: .leading)
 
@@ -27,7 +15,6 @@ final class IngredientsView: UIView {
     private lazy var cpfcPopupView = CpfcPopupView(item: item)
 
     // MARK: - Properties&Callbacks
-    private let buttonSize: CGFloat = 24
     private let cornerRadius: CGFloat = 10
     private let topInset: CGFloat = 10
     private let leftInset: CGFloat = 10
@@ -42,6 +29,7 @@ final class IngredientsView: UIView {
     override init(frame: CGRect = .zero) {
         super.init(frame: frame)
         setupUI()
+        setupActions()
     }
 
     required init?(coder: NSCoder) {
@@ -98,8 +86,14 @@ private extension IngredientsView {
 
 // MARK: - Setup actions
 private extension IngredientsView {
-    @objc private func infoButtonTapped() {
-        showPopupView()
+    func setupActions() {
+        setupInfoButtonAction()
+    }
+
+    func setupInfoButtonAction() {
+        infoButton.onInfoButtonTapped = { [weak self] in
+            self?.showPopupView()
+        }
     }
 }
 

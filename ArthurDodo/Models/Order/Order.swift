@@ -2,7 +2,7 @@ import UIKit
 
 enum OrderStatus: String, Codable {
     case new = "Новый заказ"
-    case inProgress = "Заказ собирается"
+    case inProgress = "Приняли"
     case isDelivering = "Заказ доставляется"
     case delivered = "Заказ доставлен"
     case cancelled = "Заказ отменен"
@@ -17,11 +17,9 @@ struct Order: Codable {
 
 struct OrderPosition: Codable {
     let itemName: String
-//    let imageName: String
     let size: Size
     let dough: Dough?
     let weight: Int
     let price: Int
-//    let isHit: Bool
     var count: Int
 }

@@ -2,14 +2,10 @@ import UIKit
 
 final class ItemsHeaderView: UICollectionViewCell {
 
-    // MARK: - Properties
-    private let imageSize: CGFloat = 160
-    private let hitImageSize: CGFloat = 130
-
     // MARK: - UI Properties
     private lazy var pizzaImageView = AppImageView(squareSize: imageSize)
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 20), numberOfLines: 1, adjustsFontSizeToFitWidth: true)
-    private lazy var ingredientsLabel = AppLabel(textColor: .grayFont, font: .regular(size: 14))
+    private lazy var titleLabel = AppLabelDS(type: .orderStatus)
+    private lazy var ingredientsLabel = AppLabelDS(type: .orderTitle)
     private lazy var priceButton = AppPriceGrayButton()
     private lazy var hitImageView = AppImageView(viewImage: .common(.hit), isSystem: false, squareSize: hitImageSize)
     
@@ -24,6 +20,10 @@ final class ItemsHeaderView: UICollectionViewCell {
     private lazy var contentContainer = setupContentContainer()
 
     var gradientLayer: CAGradientLayer?
+
+    // MARK: - Properties
+    private let imageSize: CGFloat = 160
+    private let hitImageSize: CGFloat = 130
 
     // MARK: - Init
     override init(frame: CGRect) {

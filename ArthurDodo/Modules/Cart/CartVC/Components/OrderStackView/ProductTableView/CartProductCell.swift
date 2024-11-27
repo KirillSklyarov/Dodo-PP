@@ -5,12 +5,12 @@ final class CartProductCell: UITableViewCell {
 
     // MARK: - UI Properties
     private lazy var pizzaImageView = AppImageView(squareSize: imageSize)
-
     private lazy var hitImageView = AppImageView(viewImage: .common(.hit), isSystem: false, squareSize: hitImageSize)
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .regular(size: 18))
-    private lazy var sizeDoughLabel = AppLabel(textColor: .grayFont, font: .regular(size: 14))
-    private lazy var priceLabel = AppLabel(textColor: .white, font: .bold(size: 20))
-    private lazy var changeLabel = AppLabel(text: "Изменить", textColor: .buttonOrange, font: .semibold(size: 16))
+
+    private lazy var titleLabel = AppLabelDS(type: .name)
+    private lazy var sizeDoughLabel = AppLabelDS(type: .orderTitle)
+    private lazy var priceLabel = AppLabelDS(type: .legalTitle)
+    private lazy var changeLabel = AppLabelDS(type: .orangeChange, text: "Изменить")
 
     private lazy var countStepper = CustomStepperView()
 

@@ -3,7 +3,7 @@ import UIKit
 final class DeliveryAddressView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(text: "Мои адреса", textColor: .white, font: .bold(size: 26))
+    private lazy var titleLabel = AppLabelDS(type: .header, text: "Мои адреса")
     private lazy var addAddressButton = AddNewAddressButton()
     private lazy var headerStackView = AppStackView([titleLabel, addAddressButton], axis: .horizontal)
     private lazy var deliveryButton = CartButton(title: "Доставить сюда", isCart: false)

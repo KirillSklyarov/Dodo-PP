@@ -2,16 +2,16 @@ import UIKit
 
 final class StoriesCollectionCell: UICollectionViewCell {
 
+    // MARK: - UI Properties
+    private lazy var coverImageView = AppImageView()
+    private lazy var titleLabel = AppLabelDS(type: .addressName)
+
     // MARK: - Properties
     private let cornerRadius: CGFloat = 14
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let topInset: CGFloat = 10
     private let bottomInset: CGFloat = -10
-
-    // MARK: - UI Properties
-    private lazy var coverImageView = AppImageView()
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .regular(size: 12), alignment: .left)
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -56,16 +56,21 @@ private extension StoriesCollectionCell {
     }
 
     func setupLayout() {
-        setupElementsLayout()
+        setupCoverImageLayout()
+        setupTitleLabelLayout()
     }
 
-    func setupElementsLayout() {
+    func setupCoverImageLayout() {
         NSLayoutConstraint.activate([
             coverImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             coverImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             coverImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+        ])
+    }
 
+    func setupTitleLabelLayout() {
+        NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset)

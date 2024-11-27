@@ -79,7 +79,7 @@ final class CategoryHeaderCollectionView: UICollectionView {
     }
 
     private func configCollectionView() {
-        backgroundColor = UIColor(hex: "222222")
+        backgroundColor = AppColors.backgroundGray
         layer.cornerRadius = cornerRadius
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         layer.masksToBounds = true

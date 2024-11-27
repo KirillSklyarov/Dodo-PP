@@ -3,7 +3,7 @@ import UIKit
 final class LegalSectionTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .regular(size: 20))
+    private lazy var titleLabel = AppLabelDS(type: .legalTitle)
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

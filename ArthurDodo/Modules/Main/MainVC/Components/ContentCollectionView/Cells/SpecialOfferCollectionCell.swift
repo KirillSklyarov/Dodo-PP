@@ -2,17 +2,17 @@ import UIKit
 
 final class SpecialOfferCollectionCell: UICollectionViewCell {
 
+    // MARK: - UI Properties
+    private lazy var pizzaImageView = AppImageView(squareSize: imageViewSize)
+    private lazy var titleLabel = AppLabelDS(type: .name)
+    private lazy var priceLabel = AppLabelDS(type: .dodoCoinsSubtitle)
+    private lazy var textStack = AppStackView([titleLabel, priceLabel], axis: .vertical, spacing: 5, alignment: .leading)
+    private lazy var contentStack = AppStackView( [pizzaImageView, textStack], axis: .horizontal, spacing: 10, alignment: .center)
+
     // MARK: - Properties
     private let imageViewSize: CGFloat = 90
 
     var onPriceButtonTapped: ( (String) -> Void )?
-
-    // MARK: - UI Properties
-    private lazy var pizzaImageView = AppImageView(squareSize: imageViewSize)
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .semibold(size: 16), adjustsFontSizeToFitWidth: true)
-    private lazy var priceButton = AppPriceGrayButton()
-    private lazy var textStack = AppStackView([titleLabel, priceButton], axis: .vertical, spacing: 5, alignment: .leading)
-    private lazy var contentStack = AppStackView( [pizzaImageView, textStack], axis: .horizontal, spacing: 10, alignment: .center)
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -29,7 +29,7 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
     func configureCell(_ item: Item) {
         pizzaImageView.image = UIImage(named: item.imageName)
         titleLabel.text = item.name
-        priceButton.setPrice(item)
+        priceLabel.setPrice(item)
     }
 }
 

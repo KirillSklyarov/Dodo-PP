@@ -2,15 +2,15 @@ import UIKit
 
 final class CategoriesHeaderView: UICollectionReusableView {
 
+    // MARK: - UI Properties
+    private lazy var headerCollectionView = CategoryHeaderCollectionView()
+
     // MARK: - Properties
     private let viewHeight: CGFloat = 40
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
 
     var onCategorySelected: ((Category) -> Void)?
-
-    // MARK: - UI Properties
-    private lazy var headerCollectionView = CategoryHeaderCollectionView()
 
     // MARK: - Init
     override init(frame: CGRect) {

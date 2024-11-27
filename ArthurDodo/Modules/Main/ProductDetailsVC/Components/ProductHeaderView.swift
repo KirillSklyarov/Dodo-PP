@@ -3,7 +3,7 @@ import UIKit
 final class ProductHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 20), alignment: .center)
+    private lazy var titleLabel = AppLabelDS(type: .headerTitle)
     private lazy var dismissButton = DismissButtonView()
     private lazy var blurView = AppBlurView()
 

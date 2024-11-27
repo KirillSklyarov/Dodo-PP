@@ -8,8 +8,8 @@ final class AddToppingsCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UI Properties
     private lazy var toppingImageView = AppImageView(squareSize: imageSize)
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 14), alignment: .center, numberOfLines: 1)
-    private lazy var priceLabel = AppLabel(textColor: .white, font: .bold(size: 14), alignment: .center, numberOfLines: 1)
+    private lazy var titleLabel = AppLabelDS(type: .topicsTitle)
+    private lazy var priceLabel = AppLabelDS(type: .topicsTitle)
 
     private lazy var chosenImageView = AppImageView(viewImage: .common(.chosenTopping), tintColor: .buttonOrange, isHidden: true)
 

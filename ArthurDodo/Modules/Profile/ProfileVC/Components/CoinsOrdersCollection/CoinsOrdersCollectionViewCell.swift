@@ -19,18 +19,10 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
         view.addSubviews(iconImageView)
         return view
     }()
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 40))
+    private lazy var titleLabel = AppLabelDS(type: .dodoCoinsTitle)
+    private lazy var subTitleLabel = AppLabelDS(type: .dodoCoinsSubtitle)
 
-    private lazy var subTitleButton: UIButton = {
-        let button = UIButton()
-        var config = UIButton.Configuration.filled()
-        config.baseForegroundColor = .white
-        config.baseBackgroundColor = .white.withAlphaComponent(0.2)
-        config.cornerStyle = .capsule
-        button.configuration = config
-        return button
-    }()
-    private lazy var contentStackView = AppStackView([containerImageView, titleLabel, subTitleButton], axis: .vertical, spacing: 10, alignment: .leading)
+    private lazy var contentStackView = AppStackView([containerImageView, titleLabel, subTitleLabel], axis: .vertical, spacing: 10, alignment: .leading)
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -62,7 +54,7 @@ private extension CoinsOrdersCollectionViewCell {
     func designDodoCoinsCell(_ data: User) {
         designCoinsImage()
         designCoinsLabel(data)
-        setButtonTitle("додокоины")
+        setSubTitleText("додокоины")
     }
 
     // Устанавливаем картинку
@@ -105,7 +97,7 @@ private extension CoinsOrdersCollectionViewCell {
     func designOrderButton(_ data: User) {
         let countOfOrders = data.orders
         let title = "заказ".pluralize(for: countOfOrders)
-        setButtonTitle("\(countOfOrders) \(title)")
+        setSubTitleText("\(countOfOrders) \(title)")
     }
 }
 
@@ -136,14 +128,11 @@ private extension CoinsOrdersCollectionViewCell {
         let countOfAddress = data.address.count
         let addressWord = "адрес".pluralize(for: countOfAddress)
         let title = "\(countOfAddress) \(addressWord)"
-        setButtonTitle(title)
+        setSubTitleText(title)
     }
 
-    func setButtonTitle(_ title: String) {
-        subTitleButton.configuration?.attributedTitle = AttributedString(title, attributes: AttributeContainer([
-            .foregroundColor: UIColor.white,
-            .font: AppFonts.bold14])
-        )
+    func setSubTitleText(_ title: String) {
+        subTitleLabel.text = title
     }
 }
 

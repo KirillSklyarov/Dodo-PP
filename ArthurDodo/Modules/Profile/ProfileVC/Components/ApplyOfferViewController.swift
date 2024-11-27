@@ -21,11 +21,9 @@ final class ApplyOfferViewController: UIViewController {
         return view
     }()
 
-    private lazy var dateOfferLabel = AppLabel(text: "до 13 октября", textColor: .grayFont, font: .semibold(size: 16), alignment: .left)
-
-    private lazy var detailsOfOfferLabel = AppLabel(text: "Скидка 30% при заказе от 649 ₽", textColor: .white, font: .semibold(size: 20), alignment: .left)
-
-    private lazy var legalTextLabel = AppLabel(text: "Акция работает только в пиццерии при заказе в приложении. Не действует с другими акциями и при заказе с комбо. Примените до 13.10 включительно", textColor: .grayFont, font: .regular(size: 16), alignment: .left)
+    private lazy var dateOfferLabel = AppLabelDS(type: .promoTitle, text: "до 13 октября")
+    private lazy var detailsOfOfferLabel = AppLabelDS(type: .orderStatus, text: "Скидка 30% при заказе от 649 ₽")
+    private lazy var legalTextLabel = AppLabelDS(type: .promoTitle, text: "Акция работает только в пиццерии при заказе в приложении. Не действует с другими акциями и при заказе с комбо. Примените до 13.10 включительно")
 
     private lazy var applyButton = CartButton(isHidden: false, title: "Применить", isCart: false)
 

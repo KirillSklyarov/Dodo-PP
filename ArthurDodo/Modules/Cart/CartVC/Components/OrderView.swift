@@ -3,7 +3,9 @@ import UIKit
 final class OrderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 26))
+    private lazy var titleLabel = AppLabelDS(type: .header)
+
+//    AppLabel(textColor: .white, font: .bold(size: 26))
 
     // MARK: - Init
     init(frame: CGRect = .zero, title: String? = nil) {

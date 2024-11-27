@@ -11,6 +11,12 @@
 		73031AF22CDE3ABD005928D2 /* SkeletonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73031AF12CDE3ABD005928D2 /* SkeletonTableViewCell.swift */; };
 		73031AF42CDE6D88005928D2 /* ScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73031AF32CDE6D88005928D2 /* ScreenState.swift */; };
 		730452E82CE3865600FC6B17 /* Cart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730452E72CE3865600FC6B17 /* Cart.swift */; };
+		730BB1002CF75E2800C18126 /* AppLabelDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730BB0FF2CF75E2800C18126 /* AppLabelDS.swift */; };
+		730BB1022CF76C1800C18126 /* InsetLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730BB1012CF76C1800C18126 /* InsetLabel.swift */; };
+		730BB1042CF7A18A00C18126 /* InfoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730BB1032CF7A18A00C18126 /* InfoButton.swift */; };
+		730BB1062CF7A6E600C18126 /* PencilButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730BB1052CF7A6E600C18126 /* PencilButton.swift */; };
+		730BB1082CF7A7FD00C18126 /* ClearTextFieldButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730BB1072CF7A7FD00C18126 /* ClearTextFieldButton.swift */; };
+		730BB10A2CF7AA0A00C18126 /* AppTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730BB1092CF7AA0A00C18126 /* AppTextField.swift */; };
 		73159A742CCC20F9002CFB76 /* DeliveryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73159A732CCC20F9002CFB76 /* DeliveryVC.swift */; };
 		731903212CF22F3200C275E4 /* EditAddressMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731903202CF22F3200C275E4 /* EditAddressMapView.swift */; };
 		731C4F712CD905560088CF51 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731C4F702CD905560088CF51 /* ProfileCoordinator.swift */; };
@@ -82,7 +88,6 @@
 		73B9696E2CC7C78700A2415A /* AddressListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968E82CC7C78700A2415A /* AddressListTableView.swift */; };
 		73B9696F2CC7C78700A2415A /* AddressListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968E92CC7C78700A2415A /* AddressListTableViewCell.swift */; };
 		73B969702CC7C78700A2415A /* AddressHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968EB2CC7C78700A2415A /* AddressHeaderView.swift */; };
-		73B969712CC7C78700A2415A /* ChooseAddressPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968EC2CC7C78700A2415A /* ChooseAddressPopUpViewController.swift */; };
 		73B969732CC7C78700A2415A /* DodoCoinsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968F02CC7C78700A2415A /* DodoCoinsStackView.swift */; };
 		73B969742CC7C78700A2415A /* DodoCoinsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968F12CC7C78700A2415A /* DodoCoinsView.swift */; };
 		73B969752CC7C78700A2415A /* CartProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968F32CC7C78700A2415A /* CartProductCell.swift */; };
@@ -201,6 +206,12 @@
 		73031AF12CDE3ABD005928D2 /* SkeletonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonTableViewCell.swift; sourceTree = "<group>"; };
 		73031AF32CDE6D88005928D2 /* ScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenState.swift; sourceTree = "<group>"; };
 		730452E72CE3865600FC6B17 /* Cart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cart.swift; sourceTree = "<group>"; };
+		730BB0FF2CF75E2800C18126 /* AppLabelDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLabelDS.swift; sourceTree = "<group>"; };
+		730BB1012CF76C1800C18126 /* InsetLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetLabel.swift; sourceTree = "<group>"; };
+		730BB1032CF7A18A00C18126 /* InfoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoButton.swift; sourceTree = "<group>"; };
+		730BB1052CF7A6E600C18126 /* PencilButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilButton.swift; sourceTree = "<group>"; };
+		730BB1072CF7A7FD00C18126 /* ClearTextFieldButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearTextFieldButton.swift; sourceTree = "<group>"; };
+		730BB1092CF7AA0A00C18126 /* AppTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTextField.swift; sourceTree = "<group>"; };
 		73159A732CCC20F9002CFB76 /* DeliveryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryVC.swift; sourceTree = "<group>"; };
 		731903202CF22F3200C275E4 /* EditAddressMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressMapView.swift; sourceTree = "<group>"; };
 		731C4F702CD905560088CF51 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
@@ -285,7 +296,6 @@
 		73B968E82CC7C78700A2415A /* AddressListTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressListTableView.swift; sourceTree = "<group>"; };
 		73B968E92CC7C78700A2415A /* AddressListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressListTableViewCell.swift; sourceTree = "<group>"; };
 		73B968EB2CC7C78700A2415A /* AddressHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressHeaderView.swift; sourceTree = "<group>"; };
-		73B968EC2CC7C78700A2415A /* ChooseAddressPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressPopUpViewController.swift; sourceTree = "<group>"; };
 		73B968F02CC7C78700A2415A /* DodoCoinsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DodoCoinsStackView.swift; sourceTree = "<group>"; };
 		73B968F12CC7C78700A2415A /* DodoCoinsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DodoCoinsView.swift; sourceTree = "<group>"; };
 		73B968F32CC7C78700A2415A /* CartProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartProductCell.swift; sourceTree = "<group>"; };
@@ -451,6 +461,14 @@
 				730452E72CE3865600FC6B17 /* Cart.swift */,
 			);
 			path = Cart;
+			sourceTree = "<group>";
+		};
+		730BB0FE2CF75E2000C18126 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				730BB0FF2CF75E2800C18126 /* AppLabelDS.swift */,
+			);
+			path = DesignSystem;
 			sourceTree = "<group>";
 		};
 		73159A722CCC20EE002CFB76 /* DeliveryVC */ = {
@@ -808,6 +826,7 @@
 				73B968E72CC7C78700A2415A /* AddressesView.swift */,
 				73B968E82CC7C78700A2415A /* AddressListTableView.swift */,
 				73B968E92CC7C78700A2415A /* AddressListTableViewCell.swift */,
+				730BB1092CF7AA0A00C18126 /* AppTextField.swift */,
 			);
 			path = AddressListTableView;
 			sourceTree = "<group>";
@@ -818,7 +837,8 @@
 				736FC2AA2CF5BEDD00FB5699 /* AddNewAddressButton.swift */,
 				73B968EA2CC7C78700A2415A /* AddressListTableView */,
 				73B968EB2CC7C78700A2415A /* AddressHeaderView.swift */,
-				73B968EC2CC7C78700A2415A /* ChooseAddressPopUpViewController.swift */,
+				730BB1052CF7A6E600C18126 /* PencilButton.swift */,
+				730BB1072CF7A7FD00C18126 /* ClearTextFieldButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -924,6 +944,7 @@
 		73B969102CC7C78700A2415A /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				730BB0FE2CF75E2000C18126 /* DesignSystem */,
 				73B969002CC7C78700A2415A /* AppNavigationHeaderView.swift */,
 				73CBABB72CEF37C90018936C /* AppStackView.swift */,
 				7322F16A2CF4DBA600C59D60 /* AppImageView.swift */,
@@ -936,6 +957,7 @@
 				7362805A2CE607CD00DD6FD7 /* Others */,
 				73031AF02CDE3AA3005928D2 /* Skeleton */,
 				73B9690A2CC7C78700A2415A /* MapView */,
+				730BB1012CF76C1800C18126 /* InsetLabel.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1052,6 +1074,7 @@
 			isa = PBXGroup;
 			children = (
 				73B969312CC7C78700A2415A /* IngredientsView.swift */,
+				730BB1032CF7A18A00C18126 /* InfoButton.swift */,
 			);
 			path = IngredientsView;
 			sourceTree = "<group>";
@@ -1421,6 +1444,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				73B969592CC7C78700A2415A /* Address.swift in Sources */,
+				730BB1062CF7A6E600C18126 /* PencilButton.swift in Sources */,
 				73B9695A2CC7C78700A2415A /* AddressTextField.swift in Sources */,
 				7352D58D2CD91CA900F3357E /* ScreenEnum.swift in Sources */,
 				73B9695B2CC7C78700A2415A /* Category.swift in Sources */,
@@ -1462,10 +1486,10 @@
 				73B9696C2CC7C78700A2415A /* NetworkManager.swift in Sources */,
 				73B9696D2CC7C78700A2415A /* AddressesView.swift in Sources */,
 				73B9696E2CC7C78700A2415A /* AddressListTableView.swift in Sources */,
+				730BB1002CF75E2800C18126 /* AppLabelDS.swift in Sources */,
 				73B9696F2CC7C78700A2415A /* AddressListTableViewCell.swift in Sources */,
 				73B969702CC7C78700A2415A /* AddressHeaderView.swift in Sources */,
 				73EE04562CF10E5E0031CC37 /* CourierView.swift in Sources */,
-				73B969712CC7C78700A2415A /* ChooseAddressPopUpViewController.swift in Sources */,
 				7330232F2CD7D5B7003E9818 /* SkeletonPlaceholderCell.swift in Sources */,
 				73B969732CC7C78700A2415A /* DodoCoinsStackView.swift in Sources */,
 				73238EF92CD219C8006F3A92 /* PaymentAddressesTableView.swift in Sources */,
@@ -1487,6 +1511,7 @@
 				73B9697D2CC7C78700A2415A /* AppNavigationHeaderView.swift in Sources */,
 				73E6EB422CC92FC5006831F2 /* CpfcPopupView.swift in Sources */,
 				736B0D2A2CCFE5C500975195 /* Array+BoolSorting.swift in Sources */,
+				730BB1082CF7A7FD00C18126 /* ClearTextFieldButton.swift in Sources */,
 				73B9697E2CC7C78700A2415A /* CustomPageControl.swift in Sources */,
 				73238EFB2CD219FF006F3A92 /* PaymentMethodsTableViewCell.swift in Sources */,
 				73B9697F2CC7C78700A2415A /* OrderView.swift in Sources */,
@@ -1537,6 +1562,7 @@
 				73FE978A2CE253E40056D53D /* ProfileViews.swift in Sources */,
 				73B9699F2CC7C78700A2415A /* CartButtonView.swift in Sources */,
 				73638F692CE4B474008F1E90 /* SelectedItem.swift in Sources */,
+				730BB10A2CF7AA0A00C18126 /* AppTextField.swift in Sources */,
 				731903212CF22F3200C275E4 /* EditAddressMapView.swift in Sources */,
 				733A01D42CDBBF000013D3EB /* DependencyContainer.swift in Sources */,
 				73B969A02CC7C78700A2415A /* CustomSegmentControl.swift in Sources */,
@@ -1578,10 +1604,12 @@
 				73349D472CEBDB3C00C3223E /* PersonalTableView.swift in Sources */,
 				73349D482CEBDB3C00C3223E /* PersonalTableViewCell.swift in Sources */,
 				73349D492CEBDB3C00C3223E /* QuitProfileTableViewCell.swift in Sources */,
+				730BB1042CF7A18A00C18126 /* InfoButton.swift in Sources */,
 				733023372CD80F7F003E9818 /* ContentStack.swift in Sources */,
 				73B969D72CC7C7C000A2415A /* UICollection+Ext.swift in Sources */,
 				73B969D82CC7C7C000A2415A /* UIColor+hex .swift in Sources */,
 				736B0D202CCD813800975195 /* ChooseAddressVC.swift in Sources */,
+				730BB1022CF76C1800C18126 /* InsetLabel.swift in Sources */,
 				73B969D92CC7C7C000A2415A /* UIView+Ext.swift in Sources */,
 				73B969DA2CC7C7C000A2415A /* UserDefaults+Ext.swift in Sources */,
 				73B969AC2CC7C78700A2415A /* PersonalViewController.swift in Sources */,

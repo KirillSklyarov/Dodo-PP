@@ -4,8 +4,9 @@ final class ItemsCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
     private lazy var pizzaImageView = AppImageView(squareSize: imageSize)
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .regular(size: 16))
-    private lazy var ingredientsLabel = AppLabel(textColor: .grayFont, font: .regular(size: 12))
+    private lazy var titleLabel = AppLabelDS(type: .name)
+    private lazy var ingredientsLabel = AppLabelDS(type: .itemSubtitle)
+
     private lazy var priceButton = AppPriceGrayButton()
     private lazy var hitImageView = AppImageView(viewImage: .common(.hit), isSystem: false, squareSize: hitImageSize)
 
