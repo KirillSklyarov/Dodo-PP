@@ -1,0 +1,73 @@
+import UIKit
+
+// Вью хэдера где указан заголовок и оранжевая кнопка Закрыть
+final class AppNavigationHeaderView: UIView {
+
+    // MARK: - UI Properties
+    private lazy var titleLabel = AppLabel(text: "Корзина", textColor: .white, font: .semibold(size: 18))
+
+    private lazy var dismissButton = DismissButton()
+
+    // MARK: - Properties&Callbacks
+    private let viewHeight: CGFloat = 60
+    private let leftInset: CGFloat = 10
+
+    var onDismissButtonTapped: (() -> Void)?
+
+    // MARK: - Init
+    init(frame: CGRect = .zero, title: String? = nil) {
+        super.init(frame: frame)
+        setTitle(title)
+        configUI()
+        setupAction()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - Setup UI
+private extension AppNavigationHeaderView {
+    func configUI() {
+        addSubviews(dismissButton, titleLabel)
+        setupLayout()
+    }
+
+    func setupLayout() {
+        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
+
+        setupDismissButtonConstraints()
+        setupTitleLabelConstraints()
+    }
+
+    func setupDismissButtonConstraints() {
+        NSLayoutConstraint.activate([
+            dismissButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            dismissButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
+        ])
+    }
+
+    func setupTitleLabelConstraints() {
+        NSLayoutConstraint.activate([
+            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
+        ])
+    }
+}
+
+// MARK: - Setup Actions
+private extension AppNavigationHeaderView {
+    func setupAction() {
+        dismissButton.onDismissButtonTapped = { [weak self] in
+            self?.onDismissButtonTapped?()
+        }
+    }
+}
+
+// MARK: - Supporting methods
+private extension AppNavigationHeaderView {
+    func setTitle(_ title: String?) {
+        if let title { titleLabel.text = title }
+    }
+}
