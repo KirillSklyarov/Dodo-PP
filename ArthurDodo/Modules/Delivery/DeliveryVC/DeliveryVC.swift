@@ -14,16 +14,7 @@ final class DeliveryVC: UIViewController {
     private lazy var totalPriceView = OrderTotalPriceView() // Общая стоимость заказа
     private lazy var payButton = PaymentButtonView(preferredPaymentMethod) // Кнопка оплатить
 
-    private lazy var addressStackView = AppStackView([addressLabel, addressTableView], axis: .vertical, spacing: 10)
-    private lazy var deliveryTimeStackView = AppStackView([timeLabel, timeCollection], axis: .vertical, spacing: 10)
-
-    private lazy var paymentMethodStackView = AppStackView([paymentLabel, paymentTableView], axis: .vertical, spacing: 10)
-
-    private lazy var tablesStackView = AppStackView([headerView, addressStackView, deliveryTimeStackView, paymentMethodStackView], axis: .vertical, spacing: 30)
-
-    private lazy var orderDetailsStackView = AppStackView([orderDetailsView, totalPriceView, payButton], axis: .vertical, spacing: 10)
-
-    private lazy var contentStackView = AppStackView([tablesStackView, UIView(), orderDetailsStackView], axis: .vertical)
+    private lazy var contentStackView = configureStackView()
 
     // MARK: - Other properties
     private let topInset: CGFloat = 10
@@ -110,6 +101,21 @@ private extension DeliveryVC {
         setupLayout()
     }
 
+    func configureStackView() -> UIStackView {
+        let addressStackView = AppStackView([addressLabel, addressTableView], axis: .vertical, spacing: 10)
+        let deliveryTimeStackView = AppStackView([timeLabel, timeCollection], axis: .vertical, spacing: 10)
+
+        let paymentMethodStackView = AppStackView([paymentLabel, paymentTableView], axis: .vertical, spacing: 10)
+
+        let tablesStackView = AppStackView([headerView, addressStackView, deliveryTimeStackView, paymentMethodStackView], axis: .vertical, spacing: 30)
+
+        let orderDetailsStackView = AppStackView([orderDetailsView, totalPriceView, payButton], axis: .vertical, spacing: 10)
+
+        let contentStackView = AppStackView([tablesStackView, UIView(), orderDetailsStackView], axis: .vertical)
+
+        return contentStackView
+    }
+
     func setupLayout() {
         setupContentStackViewLayout()
     }
@@ -119,8 +125,7 @@ private extension DeliveryVC {
             contentStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
             contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-            orderDetailsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
-
+            contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
         ])
     }
 }

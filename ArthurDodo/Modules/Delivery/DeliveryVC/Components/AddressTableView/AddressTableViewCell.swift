@@ -1,9 +1,10 @@
 import UIKit
 
+// Ячейка таблицы с адресами на экране адресов
 final class AddressTableViewCell: UITableViewCell {
 
     // MARK: - Properties
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .semibold(size: 18))
+    private lazy var titleLabel = AppLabelDS(type: .name)
 
     private let cornerRadius: CGFloat = 10
     private let topInset: CGFloat = 10
@@ -37,7 +38,7 @@ private extension AddressTableViewCell {
         layer.masksToBounds = true
         selectionStyle = .none
 
-        self.setupAccessoryView()
+        setupAccessoryView()
 
         setupLayout()
     }

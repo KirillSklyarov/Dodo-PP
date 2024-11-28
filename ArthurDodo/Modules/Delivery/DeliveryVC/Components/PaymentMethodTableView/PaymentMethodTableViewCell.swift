@@ -4,7 +4,7 @@ final class PreferredPaymentMethodTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
     private lazy var methodImage = AppImageView(squareSize: imageSize)
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .semibold(size: 20))
+    private lazy var titleLabel = AppLabelDS(type: .legalTitle)
     private lazy var contentStack = AppStackView([methodImage, titleLabel], axis: .horizontal, spacing: 10)
 
     // MARK: - Properties

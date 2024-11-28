@@ -5,13 +5,8 @@ final class PersonalTableViewCell: UITableViewCell {
     // MARK: - UI Properties
     private lazy var titleLabel = AppLabelDS(type: .promoTitle)
     private lazy var dataLabel = AppLabelDS(type: .name)
-
-    private lazy var switchLabel: UISwitch = {
-        let switchLabel = UISwitch()
-        switchLabel.isOn = false
-        switchLabel.isHidden = true
-        return switchLabel
-    }()
+    private lazy var switchLabel = AppSwitch()
+    private lazy var contentStack = setupConfigureContentStack()
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -52,18 +47,23 @@ private extension PersonalTableViewCell {
     func setupUI() {
         backgroundColor = .clear
         selectionStyle = .none
-
-        let labelsStack = AppStackView([titleLabel, dataLabel], axis: .vertical, spacing: 5)
-
-        let contentStack = AppStackView([labelsStack, switchLabel], axis: .horizontal, alignment: .center)
-
-
         contentView.addSubviews(contentStack)
 
+        setupLayout()
+    }
+
+    func setupLayout() {
         NSLayoutConstraint.activate([
-            contentStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
+    }
+
+    func setupConfigureContentStack() -> UIStackView {
+        let labelsStack = AppStackView([titleLabel, dataLabel], axis: .vertical, spacing: 5)
+        let contentStack = AppStackView([labelsStack, switchLabel], axis: .horizontal, alignment: .center)
+        return contentStack
     }
 }

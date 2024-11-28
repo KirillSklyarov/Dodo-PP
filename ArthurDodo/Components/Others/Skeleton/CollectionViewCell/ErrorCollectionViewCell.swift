@@ -10,7 +10,7 @@ final class ErrorCollectionViewCell: UICollectionViewCell {
         view.addSubviews(iconImageView)
         return view
     }()
-    private lazy var titleLabel = AppLabel(text: "Не удалось загрузить данные", textColor: .grayFont, font: .bold(size: 26), alignment: .center)
+    private lazy var titleLabel = AppLabelDS(type: .header, text: "Не удалось загрузить данные")
 
     private lazy var retryButton: UIButton = {
         let button = UIButton()

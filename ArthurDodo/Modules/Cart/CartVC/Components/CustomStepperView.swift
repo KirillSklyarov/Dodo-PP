@@ -1,6 +1,14 @@
 import UIKit
 
+// Степпер, который переключает кол-во единиц позиции в заказе
 final class CustomStepperView: UIView {
+
+    // MARK: - UI properties
+    private lazy var decrementButton = AppButtonsDS(type: .decrementCount)
+    private lazy var incrementButton = AppButtonsDS(type: .incrementCount)
+    private lazy var valueLabel = AppLabelDS(type: .topicsTitle, text: "\(value)")
+
+    private lazy var contentStack = AppStackView([decrementButton, valueLabel, incrementButton], axis: .horizontal, distribution: .fillEqually)
 
     // MARK: - Properties
     private let viewHeight: CGFloat = 25
@@ -17,29 +25,11 @@ final class CustomStepperView: UIView {
     var onValueIsNull: (() -> Void)?
     var onStepperValueChanged: ( (Int) -> Void)?
 
-    // MARK: - UI properties
-    private lazy var decrementButton: UIButton = {
-        let button = UIButton()
-        let image = UIImage(systemName: "minus")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        button.setImage(image, for: .normal)
-        button.addTarget(self, action: #selector(decrementButtonTapped), for: .touchUpInside)
-        return button
-    }()
-    private lazy var incrementButton: UIButton = {
-        let button = UIButton()
-        let image = UIImage(systemName: "plus")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        button.setImage(image, for: .normal)
-        button.addTarget(self, action: #selector(incrementButtonTapped), for: .touchUpInside)
-        return button
-    }()
-    private lazy var valueLabel = AppLabel(text: "\(value)", textColor: .white, font: .semibold(size: 14), alignment: .center)
-
-    private lazy var contentStack = AppStackView([decrementButton, valueLabel, incrementButton], axis: .horizontal, distribution: .fillEqually)
-
     // MARK: - Init
     init(frame: CGRect = .zero, isHidden: Bool = false) {
         super.init(frame: frame)
         setupUI()
+        setupActions()
         self.isHidden = isHidden
     }
 
@@ -55,20 +45,24 @@ final class CustomStepperView: UIView {
 
 // MARK: - Setup Actions
 private extension CustomStepperView {
-    @objc private func decrementButtonTapped() {
-        value -= 1
-        if value == 0 {
-            onValueIsNull?()
-        } else {
-            onStepperValueChanged?(value)
+    func setupActions() {
+        setupDecrementButtonAction()
+        setupIncrementButtonAction()
+    }
+
+    func setupDecrementButtonAction() {
+        decrementButton.onButtonTapped = { [weak self] in
+            self?.decrementButtonTapped()
         }
     }
 
-    @objc private func incrementButtonTapped() {
-        value += 1
-        onStepperValueChanged?(value)
+    func setupIncrementButtonAction() {
+        incrementButton.onButtonTapped = { [weak self] in
+            self?.incrementButtonTapped()
+        }
     }
 }
+
 
 // MARK: - Setup UI
 private extension CustomStepperView {
@@ -91,5 +85,23 @@ private extension CustomStepperView {
             heightAnchor.constraint(equalToConstant: viewHeight),
             widthAnchor.constraint(equalToConstant: viewWidth)
         ])
+    }
+}
+
+// MARK: - Supporting methods
+private extension CustomStepperView {
+    // Уменьшаем кол-во и проверяем если осталось 0, от вызываем коллбэк (он должен будет удалить позицию), если нет, то вызываем другой коллбэк
+    func decrementButtonTapped() {
+        value -= 1
+        if value == 0 {
+            onValueIsNull?()
+        } else {
+            onStepperValueChanged?(value)
+        }
+    }
+
+    func incrementButtonTapped() {
+        value += 1
+        onStepperValueChanged?(value)
     }
 }

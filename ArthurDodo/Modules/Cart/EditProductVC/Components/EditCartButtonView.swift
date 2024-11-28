@@ -1,11 +1,12 @@
 import UIKit
 
+// Нижний блок с ценой и кнопкой на экране редактирования товара
 final class EditCartButtonView: UIView {
 
     // MARK: - UI Properties
     private lazy var blurView = AppBlurView()
     private lazy var cartButton = CartButton(title: "Готово")
-    private lazy var priceLabel = AppLabel(textColor: .white, font: .bold(size: 22))
+    private lazy var priceLabel = AppLabelDS(type: .orderStatus)
     private lazy var contentStackView = AppStackView( [priceLabel, UIView(), cartButton], axis: .horizontal, alignment: .top)
 
     // MARK: - Properties

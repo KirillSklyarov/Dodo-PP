@@ -4,7 +4,7 @@ final class PaymentMethodsTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
     private lazy var methodImage = AppImageView(squareSize: imageSize)
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .semibold(size: 20))
+    private lazy var titleLabel = AppLabelDS(type: .legalTitle)
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 10

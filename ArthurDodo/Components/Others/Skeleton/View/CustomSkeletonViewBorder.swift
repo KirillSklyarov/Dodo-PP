@@ -3,17 +3,12 @@ import UIKit
 final class CustomSkeletonViewBorder: UIView {
 
     // MARK: - Properties
+    private lazy var fillView = AppViewDS(type: .details)
+    private var gradientLayer = CAGradientLayer()
+
     private let cornerRadius: CGFloat = 10
     private let viewHeight: CGFloat = 200
     private let inset: CGFloat = 3
-
-    private lazy var fillView: UIView = {
-        let view = UIView()
-        view.backgroundColor = AppColors.backgroundGray
-        view.layer.cornerRadius = cornerRadius
-        return view
-    }()
-    private var gradientLayer = CAGradientLayer()
 
     // MARK: - Init
     override init(frame: CGRect) {

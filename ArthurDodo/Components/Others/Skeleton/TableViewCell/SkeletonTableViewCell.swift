@@ -3,10 +3,8 @@ import UIKit
 final class SkeletonTableViewCell: UITableViewCell {
 
     // MARK: - Properties
-    private lazy var darkPlaceholderTitle = AppLabel(text: "Загружаем", textColor: .darkGray, font: .bold(size: 30), alignment: .center, numberOfLines: 1, adjustsFontSizeToFitWidth: true)
-
-    private lazy var whitePlaceholderTitle = AppLabel(text: "Загружаем", textColor: .white, font: .bold(size: 30), alignment: .center, numberOfLines: 1, adjustsFontSizeToFitWidth: true)
-
+    private lazy var darkPlaceholderTitle = AppLabelDS(type: .header, text: "Загружаем", textColor: .darkGray)
+    private lazy var whitePlaceholderTitle = AppLabelDS(type: .header, text: "Загружаем")
     private var gradientLayer = CAGradientLayer()
 
     // MARK: - Init

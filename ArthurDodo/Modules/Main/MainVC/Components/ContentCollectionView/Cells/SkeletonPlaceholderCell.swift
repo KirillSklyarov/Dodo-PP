@@ -3,10 +3,7 @@ import UIKit
 final class SkeletonPlaceholderCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var placeholderView: UIView = {
-        let view = UIView()
-        return view
-    }()
+    private lazy var placeholderView = UIView()
 
     // MARK: - Init
     override init(frame: CGRect) {

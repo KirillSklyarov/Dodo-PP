@@ -323,7 +323,7 @@ private extension ContentCollectionView {
 
         // Регистрируем ячейки основного каталога
         registerHeader(CategoriesHeaderView.self)
-        registerCell(ItemsHeaderView.self)
+        registerCell(ItemsHeaderCell.self)
         registerCell(ItemsCollectionCell.self)
 
         // Регистрируем скелетоны
@@ -397,7 +397,7 @@ extension ContentCollectionView: UICollectionViewDelegate, UICollectionViewDataS
             case .success:
                 let item = catalog[indexPath.item]
                 if item.isHeader {
-                    let cell = collectionView.dequeueCell(indexPath) as ItemsHeaderView
+                    let cell = collectionView.dequeueCell(indexPath) as ItemsHeaderCell
                     cell.configHeader(item)
                     return cell
                 } else {

@@ -4,8 +4,7 @@ import UIKit
 final class AppNavigationHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(text: "Корзина", textColor: .white, font: .semibold(size: 18))
-
+    private lazy var titleLabel = AppLabelDS(type: .timeLabel, text: "Корзина")
     private lazy var dismissButton = DismissButton()
 
     // MARK: - Properties&Callbacks

@@ -6,12 +6,7 @@ final class CustomActionSheet: UIViewController {
     private lazy var callButton = ActionSheetButton(title: "Позвонить")
     private lazy var chatButton = ActionSheetButton(title: "Написать в чат")
     private lazy var dismissButton = ActionSheetButton(title: "Отменить", roundedCorners: true)
-    private lazy var separatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = AppColors.buttonGray
-        view.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        return view
-    }()
+    private lazy var separatorView = AppViewDS(type: .separator)
 
     private lazy var callAndChatStack = AppStackView([callButton, separatorView, chatButton], axis: .vertical, cornerRadius: 10)
 

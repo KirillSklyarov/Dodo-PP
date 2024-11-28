@@ -3,6 +3,13 @@ import UIKit
 // Горизонтальная коллекция в профиле с додокоинами, заказами и адресами
 final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
 
+    // MARK: - UI Properties
+    private lazy var iconImageView = AppImageView(squareSize: coinsImageSize)
+    private lazy var titleLabel = AppLabelDS(type: .dodoCoinsTitle)
+    private lazy var subTitleLabel = AppLabelDS(type: .dodoCoinsSubtitle)
+
+    private lazy var contentStackView = AppStackView([iconImageView, titleLabel, subTitleLabel], axis: .vertical, spacing: 10, alignment: .leading)
+
     // MARK: - Properties
     private let coinsImageSize: CGFloat = 70
     private let leftInset: CGFloat = 10
@@ -10,19 +17,6 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
     private let topInset: CGFloat = 10
     private let bottomInset: CGFloat = -10
     private let cornerRadius: CGFloat = 14
-
-    // MARK: - UI Properties
-    private lazy var iconImageView = AppImageView(squareSize: coinsImageSize)
-
-    private lazy var containerImageView: UIView = {
-        let view = UIView()
-        view.addSubviews(iconImageView)
-        return view
-    }()
-    private lazy var titleLabel = AppLabelDS(type: .dodoCoinsTitle)
-    private lazy var subTitleLabel = AppLabelDS(type: .dodoCoinsSubtitle)
-
-    private lazy var contentStackView = AppStackView([containerImageView, titleLabel, subTitleLabel], axis: .vertical, spacing: 10, alignment: .leading)
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -150,7 +144,6 @@ private extension CoinsOrdersCollectionViewCell {
 
     func setupLayout() {
         setupContainerViewLayout()
-        setupContainerImageViewLayout()
     }
 
     func setupContainerViewLayout() {
@@ -159,13 +152,6 @@ private extension CoinsOrdersCollectionViewCell {
             contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
             contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset),
-        ])
-    }
-
-    func setupContainerImageViewLayout() {
-        NSLayoutConstraint.activate([
-            iconImageView.topAnchor.constraint(equalTo: containerImageView.topAnchor),
-            iconImageView.leadingAnchor.constraint(equalTo: containerImageView.leadingAnchor)
         ])
     }
 }

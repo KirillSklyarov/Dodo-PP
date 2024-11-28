@@ -1,44 +1,24 @@
 import UIKit
 
+// Ячейка раздела "Добавить в корзину" корзины
 final class AddToCartCollectionCell: UICollectionViewCell {
+
+    // MARK: - UI Properties
+    private lazy var detailsBackgroundView = AppViewDS(type: .details)
+    private lazy var itemImageView = AppImageView(height: imageSize)
+    private lazy var titleLabel = AppLabelDS(type: .promoCellTitle)
+    private lazy var detailsLabel = AppLabelDS(type: .itemSubtitle)
+    private lazy var priceLabel = AppLabelDS(type: .priceGrayLabel)
+
+    private lazy var contentStack = setupContentStack()
 
     // MARK: - Properties
     private let imageSize: CGFloat = 100
-    private let priceLabelHeight: CGFloat = 25
     private let cornerRadius: CGFloat = 10
     private let leftInset: CGFloat = 5
     private let rightInset: CGFloat = -5
     private let topInset: CGFloat = 5
     private let bottomInset: CGFloat = -5
-
-    // MARK: - UI Properties
-    private lazy var cellBackgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = AppColors.backgroundGray
-        view.layer.cornerRadius = cornerRadius
-        view.layer.masksToBounds = true
-        return view
-    }()
-    private lazy var itemImageView = AppImageView(height: imageSize)
-
-    private lazy var priceLabel: AppLabel = {
-        let label = AppLabel(textColor: .white, font: .semibold(size: 12), alignment: .center, height: priceLabelHeight)
-        label.backgroundColor = AppColors.buttonGray
-        label.layer.cornerRadius = cornerRadius
-        label.layer.masksToBounds = true
-        return label
-    }()
-    private lazy var titleLabel = AppLabel(textColor: .white, font: .bold(size: 14), numberOfLines: 3, adjustsFontSizeToFitWidth: true)
-
-    private lazy var detailsLabel = AppLabel(textColor: .grayFont, font: .regular(size: 12), adjustsFontSizeToFitWidth: true)
-
-    private lazy var detailsLabelContainer: UIView = {
-        let view = UIView()
-        view.addSubviews(detailsLabel)
-        return view
-    }()
-
-    private lazy var contentStack = AppStackView([itemImageView, titleLabel, detailsLabelContainer, priceLabel], axis: .vertical, spacing: 5)
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -85,15 +65,28 @@ private extension AddToCartCollectionCell {
         layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
 
-        contentView.addSubviews(cellBackgroundView, contentStack)
+        contentView.addSubviews(detailsBackgroundView, contentStack)
 
         setupLayout()
+    }
+
+    // Настраиваем контент стек
+    func setupContentStack() -> UIStackView {
+        // Группируем в стек текстовые лейблы элементы
+        let textStack = AppStackView([titleLabel, detailsLabel], axis: .vertical, spacing: 5)
+
+        // Делаем так, чтобы название и детали всегда были по верхнему краю
+        let topTextStack = AppStackView([textStack], axis: .horizontal, alignment: .top)
+
+        // Всё группируем в общий стек
+        let contentStack = AppStackView([itemImageView, topTextStack, priceLabel], axis: .vertical, spacing: 5)
+
+        return contentStack
     }
 
     func setupLayout() {
         setupContentStackLayout()
         setupBackgroundViewLayout()
-        setupDetailsContainerLayout()
     }
 
     func setupContentStackLayout() {
@@ -107,19 +100,10 @@ private extension AddToCartCollectionCell {
 
     func setupBackgroundViewLayout() {
         NSLayoutConstraint.activate([
-            cellBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            cellBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            cellBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cellBackgroundView.topAnchor.constraint(equalTo: itemImageView.centerYAnchor)
-        ])
-    }
-
-    func setupDetailsContainerLayout() {
-        NSLayoutConstraint.activate([
-            detailsLabel.topAnchor.constraint(equalTo: detailsLabelContainer.topAnchor),
-            detailsLabel.leadingAnchor.constraint(equalTo: detailsLabelContainer.leadingAnchor),
-            detailsLabel.trailingAnchor.constraint(equalTo: detailsLabelContainer.trailingAnchor),
-            detailsLabel.bottomAnchor.constraint(lessThanOrEqualTo: detailsLabelContainer.bottomAnchor)
+            detailsBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            detailsBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            detailsBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            detailsBackgroundView.topAnchor.constraint(equalTo: itemImageView.centerYAnchor)
         ])
     }
 }

@@ -1,30 +1,16 @@
 import UIKit
 
+// Кнопка "Оплатить" на экране "Доставка", которая меняет дизайн в зависимости от выбранного способа оплаты
 final class PaymentButtonView: UIView {
 
     // MARK: - UI Properties
-    private lazy var payContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = cornerRadius
-        view.layer.masksToBounds = true
-        return view
-    }()
-    private lazy var paymentTitleLabel = AppLabel(textColor: .backgroundBlack, font: .bold(size: 20))
-
-    private lazy var paymentMethodLabel = AppLabel(text: preferredPaymentMethod?.title, textColor: .backgroundBlack, font: .bold(size: 20))
-
-    private lazy var paymentImageView: UIImageView = {
-        let imageView = UIImageView()
-        let image = preferredPaymentMethod?.image
-        imageView.image = image
-        imageView.contentMode = .scaleAspectFit
-        imageView.widthAnchor.constraint(equalToConstant: imageSize).isActive = true
-        return imageView
-    }()
+    private lazy var paymentTitleLabel = AppLabelDS(type: .legalTitle)
+    private lazy var paymentImageView = AppImageViewDS(type: .payment, image: preferredPaymentMethod?.image)
+    private lazy var paymentMethodLabel = AppLabelDS(type: .legalTitle, text: preferredPaymentMethod?.title, textColor: AppColors.backgroundBlack)
 
     private lazy var paymentStack = AppStackView([paymentImageView, paymentMethodLabel], axis: .horizontal, spacing: 5)
-    private lazy var contentStack = AppStackView([paymentTitleLabel, paymentStack], axis: .horizontal, spacing: 10)
+
+    private lazy var contentStack = setupContentStack()
 
     // MARK: - Properties
     private let buttonHeight: CGFloat = 50
@@ -67,7 +53,7 @@ extension PaymentButtonView {
 // MARK: - Supporting methods
 private extension PaymentButtonView {
     func designCardAndCashMethodsButton() {
-        payContainerView.backgroundColor = AppColors.buttonOrange
+        backgroundColor = AppColors.buttonOrange
         paymentTitleLabel.text = "Оформить заказ"
         paymentTitleLabel.textColor = .white
         paymentMethodLabel.text = ""
@@ -76,7 +62,7 @@ private extension PaymentButtonView {
     }
 
     func designCBPMethodsButton() {
-        payContainerView.backgroundColor = .white
+        backgroundColor = .white
         paymentTitleLabel.text = "Оплатить"
         paymentTitleLabel.textColor = AppColors.backgroundBlack
         paymentMethodLabel.text = preferredPaymentMethod?.title
@@ -86,7 +72,7 @@ private extension PaymentButtonView {
     }
 
     func designSberPayMethodsButton() {
-        payContainerView.backgroundColor = AppColors.sberGreen
+        backgroundColor = AppColors.sberGreen
         paymentTitleLabel.text = ""
         paymentTitleLabel.textColor = AppColors.backgroundBlack
         paymentMethodLabel.text = ""
@@ -99,33 +85,30 @@ private extension PaymentButtonView {
 // MARK: - Setup UI
 private extension PaymentButtonView {
     func setupUI() {
-        addSubviews(payContainerView)
-        payContainerView.addSubviews(contentStack)
+        layer.cornerRadius = cornerRadius
+        clipsToBounds = true
+        addSubviews(contentStack)
         setupLayout()
     }
 
     func setupLayout() {
-        setupPayContainerView()
-        setupContentStack()
-
         heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
+        setupContentStackLayout()
     }
 
-    func setupContentStack() {
+    func setupContentStackLayout() {
         NSLayoutConstraint.activate([
-            contentStack.centerXAnchor.constraint(equalTo: payContainerView.centerXAnchor),
-            contentStack.topAnchor.constraint(equalTo: payContainerView.topAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: payContainerView.bottomAnchor),
+            contentStack.topAnchor.constraint(equalTo: topAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
     }
 
-    func setupPayContainerView() {
-        NSLayoutConstraint.activate([
-            payContainerView.topAnchor.constraint(equalTo: topAnchor),
-            payContainerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            payContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            payContainerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-        ])
+    func setupContentStack() -> UIStackView {
+        let preContentStack = AppStackView([paymentTitleLabel, paymentStack], axis: .horizontal, spacing: 10)
+        let contentStack = AppStackView([preContentStack], axis: .vertical, alignment: .center)
+        return contentStack
     }
 }
 

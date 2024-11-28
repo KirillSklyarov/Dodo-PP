@@ -1,10 +1,11 @@
 import UIKit
 
+// Нижний блок экрана "Доставка" с ценой заказа
 final class OrderTotalPriceView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(text: "Стоимость заказа", textColor: .white, font: .bold(size: 22), numberOfLines: 1)
-    private lazy var priceLabel = AppLabel(textColor: .white, font: .bold(size: 22), alignment: .right)
+    private lazy var titleLabel = AppLabelDS(type: .orderStatus, text: "Стоимость заказа")
+    private lazy var priceLabel = AppLabelDS(type: .orderStatus)
     private lazy var contentStack = AppStackView([titleLabel, priceLabel], axis: .horizontal, alignment: .center)
 
     // MARK: - Other Properties
@@ -33,6 +34,9 @@ private extension OrderTotalPriceView {
     func setupUI() {
         addSubviews(contentStack)
         setupLayout()
+
+        // Если у hugging приоритет ВЫСОКИЙ, то priceLabel расширяться не будет
+        priceLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
 
     func setupLayout() {

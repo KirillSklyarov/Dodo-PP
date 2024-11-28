@@ -3,15 +3,9 @@ import UIKit
 final class SkeletonCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var darkPlaceholderTitle = AppLabel(text: "Загружаем", textColor: .darkGray, font: .bold(size: 30), alignment: .center, numberOfLines: 1, adjustsFontSizeToFitWidth: true)
-
-    private lazy var whitePlaceholderTitle = AppLabel(text: "Загружаем", textColor: .white, font: .bold(size: 30), alignment: .center, numberOfLines: 1, adjustsFontSizeToFitWidth: true)
-
+    private lazy var darkPlaceholderTitle = AppLabelDS(type: .header, text: "Загружаем", textColor: .darkGray)
+    private lazy var whitePlaceholderTitle = AppLabelDS(type: .header, text: "Загружаем")
     private var gradientLayer = CAGradientLayer()
-
-    // MARK: - Properties
-    private let leftInset: CGFloat = 5
-    private let rightInset: CGFloat = -5
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -57,8 +51,6 @@ private extension SkeletonCollectionViewCell {
         NSLayoutConstraint.activate([
             darkPlaceholderTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             darkPlaceholderTitle.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            darkPlaceholderTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
-            darkPlaceholderTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset)
         ])
     }
 
@@ -66,8 +58,6 @@ private extension SkeletonCollectionViewCell {
         NSLayoutConstraint.activate([
             whitePlaceholderTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             whitePlaceholderTitle.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            whitePlaceholderTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
-            whitePlaceholderTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset)
         ])
     }
 }

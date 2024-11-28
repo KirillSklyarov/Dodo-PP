@@ -9,14 +9,6 @@ final class MainHeaderView: UIView {
     private lazy var deliveryTimeLabel = AppLabelDS(type: .addressTime, text: "около 40 минут")
 
     private lazy var chevronImageView = AppImageView(viewImage: .main(.chevronDown), tintColor: .white)
-
-    private lazy var profileContainerView: ProfileMainHeaderView = {
-        let view = ProfileMainHeaderView()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileButtonTapped))
-        view.addGestureRecognizer(tapGesture)
-        return view
-    }()
-
     private lazy var addressNameStackView = AppStackView([addressLabel, chevronImageView], axis: .horizontal, spacing: 5)
     private lazy var labelStackView = AppStackView([addressNameStackView, deliveryTimeLabel], axis: .vertical, spacing: 0, alignment: .leading)
     private lazy var addressStackView: AppStackView = {
@@ -25,6 +17,9 @@ final class MainHeaderView: UIView {
         stackView.addGestureRecognizer(tapGesture)
         return stackView
     }()
+
+    private lazy var profileContainerView = ProfileMainHeaderView()
+
     private lazy var contentStackView = AppStackView([addressStackView, UIView(), profileContainerView], axis: .horizontal, spacing: 10)
 
     // MARK: - Properties
@@ -40,6 +35,7 @@ final class MainHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupActions()
         isUIVisible(false)
     }
 
@@ -75,8 +71,14 @@ extension MainHeaderView {
 
 // MARK: - Setup button actions
 private extension MainHeaderView {
-    @objc func profileButtonTapped() {
-        onProfileButtonTapped?()
+    func setupActions() {
+        setupTapGestures()
+    }
+
+    func setupTapGestures() {
+        profileContainerView.onButtonTapped = { [weak self] in
+            self?.onProfileButtonTapped?()
+        }
     }
 
     @objc func addressTapped() {

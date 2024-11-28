@@ -132,7 +132,7 @@ private extension ProfileViewController {
 // MARK: - Fetch Data
 private extension ProfileViewController { // Запрашиваем данные с сервера
     func fetchData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             guard let self else { return }
 
             let dispatchGroup = DispatchGroup() // Решаем задачу вызвать setState только после завершения двух методов: fetchPersonalData, fetchPromo. Сначала делаем группу.
