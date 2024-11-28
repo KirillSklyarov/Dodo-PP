@@ -3,7 +3,7 @@ import UIKit
 final class CartViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var headerView = AppNavigationHeaderView() // Заголовок с кнопкой
+    private lazy var headerView = AppNavigationBarView(type: .cart) // Заголовок с кнопкой
     private lazy var orderStackView = OrderStackView() // Хэдер и таблица с заказами
     private lazy var itemsToAddStackView = ItemsToAddStackView() // Добавки к заказу
     private lazy var promoStackView = PromoStackView() // Акции

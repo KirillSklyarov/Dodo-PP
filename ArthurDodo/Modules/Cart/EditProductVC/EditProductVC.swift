@@ -1,6 +1,6 @@
 import UIKit
 
-// Класс, который отвечает за показ экрана с редактирование товара
+// Класс, который отвечает за показ экрана с редактированием товара
 final class EditProductViewController: UIViewController {
 
     // MARK: - UI Properties
@@ -117,7 +117,7 @@ private extension EditProductViewController {
 
     // Отрабатываем коллбэк для закрытия окна
     func setupHeaderAction() {
-        headerView.onCloseButtonTapped = { [weak self] in
+        headerView.onDismissButtonTapped = { [weak self] in
             self?.onDismissButtonTapped?()
         }
     }

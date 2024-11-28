@@ -6,7 +6,7 @@ final class AddressListTableViewCell: UITableViewCell {
     private lazy var orangePoint = AppImageView(viewImage: .address(.orangePoint), tintColor: .buttonOrange, squareSize: imageSize)
     private lazy var titleLabel = AppLabelDS(type: .addressTitle)
 
-    private lazy var editAddressButton = PencilButton()
+    private lazy var editAddressButton = AppButtonsDS(type: .mapEdit)
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 0

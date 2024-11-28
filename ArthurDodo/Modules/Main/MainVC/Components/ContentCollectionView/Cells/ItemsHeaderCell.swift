@@ -8,7 +8,8 @@ final class ItemsHeaderCell: UICollectionViewCell {
     private lazy var pizzaImageView = AppImageView(squareSize: imageSize)
     private lazy var titleLabel = AppLabelDS(type: .orderStatus)
     private lazy var ingredientsLabel = AppLabelDS(type: .orderTitle)
-    private lazy var priceButton = AppPriceGrayButton()
+    private lazy var priceButton = AppButtonsDS(type: .grayPrice)
+
     private lazy var hitImageView = AppImageView(viewImage: .common(.hit), isSystem: false, squareSize: hitImageSize)
 
     private lazy var contentStack = setupContentStack()

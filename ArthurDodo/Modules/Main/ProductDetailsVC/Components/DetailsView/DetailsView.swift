@@ -4,8 +4,8 @@ final class DetailsView: UIView {
 
     // MARK: - UI Properties
     private lazy var pizzaImageView = AppImageView(squareSize: pizzaImageSize)
-    private lazy var sizeSegmentControl = AppSegmentControlView(items: AppConstants.sizeCases, defaultSelection: 1)
-    private lazy var doughSegmentControl = AppSegmentControlView(items: AppConstants.doughCases, defaultSelection: 0)
+    private lazy var sizeSegmentControl = AppSegmentControlDS(type: .size)
+    private lazy var doughSegmentControl = AppSegmentControlDS(type: .dough)
 
     // MARK: - Size Properties
     private let pizzaImageSize: CGFloat = 350
@@ -126,7 +126,7 @@ private extension DetailsView {
     }
 
     func setupSizeSegmentControl() {
-        sizeSegmentControl.onSegmentControllerValueChanged = { [weak self] index in
+        sizeSegmentControl.onSegmentValueChanged = { [weak self] index in
             guard let self else { print("123"); return }
             onSegmentValueChanged?(index)
 
@@ -139,7 +139,7 @@ private extension DetailsView {
     }
 
     func setupDoughSegmentControl() {
-        doughSegmentControl.onSegmentControllerValueChanged = { [weak self] index in
+        doughSegmentControl.onSegmentValueChanged = { [weak self] index in
             guard let self else { print("123"); return }
             switch index {
             case 0: chosenDough = .basic

@@ -7,7 +7,7 @@ final class ItemsCollectionCell: UICollectionViewCell {
     private lazy var titleLabel = AppLabelDS(type: .name)
     private lazy var ingredientsLabel = AppLabelDS(type: .itemSubtitle)
 
-    private lazy var priceButton = AppPriceGrayButton()
+    private lazy var priceButton = AppButtonsDS(type: .grayPrice)
     private lazy var hitImageView = AppImageView(viewImage: .common(.hit), isSystem: false, squareSize: hitImageSize)
 
     private lazy var detailsStackView = AppStackView( [titleLabel, ingredientsLabel, priceButton], axis: .vertical, spacing: 5, alignment: .leading)

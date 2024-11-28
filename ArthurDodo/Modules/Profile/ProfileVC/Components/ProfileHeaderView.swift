@@ -4,8 +4,8 @@ final class ProfileHeaderView: UIView {
 
     // MARK: - UI Properties
     private lazy var dismissButton = DismissButtonView()
-    private lazy var chatButton = ProfileButtonView(type: .chat)
-    private lazy var profileButton = ProfileButtonView(type: .profile)
+    private lazy var chatButton = AppButtonsDS(type: .profileChat)
+    private lazy var profileButton = AppButtonsDS(type: .personal)
 
     private lazy var rightButtonsStackView = AppStackView([chatButton, profileButton], axis: .horizontal, spacing: 10, distribution: .fillEqually)
 

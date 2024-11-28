@@ -7,17 +7,14 @@ final class ProductHeaderView: UIView {
     private lazy var dismissButton = DismissButtonView()
     private lazy var blurView = AppBlurView()
 
+    private lazy var contentStackView = setupContentStackView()
+
     // MARK: - Properties
-    private let buttonSize: CGFloat = 40
     private let viewHeight: CGFloat = 110
-    private let labelLeftPadding: CGFloat = 60
-    private let labelRightPadding: CGFloat = -60
-    private let buttonLeftPadding: CGFloat = 20
-    private let buttonBottomPadding: CGFloat = 10
 
     private var heightConstraint: NSLayoutConstraint?
 
-    var onCloseButtonTapped: (() -> Void)?
+    var onDismissButtonTapped: (() -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -50,7 +47,7 @@ extension ProductHeaderView {
 private extension ProductHeaderView {
     func dismissButtonTapped() {
         dismissButton.onButtonTapped = { [weak self] in
-            self?.onCloseButtonTapped?()
+            self?.onDismissButtonTapped?()
         }
     }
 }
@@ -58,16 +55,17 @@ private extension ProductHeaderView {
 // MARK: - Setup UI
 private extension ProductHeaderView {
     func setupUI() {
-        addSubviews(blurView, dismissButton, titleLabel)
+        addSubviews(blurView)
+
+        blurView.contentView.addSubviews(contentStackView)
+
         setupLayout()
     }
 
     func setupLayout() {
         setViewHeight()
-
         setupBlurConstraints()
-        setupDismissButtonConstraints()
-        setupTitleLabelConstraints()
+        setupContentStackLayout()
     }
 
     func setupBlurConstraints() {
@@ -79,18 +77,18 @@ private extension ProductHeaderView {
         ])
     }
 
-    func setupDismissButtonConstraints() {
+    func setupContentStackLayout() {
         NSLayoutConstraint.activate([
-            dismissButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -buttonBottomPadding),
-            dismissButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: buttonLeftPadding),
+            contentStackView.leadingAnchor.constraint(equalTo: blurView.contentView.leadingAnchor, constant: 10),
+            contentStackView.trailingAnchor.constraint(equalTo: blurView.contentView.trailingAnchor, constant: -50),
+            contentStackView.bottomAnchor.constraint(equalTo: blurView.contentView.bottomAnchor, constant: -10)
         ])
+
     }
 
-    func setupTitleLabelConstraints() {
-        NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: labelLeftPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: labelRightPadding),
-        ])
+    func setupContentStackView() -> UIStackView {
+        let contentStackView = AppStackView([dismissButton, titleLabel], axis: .horizontal, spacing: 10)
+        titleLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        return contentStackView
     }
 }

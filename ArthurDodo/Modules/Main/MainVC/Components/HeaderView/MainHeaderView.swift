@@ -3,24 +3,9 @@ import UIKit
 final class MainHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var courierView = CourierView()
-
-    private lazy var addressLabel = AppLabelDS(type: .addressName, text: "Укажите адрес доставки")
-    private lazy var deliveryTimeLabel = AppLabelDS(type: .addressTime, text: "около 40 минут")
-
-    private lazy var chevronImageView = AppImageView(viewImage: .main(.chevronDown), tintColor: .white)
-    private lazy var addressNameStackView = AppStackView([addressLabel, chevronImageView], axis: .horizontal, spacing: 5)
-    private lazy var labelStackView = AppStackView([addressNameStackView, deliveryTimeLabel], axis: .vertical, spacing: 0, alignment: .leading)
-    private lazy var addressStackView: AppStackView = {
-        let stackView = AppStackView([courierView, labelStackView], axis: .horizontal, spacing: 20)
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addressTapped))
-        stackView.addGestureRecognizer(tapGesture)
-        return stackView
-    }()
-
+    private lazy var addressStackView = AddressStackView()
     private lazy var profileContainerView = ProfileMainHeaderView()
-
-    private lazy var contentStackView = AppStackView([addressStackView, UIView(), profileContainerView], axis: .horizontal, spacing: 10)
+    private lazy var contentStackView = setupContentStack()
 
     // MARK: - Properties
     private let topInset: CGFloat = 10
@@ -42,11 +27,6 @@ final class MainHeaderView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        courierView.layer.cornerRadius = contentStackView.frame.height / 2
-    }
 }
 
 // MARK: - Public methods
@@ -59,7 +39,7 @@ extension MainHeaderView {
 
     // Обновляем название адреса (Дом, офис и тп)
     private func updateAddress(_ address: String) {
-        addressLabel.text = address
+        addressStackView.updateAddress(address)
         isUIVisible(true)
     }
 
@@ -72,17 +52,20 @@ extension MainHeaderView {
 // MARK: - Setup button actions
 private extension MainHeaderView {
     func setupActions() {
-        setupTapGestures()
+        setupAddressStackAction()
+        setupProfileContainerAction()
     }
 
-    func setupTapGestures() {
-        profileContainerView.onButtonTapped = { [weak self] in
-            self?.onProfileButtonTapped?()
+    func setupAddressStackAction() {
+        addressStackView.onAddressTapped = { [weak self] in
+            self?.onAddressTapped?()
         }
     }
 
-    @objc func addressTapped() {
-        onAddressTapped?()
+    func setupProfileContainerAction() {
+        profileContainerView.onButtonTapped = { [weak self] in
+            self?.onProfileButtonTapped?()
+        }
     }
 }
 
@@ -103,8 +86,15 @@ private extension MainHeaderView {
             contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
             contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomInset),
-            courierView.widthAnchor.constraint(equalTo: courierView.heightAnchor)
         ])
+    }
+
+    // Настраиваем стек, указываем, что нужно увеличить размер address, но не нужно увеличивать размер profile (это позволяет нам не вставлять туда лишний UIView для расстояния)
+    func setupContentStack() -> UIStackView {
+        let contentStackView = AppStackView([addressStackView, profileContainerView], axis: .horizontal, spacing: 10)
+        addressStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        profileContainerView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        return contentStackView
     }
 }
 
@@ -112,6 +102,6 @@ private extension MainHeaderView {
 private extension MainHeaderView {
     // Показываем или скрываем все UI элементы на вьюхе (нужно в процессе загрузки экрана)
     func isUIVisible(_ isVisible: Bool) {
-        [addressLabel, chevronImageView, deliveryTimeLabel, courierView, profileContainerView].forEach { $0.isHidden = !isVisible }
+        [addressStackView, profileContainerView].forEach { $0.isHidden = !isVisible }
     }
 }

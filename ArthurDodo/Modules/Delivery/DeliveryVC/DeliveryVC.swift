@@ -3,7 +3,7 @@ import UIKit
 final class DeliveryVC: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var headerView = AppNavigationHeaderView(title: "Доставка") // Заголовок с кнопкой
+    private lazy var headerView = AppNavigationBarView(type: .delivery) // Заголовок с кнопкой
     private lazy var addressLabel = DeliveryVCLabel(title: "Адрес доставки") // Адрес доставки
     private lazy var addressTableView = AddressTableView() // Таблица с адресом
     private lazy var timeLabel = DeliveryVCLabel(title: "Время доставки") // Время доставки

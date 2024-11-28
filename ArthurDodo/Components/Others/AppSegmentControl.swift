@@ -20,6 +20,13 @@ final class AppSegmentControlView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+// MARK: - Public methods
+extension AppSegmentControlView {
+    func getSegmentControll() -> CustomSegmentControl? {
+        segmentControl
+    }
 
     func setDefaultSelectedSegment(_ index: Int) {
         segmentControl?.selectedSegmentIndex = index

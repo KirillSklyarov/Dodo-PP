@@ -4,8 +4,8 @@ import UIKit
 final class AppNavigationHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabelDS(type: .timeLabel, text: "Корзина")
-    private lazy var dismissButton = DismissButton()
+    private lazy var titleLabel = AppLabelDS(type: .timeLabel)
+    private lazy var dismissButton = AppButtonsDS(type: .orangeDismiss)
 
     // MARK: - Properties&Callbacks
     private let viewHeight: CGFloat = 60
@@ -58,7 +58,7 @@ private extension AppNavigationHeaderView {
 // MARK: - Setup Actions
 private extension AppNavigationHeaderView {
     func setupAction() {
-        dismissButton.onDismissButtonTapped = { [weak self] in
+        dismissButton.onButtonTapped = { [weak self] in
             self?.onDismissButtonTapped?()
         }
     }

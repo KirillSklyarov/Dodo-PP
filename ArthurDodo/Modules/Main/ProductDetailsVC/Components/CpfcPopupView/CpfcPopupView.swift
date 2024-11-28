@@ -6,19 +6,8 @@ final class CpfcPopupView: UIViewController {
     private lazy var titleLabel = AppLabelDS(type: .orderStatus)
     private lazy var subLabel = AppLabelDS(type: .addressName, text: "Пищевая ценность на 100 г")
     private lazy var infoLabel = AppLabelDS(type: .addressName, text: "Может содержать: глютен, молоко и продукты его переработки (в том числе лактозу), а так же некоторые другие аллергены")
-
-    private lazy var cpfcTableView: AppTableView = {
-        let tableView = AppTableView()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.registerCell(CpfcTableViewCell.self)
-        tableView.backgroundColor = .clear
-        tableView.rowHeight = cellHeight
-        tableView.estimatedRowHeight = UITableView.automaticDimension
-        tableView.isScrollEnabled = false
-        return tableView
-    }()
-
+    private lazy var cpfcTableView = CpfcTableView(dataSource: self)
+    
     private lazy var contentStack = AppStackView([titleLabel, subLabel, cpfcTableView, infoLabel], axis: .vertical, distribution: .equalSpacing)
 
     // MARK: - Properties
@@ -27,7 +16,6 @@ final class CpfcPopupView: UIViewController {
     private let topInsets: CGFloat = 10
     private let bottomInset: CGFloat = -10
 
-    private let cellHeight: CGFloat = 30
     private let cornerRadius: CGFloat = 20
 
     private let cpfcNames = CPFCData.allCases

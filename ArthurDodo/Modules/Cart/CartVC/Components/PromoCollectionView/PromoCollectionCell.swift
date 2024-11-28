@@ -8,7 +8,7 @@ final class PromoCollectionCell: UICollectionViewCell {
     private lazy var nameOfOfferLabel = AppLabelDS(type: .orderTitle)
     private lazy var detailsOfOfferLabel = AppLabelDS(type: .name)
     private lazy var dateLabel = AppLabelDS(type: .orderTitle)
-    private lazy var applyButton = ApplyPromoButton()
+    private lazy var applyButton = AppButtonsDS(type: .orangeApplyPromo)
 
     private lazy var textStack = AppStackView( [nameOfOfferLabel, detailsOfOfferLabel, dateLabel, applyButton], axis: .vertical, alignment: .leading, distribution: .equalSpacing)
     private lazy var contentStack = AppStackView([textStack, promoImageView], axis: .horizontal, spacing: 10, distribution: .fillEqually)

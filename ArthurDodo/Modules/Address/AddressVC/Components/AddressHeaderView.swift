@@ -4,12 +4,7 @@ final class AddressHeaderView: UIStackView {
 
     // MARK: - UI Properties
     private lazy var dismissButton = DismissButtonView()
-    private lazy var segmentControl: AppSegmentControlView = {
-        let view = AppSegmentControlView(items: ["Доставка", "В пиццерии"], defaultSelection: 0)
-        view.setSegmentColor(AppColors.buttonOrange)
-        view.backgroundColor = AppColors.backgroundBlack
-        return view
-    }()
+    private lazy var segmentControl = AppSegmentControlDS(type: .address)
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 20
@@ -73,7 +68,7 @@ private extension AddressHeaderView {
     }
 
     func setupSegmentControlAction() {
-        segmentControl.onSegmentControllerValueChanged = { [weak self] segmentControlIndex in
+        segmentControl.onSegmentValueChanged = { [weak self] segmentControlIndex in
             switch segmentControlIndex {
             case 0: self?.onDeliveryButtonTapped?()
             case 1: print(#function)

@@ -117,7 +117,7 @@ private extension ProductDetailsViewController {
     }
 
     func setupHeaderAction() {
-        headerView.onCloseButtonTapped = { [weak self] in
+        headerView.onDismissButtonTapped = { [weak self] in
             self?.onDismissButtonTapped?()
         }
     }

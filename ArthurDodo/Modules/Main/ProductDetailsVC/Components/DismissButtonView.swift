@@ -3,7 +3,7 @@ import UIKit
 final class DismissButtonView: UIView {
 
     // MARK: - UI Properties
-    private lazy var dismissButton = AppButton(type: .dismiss, imageColor: .white, target: self, action: #selector(closeButtonTapped))
+    private lazy var dismissButton = AppButtonsDS(type: .grayXmark)
 
     // MARK: - Properties&Callbacks
     private let viewSize: CGFloat = 40
@@ -13,6 +13,7 @@ final class DismissButtonView: UIView {
     init(frame: CGRect = .zero, xColor: UIColor = .white, backgroundColor: UIColor = AppColors.backgroundGray, isChevron: Bool = false) {
         super.init(frame: frame)
         setupUI()
+        setupAction()
         setColors(xColor: xColor, backgroundColor: backgroundColor)
         if isChevron { setChevron() }
     }
@@ -24,8 +25,14 @@ final class DismissButtonView: UIView {
 
 // MARK: - Setup actions
 private extension DismissButtonView {
-    @objc func closeButtonTapped() {
-        onButtonTapped?()
+    func setupAction() {
+        setupDismissButtonAction()
+    }
+
+    func setupDismissButtonAction() {
+        dismissButton.onButtonTapped = { [weak self] in
+            self?.onButtonTapped?()
+        }
     }
 }
 
