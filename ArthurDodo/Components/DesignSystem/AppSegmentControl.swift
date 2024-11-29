@@ -6,7 +6,7 @@ enum AppSegmentControlType {
     case dough
 }
 
-final class AppSegmentControlDS: UIView {
+final class AppSegmentControl: UIView {
 
     // MARK: - Properties
     var segmentControl: CustomSegmentControl?
@@ -25,13 +25,13 @@ final class AppSegmentControlDS: UIView {
 }
 
 // MARK: - Public methods
-extension AppSegmentControlDS {
+extension AppSegmentControl {
     func setDefaultSelectedSegment(_ index: Int) {
         segmentControl?.selectedSegmentIndex = index
     }
 }
 
-private extension AppSegmentControlDS {
+private extension AppSegmentControl {
     func configure(type: AppSegmentControlType) {
         switch type {
         case .address:
@@ -57,14 +57,9 @@ private extension AppSegmentControlDS {
     }
 }
 
-extension AppSegmentControlDS {
+extension AppSegmentControl {
     func setLayout(_ segmentView: AppSegmentControlView) {
         addSubviews(segmentView)
-        NSLayoutConstraint.activate([
-            segmentView.topAnchor.constraint(equalTo: topAnchor),
-            segmentView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            segmentView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            segmentView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        segmentView.setConstraints()
     }
 }

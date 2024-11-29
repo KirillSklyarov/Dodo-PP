@@ -8,7 +8,7 @@ final class MapView: UIView {
     private lazy var mapView = MKMapView()
     private lazy var locationManager = CLLocationManager()
     private lazy var userTrackingButton = UserTrackingButton(mapView: mapView)
-    private lazy var pinView = AppImageViewDS(type: .mapPin)
+    private lazy var pinView = AppImageView(type: .mapPin)
 
     // MARK: - Properties
     private let rightInset: CGFloat = -20
@@ -46,12 +46,8 @@ private extension MapView {
     }
 
     func setupLayout() {
+        mapView.setConstraints()
         NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalTo: topAnchor),
-            mapView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            mapView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            mapView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-
             userTrackingButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
             userTrackingButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
 

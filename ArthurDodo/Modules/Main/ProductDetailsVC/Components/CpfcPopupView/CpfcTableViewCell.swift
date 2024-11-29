@@ -3,8 +3,8 @@ import UIKit
 final class CpfcTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabelDS(type: .topicsTitle)
-    private lazy var cpfcValueLabel = AppLabelDS(type: .topicsTitle)
+    private lazy var titleLabel = AppLabel(type: .topicsTitle)
+    private lazy var cpfcValueLabel = AppLabel(type: .topicsTitle)
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

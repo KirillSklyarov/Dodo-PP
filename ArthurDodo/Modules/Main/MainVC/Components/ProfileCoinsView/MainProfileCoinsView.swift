@@ -3,8 +3,8 @@ import UIKit
 final class MainProfileCoinsView: UIView {
 
     // MARK: - Properties
-    private lazy var coinsLabel = AppLabelDS(type: .coinsTitle)
-    private lazy var coinsImageView = AppImageViewDS(type: .dodoCoins)
+    private lazy var coinsLabel = AppLabel(type: .coinsTitle)
+    private lazy var coinsImageView = AppImageView(type: .dodoCoins)
     private lazy var contentStack = AppStackView([coinsLabel, coinsImageView], axis: .horizontal, spacing: 1)
 
     // MARK: - Init

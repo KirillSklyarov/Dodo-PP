@@ -3,8 +3,8 @@ import UIKit
 final class DodoCoinsView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabelDS(type: .name)
-    private lazy var valueLabel = AppLabelDS(type: .name)
+    private lazy var titleLabel = AppLabel(type: .name)
+    private lazy var valueLabel = AppLabel(type: .name)
     private lazy var contentStack = AppStackView([titleLabel, valueLabel], axis: .horizontal, distribution: .equalSpacing)
 
     // MARK: - Init
@@ -40,12 +40,7 @@ private extension DodoCoinsView {
     }
 
      func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: topAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
+         contentStack.setConstraints()
     }
 }
 

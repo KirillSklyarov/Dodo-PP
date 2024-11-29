@@ -4,21 +4,22 @@ enum AppViewType {
     case profile
     case separator
     case details
+    case roundedTopView
 }
 
-final class AppViewDS: UIView {
+final class AppView: UIView {
 
     init(type: AppViewType) {
         super.init(frame: .zero)
         configure(type)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
-private extension AppViewDS {
+private extension AppView {
     func configure(_ type: AppViewType) {
         switch type {
         case .profile:
@@ -31,6 +32,10 @@ private extension AppViewDS {
             backgroundColor = AppColors.backgroundGray
             layer.cornerRadius = 10
             layer.masksToBounds = true
+        case .roundedTopView:
+            layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            layer.cornerRadius = frame.height / 2
+            clipsToBounds = true
         }
     }
 }

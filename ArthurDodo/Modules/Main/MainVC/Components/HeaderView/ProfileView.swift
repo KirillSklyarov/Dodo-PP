@@ -5,7 +5,7 @@ final class ProfileMainHeaderView: UIView {
 
     // MARK: - UI Properties
     private lazy var coinsView = MainProfileCoinsView()
-    private lazy var profileView = AppViewDS(type: .profile)
+    private lazy var profileView = AppView(type: .profile)
 
     // MARK: - Other Properties
     private let height: CGFloat = 40
@@ -68,12 +68,7 @@ private extension ProfileMainHeaderView {
     }
 
     func profileImageViewLayout() {
-        NSLayoutConstraint.activate([
-            profileView.topAnchor.constraint(equalTo: topAnchor),
-            profileView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            profileView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            profileView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        profileView.setConstraints()
     }
 }
 

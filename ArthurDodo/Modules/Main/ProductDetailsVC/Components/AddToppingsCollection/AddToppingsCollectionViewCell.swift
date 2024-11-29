@@ -3,10 +3,10 @@ import UIKit
 final class AddToppingsCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var toppingImageView = AppImageViewDS(type: .toppings)
-    private lazy var titleLabel = AppLabelDS(type: .topicsTitle)
-    private lazy var priceLabel = AppLabelDS(type: .topicsTitle)
-    private lazy var chosenImageView = AppImageViewDS(type: .chosenTopping)
+    private lazy var toppingImageView = AppImageView(type: .toppings)
+    private lazy var titleLabel = AppLabel(type: .topicsTitle)
+    private lazy var priceLabel = AppLabel(type: .topicsTitle)
+    private lazy var chosenImageView = AppImageView(type: .chosenTopping)
 
     private lazy var contentStack = AppStackView([toppingImageView, titleLabel, priceLabel], axis: .vertical, spacing: 10, alignment: .center, distribution: .equalSpacing)
 

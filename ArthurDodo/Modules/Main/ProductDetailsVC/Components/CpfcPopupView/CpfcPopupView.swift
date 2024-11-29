@@ -3,9 +3,9 @@ import UIKit
 final class CpfcPopupView: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabelDS(type: .orderStatus)
-    private lazy var subLabel = AppLabelDS(type: .addressName, text: "Пищевая ценность на 100 г")
-    private lazy var infoLabel = AppLabelDS(type: .addressName, text: "Может содержать: глютен, молоко и продукты его переработки (в том числе лактозу), а так же некоторые другие аллергены")
+    private lazy var titleLabel = AppLabel(type: .orderStatus)
+    private lazy var subLabel = AppLabel(type: .addressName, text: "Пищевая ценность на 100 г")
+    private lazy var infoLabel = AppLabel(type: .addressName, text: "Может содержать: глютен, молоко и продукты его переработки (в том числе лактозу), а так же некоторые другие аллергены")
     private lazy var cpfcTableView = CpfcTableView(dataSource: self)
     
     private lazy var contentStack = AppStackView([titleLabel, subLabel, cpfcTableView, infoLabel], axis: .vertical, distribution: .equalSpacing)

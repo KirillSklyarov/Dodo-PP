@@ -63,12 +63,7 @@ private extension CartButtonView {
     }
 
     func setupBlurConstraints() {
-        NSLayoutConstraint.activate([
-            blurView.topAnchor.constraint(equalTo: topAnchor),
-            blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            blurView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        blurView.setConstraints()
     }
 
     func setupCartButtonConstraints() {

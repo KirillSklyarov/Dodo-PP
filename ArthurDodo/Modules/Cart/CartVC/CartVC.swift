@@ -7,10 +7,11 @@ final class CartViewController: UIViewController {
     private lazy var orderStackView = OrderStackView() // Хэдер и таблица с заказами
     private lazy var itemsToAddStackView = ItemsToAddStackView() // Добавки к заказу
     private lazy var promoStackView = PromoStackView() // Акции
-    private lazy var enterPromoCodeButton = PromoButton() // Кнопка Ввести промокод
+    private lazy var enterPromoCodeButton = AppButtons(type: .promoButton) // Кнопка Ввести промокод
     private lazy var dodoCoinsView = DodoCoinsStackView() // Блок с додокоинами
     private lazy var cartButtonView = CartButtonView(isCart: true) // Кнопка корзины
-    private lazy var scrollUpButton = ScrollUpButton() // Кнопка scrollToTop
+    private lazy var scrollUpButton = AppButtons(type: .scrollUp)
+//    ScrollUpButtonView() // Кнопка scrollToTop
     private lazy var contentStackView = AppStackView([orderStackView, itemsToAddStackView, promoStackView, enterPromoCodeButton, dodoCoinsView], axis: .vertical, spacing: 10)
     private lazy var scrollView = UIScrollView()
 
@@ -198,7 +199,7 @@ private extension CartViewController {
     }
 
     func setupScrollUpButtonAction() {
-        scrollUpButton.onScrollUpButtonTapped = { [weak self] in
+        scrollUpButton.onButtonTapped = { [weak self] in
             guard let self else { return }
             let topInset = scrollView.adjustedContentInset.top
             scrollView.setContentOffset(CGPoint(x: 0, y: -topInset), animated: true)
@@ -303,7 +304,27 @@ private extension CartViewController {
 // MARK: - UIScrollViewDelegate - настройка кнопки scrollToTop
 extension CartViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        scrollUpButton.setupScrollUpButtonAction(scrollView: scrollView)
+        setupScrollUpButtonAction(scrollView: scrollView)
+    }
+
+    // Определяет если прокрутили больше половины контента, по показать кнопку, если меньше - скрыть кнопку
+    private func setupScrollUpButtonAction(scrollView: UIScrollView) {
+        let contentHeight = scrollView.contentSize.height
+        let scrollOffset = scrollView.contentOffset.y + scrollView.adjustedContentInset.top
+        let visibleHeight = scrollView.frame.height
+
+        // Срабатывает когда по каким-то причинам контент еще не загрузился
+        if contentHeight == 0 {
+            scrollUpButton.isHidden = true
+            return
+        }
+
+        // Срабатывает когда прокрутили больше половины контента
+        if scrollOffset > (contentHeight - visibleHeight) / 2 {
+            scrollUpButton.isHidden = false
+        } else {
+            scrollUpButton.isHidden = true
+        }
     }
 }
 

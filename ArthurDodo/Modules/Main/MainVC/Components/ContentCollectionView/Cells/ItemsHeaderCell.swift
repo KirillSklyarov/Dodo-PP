@@ -4,13 +4,13 @@ import UIKit
 final class ItemsHeaderCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var backView = AppView()
-    private lazy var pizzaImageView = AppImageViewDS(type: .largeView)
-    private lazy var titleLabel = AppLabelDS(type: .orderStatus)
-    private lazy var ingredientsLabel = AppLabelDS(type: .orderTitle)
-    private lazy var priceButton = AppButtonsDS(type: .grayPrice)
+    private lazy var backView = AppView(type: .roundedTopView)
+    private lazy var pizzaImageView = AppImageView(type: .largeView)
+    private lazy var titleLabel = AppLabel(type: .orderStatus)
+    private lazy var ingredientsLabel = AppLabel(type: .orderTitle)
+    private lazy var priceButton = AppButtons(type: .grayPrice)
 
-    private lazy var hitImageView = AppImageViewDS(type: .hit)
+    private lazy var hitImageView = AppImageView(type: .hit)
 
     private lazy var contentStack = setupContentStack()
 

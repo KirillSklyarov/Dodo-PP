@@ -4,12 +4,12 @@ import UIKit
 final class ApplyOfferViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var promoImageView = AppImageViewDS(type: .promoImage)
-    private lazy var promoDateLabel = AppLabelDS(type: .promoTitle, text: "до 13 октября")
-    private lazy var promoDetailsLabel = AppLabelDS(type: .orderStatus, text: "Скидка 30% при заказе от 649 ₽")
-    private lazy var legalTextLabel = AppLabelDS(type: .promoTitle, text: "Акция работает только в пиццерии при заказе в приложении. Не действует с другими акциями и при заказе с комбо. Примените до 13.10 включительно")
+    private lazy var promoImageView = AppImageView(type: .promoImage)
+    private lazy var promoDateLabel = AppLabel(type: .promoTitle, text: "до 13 октября")
+    private lazy var promoDetailsLabel = AppLabel(type: .orderStatus, text: "Скидка 30% при заказе от 649 ₽")
+    private lazy var legalTextLabel = AppLabel(type: .promoTitle, text: "Акция работает только в пиццерии при заказе в приложении. Не действует с другими акциями и при заказе с комбо. Примените до 13.10 включительно")
 
-    private lazy var applyButton = CartButton(isHidden: false, title: "Применить", isCart: false)
+    private lazy var applyButton = AppButtons(type: .cartOrange, text: "Применить")
 
     private lazy var contentStack = setupContentStack()
 
@@ -56,7 +56,7 @@ extension ApplyOfferViewController {
         applyButton.onButtonTapped = { [weak self] in
             guard let self else { return }
             applyButton.setNewTitle("Акция применена")
-            applyButton.configuration?.background.backgroundColor = AppColors.buttonGray
+            applyButton.setNewBackgroundColor(AppColors.buttonGray)
         }
     }
 }

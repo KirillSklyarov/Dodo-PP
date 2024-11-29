@@ -3,10 +3,10 @@ import UIKit
 final class DeliveryAddressView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabelDS(type: .header, text: "Мои адреса")
-    private lazy var addAddressButton = AddNewAddressButton()
+    private lazy var titleLabel = AppLabel(type: .header, text: "Мои адреса")
+    private lazy var addAddressButton = AppButtons(type: .addNewAddress)
     private lazy var headerStackView = AppStackView([titleLabel, addAddressButton], axis: .horizontal)
-    private lazy var deliveryButton = CartButton(title: "Доставить сюда", isCart: false)
+    private lazy var deliveryButton = AppButtons(type: .cartOrange, text: "Доставить сюда")
     private lazy var addressTableView = AddressListTableView()
     private lazy var contentStackView = AppStackView([headerStackView, addressTableView, deliveryButton], axis: .vertical, spacing: 10)
 
@@ -86,7 +86,7 @@ private extension DeliveryAddressView {
     }
 
     func setupAddNewAddressButtonAction() {
-        addAddressButton.onAddNewAddressButtonTapped = { [weak self] in
+        addAddressButton.onButtonTapped = { [weak self] in
             self?.onAddNewAddressButtonTapped?()
         }
     }

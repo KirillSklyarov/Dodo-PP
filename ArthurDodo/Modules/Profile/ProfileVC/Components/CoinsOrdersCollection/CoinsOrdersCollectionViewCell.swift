@@ -4,9 +4,9 @@ import UIKit
 final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var iconImageView = AppImageViewDS(type: .dodoCoinsLarge)
-    private lazy var titleLabel = AppLabelDS(type: .dodoCoinsTitle)
-    private lazy var subTitleLabel = AppLabelDS(type: .dodoCoinsSubtitle)
+    private lazy var iconImageView = AppImageView(type: .dodoCoinsLarge)
+    private lazy var titleLabel = AppLabel(type: .dodoCoinsTitle)
+    private lazy var subTitleLabel = AppLabel(type: .dodoCoinsSubtitle)
 
     private lazy var contentStackView = AppStackView([iconImageView, titleLabel, subTitleLabel], axis: .vertical, spacing: 10, alignment: .leading)
 

@@ -12,8 +12,8 @@ final class EditAddressStackView: UIStackView {
     private lazy var editFlatOfAddressView = AddressTextFieldView(.flat)
     private lazy var floorAndFlatStackView = AppStackView([editFloorOfAddressView, editFlatOfAddressView], axis: .horizontal, spacing: 10, distribution: .fillEqually)
     private lazy var editCommentToAddressView = AddressTextFieldView(.comment)
-    private lazy var saveAddressButton = CartButton(title: "Сохранить", isCart: false)
-    private lazy var deleteAddressButton = CartButton(title: "Удалить", isCart: false, backgroundColor: AppColors.buttonGray)
+    private lazy var saveAddressButton = AppButtons(type: .cartOrange, text: "Сохранить")
+    private lazy var deleteAddressButton = AppButtons(type: .cartGray, text: "Удалить")
 
     private lazy var buttonsStackView = AppStackView([deleteAddressButton, saveAddressButton], axis: .horizontal, spacing: 10, distribution: .fillEqually)
 

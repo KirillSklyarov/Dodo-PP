@@ -3,7 +3,7 @@ import UIKit
 final class MissionStackView: UIStackView {
 
     // MARK: - UI Properties
-    private lazy var headerLabel = AppLabelDS(type: .header, text: "Миссии")
+    private lazy var headerLabel = AppLabel(type: .header, text: "Миссии")
     private lazy var missionView = MissionView()
     private lazy var skeletonView = CustomSkeletonViewBorder()
 

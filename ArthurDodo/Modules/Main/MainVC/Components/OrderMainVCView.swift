@@ -3,8 +3,8 @@ import UIKit
 final class OrderMainVCView: UIView {
 
     // MARK: - UI Properties
-    private lazy var orderLabel = AppLabelDS(type: .orderTitle)
-    private lazy var statusLabel = AppLabelDS(type: .orderStatus)
+    private lazy var orderLabel = AppLabel(type: .orderTitle)
+    private lazy var statusLabel = AppLabel(type: .orderStatus)
 
     private lazy var labelsStackView = AppStackView([orderLabel, statusLabel], axis: .vertical, alignment: .leading, distribution: .fillEqually)
     private lazy var contentStackView = AppStackView([labelsStackView], axis: .horizontal, alignment: .center)

@@ -3,9 +3,9 @@ import UIKit
 final class FinalVCContentStackView: UIStackView {
 
     // MARK: - UI properties
-    private lazy var titleLabel = AppLabelDS(type: .headerTitle, text: "Ваш заказ успешно оформлен")
-    private lazy var doneImageView = AppImageViewDS(type: .checkmark)
-    private lazy var dismissInfoLabel = AppLabelDS(type: .promoTitle, text: "Это окно закроется через \(dismissDelay ?? 5) секунд")
+    private lazy var titleLabel = AppLabel(type: .headerTitle, text: "Ваш заказ успешно оформлен")
+    private lazy var doneImageView = AppImageView(type: .checkmark)
+    private lazy var dismissInfoLabel = AppLabel(type: .promoTitle, text: "Это окно закроется через \(dismissDelay ?? 5) секунд")
 
     // MARK: - Other properties
     private let leftInset: CGFloat = 20

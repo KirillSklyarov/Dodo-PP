@@ -3,9 +3,9 @@ import UIKit
 final class ErrorCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var iconImageView = AppImageViewDS(type: .errorXMark)
-    private lazy var titleLabel = AppLabelDS(type: .header, text: "Не удалось загрузить данные")
-    private lazy var retryButton = AppButtonsDS(type: .errorRetry)
+    private lazy var iconImageView = AppImageView(type: .errorXMark)
+    private lazy var titleLabel = AppLabel(type: .header, text: "Не удалось загрузить данные")
+    private lazy var retryButton = AppButtons(type: .errorRetry)
     private lazy var contentStackView = AppStackView([iconImageView, titleLabel, retryButton], axis: .vertical, alignment: .center, distribution: .equalSpacing)
 
     // MARK: - Properties

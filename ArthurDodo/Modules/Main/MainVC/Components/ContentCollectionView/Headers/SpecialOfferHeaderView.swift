@@ -3,7 +3,7 @@ import UIKit
 final class SpecialOfferHeaderView: UICollectionReusableView {
 
     // MARK: - Properties
-    private lazy var titleLabel = AppLabelDS(type: .name)
+    private lazy var titleLabel = AppLabel(type: .name)
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -27,12 +27,6 @@ extension SpecialOfferHeaderView {
 private extension SpecialOfferHeaderView {
     func configUI() {
         addSubviews(titleLabel)
-
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        titleLabel.setConstraints()
     }
 }

@@ -3,8 +3,8 @@ import UIKit
 final class StoriesCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var coverImageView = AppImageViewDS(type: .stories)
-    private lazy var titleLabel = AppLabelDS(type: .addressName)
+    private lazy var coverImageView = AppImageView(type: .stories)
+    private lazy var titleLabel = AppLabel(type: .addressName)
 
     // MARK: - Properties
     private let cornerRadius: CGFloat = 14

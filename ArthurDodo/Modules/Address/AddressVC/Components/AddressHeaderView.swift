@@ -4,7 +4,7 @@ final class AddressHeaderView: UIStackView {
 
     // MARK: - UI Properties
     private lazy var dismissButton = DismissButtonView()
-    private lazy var segmentControl = AppSegmentControlDS(type: .address)
+    private lazy var segmentControl = AppSegmentControl(type: .address)
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 20

@@ -4,7 +4,7 @@ final class BackgroundStoriesView: UIView {
 
     // MARK: - UI Properties
     private lazy var dismissButton = DismissButtonView(xColor: AppColors.buttonGray, backgroundColor: .white)
-    private lazy var storiesImageView = AppImageViewDS(type: .justView)
+    private lazy var storiesImageView = AppImageView(type: .justView)
     private lazy var progressViewsStack = AppStackView([], axis: .horizontal, spacing: 15, alignment: .fill, distribution: .fillEqually)
     private lazy var progressViews: [UIProgressView] = []
 
@@ -241,12 +241,9 @@ private extension BackgroundStoriesView {
     }
 
     func setupConstraints() {
+        storiesImageView.setConstraints()
+        
         NSLayoutConstraint.activate([
-            storiesImageView.topAnchor.constraint(equalTo: topAnchor),
-            storiesImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            storiesImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            storiesImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
             progressViewsStack.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor),
             progressViewsStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding),
             progressViewsStack.trailingAnchor.constraint(equalTo: dismissButton.leadingAnchor, constant: -padding),

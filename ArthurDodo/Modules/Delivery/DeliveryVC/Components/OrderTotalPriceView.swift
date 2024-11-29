@@ -4,8 +4,8 @@ import UIKit
 final class OrderTotalPriceView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabelDS(type: .orderStatus, text: "Стоимость заказа")
-    private lazy var priceLabel = AppLabelDS(type: .orderStatus)
+    private lazy var titleLabel = AppLabel(type: .orderStatus, text: "Стоимость заказа")
+    private lazy var priceLabel = AppLabel(type: .orderStatus)
     private lazy var contentStack = AppStackView([titleLabel, priceLabel], axis: .horizontal, alignment: .center)
 
     // MARK: - Other Properties
@@ -40,13 +40,7 @@ private extension OrderTotalPriceView {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: topAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-            heightAnchor.constraint(equalToConstant: viewHeight)
-        ])
+        contentStack.setConstraints()
+        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
     }
 }

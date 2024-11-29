@@ -4,8 +4,8 @@ import UIKit
 final class AppNavigationHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabelDS(type: .timeLabel)
-    private lazy var dismissButton = AppButtonsDS(type: .orangeDismiss)
+    private lazy var titleLabel = AppLabel(type: .timeLabel)
+    private lazy var dismissButton = AppButtons(type: .orangeDismiss)
 
     // MARK: - Properties&Callbacks
     private let viewHeight: CGFloat = 60

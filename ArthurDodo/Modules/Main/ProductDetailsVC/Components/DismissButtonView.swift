@@ -3,7 +3,7 @@ import UIKit
 final class DismissButtonView: UIView {
 
     // MARK: - UI Properties
-    private lazy var dismissButton = AppButtonsDS(type: .grayXmark)
+    private lazy var dismissButton = AppButtons(type: .grayXmark)
 
     // MARK: - Properties&Callbacks
     private let viewSize: CGFloat = 40
@@ -51,12 +51,7 @@ private extension DismissButtonView {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            dismissButton.topAnchor.constraint(equalTo: topAnchor),
-            dismissButton.leadingAnchor.constraint(equalTo: leadingAnchor),
-            dismissButton.trailingAnchor.constraint(equalTo: trailingAnchor),
-            dismissButton.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        dismissButton.setConstraints()
     }
 }
 

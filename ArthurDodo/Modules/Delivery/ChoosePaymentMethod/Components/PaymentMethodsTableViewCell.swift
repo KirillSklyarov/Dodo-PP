@@ -3,8 +3,8 @@ import UIKit
 final class PaymentMethodsTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var methodImage = AppImageViewDS(type: .smallView)
-    private lazy var titleLabel = AppLabelDS(type: .legalTitle)
+    private lazy var methodImage = AppImageView(type: .smallView)
+    private lazy var titleLabel = AppLabel(type: .legalTitle)
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 10

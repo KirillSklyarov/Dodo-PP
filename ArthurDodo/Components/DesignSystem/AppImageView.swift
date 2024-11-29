@@ -22,7 +22,7 @@ enum AppImageViewType {
     case errorXMark
 }
 
-final class AppImageViewDS: UIImageView {
+final class AppImageView: UIImageView {
 
     init(type: AppImageViewType, image: UIImage? = nil) {
         super.init(frame: .zero)
@@ -34,7 +34,7 @@ final class AppImageViewDS: UIImageView {
     }
 }
 
-private extension AppImageViewDS {
+private extension AppImageView {
     func configure(_ type: AppImageViewType, image: UIImage? = nil) {
         switch type {
         case .payment:

@@ -4,11 +4,11 @@ import UIKit
 final class AddToCartCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var detailsBackgroundView = AppViewDS(type: .details)
-    private lazy var itemImageView = AppImageViewDS(type: .justView)
-    private lazy var titleLabel = AppLabelDS(type: .promoCellTitle)
-    private lazy var detailsLabel = AppLabelDS(type: .itemSubtitle)
-    private lazy var priceLabel = AppLabelDS(type: .priceGrayLabel)
+    private lazy var detailsBackgroundView = AppView(type: .details)
+    private lazy var itemImageView = AppImageView(type: .justView)
+    private lazy var titleLabel = AppLabel(type: .promoCellTitle)
+    private lazy var detailsLabel = AppLabel(type: .itemSubtitle)
+    private lazy var priceLabel = AppLabel(type: .priceGrayLabel)
 
     private lazy var contentStack = setupContentStack()
 

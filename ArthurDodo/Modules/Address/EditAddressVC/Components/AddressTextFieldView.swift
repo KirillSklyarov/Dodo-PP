@@ -3,13 +3,11 @@ import UIKit
 final class AddressTextFieldView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabelDS(type: .itemSubtitle)
-    private lazy var clearButton = ClearTextFieldButton()
+    private lazy var titleLabel = AppLabel(type: .itemSubtitle)
+    private lazy var clearButton = AppButtons(type: .textFieldClear)
     private lazy var textField = AppTextField()
 
-    private lazy var textStack = AppStackView([titleLabel, textField], axis: .vertical, spacing: 0)
-
-    private lazy var contentStack = AppStackView([textStack, clearButton], axis: .horizontal)
+    private lazy var contentStack = setupContentStack()
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 10
@@ -73,6 +71,12 @@ private extension AddressTextFieldView {
             clearButton.widthAnchor.constraint(equalTo: contentStack.heightAnchor),
             heightAnchor.constraint(equalToConstant: viewHeight)
         ])
+    }
+
+    func setupContentStack() -> UIStackView {
+        let textStack = AppStackView([titleLabel, textField], axis: .vertical, spacing: 0)
+        let contentStack = AppStackView([textStack, clearButton], axis: .horizontal)
+        return contentStack
     }
 }
 

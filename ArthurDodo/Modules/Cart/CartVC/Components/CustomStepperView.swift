@@ -4,9 +4,9 @@ import UIKit
 final class CustomStepperView: UIView {
 
     // MARK: - UI properties
-    private lazy var decrementButton = AppButtonsDS(type: .decrementCount)
-    private lazy var incrementButton = AppButtonsDS(type: .incrementCount)
-    private lazy var valueLabel = AppLabelDS(type: .topicsTitle, text: "\(value)")
+    private lazy var decrementButton = AppButtons(type: .decrementCount)
+    private lazy var incrementButton = AppButtons(type: .incrementCount)
+    private lazy var valueLabel = AppLabel(type: .topicsTitle, text: "\(value)")
 
     private lazy var contentStack = AppStackView([decrementButton, valueLabel, incrementButton], axis: .horizontal, distribution: .fillEqually)
 
@@ -76,12 +76,9 @@ private extension CustomStepperView {
     }
 
     func setupLayout() {
+        contentStack.setConstraints()
+        
         NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: topAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor),
-
             heightAnchor.constraint(equalToConstant: viewHeight),
             widthAnchor.constraint(equalToConstant: viewWidth)
         ])

@@ -4,9 +4,9 @@ import UIKit
 final class DetailsView: UIView {
 
     // MARK: - UI Properties
-    private lazy var itemImageView = AppImageViewDS(type: .justView)
-    private lazy var sizeSegmentControl = AppSegmentControlDS(type: .size)
-    private lazy var doughSegmentControl = AppSegmentControlDS(type: .dough)
+    private lazy var itemImageView = AppImageView(type: .justView)
+    private lazy var sizeSegmentControl = AppSegmentControl(type: .size)
+    private lazy var doughSegmentControl = AppSegmentControl(type: .dough)
 
     private lazy var contentStack = AppStackView([itemImageView, sizeSegmentControl, doughSegmentControl], axis: .vertical, spacing: 10)
 

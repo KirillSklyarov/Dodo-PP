@@ -5,9 +5,9 @@ final class AddressStackView: UIStackView {
 
     // MARK: - UI Properties
     private lazy var courierView = CourierView()
-    private lazy var addressLabel = AppLabelDS(type: .addressName, text: "Укажите адрес доставки")
-    private lazy var deliveryTimeLabel = AppLabelDS(type: .addressTime, text: "около 40 минут")
-    private lazy var chevronImageView = AppImageViewDS(type: .chevronDown)
+    private lazy var addressLabel = AppLabel(type: .addressName, text: "Укажите адрес доставки")
+    private lazy var deliveryTimeLabel = AppLabel(type: .addressTime, text: "около 40 минут")
+    private lazy var chevronImageView = AppImageView(type: .chevronDown)
 
     private lazy var contentStackView = setupContentStackView()
 

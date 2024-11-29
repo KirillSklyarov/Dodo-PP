@@ -4,12 +4,12 @@ import UIKit
 final class CartProductCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var itemImageView = AppImageViewDS(type: .mediumView)
-    private lazy var hitImageView = AppImageViewDS(type: .hit)
-    private lazy var titleLabel = AppLabelDS(type: .name)
-    private lazy var sizeDoughLabel = AppLabelDS(type: .orderTitle)
-    private lazy var priceLabel = AppLabelDS(type: .legalTitle)
-    private lazy var changeLabel = AppLabelDS(type: .orangeChange, text: "Изменить")
+    private lazy var itemImageView = AppImageView(type: .mediumView)
+    private lazy var hitImageView = AppImageView(type: .hit)
+    private lazy var titleLabel = AppLabel(type: .name)
+    private lazy var sizeDoughLabel = AppLabel(type: .orderTitle)
+    private lazy var priceLabel = AppLabel(type: .legalTitle)
+    private lazy var changeLabel = AppLabel(type: .orangeChange, text: "Изменить")
 
     private lazy var countStepper = CustomStepperView()
 

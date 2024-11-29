@@ -44,13 +44,6 @@ final class CategoriesHeaderView: UICollectionReusableView {
     // MARK: - Private methods
     private func setupConstraints() {
         addSubviews(headerCollectionView)
-
-        NSLayoutConstraint.activate([
-            headerCollectionView.topAnchor.constraint(equalTo: topAnchor),
-            headerCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            headerCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            headerCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        headerCollectionView.setConstraints()
     }
 }
-

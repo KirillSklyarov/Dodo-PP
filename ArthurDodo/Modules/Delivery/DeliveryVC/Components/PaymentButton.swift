@@ -4,9 +4,9 @@ import UIKit
 final class PaymentButtonView: UIView {
 
     // MARK: - UI Properties
-    private lazy var paymentTitleLabel = AppLabelDS(type: .legalTitle)
-    private lazy var paymentImageView = AppImageViewDS(type: .payment, image: preferredPaymentMethod?.image)
-    private lazy var paymentMethodLabel = AppLabelDS(type: .legalTitle, text: preferredPaymentMethod?.title, textColor: AppColors.backgroundBlack)
+    private lazy var paymentTitleLabel = AppLabel(type: .legalTitle)
+    private lazy var paymentImageView = AppImageView(type: .payment, image: preferredPaymentMethod?.image)
+    private lazy var paymentMethodLabel = AppLabel(type: .legalTitle, text: preferredPaymentMethod?.title, textColor: AppColors.backgroundBlack)
 
     private lazy var paymentStack = AppStackView([paymentImageView, paymentMethodLabel], axis: .horizontal, spacing: 5)
 
@@ -97,12 +97,7 @@ private extension PaymentButtonView {
     }
 
     func setupContentStackLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: topAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor),
-        ])
+        contentStack.setConstraints()
     }
 
     func setupContentStack() -> UIStackView {

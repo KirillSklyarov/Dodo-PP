@@ -3,7 +3,7 @@ import UIKit
 final class OrderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabelDS(type: .header)
+    private lazy var titleLabel = AppLabel(type: .header)
 
     // MARK: - Init
     init(frame: CGRect = .zero, title: String? = nil) {
@@ -34,11 +34,6 @@ private extension OrderView {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
+        titleLabel.setConstraints()
     }
 }

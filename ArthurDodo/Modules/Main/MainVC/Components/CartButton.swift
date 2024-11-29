@@ -71,6 +71,7 @@ private extension CartButton {
 // MARK: - Setup UI
 private extension CartButton {
     func configButton(isHidden: Bool, backgroundColor: UIColor) {
+
         let image = UIImage(systemName: "cart.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         let title = "0 ₽"
 

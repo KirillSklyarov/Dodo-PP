@@ -3,11 +3,11 @@ import UIKit
 final class ItemsCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var pizzaImageView = AppImageViewDS(type: .justView)
-    private lazy var titleLabel = AppLabelDS(type: .name)
-    private lazy var ingredientsLabel = AppLabelDS(type: .itemSubtitle)
-    private lazy var priceButton = AppButtonsDS(type: .grayPrice)
-    private lazy var hitImageView = AppImageViewDS(type: .hit)
+    private lazy var pizzaImageView = AppImageView(type: .justView)
+    private lazy var titleLabel = AppLabel(type: .name)
+    private lazy var ingredientsLabel = AppLabel(type: .itemSubtitle)
+    private lazy var priceButton = AppButtons(type: .grayPrice)
+    private lazy var hitImageView = AppImageView(type: .hit)
 
     private lazy var contentStackView = setupContentStackView()
 

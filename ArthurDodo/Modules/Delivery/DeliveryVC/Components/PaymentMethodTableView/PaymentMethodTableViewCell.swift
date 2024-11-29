@@ -3,8 +3,8 @@ import UIKit
 final class PreferredPaymentMethodTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var methodImage = AppImageViewDS(type: .smallView)
-    private lazy var titleLabel = AppLabelDS(type: .legalTitle)
+    private lazy var methodImage = AppImageView(type: .smallView)
+    private lazy var titleLabel = AppLabel(type: .legalTitle)
     private lazy var contentStack = AppStackView([methodImage, titleLabel], axis: .horizontal, spacing: 10)
 
     // MARK: - Properties

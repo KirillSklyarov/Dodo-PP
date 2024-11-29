@@ -4,9 +4,9 @@ import UIKit
 final class SpecialOfferCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var itemImageView = AppImageViewDS(type: .justView)
-    private lazy var titleLabel = AppLabelDS(type: .name)
-    private lazy var priceLabel = AppLabelDS(type: .dodoCoinsSubtitle)
+    private lazy var itemImageView = AppImageView(type: .justView)
+    private lazy var titleLabel = AppLabel(type: .name)
+    private lazy var priceLabel = AppLabel(type: .dodoCoinsSubtitle)
 
     private lazy var contentStack = setupContentStack()
 

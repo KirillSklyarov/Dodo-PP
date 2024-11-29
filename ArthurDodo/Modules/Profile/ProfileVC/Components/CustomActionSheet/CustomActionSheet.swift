@@ -3,14 +3,12 @@ import UIKit
 final class CustomActionSheet: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var callButton = ActionSheetButton(title: "Позвонить")
-    private lazy var chatButton = ActionSheetButton(title: "Написать в чат")
-    private lazy var dismissButton = ActionSheetButton(title: "Отменить", roundedCorners: true)
-    private lazy var separatorView = AppViewDS(type: .separator)
+    private lazy var callButton = AppButtons(type: .actionSheetButton, text: "Позвонить")
+    private lazy var chatButton = AppButtons(type: .actionSheetButton, text: "Написать в чат")
+    private lazy var dismissButton = AppButtons(type: .actionSheetButton, text: "Отменить")
+    private lazy var separatorView = AppView(type: .separator)
 
-    private lazy var callAndChatStack = AppStackView([callButton, separatorView, chatButton], axis: .vertical, cornerRadius: 10)
-
-    private lazy var contentStack = AppStackView([callAndChatStack, dismissButton], axis: .vertical, spacing: 5, distribution: .fillProportionally)
+    private lazy var contentStack = setupContentStack()
 
     // MARK: - Other Properties
     private var bottomConstraint: NSLayoutConstraint!
@@ -74,8 +72,14 @@ private extension CustomActionSheet {
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         view.addSubviews(contentStack)
 
+        setupDismissButton()
         setupLayout()
         setupGesture()
+    }
+
+    func setupDismissButton() {
+        dismissButton.layer.cornerRadius = 10
+        dismissButton.layer.masksToBounds = true
     }
 
     func setupLayout() {
@@ -90,6 +94,13 @@ private extension CustomActionSheet {
             contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
         ])
+    }
+
+    func setupContentStack() -> UIStackView {
+        let callAndChatStack = AppStackView([callButton, separatorView, chatButton], axis: .vertical, cornerRadius: 10)
+
+        let contentStack = AppStackView([callAndChatStack, dismissButton], axis: .vertical, spacing: 5, distribution: .fillProportionally)
+        return contentStack
     }
 }
 

@@ -6,7 +6,7 @@ final class EditAddressMapView: UIView {
     // MARK: - UI Properties
     private lazy var mapView = MKMapView()
     private lazy var userTrackingButton = UserTrackingButton(mapView: mapView)
-    private lazy var pinView = AppImageViewDS(type: .mapPin)
+    private lazy var pinView = AppImageView(type: .mapPin)
 
     // MARK: - Other properties
     private let rightInset: CGFloat = -20
@@ -54,12 +54,8 @@ private extension EditAddressMapView {
     }
 
     func setupLayout() {
+        mapView.setConstraints()
         NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalTo: topAnchor),
-            mapView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            mapView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            mapView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-
             userTrackingButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
             userTrackingButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
 

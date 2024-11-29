@@ -6,7 +6,7 @@ final class MainViewController: UIViewController {
     private lazy var headerView = MainHeaderView() // Заголовок с кнопками
     private lazy var orderView = OrderMainVCView() // Вью с заказом (или скрыто или показывается)
     private lazy var contentCollectionView = ContentCollectionView() // Основная коллекция с товарами
-    private lazy var cartButton = CartButton(isHidden: true, isNeedImage: true) // Кнопка корзины
+    private lazy var cartButton = AppButtons(type: .cartMain) // Кнопка корзины
 
     private lazy var contentStackView = AppStackView([headerView, orderView, contentCollectionView], axis: .vertical, spacing: 5)
 

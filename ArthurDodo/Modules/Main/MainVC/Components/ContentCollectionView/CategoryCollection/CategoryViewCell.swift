@@ -3,7 +3,7 @@ import UIKit
 final class CategoryViewCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabelDS(type: .categoryTitle)
+    private lazy var titleLabel = AppLabel(type: .categoryTitle)
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 10

@@ -3,7 +3,7 @@ import UIKit
 final class ProductHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabelDS(type: .headerTitle)
+    private lazy var titleLabel = AppLabel(type: .headerTitle)
     private lazy var dismissButton = DismissButtonView()
     private lazy var blurView = AppBlurView()
 
@@ -69,12 +69,7 @@ private extension ProductHeaderView {
     }
 
     func setupBlurConstraints() {
-        NSLayoutConstraint.activate([
-            blurView.topAnchor.constraint(equalTo: topAnchor),
-            blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            blurView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        blurView.setConstraints()
     }
 
     func setupContentStackLayout() {

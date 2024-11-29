@@ -23,7 +23,7 @@ enum LabelType {
     case timeLabel
 }
 
-final class AppLabelDS: InsetLabel {
+final class AppLabel: InsetLabel {
 
     init(type: LabelType, text: String? = nil, textColor: UIColor? = .white) {
         super.init(frame: .zero)
@@ -40,7 +40,7 @@ final class AppLabelDS: InsetLabel {
     }
 }
 
-private extension AppLabelDS {
+private extension AppLabel {
     func configureLabel(type: LabelType, text: String?, textColor: UIColor?) {
         switch type {
         case .coinsTitle:

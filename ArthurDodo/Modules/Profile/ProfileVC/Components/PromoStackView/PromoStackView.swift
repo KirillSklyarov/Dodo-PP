@@ -3,7 +3,7 @@ import UIKit
 final class PromoStackView: UIStackView {
 
     // MARK: - UI Properties
-    private lazy var headerLabel = AppLabelDS(type: .header, text: "Акции")
+    private lazy var headerLabel = AppLabel(type: .header, text: "Акции")
     private lazy var promoCollectionView = PromoCollectionView()
     private lazy var pageControl = CustomPageControl()
     private lazy var skeletonView = SkeletonView()

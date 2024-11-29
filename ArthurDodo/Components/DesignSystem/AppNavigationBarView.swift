@@ -57,11 +57,6 @@ private extension AppNavigationBarView {
 private extension AppNavigationBarView {
     func setupLayout(_ view: AppNavigationHeaderView?) {
         guard let view else { return }
-        NSLayoutConstraint.activate([
-            view.topAnchor.constraint(equalTo: topAnchor),
-            view.leadingAnchor.constraint(equalTo: leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: trailingAnchor),
-            view.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        view.setConstraints()
     }
 }

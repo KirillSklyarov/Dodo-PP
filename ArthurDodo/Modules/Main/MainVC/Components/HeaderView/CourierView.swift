@@ -4,7 +4,7 @@ import UIKit
 final class CourierView: UIView {
 
     // MARK: - Properties
-    private lazy var courierImageView = AppImageViewDS(type: .courier)
+    private lazy var courierImageView = AppImageView(type: .courier)
 
     private let height: CGFloat = 40
 

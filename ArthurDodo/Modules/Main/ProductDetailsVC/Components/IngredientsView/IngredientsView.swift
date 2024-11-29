@@ -4,9 +4,10 @@ import UIKit
 final class IngredientsView: UIView {
 
     // MARK: - UI Properties
-    private lazy var ingredientsLabel = AppLabelDS(type: .name)
-    private lazy var infoButton = InfoButton()
-    private lazy var weightLabel = AppLabelDS(type: .name)
+    private lazy var ingredientsLabel = AppLabel(type: .name)
+    private lazy var infoButton = AppButtons(type: .infoButton)
+//    InfoButton()
+    private lazy var weightLabel = AppLabel(type: .name)
 
     private lazy var ingredientsAndInfoStack = AppStackView([ingredientsLabel, infoButton], axis: .horizontal, spacing: 10, alignment: .leading)
 
@@ -91,7 +92,7 @@ private extension IngredientsView {
     }
 
     func setupInfoButtonAction() {
-        infoButton.onInfoButtonTapped = { [weak self] in
+        infoButton.onButtonTapped = { [weak self] in
             self?.showPopupView()
         }
     }

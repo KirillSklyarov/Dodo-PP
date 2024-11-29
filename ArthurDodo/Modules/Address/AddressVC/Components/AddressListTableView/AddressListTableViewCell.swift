@@ -3,9 +3,9 @@ import UIKit
 final class AddressListTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var orangePoint = AppImageViewDS(type: .addressPoint)
-    private lazy var titleLabel = AppLabelDS(type: .addressTitle)
-    private lazy var editAddressButton = AppButtonsDS(type: .mapEdit)
+    private lazy var orangePoint = AppImageView(type: .addressPoint)
+    private lazy var titleLabel = AppLabel(type: .addressTitle)
+    private lazy var editAddressButton = AppButtons(type: .mapEdit)
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 0

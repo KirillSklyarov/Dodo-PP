@@ -12,7 +12,7 @@ final class AddNewAddressStackView: UIStackView {
     private lazy var editFlatOfAddressView = AddressTextFieldView(.flat)
     private lazy var floorAndFlatStackView = AppStackView([editFloorOfAddressView, editFlatOfAddressView], axis: .horizontal, spacing: 10, distribution: .fillEqually)
     private lazy var editCommentToAddressView = AddressTextFieldView(.comment)
-    private lazy var saveAddressButton = CartButton(title: "Доставить сюда", isCart: false)
+    private lazy var saveAddressButton = AppButtons(type: .cartOrange, text: "Доставить сюда")
 
     private var newShortAddress: String?
 
