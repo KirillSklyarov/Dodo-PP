@@ -10,6 +10,7 @@ enum AppButtonType {
     case grayXmark
     case profileChat
     case personal
+    case errorRetry
 }
 
 final class AppButtonsDS: UIButton {
@@ -91,6 +92,15 @@ private extension AppButtonsDS {
             widthAnchor.constraint(equalToConstant: 40).isActive = true
             layer.cornerRadius = 40 / 2
             layer.masksToBounds = true
+        case .errorRetry:
+            var config = UIButton.Configuration.filled()
+            config.attributedTitle = AttributedString("Повторить", attributes: AttributeContainer([
+                .font: AppFonts.bold16,
+                .foregroundColor: AppColors.grayFont])
+            )
+            config.baseBackgroundColor = AppColors.buttonGray
+            config.cornerStyle = .capsule
+            configuration = config
         }
 
         addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)

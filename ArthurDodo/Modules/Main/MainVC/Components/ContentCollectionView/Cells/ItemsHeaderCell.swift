@@ -5,20 +5,16 @@ final class ItemsHeaderCell: UICollectionViewCell {
 
     // MARK: - UI Properties
     private lazy var backView = AppView()
-    private lazy var pizzaImageView = AppImageView(squareSize: imageSize)
+    private lazy var pizzaImageView = AppImageViewDS(type: .largeView)
     private lazy var titleLabel = AppLabelDS(type: .orderStatus)
     private lazy var ingredientsLabel = AppLabelDS(type: .orderTitle)
     private lazy var priceButton = AppButtonsDS(type: .grayPrice)
 
-    private lazy var hitImageView = AppImageView(viewImage: .common(.hit), isSystem: false, squareSize: hitImageSize)
+    private lazy var hitImageView = AppImageViewDS(type: .hit)
 
     private lazy var contentStack = setupContentStack()
 
     private var gradientLayer: CAGradientLayer?
-
-    // MARK: - Properties
-    private let imageSize: CGFloat = 160
-    private let hitImageSize: CGFloat = 130
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -58,12 +54,21 @@ private extension ItemsHeaderCell {
     }
 
     func setupLayout() {
+        setupBackViewLayout()
+        setupContentStackLayout()
+    }
+
+    func setupBackViewLayout() {
         NSLayoutConstraint.activate([
             backView.topAnchor.constraint(equalTo: contentView.topAnchor),
             backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+    }
 
+    func setupContentStackLayout() {
+        NSLayoutConstraint.activate([
             contentStack.topAnchor.constraint(equalTo: backView.topAnchor, constant: 10),
             contentStack.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 10),
             contentStack.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -10),

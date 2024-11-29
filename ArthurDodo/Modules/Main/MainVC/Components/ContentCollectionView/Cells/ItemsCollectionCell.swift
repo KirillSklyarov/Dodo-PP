@@ -3,26 +3,19 @@ import UIKit
 final class ItemsCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var pizzaImageView = AppImageView(squareSize: imageSize)
+    private lazy var pizzaImageView = AppImageViewDS(type: .justView)
     private lazy var titleLabel = AppLabelDS(type: .name)
     private lazy var ingredientsLabel = AppLabelDS(type: .itemSubtitle)
-
     private lazy var priceButton = AppButtonsDS(type: .grayPrice)
-    private lazy var hitImageView = AppImageView(viewImage: .common(.hit), isSystem: false, squareSize: hitImageSize)
+    private lazy var hitImageView = AppImageViewDS(type: .hit)
 
-    private lazy var detailsStackView = AppStackView( [titleLabel, ingredientsLabel, priceButton], axis: .vertical, spacing: 5, alignment: .leading)
-
-    private lazy var contentStackView = AppStackView([pizzaImageView, detailsStackView], axis: .horizontal, spacing: 10, alignment: .center)
-
-    // MARK: - Properties
-    private let imageSize: CGFloat = 130
-    private let hitImageSize: CGFloat = 30
+    private lazy var contentStackView = setupContentStackView()
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        setupSkeleton()
+        setupActions()
     }
 
     required init?(coder: NSCoder) {
@@ -39,20 +32,6 @@ final class ItemsCollectionCell: UICollectionViewCell {
     }
 }
 
-// MARK: - Setup Skeleton
-private extension ItemsCollectionCell {
-    func setupSkeleton() {
-//        isSkeletonable = true
-//        contentView.isSkeletonable = true
-//        contentStackView.isSkeletonable = true
-//        pizzaImageView.isSkeletonable = true
-//        titleLabel.isSkeletonable = true
-//        ingredientsLabel.isSkeletonable = true
-//        priceButton.isSkeletonable = true
-//        hitImageView.isSkeletonable = true
-    }
-}
-
 // MARK: - Setup UI
 private extension ItemsCollectionCell {
     func setupUI() {
@@ -62,11 +41,29 @@ private extension ItemsCollectionCell {
 
     func setupLayout() {
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
             contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+
+            pizzaImageView.widthAnchor.constraint(equalTo: contentStackView.widthAnchor, multiplier: 0.4),
         ])
+    }
+
+    func setupContentStackView() -> UIStackView {
+        let detailsStackView = AppStackView( [titleLabel, ingredientsLabel, priceButton], axis: .vertical, spacing: 5, alignment: .leading)
+
+        let contentStackView = AppStackView([pizzaImageView, detailsStackView], axis: .horizontal, spacing: 10, alignment: .center)
+        return contentStackView
+    }
+}
+
+// MARK: - Setup actions
+private extension ItemsCollectionCell {
+    func setupActions() {
+        priceButton.onButtonTapped = { [weak self] in
+            print("Button tapped")
+        }
     }
 }
 

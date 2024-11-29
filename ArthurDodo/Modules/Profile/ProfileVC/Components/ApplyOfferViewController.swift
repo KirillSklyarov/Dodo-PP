@@ -4,9 +4,9 @@ import UIKit
 final class ApplyOfferViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var specialOfferImageView = AppImageView(squareSize: imageSize, cornerRadius: cornerRadius)
-    private lazy var dateOfferLabel = AppLabelDS(type: .promoTitle, text: "до 13 октября")
-    private lazy var detailsOfOfferLabel = AppLabelDS(type: .orderStatus, text: "Скидка 30% при заказе от 649 ₽")
+    private lazy var promoImageView = AppImageViewDS(type: .promoImage)
+    private lazy var promoDateLabel = AppLabelDS(type: .promoTitle, text: "до 13 октября")
+    private lazy var promoDetailsLabel = AppLabelDS(type: .orderStatus, text: "Скидка 30% при заказе от 649 ₽")
     private lazy var legalTextLabel = AppLabelDS(type: .promoTitle, text: "Акция работает только в пиццерии при заказе в приложении. Не действует с другими акциями и при заказе с комбо. Примените до 13.10 включительно")
 
     private lazy var applyButton = CartButton(isHidden: false, title: "Применить", isCart: false)
@@ -14,12 +14,10 @@ final class ApplyOfferViewController: UIViewController {
     private lazy var contentStack = setupContentStack()
 
     // MARK: - Properties
-    private let imageSize: CGFloat = 160
     private let leftPadding: CGFloat = 10
     private let rightPadding: CGFloat = -10
     private let topPadding: CGFloat = 20
     private let bottomPadding: CGFloat = -10
-    private let cornerRadius: CGFloat = 14
 
     // MARK: - Init
     init(with offer: Promo) {
@@ -41,10 +39,10 @@ final class ApplyOfferViewController: UIViewController {
     // MARK: - Public methods
     func configureViewController(_ offer: Promo) {
         let image = UIImage(named: offer.imageName)
-        specialOfferImageView.image = image
+        promoImageView.image = image
 
-        dateOfferLabel.text = offer.date
-        detailsOfOfferLabel.text = offer.details
+        promoDateLabel.text = offer.date
+        promoDetailsLabel.text = offer.details
     }
 }
 
@@ -76,14 +74,17 @@ private extension ApplyOfferViewController {
             contentStack.topAnchor.constraint(equalTo: view.topAnchor, constant: topPadding),
             contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftPadding),
             contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightPadding),
-            contentStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomPadding)
+            contentStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomPadding),
+
+//            promoImageView.widthAnchor.constraint(equalTo: contentStack.widthAnchor, multiplier: 0.4),
+//            promoImageView.heightAnchor.constraint(equalTo: promoImageView.widthAnchor),
         ])
     }
 
     func setupContentStack() -> UIStackView {
-        let detailsStack = AppStackView([dateOfferLabel, detailsOfOfferLabel, legalTextLabel, applyButton], axis: .vertical, distribution: .equalSpacing)
+        let detailsStack = AppStackView([promoDateLabel, promoDetailsLabel, legalTextLabel, applyButton], axis: .vertical, distribution: .equalSpacing)
 
-        let imageStack = AppStackView([specialOfferImageView], axis: .vertical, alignment: .center)
+        let imageStack = AppStackView([promoImageView], axis: .vertical, alignment: .center)
 
         let contentStack = AppStackView([imageStack, detailsStack], axis: .vertical, spacing: 10)
 

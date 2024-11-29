@@ -1,24 +1,19 @@
 import UIKit
 
+// Коллекция "Вам понравится" на главном экране
 final class SpecialOfferCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var pizzaImageView = AppImageView(squareSize: imageViewSize)
+    private lazy var itemImageView = AppImageViewDS(type: .justView)
     private lazy var titleLabel = AppLabelDS(type: .name)
     private lazy var priceLabel = AppLabelDS(type: .dodoCoinsSubtitle)
-    private lazy var textStack = AppStackView([titleLabel, priceLabel], axis: .vertical, spacing: 5, alignment: .leading)
-    private lazy var contentStack = AppStackView( [pizzaImageView, textStack], axis: .horizontal, spacing: 10, alignment: .center)
 
-    // MARK: - Properties
-    private let imageViewSize: CGFloat = 90
-
-    var onPriceButtonTapped: ( (String) -> Void )?
+    private lazy var contentStack = setupContentStack()
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        setupSkeleton()
     }
 
     required init?(coder: NSCoder) {
@@ -27,7 +22,7 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
 
     // MARK: - Public methods
     func configureCell(_ item: Item) {
-        pizzaImageView.image = UIImage(named: item.imageName)
+        itemImageView.image = UIImage(named: item.imageName)
         titleLabel.text = item.name
         priceLabel.setPrice(item)
     }
@@ -46,13 +41,14 @@ private extension SpecialOfferCollectionCell {
             contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            itemImageView.widthAnchor.constraint(equalTo: contentStack.widthAnchor, multiplier: 0.4)
         ])
     }
-}
 
-// MARK: - Setup Skeleton
-private extension SpecialOfferCollectionCell {
-    func setupSkeleton() {
-//        isSkeletonable = true
+    func setupContentStack() -> UIStackView {
+        let textStack = AppStackView([titleLabel, priceLabel], axis: .vertical, spacing: 5, alignment: .leading)
+        let contentStack = AppStackView( [itemImageView, textStack], axis: .horizontal, spacing: 10, alignment: .center)
+        return contentStack
     }
 }

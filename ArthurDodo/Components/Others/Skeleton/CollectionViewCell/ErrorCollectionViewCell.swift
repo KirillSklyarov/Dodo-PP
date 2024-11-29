@@ -3,32 +3,12 @@ import UIKit
 final class ErrorCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var iconImageView = AppImageView(viewImage: .common(.errorXmark), tintColor: .buttonOrange, squareSize: xmarkImageSize)
-    
-    private lazy var containerImageView: UIView = {
-        let view = UIView()
-        view.addSubviews(iconImageView)
-        return view
-    }()
+    private lazy var iconImageView = AppImageViewDS(type: .errorXMark)
     private lazy var titleLabel = AppLabelDS(type: .header, text: "Не удалось загрузить данные")
-
-    private lazy var retryButton: UIButton = {
-        let button = UIButton()
-        var config = UIButton.Configuration.filled()
-        config.attributedTitle = AttributedString("Повторить", attributes: AttributeContainer([
-            .font: AppFonts.bold16,
-            .foregroundColor: AppColors.grayFont])
-        )
-        config.baseBackgroundColor = AppColors.buttonGray
-        config.cornerStyle = .capsule
-        button.configuration = config
-        button.addTarget(self, action: #selector(retryButtonTapped), for: .touchUpInside)
-        return button
-    }()
-    private lazy var contentStackView = AppStackView([containerImageView, titleLabel, retryButton], axis: .vertical, alignment: .center, distribution: .equalSpacing)
+    private lazy var retryButton = AppButtonsDS(type: .errorRetry)
+    private lazy var contentStackView = AppStackView([iconImageView, titleLabel, retryButton], axis: .vertical, alignment: .center, distribution: .equalSpacing)
 
     // MARK: - Properties
-    private let xmarkImageSize: CGFloat = 65
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let topInset: CGFloat = 10
@@ -61,24 +41,15 @@ private extension ErrorCollectionViewCell {
     }
 
     func setupLayout() {
-        setupContainerViewLayout()
-        setupContainerImageViewLayout()
+        setupContentStackViewLayout()
     }
 
-    func setupContainerViewLayout() {
+    func setupContentStackViewLayout() {
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topInset),
             contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
             contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset),
-        ])
-    }
-
-    func setupContainerImageViewLayout() {
-        NSLayoutConstraint.activate([
-            iconImageView.centerXAnchor.constraint(equalTo: containerImageView.centerXAnchor),
-            iconImageView.topAnchor.constraint(equalTo: containerImageView.topAnchor),
-            iconImageView.bottomAnchor.constraint(equalTo: containerImageView.bottomAnchor)
         ])
     }
 }

@@ -1,9 +1,10 @@
 import UIKit
 
+// Вью курьера на хэдере главного экрана
 final class CourierView: UIView {
 
     // MARK: - Properties
-    private lazy var courierImageView = AppImageView(viewImage: .common(.courier), tintColor: .buttonOrange)
+    private lazy var courierImageView = AppImageViewDS(type: .courier)
 
     private let height: CGFloat = 40
 

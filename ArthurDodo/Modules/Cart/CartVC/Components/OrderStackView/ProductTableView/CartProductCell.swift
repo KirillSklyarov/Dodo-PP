@@ -4,9 +4,8 @@ import UIKit
 final class CartProductCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var pizzaImageView = AppImageView(squareSize: imageSize)
-    private lazy var hitImageView = AppImageView(viewImage: .common(.hit), isSystem: false, squareSize: hitImageSize)
-
+    private lazy var itemImageView = AppImageViewDS(type: .mediumView)
+    private lazy var hitImageView = AppImageViewDS(type: .hit)
     private lazy var titleLabel = AppLabelDS(type: .name)
     private lazy var sizeDoughLabel = AppLabelDS(type: .orderTitle)
     private lazy var priceLabel = AppLabelDS(type: .legalTitle)
@@ -17,9 +16,6 @@ final class CartProductCell: UITableViewCell {
     private lazy var contentStackView = setupContentContainer()
 
     // MARK: - Properties
-    private let imageSize: CGFloat = 100
-    private let hitImageSize: CGFloat = 30
-
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let topInset: CGFloat = 10
@@ -44,7 +40,7 @@ final class CartProductCell: UITableViewCell {
 // MARK: - Public methods
 extension CartProductCell {
     func configureCell(cartItem: CartItem) {
-        pizzaImageView.image = UIImage(named: cartItem.item.imageName)
+        itemImageView.image = UIImage(named: cartItem.item.imageName)
         titleLabel.text = cartItem.item.name
 
         setProductDetails(cartItem) // Устанавливаем детали продукта
@@ -94,14 +90,14 @@ private extension CartProductCell {
 
     func setupElementsLayout() {
         NSLayoutConstraint.activate([
-            hitImageView.trailingAnchor.constraint(equalTo: pizzaImageView.trailingAnchor),
-            hitImageView.topAnchor.constraint(equalTo: pizzaImageView.topAnchor),
+            hitImageView.trailingAnchor.constraint(equalTo: itemImageView.trailingAnchor),
+            hitImageView.topAnchor.constraint(equalTo: itemImageView.topAnchor),
         ])
     }
 
     func setupContentContainer() -> UIStackView {
         let nameSizeStackView = AppStackView([titleLabel, sizeDoughLabel], axis: .vertical, spacing: 5)
-        let imageDetailsStackView = AppStackView([pizzaImageView, nameSizeStackView], axis: .horizontal, spacing: 10, alignment: .center)
+        let imageDetailsStackView = AppStackView([itemImageView, nameSizeStackView], axis: .horizontal, spacing: 10, alignment: .center)
         let countStackView = AppStackView( [changeLabel, countStepper], axis: .horizontal, spacing: 10)
         let priceCountStackView = AppStackView([priceLabel, countStackView], axis: .horizontal)
 

@@ -5,7 +5,7 @@ final class AddToCartCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
     private lazy var detailsBackgroundView = AppViewDS(type: .details)
-    private lazy var itemImageView = AppImageView(height: imageSize)
+    private lazy var itemImageView = AppImageViewDS(type: .justView)
     private lazy var titleLabel = AppLabelDS(type: .promoCellTitle)
     private lazy var detailsLabel = AppLabelDS(type: .itemSubtitle)
     private lazy var priceLabel = AppLabelDS(type: .priceGrayLabel)
@@ -13,7 +13,6 @@ final class AddToCartCollectionCell: UICollectionViewCell {
     private lazy var contentStack = setupContentStack()
 
     // MARK: - Properties
-    private let imageSize: CGFloat = 100
     private let cornerRadius: CGFloat = 10
     private let leftInset: CGFloat = 5
     private let rightInset: CGFloat = -5
@@ -95,6 +94,8 @@ private extension AddToCartCollectionCell {
             contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
             contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
             contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset),
+
+            itemImageView.widthAnchor.constraint(equalTo: itemImageView.heightAnchor),
         ])
     }
 

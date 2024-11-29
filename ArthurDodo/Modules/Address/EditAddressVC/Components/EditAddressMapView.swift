@@ -6,12 +6,11 @@ final class EditAddressMapView: UIView {
     // MARK: - UI Properties
     private lazy var mapView = MKMapView()
     private lazy var userTrackingButton = UserTrackingButton(mapView: mapView)
-    private lazy var pinView = AppImageView(viewImage: AppImages.common(.mapPin), tintColor: .buttonOrange, squareSize: pinImageSize)
+    private lazy var pinView = AppImageViewDS(type: .mapPin)
 
     // MARK: - Other properties
     private let rightInset: CGFloat = -20
     private let bottomInset: CGFloat = -20
-    private let pinImageSize: CGFloat = 40
     private let locationRadius: CLLocationDistance = 500
 
     private var isAnimating = false

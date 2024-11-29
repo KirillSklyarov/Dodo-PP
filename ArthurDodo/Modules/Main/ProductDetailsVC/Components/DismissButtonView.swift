@@ -39,8 +39,6 @@ private extension DismissButtonView {
 // MARK: - Setup UI
 private extension DismissButtonView {
     func setupUI() {
-        backgroundColor = .darkGray.withAlphaComponent(0.4)
-
         heightAnchor.constraint(equalToConstant: viewSize).isActive = true
         widthAnchor.constraint(equalToConstant: viewSize).isActive = true
 

@@ -3,13 +3,13 @@ import UIKit
 final class DetailsView2: UIView {
 
     // MARK: - UI Properties
-    private lazy var pizzaImageView = AppImageView()
+    private lazy var itemImageView = AppImageViewDS(type: .justView)
     private lazy var sizeSegmentControl = AppSegmentControlDS(type: .size)
     private lazy var doughSegmentControl = AppSegmentControlDS(type: .dough)
 
     private lazy var segmentsControlStackView = AppStackView([sizeSegmentControl, doughSegmentControl], axis: .vertical, spacing: 5)
 
-    private lazy var contentStackView = AppStackView([pizzaImageView, segmentsControlStackView], axis: .vertical, spacing: 10)
+    private lazy var contentStackView = AppStackView([itemImageView, segmentsControlStackView], axis: .vertical, spacing: 10)
 
     // MARK: - Size Properties
     private let pizzaImageSize: CGFloat = 340
@@ -61,7 +61,7 @@ extension DetailsView2 {
 
     func updatePizzaImage(_ imageName: String) {
         let image = UIImage(named: imageName)
-        pizzaImageView.image = image
+        itemImageView.image = image
     }
 
     func getChosenSize() -> Size? {
@@ -96,7 +96,7 @@ private extension DetailsView2 {
             contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset*2),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomInset),
 
-            pizzaImageView.heightAnchor.constraint(equalToConstant: pizzaImageSize)
+            itemImageView.heightAnchor.constraint(equalToConstant: pizzaImageSize)
 
         ])
     }

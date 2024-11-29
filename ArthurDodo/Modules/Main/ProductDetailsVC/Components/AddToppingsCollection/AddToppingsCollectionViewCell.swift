@@ -2,18 +2,16 @@ import UIKit
 
 final class AddToppingsCollectionViewCell: UICollectionViewCell {
 
-    // MARK: - Properties
-    private let imageSize: CGFloat = 60
-    private let cornerRadius: CGFloat = 10
-
     // MARK: - UI Properties
-    private lazy var toppingImageView = AppImageView(squareSize: imageSize)
+    private lazy var toppingImageView = AppImageViewDS(type: .toppings)
     private lazy var titleLabel = AppLabelDS(type: .topicsTitle)
     private lazy var priceLabel = AppLabelDS(type: .topicsTitle)
-
-    private lazy var chosenImageView = AppImageView(viewImage: .common(.chosenTopping), tintColor: .buttonOrange, isHidden: true)
+    private lazy var chosenImageView = AppImageViewDS(type: .chosenTopping)
 
     private lazy var contentStack = AppStackView([toppingImageView, titleLabel, priceLabel], axis: .vertical, spacing: 10, alignment: .center, distribution: .equalSpacing)
+
+    // MARK: - Properties
+    private let cornerRadius: CGFloat = 10
 
     // MARK: - Init
     override init(frame: CGRect) {

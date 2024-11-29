@@ -3,7 +3,7 @@ import UIKit
 final class StoriesCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var coverImageView = AppImageView()
+    private lazy var coverImageView = AppImageViewDS(type: .stories)
     private lazy var titleLabel = AppLabelDS(type: .addressName)
 
     // MARK: - Properties

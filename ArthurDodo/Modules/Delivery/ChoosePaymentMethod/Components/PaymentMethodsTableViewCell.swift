@@ -3,7 +3,7 @@ import UIKit
 final class PaymentMethodsTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var methodImage = AppImageView(squareSize: imageSize)
+    private lazy var methodImage = AppImageViewDS(type: .smallView)
     private lazy var titleLabel = AppLabelDS(type: .legalTitle)
 
     // MARK: - Properties
@@ -11,7 +11,6 @@ final class PaymentMethodsTableViewCell: UITableViewCell {
     private let rightPadding: CGFloat = -10
     private let topPadding: CGFloat = 10
     private let bottomPadding: CGFloat = -10
-    private let imageSize: CGFloat = 25
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

@@ -4,7 +4,7 @@ final class BackgroundStoriesView: UIView {
 
     // MARK: - UI Properties
     private lazy var dismissButton = DismissButtonView(xColor: AppColors.buttonGray, backgroundColor: .white)
-    private lazy var storiesImageView = AppImageView()
+    private lazy var storiesImageView = AppImageViewDS(type: .justView)
     private lazy var progressViewsStack = AppStackView([], axis: .horizontal, spacing: 15, alignment: .fill, distribution: .fillEqually)
     private lazy var progressViews: [UIProgressView] = []
 

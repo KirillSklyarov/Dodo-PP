@@ -4,7 +4,7 @@ import UIKit
 final class PromoCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var promoImageView = AppImageView(cornerRadius: cornerRadius)
+    private lazy var promoImageView = AppImageViewDS(type: .radiusCornerView)
     private lazy var nameOfOfferLabel = AppLabelDS(type: .orderTitle)
     private lazy var detailsOfOfferLabel = AppLabelDS(type: .name)
     private lazy var dateLabel = AppLabelDS(type: .orderTitle)
@@ -18,7 +18,6 @@ final class PromoCollectionCell: UICollectionViewCell {
     private let rightInset: CGFloat = -10
     private let topInset: CGFloat = 10
     private let bottomInset: CGFloat = -10
-    private let cornerRadius: CGFloat = 14
 
     // MARK: - Init
     override init(frame: CGRect) {

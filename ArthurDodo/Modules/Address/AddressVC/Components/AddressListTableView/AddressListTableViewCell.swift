@@ -3,9 +3,8 @@ import UIKit
 final class AddressListTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var orangePoint = AppImageView(viewImage: .address(.orangePoint), tintColor: .buttonOrange, squareSize: imageSize)
+    private lazy var orangePoint = AppImageViewDS(type: .addressPoint)
     private lazy var titleLabel = AppLabelDS(type: .addressTitle)
-
     private lazy var editAddressButton = AppButtonsDS(type: .mapEdit)
 
     // MARK: - Properties
@@ -14,10 +13,7 @@ final class AddressListTableViewCell: UITableViewCell {
     private let topPadding: CGFloat = 10
     private let bottomPadding: CGFloat = -10
 
-    private let imageSize: CGFloat = 25
-
     var onEditAddressButtonTapped: (() -> Void)?
-
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

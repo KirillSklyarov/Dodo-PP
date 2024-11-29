@@ -6,9 +6,6 @@ final class CpfcTableViewCell: UITableViewCell {
     private lazy var titleLabel = AppLabelDS(type: .topicsTitle)
     private lazy var cpfcValueLabel = AppLabelDS(type: .topicsTitle)
 
-    // MARK: - Properties
-    var onPriceButtonTapped: ( (String) -> Void )?
-
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

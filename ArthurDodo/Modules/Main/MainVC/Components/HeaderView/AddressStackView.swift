@@ -1,14 +1,15 @@
 import UIKit
 
+// Вью с адресом и временем доставки на главном экране
 final class AddressStackView: UIStackView {
 
     // MARK: - UI Properties
     private lazy var courierView = CourierView()
     private lazy var addressLabel = AppLabelDS(type: .addressName, text: "Укажите адрес доставки")
     private lazy var deliveryTimeLabel = AppLabelDS(type: .addressTime, text: "около 40 минут")
-    private lazy var chevronImageView = AppImageView(viewImage: .main(.chevronDown), tintColor: .white)
-    private lazy var addressNameStackView = AppStackView([addressLabel, chevronImageView], axis: .horizontal, spacing: 5)
-    private lazy var labelStackView = AppStackView([addressNameStackView, deliveryTimeLabel], axis: .vertical, spacing: 0, alignment: .leading)
+    private lazy var chevronImageView = AppImageViewDS(type: .chevronDown)
+
+    private lazy var contentStackView = setupContentStackView()
 
     var onAddressTapped: (() -> Void)?
 
@@ -40,7 +41,7 @@ extension AddressStackView {
 // MARK: - Setup UI
 private extension AddressStackView {
     func setup() {
-        [courierView, labelStackView].forEach { addArrangedSubview($0) }
+        [courierView, contentStackView].forEach { addArrangedSubview($0) }
         axis = .horizontal
         distribution = .fill
         spacing = 20
@@ -50,6 +51,15 @@ private extension AddressStackView {
         courierView.widthAnchor.constraint(equalTo: courierView.heightAnchor).isActive = true
     }
 
+    func setupContentStackView() -> UIStackView {
+        let addressNameStackView = AppStackView([addressLabel, chevronImageView], axis: .horizontal, spacing: 5)
+        let labelStackView = AppStackView([addressNameStackView, deliveryTimeLabel], axis: .vertical, spacing: 0, alignment: .leading)
+        return labelStackView
+    }
+}
+
+// MARK: - Setup Tap gesture
+private extension AddressStackView {
     func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addressTapped))
         addGestureRecognizer(tapGesture)

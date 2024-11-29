@@ -1,11 +1,14 @@
 import UIKit
 
+// Вью с картинкой и сегментами на экране DetailsVC
 final class DetailsView: UIView {
 
     // MARK: - UI Properties
-    private lazy var pizzaImageView = AppImageView(squareSize: pizzaImageSize)
+    private lazy var itemImageView = AppImageViewDS(type: .justView)
     private lazy var sizeSegmentControl = AppSegmentControlDS(type: .size)
     private lazy var doughSegmentControl = AppSegmentControlDS(type: .dough)
+
+    private lazy var contentStack = AppStackView([itemImageView, sizeSegmentControl, doughSegmentControl], axis: .vertical, spacing: 10)
 
     // MARK: - Size Properties
     private let pizzaImageSize: CGFloat = 350
@@ -36,18 +39,18 @@ final class DetailsView: UIView {
 extension DetailsView {
     func hideDoughSegment() {
         doughSegmentControl.isHidden = true
-        placeImageInCenter()
+//        placeImageInCenter()
     }
 
     func hideSizeSegment() {
         sizeSegmentControl.isHidden = true
-        placeImageInCenter()
+//        placeImageInCenter()
     }
 
     // Если сегменты скрыты, то помещаем картинку в центре
     func placeImageInCenter() {
         imageCenterY?.isActive = false
-        imageCenterY = pizzaImageView.topAnchor.constraint(equalTo: topAnchor)
+        imageCenterY = itemImageView.topAnchor.constraint(equalTo: topAnchor)
 
         if doughSegmentControl.isHidden && sizeSegmentControl.isHidden {
             let topPadding = viewHeight - blurHeaderHeight - pizzaImageSize
@@ -70,7 +73,7 @@ extension DetailsView {
 
     func updatePizzaImage(_ imageName: String) {
         let image = UIImage(named: imageName)
-        pizzaImageView.image = image
+        itemImageView.image = image
     }
 
     func getChosenSize() -> Size {
@@ -85,33 +88,48 @@ extension DetailsView {
 // MARK: - Setup UI
 private extension DetailsView {
     func setupUI() {
-        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
+//        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
 
-        backgroundColor = UIColor(hex: "485460")
+        backgroundColor = AppColors.detailsBackground
         layer.cornerRadius = 20
         layer.masksToBounds = true
 
-        addSubviews(pizzaImageView, sizeSegmentControl, doughSegmentControl)
+        addSubviews(contentStack)
+
+//        addSubviews(pizzaImageView, sizeSegmentControl, doughSegmentControl)
 
         setupLayout()
     }
 
     func setupLayout() {
-        setupPizzaImageViewConstraints()
-        setupSizeSegmentControlConstraints()
-        setupDoughSegmentControlConstraints()
+        setupContentStackLayout()
+
+//        setupPizzaImageViewConstraints()
+//        setupSizeSegmentControlConstraints()
+//        setupDoughSegmentControlConstraints()
+    }
+
+    func setupContentStackLayout() {
+        NSLayoutConstraint.activate([
+            contentStack.topAnchor.constraint(equalTo: topAnchor, constant: 120),
+            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
+
+            itemImageView.heightAnchor.constraint(equalTo: widthAnchor),
+        ])
     }
 
     func setupPizzaImageViewConstraints() {
         placeImageInCenter()
         NSLayoutConstraint.activate([
-            pizzaImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            itemImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
         ])
     }
 
     func setupSizeSegmentControlConstraints() {
         NSLayoutConstraint.activate([
-            sizeSegmentControl.topAnchor.constraint(equalTo: pizzaImageView.bottomAnchor, constant: 10),
+            sizeSegmentControl.topAnchor.constraint(equalTo: itemImageView.bottomAnchor, constant: 10),
             sizeSegmentControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             sizeSegmentControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
         ])
