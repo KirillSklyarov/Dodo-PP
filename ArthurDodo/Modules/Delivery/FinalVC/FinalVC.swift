@@ -3,7 +3,7 @@ import UIKit
 final class FinalVC: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var dismissButton = DismissButtonView()
+    private lazy var dismissButton = AppDismissButtonView(type: .standard)
     private lazy var contentStack = FinalVCContentStackView(dismissDelay)
 
     // MARK: - Properties

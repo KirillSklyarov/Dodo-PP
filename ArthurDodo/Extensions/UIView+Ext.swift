@@ -13,16 +13,17 @@ extension UIView {
         layer.borderWidth = borderWidth
     }
 
-    func setConstraints(isSafeArea: Bool = false) {
+    // Делаем констреинты (если нужно учитываем safeArea, учитываем отступы)
+    func setConstraints(isSafeArea: Bool = false, insets: UIEdgeInsets = .zero) {
         guard let superview else { return }
         let topConstraints = isSafeArea ? superview.safeAreaLayoutGuide.topAnchor : superview.topAnchor
         let bottomConstraints = isSafeArea ? superview.safeAreaLayoutGuide.bottomAnchor : superview.bottomAnchor
 
         NSLayoutConstraint.activate([
-            leadingAnchor.constraint(equalTo: superview.leadingAnchor),
-            trailingAnchor.constraint(equalTo: superview.trailingAnchor),
-            topAnchor.constraint(equalTo: topConstraints),
-            bottomAnchor.constraint(equalTo: bottomConstraints)
+            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: insets.left),
+            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -insets.right),
+            topAnchor.constraint(equalTo: topConstraints, constant: insets.top),
+            bottomAnchor.constraint(equalTo: bottomConstraints, constant: -insets.bottom)
         ])
     }
 }

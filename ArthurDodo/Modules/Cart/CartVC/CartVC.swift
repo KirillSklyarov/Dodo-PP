@@ -9,9 +9,8 @@ final class CartViewController: UIViewController {
     private lazy var promoStackView = PromoStackView() // Акции
     private lazy var enterPromoCodeButton = AppButtons(type: .promoButton) // Кнопка Ввести промокод
     private lazy var dodoCoinsView = DodoCoinsStackView() // Блок с додокоинами
-    private lazy var cartButtonView = CartButtonView(isCart: true) // Кнопка корзины
-    private lazy var scrollUpButton = AppButtons(type: .scrollUp)
-//    ScrollUpButtonView() // Кнопка scrollToTop
+    private lazy var cartButtonView = AppCartButtonView(type: .cart) // Кнопка корзины
+    private lazy var scrollUpButton = AppButtons(type: .scrollUp) // Кнопка scrollToTop
     private lazy var contentStackView = AppStackView([orderStackView, itemsToAddStackView, promoStackView, enterPromoCodeButton, dodoCoinsView], axis: .vertical, spacing: 10)
     private lazy var scrollView = UIScrollView()
 
@@ -19,6 +18,7 @@ final class CartViewController: UIViewController {
     private let leftInset: CGFloat = 10
     private let rightInset: CGFloat = -10
     private let topInset: CGFloat = 10
+    private let bottomInset: CGFloat = -10
 
     private let storage: DataStorage
 
@@ -241,8 +241,6 @@ private extension CartViewController {
 
     func setupScrollView() {
         scrollView.addSubviews(contentStackView, scrollUpButton)
-        let bottomInset = cartButtonView.getHeight()
-        scrollView.contentInset = UIEdgeInsets(top: topInset, left: 0, bottom: bottomInset, right: 0)
         scrollView.delegate = self
     }
 }
@@ -270,7 +268,7 @@ private extension CartViewController {
             scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            scrollView.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor, constant: bottomInset)
         ])
     }
 
@@ -287,7 +285,7 @@ private extension CartViewController {
 
     func setupScrollUpButtonConstraints() {
         NSLayoutConstraint.activate([
-            scrollUpButton.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor, constant: rightInset / 2),
+            scrollUpButton.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor, constant: bottomInset),
             scrollUpButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
         ])
     }

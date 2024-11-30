@@ -5,11 +5,7 @@ final class InfoAndToppingsStack: UIStackView {
     // MARK: - UI Properties
     private lazy var ingredientsView = IngredientsView()
     private lazy var toppingsCollectionView = AddToppingsCollectionView()
-    private var cart: CartButtonView?
-
-    // MARK: - Properties
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
+    private var cart: AppCartButtonView?
 
     var onShowPopupVC: ((UIViewController) -> Void)?
 
@@ -37,7 +33,7 @@ final class InfoAndToppingsStack: UIStackView {
 
 // MARK: - Update UI
 extension InfoAndToppingsStack {
-    func getButtonView(_ cart: CartButtonView) {
+    func getButtonView(_ cart: AppCartButtonView) {
         self.cart = cart
     }
 

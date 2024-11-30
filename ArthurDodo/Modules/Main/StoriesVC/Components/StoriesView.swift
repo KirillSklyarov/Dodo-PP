@@ -1,11 +1,11 @@
 import UIKit
 
-final class BackgroundStoriesView: UIView {
+final class StoriesView: UIView {
 
     // MARK: - UI Properties
-    private lazy var dismissButton = DismissButtonView(xColor: AppColors.buttonGray, backgroundColor: .white)
-    private lazy var storiesImageView = AppImageView(type: .justView)
-    private lazy var progressViewsStack = AppStackView([], axis: .horizontal, spacing: 15, alignment: .fill, distribution: .fillEqually)
+    private lazy var dismissButton = AppDismissButtonView(type: .storiesWhite)
+    private lazy var storiesImageView = AppImageView(type: .stories)
+    private lazy var progressViewsStack = AppStackView([], axis: .horizontal, spacing: 15, distribution: .fillEqually)
     private lazy var progressViews: [UIProgressView] = []
 
     // MARK: - Properties
@@ -25,7 +25,7 @@ final class BackgroundStoriesView: UIView {
     private lazy var durationOfStory: TimeInterval = 2.0
 
     // MARK: - Init
-    init(story: [Story]) {
+    init(_ story: [Story]) {
         self.stories = story
         super.init(frame: .zero)
         setupUI()
@@ -42,7 +42,7 @@ final class BackgroundStoriesView: UIView {
 }
 
 // MARK: - Public methods
-extension BackgroundStoriesView {
+extension StoriesView {
     func showSelectedStory(_ indexPath: IndexPath) {
         currentStoryIndex = indexPath.row
         countSubStories = stories[currentStoryIndex].subStoryImages.count
@@ -55,7 +55,7 @@ extension BackgroundStoriesView {
 }
 
 // MARK: - Setup actions
-private extension BackgroundStoriesView {
+private extension StoriesView {
     func setupActions() {
         dismissButtonTapped()
     }
@@ -70,7 +70,7 @@ private extension BackgroundStoriesView {
 }
 
 // MARK: - Setup Stories
-private extension BackgroundStoriesView {
+private extension StoriesView {
 
     func showStory() {
         setupProgressViews()
@@ -200,7 +200,7 @@ private extension BackgroundStoriesView {
 }
 
 // MARK: - Setup TapGesture
-private extension BackgroundStoriesView {
+private extension StoriesView {
 
     @objc func onTap(_ sender: UITapGestureRecognizer) {
         setupTapGesture(sender)
@@ -217,7 +217,7 @@ private extension BackgroundStoriesView {
 }
 
 // MARK: - SetupUI
-private extension BackgroundStoriesView {
+private extension StoriesView {
     func setupProgressViews() {
         progressViewsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         progressViews = []

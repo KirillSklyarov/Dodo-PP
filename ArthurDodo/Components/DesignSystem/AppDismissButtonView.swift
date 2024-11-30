@@ -1,6 +1,12 @@
 import UIKit
 
-final class DismissButtonView: UIView {
+enum DismissButtonType {
+    case standard
+    case chevron
+    case storiesWhite
+}
+
+final class AppDismissButtonView: UIView {
 
     // MARK: - UI Properties
     private lazy var dismissButton = AppButtons(type: .grayXmark)
@@ -9,13 +15,11 @@ final class DismissButtonView: UIView {
     private let viewSize: CGFloat = 40
     var onButtonTapped: (() -> Void)?
 
-    // MARK: - Init
-    init(frame: CGRect = .zero, xColor: UIColor = .white, backgroundColor: UIColor = AppColors.backgroundGray, isChevron: Bool = false) {
-        super.init(frame: frame)
+    init(type: DismissButtonType) {
+        super.init(frame: .zero)
+        configure(type)
         setupUI()
         setupAction()
-        setColors(xColor: xColor, backgroundColor: backgroundColor)
-        if isChevron { setChevron() }
     }
 
     required init?(coder: NSCoder) {
@@ -23,8 +27,22 @@ final class DismissButtonView: UIView {
     }
 }
 
+private extension AppDismissButtonView {
+    func configure(_ type: DismissButtonType) {
+        switch type {
+        case .standard:
+            setColors(xColor: .white, backgroundColor: AppColors.backgroundGray.withAlphaComponent(0.2))
+
+        case .chevron:
+            setChevron()
+        case .storiesWhite:
+            setColors(xColor: AppColors.buttonGray, backgroundColor: .white)
+        }
+    }
+}
+
 // MARK: - Setup actions
-private extension DismissButtonView {
+private extension AppDismissButtonView {
     func setupAction() {
         setupDismissButtonAction()
     }
@@ -37,7 +55,7 @@ private extension DismissButtonView {
 }
 
 // MARK: - Setup UI
-private extension DismissButtonView {
+private extension AppDismissButtonView {
     func setupUI() {
         heightAnchor.constraint(equalToConstant: viewSize).isActive = true
         widthAnchor.constraint(equalToConstant: viewSize).isActive = true
@@ -56,7 +74,7 @@ private extension DismissButtonView {
 }
 
 // MARK: - Supporting methods
-private extension DismissButtonView {
+private extension AppDismissButtonView {
     func setColors(xColor: UIColor, backgroundColor: UIColor) {
         let image = UIImage(systemName: "xmark")?.withTintColor(xColor, renderingMode: .alwaysOriginal)
         dismissButton.setImage(image, for: .normal)
@@ -68,4 +86,3 @@ private extension DismissButtonView {
         dismissButton.setImage(image, for: .normal)
     }
 }
-

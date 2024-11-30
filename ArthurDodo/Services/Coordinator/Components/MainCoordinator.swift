@@ -87,7 +87,7 @@ private extension MainCoordinator {
             self?.router.dismiss() // Закрываем окно
         }
 
-        router.present(vc) // Показываем экран
+        router.present(vc, modalPresentation: .fullScreen) // Показываем экран
     }
 }
 

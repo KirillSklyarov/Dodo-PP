@@ -3,7 +3,7 @@ import UIKit
 final class ProfileHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var dismissButton = DismissButtonView()
+    private lazy var dismissButton = AppDismissButtonView(type: .standard)
     private lazy var chatButton = AppButtons(type: .profileChat)
     private lazy var profileButton = AppButtons(type: .personal)
 

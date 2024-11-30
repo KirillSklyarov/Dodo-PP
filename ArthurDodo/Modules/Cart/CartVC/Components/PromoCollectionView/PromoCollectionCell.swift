@@ -72,7 +72,7 @@ private extension PromoCollectionCell {
     }
 
     func setupApplyButtonAction() {
-        applyButton.onButtonTapped = { [weak self] in
+        applyButton.onButtonTapped = { // [weak self] in
             print("Apply button tapped")
         }
     }

@@ -6,7 +6,7 @@ final class AddNewAddressViewController: UIViewController {
     private lazy var mapView = AddAddressMapView()
     private lazy var addressView = AddAddressView()
     private lazy var contentStackView = AppStackView([mapView, addressView], axis: .vertical, spacing: -5, distribution: .fill)
-    private lazy var dismissButton = DismissButtonView(isChevron: true)
+    private lazy var dismissButton = AppDismissButtonView(type: .chevron)
 
     // MARK: - Properties
     private let leftInset: CGFloat = 20

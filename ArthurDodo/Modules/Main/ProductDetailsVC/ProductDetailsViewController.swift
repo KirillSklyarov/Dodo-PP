@@ -7,7 +7,7 @@ final class ProductDetailsViewController: UIViewController {
     private lazy var headerView = ProductHeaderView()
     private lazy var itemDetailsView = DetailsView()
     private lazy var infoAndToppingsContainer = InfoAndToppingsView()
-    private lazy var cartButtonView = CartButtonView()
+    private lazy var cartButtonView = AppCartButtonView(type: .itemDetail)
     private lazy var contentStack = AppStackView( [itemDetailsView, infoAndToppingsContainer], axis: .vertical, spacing: 5)
    
     private lazy var scrollView = UIScrollView()
@@ -47,15 +47,13 @@ final class ProductDetailsViewController: UIViewController {
 private extension ProductDetailsViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundGray
+        view.addSubviews(scrollView, headerView, cartButtonView)
+
         configScrollView()
-
-
         setupConstraints()
     }
 
     func configScrollView() {
-        view.addSubviews(scrollView, headerView, cartButtonView)
-
         scrollView.backgroundColor = AppColors.backgroundGray
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.showsVerticalScrollIndicator = false
@@ -81,14 +79,8 @@ private extension ProductDetailsViewController {
     }
 
     func setupContentViewConstraints() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-
-            contentStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-        ])
+        contentStack.setConstraints()
+        contentStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
     }
 
     func setupProductHeaderViewConstraints() {
@@ -293,30 +285,30 @@ private extension ProductDetailsViewController {
 
 
 // MARK: - Setup navigation bar
-private extension ProductDetailsViewController {
-    func setupNavigationBar() {
-        let color = UIColor.black.withAlphaComponent(0.2)
-        let dismissButtonView = DismissButtonView(backgroundColor: color)
-
-        print(navigationController ?? "navigationController is nil")
-
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.standardAppearance = appearance
-        title = "ТЕСТ"
-
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButtonView)
-
-        // Настраиваем действия кнопок навигации
-        setupNavigationViewActions(dismissButtonView)
-    }
-
-    // Настройка действий навигации
-    func setupNavigationViewActions(_ dismissButtonView: DismissButtonView) {
-        dismissButtonView.onButtonTapped = { [weak self] in
-            self?.onDismissButtonTapped?()
-        }
-    }
-}
+//private extension ProductDetailsViewController {
+//    func setupNavigationBar() {
+//        let color = UIColor.black.withAlphaComponent(0.2)
+//        let dismissButtonView = DismissButtonView(backgroundColor: color)
+//
+//        print(navigationController ?? "navigationController is nil")
+//
+//        let appearance = UINavigationBarAppearance()
+//        appearance.configureWithTransparentBackground()
+//        appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+//        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+//        navigationController?.navigationBar.standardAppearance = appearance
+//        title = "ТЕСТ"
+//
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButtonView)
+//
+//        // Настраиваем действия кнопок навигации
+//        setupNavigationViewActions(dismissButtonView)
+//    }
+//
+//    // Настройка действий навигации
+//    func setupNavigationViewActions(_ dismissButtonView: DismissButtonView) {
+//        dismissButtonView.onButtonTapped = { [weak self] in
+//            self?.onDismissButtonTapped?()
+//        }
+//    }
+//}

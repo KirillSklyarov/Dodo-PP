@@ -3,7 +3,7 @@ import UIKit
 final class AddressHeaderView: UIStackView {
 
     // MARK: - UI Properties
-    private lazy var dismissButton = DismissButtonView()
+    private lazy var dismissButton = AppDismissButtonView(type: .standard)
     private lazy var segmentControl = AppSegmentControl(type: .address)
 
     // MARK: - Properties

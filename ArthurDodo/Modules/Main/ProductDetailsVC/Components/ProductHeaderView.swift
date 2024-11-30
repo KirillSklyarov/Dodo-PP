@@ -4,7 +4,7 @@ final class ProductHeaderView: UIView {
 
     // MARK: - UI Properties
     private lazy var titleLabel = AppLabel(type: .headerTitle)
-    private lazy var dismissButton = DismissButtonView()
+    private lazy var dismissButton = AppDismissButtonView(type: .standard)
     private lazy var blurView = AppBlurView()
 
     private lazy var contentStackView = setupContentStackView()

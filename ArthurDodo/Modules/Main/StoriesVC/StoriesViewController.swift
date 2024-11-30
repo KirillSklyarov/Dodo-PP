@@ -3,7 +3,7 @@ import UIKit
 final class StoriesVC: UIViewController {
 
     // MARK: - Properties
-    private lazy var backgroundView = BackgroundStoriesView(story: story)
+    private lazy var storiesView = StoriesView(story)
 
     private var story: [Story]
 
@@ -29,14 +29,14 @@ final class StoriesVC: UIViewController {
 
     // MARK: - Public methods
     func showStories(_ indexPath: IndexPath) {
-        backgroundView.showSelectedStory(indexPath)
+        storiesView.showSelectedStory(indexPath)
     }
 }
 
 // MARK: - Setup Actions
 private extension StoriesVC {
      func setupActions() {
-        backgroundView.onDismissButtonTapped = { [weak self] in
+        storiesView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
             onDismissed?()
         }
@@ -47,14 +47,14 @@ private extension StoriesVC {
 private extension StoriesVC {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
+        view.addSubviews(storiesView)
+        storiesView.setConstraints(isSafeArea: true)
 
-        view.addSubviews(backgroundView)
-
-        NSLayoutConstraint.activate([
-            backgroundView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+//        NSLayoutConstraint.activate([
+//            backgroundView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+//            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//            backgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+//        ])
     }
 }

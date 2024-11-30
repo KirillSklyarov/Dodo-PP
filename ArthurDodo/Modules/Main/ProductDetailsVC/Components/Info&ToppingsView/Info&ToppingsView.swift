@@ -2,12 +2,8 @@ import UIKit
 
 final class InfoAndToppingsView: UIView {
 
-    // MARK: - UI Properties
-    private lazy var infoAndToppingsStack = InfoAndToppingsStack()
-
     // MARK: - Properties
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
+    private lazy var infoAndToppingsStack = InfoAndToppingsStack()
 
     var onShowPopupVC: ((UIViewController) -> Void)?
 
@@ -30,7 +26,7 @@ extension InfoAndToppingsView {
         infoAndToppingsStack.getSelectedItem(item)
     }
 
-    func getCartView(_ cart: CartButtonView) {
+    func getCartView(_ cart: AppCartButtonView) {
         infoAndToppingsStack.getButtonView(cart)
     }
 
@@ -76,11 +72,6 @@ private extension InfoAndToppingsView {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            infoAndToppingsStack.topAnchor.constraint(equalTo: topAnchor),
-            infoAndToppingsStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
-            infoAndToppingsStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
-            infoAndToppingsStack.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        infoAndToppingsStack.setConstraints(insets: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
     }
 }

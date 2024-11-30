@@ -121,12 +121,7 @@ private extension DeliveryVC {
     }
 
     func setupContentStackViewLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-            contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
-        ])
+        contentStackView.setConstraints(isSafeArea: true, insets: UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10))
     }
 }
 

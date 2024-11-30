@@ -1,10 +1,3 @@
-//
-//  AppProgressView.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 08.10.2024.
-//
-
 import UIKit
 
 final class AppProgressView: UIProgressView {

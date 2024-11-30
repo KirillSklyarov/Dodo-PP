@@ -61,8 +61,8 @@ private extension ItemsCollectionCell {
 // MARK: - Setup actions
 private extension ItemsCollectionCell {
     func setupActions() {
-        priceButton.onButtonTapped = { [weak self] in
-            print("Button tapped")
+        priceButton.onButtonTapped = { // [weak self] in
+            print(#function)
         }
     }
 }

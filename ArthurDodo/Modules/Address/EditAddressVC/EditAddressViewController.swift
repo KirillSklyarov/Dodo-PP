@@ -6,7 +6,7 @@ final class EditAddressViewController: UIViewController {
     private lazy var mapView = EditAddressMapView()
     private lazy var addressContainerView = EditAddressView()
     private lazy var contentStackView = AppStackView([mapView, addressContainerView], axis: .vertical, spacing: -5, distribution: .fillEqually)
-    private lazy var dismissButton = DismissButtonView(isChevron: true)
+    private lazy var dismissButton = AppDismissButtonView(type: .chevron)
 
     // MARK: - Other properties
     private var addressToEdit: Address?
