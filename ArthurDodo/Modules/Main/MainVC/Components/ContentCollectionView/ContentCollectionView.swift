@@ -47,7 +47,6 @@ extension ContentCollectionView {
 // MARK: - Fetch data
 // Получаем все данные из MainVC
 extension ContentCollectionView {
-
     // Получаем список категорий
     func getCategories(_ categories: [Category]) {
         self.categories = categories
@@ -83,7 +82,6 @@ private extension ContentCollectionView {
         categoryHeaderView?.passCategories(categories)
     }
 }
-
 
 // MARK: - Setup Actions
 private extension ContentCollectionView {

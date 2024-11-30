@@ -65,3 +65,42 @@
 //        }
 //    }
 //}
+
+// MARK: - Setup navigation bar
+//private extension ProfileViewController {
+//    func setupNavigationBar() {
+//        let dismissButtonView = DismissButtonView()
+//        let chatButtonView = ProfileButtonView(type: .chat)
+//        let profileButtonView = ProfileButtonView(type: .profile)
+//
+//        navigationController?.isNavigationBarHidden = false
+//        navigationController?.navigationBar.barTintColor = AppColors.backgroundBlack
+//        navigationController?.navigationBar.backgroundColor = AppColors.backgroundBlack
+//        navigationController?.navigationBar.isTranslucent = false
+//
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButtonView)
+//        navigationItem.rightBarButtonItems = [
+//            UIBarButtonItem(customView: profileButtonView),
+//            UIBarButtonItem(customView: chatButtonView)
+//        ]
+//
+//        // Настраиваем действия кнопок навигации
+//        setupNavigationViewActions(dismissButtonView, chatButtonView, profileButtonView)
+//    }
+//
+//    // Настройка действий навигации
+//    func setupNavigationViewActions(_ dismissButtonView: DismissButtonView, _ chatButtonView: ProfileButtonView, _ profileButtonView: ProfileButtonView) {
+//
+//        dismissButtonView.onButtonTapped = { [weak self] in
+//            self?.dismissVC()
+//        }
+//
+//        chatButtonView.onButtonTapped = { [weak self] in
+//            self?.showChatAlert()
+//        }
+//
+//        profileButtonView.onButtonTapped = { [weak self] in
+//            self?.showPersonalVC()
+//        }
+//    }
+//}

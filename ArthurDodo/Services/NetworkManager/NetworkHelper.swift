@@ -19,6 +19,7 @@ enum NetworkError: Error {
     case httpError(Int)
     case noData
     case decodingError(Error)
+    case unknown(Error)
 }
 
 // Методы
@@ -41,7 +42,7 @@ enum endPoint: String {
     case userAddress = "/userAddress"
     case toppings = "/toppings"
     case stories = "/stories"
-    case products = "/products"
+    case items = "/products"
     case promo = "/promo"
     case personal = "/personal"
     case error = "/error"

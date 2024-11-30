@@ -8,6 +8,11 @@ final class DependencyContainer {
     let router: Router
     let coordinatorFactory: CoordinatorFactory
 
+    // тест
+    let asyncAwaitNetworkManager: NetworkManagerAsyncAwait
+    let startAppService: StartAppService
+    let networkService: NetworkService
+
     init() {
         let decoder = JSONDecoder()
         let encoder = JSONEncoder()
@@ -16,8 +21,18 @@ final class DependencyContainer {
         // Создаем сетевой слой
         networkManager = NetworkManager(decoder: decoder, encoder: encoder, session: session)
 
+
+        // тест
+        asyncAwaitNetworkManager = NetworkManagerAsyncAwait(decoder: decoder, encoder: encoder, session: session)
+
+
         // Создаем хранилище
-        storage = DataStorage(networkManager: networkManager)
+        storage = DataStorage(networkManager: networkManager, asyncAwaitNetworkManager: asyncAwaitNetworkManager)
+
+        // тест
+        networkService = NetworkService(networkManager: asyncAwaitNetworkManager)
+        startAppService = StartAppService(networkService: networkService, storage: storage)
+
 
         // Создаем фабрику экранов
         screenFactory = ScreenFactory(storage: storage)

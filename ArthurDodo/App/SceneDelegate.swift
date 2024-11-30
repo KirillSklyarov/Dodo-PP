@@ -3,8 +3,8 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    let di = DependencyContainer()
-    var appCoordinator: Coordinator?
+    private let di = DependencyContainer()
+    private var appCoordinator: Coordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
@@ -12,12 +12,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = di.router.setRootNavigation()
         window?.makeKeyAndVisible()
 
-        appCoordinator = di.coordinatorFactory.makeAppCoordinator()
-        appCoordinator?.start()
+        startApp()
+
 
         resetActiveOrder() // Сбрасывает активный заказ (использую для тестирования)
 //        resetStories() // Сбрасывает просмотренные сторисы (использую для тестирования)
 
+    }
+
+    // Загружаем данные с сервера, потом стартуем главный координатор
+    private func startApp() {
+        appCoordinator = di.coordinatorFactory.makeAppCoordinator()
+
+        Task {
+            await di.startAppService.fetchAllData()
+            appCoordinator?.start()
+        }
     }
 
     // Метод сбрасывает активный заказ для отладки,

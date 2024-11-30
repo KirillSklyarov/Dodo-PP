@@ -87,13 +87,8 @@ private extension ProfileViewController {
     }
 
     func setupContentStackViewLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-        ])
+        contentStackView.setConstraints()
+        contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
     }
 }
 
@@ -132,57 +127,23 @@ private extension ProfileViewController {
 // MARK: - Fetch Data
 private extension ProfileViewController { // Запрашиваем данные с сервера
     func fetchData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            guard let self else { return }
-
-            let dispatchGroup = DispatchGroup() // Решаем задачу вызвать setState только после завершения двух методов: fetchPersonalData, fetchPromo. Сначала делаем группу.
-
-            // Входим в группу и выполняем метод, когда метод выполнен, вызывается комплишн и покидаем группу
-            dispatchGroup.enter()
-            fetchPersonalData {
-                dispatchGroup.leave()
-            }
-
-            // Входим в группу и выполняем метод, когда метод выполнен, вызывается комплишн и покидаем группу
-            dispatchGroup.enter()
-            fetchPromo {
-                dispatchGroup.leave()
-            }
-
-            // Группа сообщает, что все операции внутри нее выполнены и можно выполнять операции в теле setState, missionStackView.setState
-            dispatchGroup.notify(queue: .main) { [weak self] in
-                guard let self else { return }
-                self.setState(view: .profile, state: .success)
-                self.setState(view: .mission, state: .success)
-            }
-        }
+        fetchUserDataFromStorage()
+        fetchPromoFromStorage()
+        setState(view: .mission, state: .success) // Выставляю нижней вью правильное состояние (потом можно будет убрать)
     }
 
     // Запрашиваем персональные данные с сервера: додокоины, кол-во заказов, адреса
-    func fetchPersonalData(completion: @escaping (() -> Void)) {
-        storage.fetchUserData()
-        storage.onUserDataFetchedSuccessfully = { [weak self] personalData in
-            guard let self else { return }
-            passPersonalDataToCollectionView(personalData)
-            setState(view: .personalData, state: .success)
-            completion()
-        }
-
-        storage.onError = { [weak self] error in
-            self?.setState(view: .personalData, state: .error)
-            completion()
-        }
+    func fetchUserDataFromStorage() {
+        guard let personalData = storage.getUserData() else { print("Error: fetchUserDataFromStorage"); return }
+        passPersonalDataToCollectionView(personalData)
+        setState(view: .personalData, state: .success)
     }
 
-    // Запрашиваем спецпредложения с сервера (раздел Акции)
-    func fetchPromo(completion: @escaping (() -> Void)) {
-        storage.fetchPromo()
-        storage.onPromoFetchedSuccessfully = { [weak self] promo in
-            guard let self else { return }
-            passPromoToCollectionView(promo)
-            setState(view: .promo, state: .success)
-            completion()
-        }
+    // Запрашиваем спецпредложения с сервера (раздел Акции), передаем данные на вью и выставляем состояние у вьюхи
+    func fetchPromoFromStorage() {
+        let promo = storage.getPromo()
+        passPromoToCollectionView(promo)
+        setState(view: .promo, state: .success)
     }
 }
 
@@ -209,43 +170,3 @@ private extension ProfileViewController {
         }
     }
 }
-
-
-// MARK: - Setup navigation bar
-//private extension ProfileViewController {
-//    func setupNavigationBar() {
-//        let dismissButtonView = DismissButtonView()
-//        let chatButtonView = ProfileButtonView(type: .chat)
-//        let profileButtonView = ProfileButtonView(type: .profile)
-//
-//        navigationController?.isNavigationBarHidden = false
-//        navigationController?.navigationBar.barTintColor = AppColors.backgroundBlack
-//        navigationController?.navigationBar.backgroundColor = AppColors.backgroundBlack
-//        navigationController?.navigationBar.isTranslucent = false
-//
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButtonView)
-//        navigationItem.rightBarButtonItems = [
-//            UIBarButtonItem(customView: profileButtonView),
-//            UIBarButtonItem(customView: chatButtonView)
-//        ]
-//
-//        // Настраиваем действия кнопок навигации
-//        setupNavigationViewActions(dismissButtonView, chatButtonView, profileButtonView)
-//    }
-//
-//    // Настройка действий навигации
-//    func setupNavigationViewActions(_ dismissButtonView: DismissButtonView, _ chatButtonView: ProfileButtonView, _ profileButtonView: ProfileButtonView) {
-//
-//        dismissButtonView.onButtonTapped = { [weak self] in
-//            self?.dismissVC()
-//        }
-//
-//        chatButtonView.onButtonTapped = { [weak self] in
-//            self?.showChatAlert()
-//        }
-//
-//        profileButtonView.onButtonTapped = { [weak self] in
-//            self?.showPersonalVC()
-//        }
-//    }
-//}

@@ -86,7 +86,7 @@ private extension PersonalViewController {
 private extension PersonalViewController {
     // Забираем данные с сервера и передаем их для отображения
     func fetchData() {
-        self.personalData = storage.getPersonalData()
+        self.personalData = storage.getUserData()
         passUserDataToTableView()
     }
 

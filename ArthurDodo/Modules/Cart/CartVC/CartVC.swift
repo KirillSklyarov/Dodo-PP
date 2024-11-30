@@ -54,45 +54,24 @@ final class CartViewController: UIViewController {
     }
 
     func updateCart() {
-        fetchCart()
+        getCartFromStorage()
     }
 }
 
 // MARK: - Fetch Data
 private extension CartViewController {
     func fetchData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            guard let self else { return }
-
-            let dispatchGroup = DispatchGroup()
-
-            dispatchGroup.enter()
-            fetchCart() {
-                dispatchGroup.leave()
-            }
-
-            dispatchGroup.enter()
-            fetchItemsToAdd() {
-                dispatchGroup.leave()
-            }
-
-            dispatchGroup.enter()
-            fetchPromo() {
-                dispatchGroup.leave()
-            }
-
-            dispatchGroup.notify(queue: .main) { [weak self] in
-                self?.setState(.success)
-            }
-        }
+        getPromoFromStorage()
+        getItemsToAddFromStorage()
+        getCartFromStorage()
+        setState(.success)
     }
 
     // Получаем заказ с хранилища и передаем его в таблицу
-    func fetchCart(completion: (() -> Void)? = nil) {
+    func getCartFromStorage() {
         guard let order = storage.getCartFromStorage() else { print("Cart not found in storage"); return }
         passCartToView(order)
         updateUI()
-        completion?()
     }
 
     func updateUI() {
@@ -103,21 +82,9 @@ private extension CartViewController {
         updateCartButtonPrice(totalPrice)
     }
 
-    // Сначала запрашиваем из хранилища (мб ранее уже загружались промо), если в хранилище нет, то запрашиваем с сервера, если есть, то обновляем UI
-    func fetchPromo(completion: (() -> Void)? = nil) {
-        let isPromoInStorage = storage.isPromoAlreadyFetched()
-
-        if isPromoInStorage {
-            getPromoFromStorage()
-        } else {
-            fetchPromoFromServer()
-        }
-        completion?()
-    }
-
     // Получаем данные из хранилища и передаем их в коллекцию и выставляем состояние экрана
     func getPromoFromStorage() {
-        let promo = storage.getPromoFromStorage()
+        let promo = storage.getPromo()
         promoCollectionUpdateUI(promo)
         promoStackView.setState(.success)
     }
@@ -127,20 +94,10 @@ private extension CartViewController {
         promoStackView.updateUI(promo)
     }
 
-    func fetchPromoFromServer() {
-        storage.fetchPromo()
-        storage.onPromoFetchedSuccessfully = { [weak self] fetchedPromo in
-            guard let self else { return }
-            promoCollectionUpdateUI(fetchedPromo)
-            promoStackView.setState(.success)
-        }
-    }
-
     // Получаем товары, для отражения в корзине в категории "Добавить к заказу"
-    func fetchItemsToAdd(completion: (() -> Void)? = nil) {
+    func getItemsToAddFromStorage() {
         let itemsToAdd = storage.getSpecialOffersArray()
         sendItemsToAdd(itemsToAdd)
-        completion?()
     }
 
     // Отправляем товары для отражения в категории "Добавить к заказу" далее по вьюхе
@@ -182,12 +139,12 @@ private extension CartViewController {
         // Удаляем позицию из заказа и опять фетчим заказы
         orderStackView.onItemDeletedFromCart = { [weak self] indexPath in
             self?.storage.removeItemFromCart(indexPath)
-            self?.fetchCart()
+            self?.getCartFromStorage()
         }
 
         orderStackView.onCountChanged = { [weak self] indexPath, count in
             self?.storage.changeCountOfItems(indexPath, count)
-            self?.fetchCart()
+            self?.getCartFromStorage()
         }
 
         // Нажали на ячейку в таблице с товаром, отправили редактируемый товар в хранилище и открыли экран с этим товаром, при закрытии этого экрана срабатывает комплишн и мы заново загружаем корзину
@@ -217,7 +174,7 @@ private extension CartViewController {
         itemsToAddStackView.onNewItemToAddToCart = { [weak self] itemToAddToOrder in
             guard let self else { return }
             storage.addItemToCart(item: itemToAddToOrder)
-            fetchCart()
+            getCartFromStorage()
         }
     }
 

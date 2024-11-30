@@ -62,11 +62,12 @@ private extension AddressViewController {
 
     // Запрашиваем данные с сервера и когда все получено, то просто забираем с него данные
     func fetchAddresses() {
-        storage.fetchUserData()
-        storage.onUserDataFetchedSuccessfully = { [weak self] userData in
-            guard let self else { print("Error: We have no self"); return }
-            getAddressFromStorage()
-        }
+//        storage.fetchUserData()
+//        storage.onUserDataFetchedSuccessfully = { [weak self] userData in
+//            guard let self else { print("Error: We have no self"); return }
+//            getAddressFromStorage()
+//        }
+        getAddressFromStorage()
     }
 
     // Получаем данные из хранилища

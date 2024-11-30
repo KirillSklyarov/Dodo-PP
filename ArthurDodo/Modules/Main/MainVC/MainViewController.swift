@@ -47,6 +47,8 @@ final class MainViewController: UIViewController {
     // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+//        print(#function)
+//        updateUI()
         updateCart()
     }
 }
@@ -103,12 +105,7 @@ private extension MainViewController {
 
     // Настраиваем расположение стека с контентом
     func setupContentStackViewLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-        ])
+        contentStackView.setConstraints(isSafeArea: true)
     }
 
     // Настраиваем расположение кнопки
@@ -177,50 +174,27 @@ private extension MainViewController {
     // Обращаемся к хранилищу за необходимыми данными
     func fetchData() {
         getMainAddressFromStorage()
-        getStoriesFromServer()
-        getCatalogAndSpecialOffersFromServer()
-    }
-
-    // Так как у нас адреса лежат в личных данных, то проверяем если данные НЕ были ранее загружены, то инициируем сетевой запрос и обновляем header, а если данные уже есть, то забираем данные с сервера
-    func getMainAddressFromStorage() {
-        if storage.isAddressesEmpty() {
-            fetchDataFromServer()
-        } else {
-            getDataFromStorageAndUpdateUI()
-        }
-    }
-
-    // Делаем сетевой запрос и потом забираем данные с хранилища
-    func fetchDataFromServer() {
-        storage.fetchUserData()
-        storage.onUserDataFetchedSuccessfully = { [weak self] personalData in
-            guard let self else { return }
-            getDataFromStorageAndUpdateUI()
-        }
+        getStoriesFromStorage()
+        getCatalogAndSpecialOffersFromStorage()
     }
 
     // Забираем данные из хранилища
-    func getDataFromStorageAndUpdateUI() {
-        guard let mainAddress = storage.getMainAddress() else { return }
+    func getMainAddressFromStorage() {
+        guard let mainAddress = storage.getMainAddress() else { print("Error: mainAddress is nil"); return }
         let addressName = mainAddress.name
         let userDodoCoins = storage.getDodoCoins()
         headerView.updateUI(addressName, userDodoCoins)
     }
 
     // Мы обращаемся к хранилищу за сторисами, инициируем сетевой запрос, забираем результаты и передаем их в коллекцию
-    func getStoriesFromServer() {
-        storage.fetchStories()
-
-        storage.onStoriesFetchedSuccessfully = { [weak self] stories in
-            self?.passStoriesToContentCollectionView(stories)
-        }
+    func getStoriesFromStorage() {
+        let stories = storage.getFetchedStories()
+        passStoriesToContentCollectionView(stories)
     }
 
     // Мы обращаемся к хранилищу за каталогом, инициируем сетевой запрос и забираем результаты. Так как спецпредложения это рандомная выборка из каталога, то можно делать это тут же.
-    func getCatalogAndSpecialOffersFromServer() {
-        storage.fetchItems()
-
-        storage.onItemsFetchedSuccessfully = { [weak self] in
+    func getCatalogAndSpecialOffersFromStorage() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
             guard let self else { return }
             getCategories()
             getSpecialOffers()

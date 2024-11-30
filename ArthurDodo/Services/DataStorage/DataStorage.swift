@@ -21,19 +21,21 @@ final class DataStorage {
 
     private let networkManager: NetworkManager
 
+    private let asyncAwaitNetworkManager: NetworkManagerAsyncAwait
+
     // MARK: - Callbacks
     var onDataFetchedSuccessfully: (() -> Void)?
     var onToppingsFetchedSuccessfully: (([Topping]) -> Void)?
     var onStoriesFetchedSuccessfully: (([Story]) -> Void)?
-    var onItemsFetchedSuccessfully: (() -> Void)?
     var onPromoFetchedSuccessfully: (([Promo]) -> Void)?
     var onUserDataFetchedSuccessfully: ((User) -> Void)?
 
     var onError: ((Error) -> Void)?
 
     // MARK: - Init
-    init(networkManager: NetworkManager) {
+    init(networkManager: NetworkManager, asyncAwaitNetworkManager: NetworkManagerAsyncAwait) {
         self.networkManager = networkManager
+        self.asyncAwaitNetworkManager = asyncAwaitNetworkManager
         getOrderFromUserDefaults()
     }
 }
@@ -104,36 +106,26 @@ extension DataStorage {
     }
 }
 
-// MARK: - Personal
+// MARK: - User data
 extension DataStorage {
-    // Фетчим личные данные
-    func fetchUserData() {
-        networkManager.fetchData(.personal) { [weak self] (result: Result<User, NetworkError>) in
-            guard let self else { return }
-            switch result {
-            case .success(let personalData):
-                fetchedUserData = personalData
-                onUserDataFetchedSuccessfully?(personalData)
-            case .failure(let error):
-                onError?(error)
-                print(error)
-            }
-        }
-    }
-
-    func getDodoCoins() -> Int {
-        guard let fetchedUserData else { return 0 }
-        return fetchedUserData.dodoCoins
+    // Получаем личные данные
+    func setUserData(_ user: User) {
+        fetchedUserData = user
     }
 
     // Отдаем личные данные
-    func getPersonalData() -> User? {
+    func getUserData() -> User? {
         fetchedUserData
     }
 
     // Проверяем были ли ранее загружены данные
     func isUserDataLoaded() -> Bool {
         fetchedUserData != nil
+    }
+
+    // Отдаем кол-во додокоинов у юзера
+    func getDodoCoins() -> Int {
+        fetchedUserData?.dodoCoins ?? 0
     }
 }
 
@@ -168,7 +160,7 @@ extension DataStorage {
     }
 
     func getMainAddress() -> Address? {
-        fetchedUserData?.address.first(where: \.isMain)
+        return fetchedUserData?.address.first(where: \.isMain)
     }
 
     func getAddresses() -> [Address] {
@@ -202,17 +194,8 @@ extension DataStorage {
 
 // MARK: - Stories
 extension DataStorage {
-    func fetchStories() {
-        networkManager.fetchData(.stories) { [weak self] (result: Result<[Story], NetworkError>) in
-            guard let self else { return }
-            switch result {
-            case .success(let stories):
-                fetchedStories = stories
-                onStoriesFetchedSuccessfully?(fetchedStories)
-            case .failure(let error):
-                print(error)
-            }
-        }
+    func setStories(_ stories: [Story]) {
+        fetchedStories = stories
     }
 
     func getFetchedStories() -> [Story] {
@@ -222,18 +205,18 @@ extension DataStorage {
 
 // MARK: - Toppings
 extension DataStorage {
-    func fetchToppings() {
-        networkManager.fetchData(.toppings) { [weak self] (result: Result<[Topping], NetworkError>) in
-            guard let self else { return }
-            switch result {
-            case .success(let topping):
-                fetchedToppings = topping
-                onToppingsFetchedSuccessfully?(fetchedToppings)
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
+//    func fetchToppings() {
+//        networkManager.fetchData(.toppings) { [weak self] (result: Result<[Topping], NetworkError>) in
+//            guard let self else { return }
+//            switch result {
+//            case .success(let topping):
+//                fetchedToppings = topping
+//                onToppingsFetchedSuccessfully?(fetchedToppings)
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
+//    }
 
     func getFetchedToppings(for item: Item) -> [Topping]? {
         let itemToppings = item.toppings
@@ -254,19 +237,11 @@ extension DataStorage {
 
 // MARK: - Items
 extension DataStorage {
-    func fetchItems() {
-        networkManager.fetchData(.products) { [weak self] (result: Result<[Item], NetworkError>) in
-            guard let self else { return }
-            switch result {
-            case .success(let items):
-                fetchedItems = items.sorted { $0.category.rawValue < $1.category.rawValue }
-                getArrayOfRandomItems(5)
-                getCategoriesFromCatalog()
-                onItemsFetchedSuccessfully?()
-            case .failure(let error):
-                print(error)
-            }
-        }
+    // Принимаем полученные данные в хранилище
+    func setItems(_ items: [Item]) {
+        fetchedItems = items.sorted { $0.category.rawValue < $1.category.rawValue }
+        getArrayOfRandomItems(5)
+        getCategoriesFromCatalog()
     }
 
     // Отправляет весь каталог товаров
@@ -318,32 +293,20 @@ extension DataStorage {
 
 // MARK: - Promo
 extension DataStorage {
-    func fetchPromo() {
-        networkManager.fetchData(.promo) { [weak self] (result: Result<[Promo], NetworkError>) in
-            guard let self else { return }
-            switch result {
-            case .success(let promo):
-                fetchedPromo = promo
-                onPromoFetchedSuccessfully?(fetchedPromo)
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-
-    // Показывает были ли ранее загружены акции
-    func isPromoAlreadyFetched() -> Bool {
-        !fetchedPromo.isEmpty
+    // Получаем промо (коллекция "Акции" в корзине и в профиле)
+    func setPromo(_ promo: [Promo]) {
+        fetchedPromo = promo
     }
 
     // Возвращает загруженные акции 
-    func getPromoFromStorage() -> [Promo] {
+    func getPromo() -> [Promo] {
         fetchedPromo
     }
 }
 
 // MARK: - Categories
 extension DataStorage {
+    // Вытаскиваем уникальные категории из каталога
     func getCategoriesFromCatalog() {
         let set = Set(fetchedItems.compactMap(\.category))
         let sorted = Array(set).sorted { $0.rawValue < $1.rawValue }
