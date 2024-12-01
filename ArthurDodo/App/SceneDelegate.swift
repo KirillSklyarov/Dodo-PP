@@ -12,22 +12,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = di.router.setRootNavigation()
         window?.makeKeyAndVisible()
 
+        setAppCoordinator()
         startApp()
 
-
         resetActiveOrder() // Сбрасывает активный заказ (использую для тестирования)
-//        resetStories() // Сбрасывает просмотренные сторисы (использую для тестирования)
-
     }
+}
 
-    // Загружаем данные с сервера, потом стартуем главный координатор
+// MARK: - Supporting methods
+private extension SceneDelegate {
+    // Сначала загружаем данные с сервера, и только потом стартует главный координатор
     private func startApp() {
-        appCoordinator = di.coordinatorFactory.makeAppCoordinator()
-
         Task {
             await di.startAppService.fetchAllData()
             appCoordinator?.start()
         }
+    }
+
+    // Назначаем основной координатор приложения
+    private func setAppCoordinator() {
+        appCoordinator = di.coordinatorFactory.makeAppCoordinator()
     }
 
     // Метод сбрасывает активный заказ для отладки,
@@ -35,6 +39,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UserDefaults.standard.resetActiveOrder()
     }
 
+    // Сбрасывает просмотренные сторисы (использую для тестирования)
     private func resetStories() {
         UserDefaults.standard.resetViewedStories()
     }

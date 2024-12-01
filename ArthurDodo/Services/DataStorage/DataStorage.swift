@@ -19,23 +19,8 @@ final class DataStorage {
 
     private var changingItem: CartItem?
 
-    private let networkManager: NetworkManager
-
-    private let asyncAwaitNetworkManager: NetworkManagerAsyncAwait
-
-    // MARK: - Callbacks
-    var onDataFetchedSuccessfully: (() -> Void)?
-    var onToppingsFetchedSuccessfully: (([Topping]) -> Void)?
-    var onStoriesFetchedSuccessfully: (([Story]) -> Void)?
-    var onPromoFetchedSuccessfully: (([Promo]) -> Void)?
-    var onUserDataFetchedSuccessfully: ((User) -> Void)?
-
-    var onError: ((Error) -> Void)?
-
     // MARK: - Init
-    init(networkManager: NetworkManager, asyncAwaitNetworkManager: NetworkManagerAsyncAwait) {
-        self.networkManager = networkManager
-        self.asyncAwaitNetworkManager = asyncAwaitNetworkManager
+    init() {
         getOrderFromUserDefaults()
     }
 }
@@ -131,21 +116,6 @@ extension DataStorage {
 
 // MARK: - User Addresses
 extension DataStorage {
-
-    // Запрашиваем из сети данные по адреса конкретного юзера по ID (сейчас для теста просто взяли "1")
-    func fetchUserAddresses() {
-        networkManager.fetchAddressesWithID("1") { [weak self] (result: Result<[Address], NetworkError>) in
-            guard let self else { return }
-            switch result {
-            case .success(let address):
-                fetchedUserAddresses = address
-                onDataFetchedSuccessfully?()
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-
     // Отправляем новый адрес в хранилище
     func updateAddressesAfterEdition(correctAddress: Address) {
         var deleteOldAddress = fetchedUserData?.address.filter { $0.addressId != correctAddress.addressId }
@@ -205,24 +175,18 @@ extension DataStorage {
 
 // MARK: - Toppings
 extension DataStorage {
-//    func fetchToppings() {
-//        networkManager.fetchData(.toppings) { [weak self] (result: Result<[Topping], NetworkError>) in
-//            guard let self else { return }
-//            switch result {
-//            case .success(let topping):
-//                fetchedToppings = topping
-//                onToppingsFetchedSuccessfully?(fetchedToppings)
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//    }
+    // Получаем топпинги
+    func setToppings(_ toppings: [Topping]) {
+        fetchedToppings = toppings
+    }
 
+    // Вытаскиваем допустимые топпинги для продукта
     func getFetchedToppings(for item: Item) -> [Topping]? {
         let itemToppings = item.toppings
         return itemToppings
     }
 
+    // Вытаскиваем допустимые топпинги для позиции в корзине
     func getFetchedToppings(for cartItem: CartItem) -> [Topping]? {
         guard let item = getItem(for: cartItem) else { return nil }
         let itemToppings = item.toppings
@@ -306,13 +270,14 @@ extension DataStorage {
 
 // MARK: - Categories
 extension DataStorage {
-    // Вытаскиваем уникальные категории из каталога
+    // Формируем список категории (путем обработки каталога, вычленения уникальных категорий и сортировка их в алфавитном порядке)
     func getCategoriesFromCatalog() {
         let set = Set(fetchedItems.compactMap(\.category))
         let sorted = Array(set).sorted { $0.rawValue < $1.rawValue }
         category = sorted
     }
 
+    // Отдаем список категорий
     func getCategories() -> [Category] {
         category
     }
@@ -320,12 +285,14 @@ extension DataStorage {
 
 // MARK: - Orders
 extension DataStorage {
-    // Мы возвращаем цену только в том случае,
+    // Возвращаем общую цену заказа, полученную как сумму перемножения кол-ва единиц на цену
     func getTotalOrderPrice() -> Int {
         guard let order else { print("Order is nil"); return 0 }
-        return order.position.compactMap{ $0.price * $0.count }.reduce(0, +)
+        let totalPrice = order.position.compactMap{ $0.price * $0.count }.reduce(0, +)
+        return totalPrice
     }
 
+    // Отдаем активный заказ
     func getOrderFromStorage() -> Order? {
         order
     }
@@ -335,16 +302,19 @@ extension DataStorage {
         order = UserDefaults.standard.getOrder()
     }
 
+    // Принимаем время доставки
     func setDeliveryTime(time: String) {
         deliveryTime = time
     }
 
+    // Формируем заказ (получаем позиции, получаем адрес)
     func configureOrder() {
         guard let orderPositions = castCartToOrder() else { print("OrderPositions is nil"); return }
         guard let address = getMainAddress()?.cityStreetHouse else { print("No main address"); return }
         order = Order(position: orderPositions, deliveryAddress: address, deliveryTime: deliveryTime, status: .inProgress)
     }
 
+    // Делаем заказ из корзины (так как формы заказа и корзины отличаются, то нам нужно скастить корзину до заказа)
     private func castCartToOrder() -> [OrderPosition]? {
         guard let cart else { print("Cart is nil"); return nil}
         var orderPositions: [OrderPosition] = []

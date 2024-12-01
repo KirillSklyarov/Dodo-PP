@@ -130,7 +130,6 @@ private extension MainViewController {
             guard let self else { return }
             let catalog = storage.getCatalog()
             let item = catalog[IndexPath.item]
-            storage.fetchToppings()
             sendSelectedItemToStorage(item)
             onProductDetailsTapped?()
         }

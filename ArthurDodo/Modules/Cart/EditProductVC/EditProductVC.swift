@@ -196,11 +196,7 @@ private extension EditProductViewController {
 
     // Загружаем ВСЕ начинки
     func fetchToppings() {
-        storage.fetchToppings()
-        storage.onToppingsFetchedSuccessfully = { [weak self] fetchedToppings in
-            guard let self else { return }
-            filterToppings()
-        }
+        filterToppings()
     }
 
     // Отбираем только нужные нам начинки

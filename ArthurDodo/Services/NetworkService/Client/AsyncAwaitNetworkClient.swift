@@ -1,6 +1,6 @@
 import Foundation
 
-final class NetworkManagerAsyncAwait {
+final class AsyncAwaitNetworkClient {
 
     // MARK: - Properties
     private let decoder: JSONDecoder

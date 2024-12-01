@@ -10,6 +10,7 @@ final class StartAppService {
         self.storage = storage
     }
 
+    // Выполняется загрузка всех необходимых данных (личных данных юзера, сторисов, каталога, акций, топпингов). Важно: загрузка всех данных осуществляется параллельно, что ускоряет работу приложения (именно для этого используем TaskGroup).
     func fetchAllData() async {
         await withTaskGroup(of: Void.self) { group in
             group.addTask { [weak self] in
@@ -27,11 +28,16 @@ final class StartAppService {
             group.addTask { [weak self] in
                 await self?.fetchPromo()
             }
+
+            group.addTask { [weak self] in
+                await self?.fetchToppings()
+            }
         }
         print("Все запросы выполнены")
     }
 }
 
+// MARK: - Fetch methods
 private extension StartAppService {
     // Получаем данные пользователя с сервера и отправляем их в хранилище
     func fetchUserData() async {
@@ -66,6 +72,7 @@ private extension StartAppService {
         }
     }
 
+    // Получаем акции с сервера и отправляем их в хранилище
     func fetchPromo() async {
         do {
             let promo = try await networkService.fetchPromo()
@@ -73,6 +80,17 @@ private extension StartAppService {
             print("Promo fetched")
         } catch {
             print("Promo fetch error: \(error)")
+        }
+    }
+
+    // Получаем начинки с сервера и отправляем их в хранилище
+    func fetchToppings() async {
+        do {
+            let toppings = try await networkService.fetchToppings()
+            storage.setToppings(toppings)
+            print("Toppings fetched")
+        } catch {
+            print("Toppings fetch error: \(error)")
         }
     }
 }

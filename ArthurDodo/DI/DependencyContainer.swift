@@ -2,14 +2,14 @@ import UIKit
 
 // Контейнер зависимостей. При его создании мы делаем экземпляр навигационного контроллера, который будет управлять навигацией и его мы назначим рутом в sceneDelegate
 final class DependencyContainer {
-    let networkManager: NetworkManager
     let storage: DataStorage
     let screenFactory: ScreenFactory
     let router: Router
     let coordinatorFactory: CoordinatorFactory
 
-    // тест
-    let asyncAwaitNetworkManager: NetworkManagerAsyncAwait
+    // MARK: - Netwok Layer
+    //    let networkClient: NetworkManager
+    let asyncAwaitNetworkClient: AsyncAwaitNetworkClient
     let startAppService: StartAppService
     let networkService: NetworkService
 
@@ -19,20 +19,19 @@ final class DependencyContainer {
         let session = URLSession(configuration: .default)
 
         // Создаем сетевой слой
-        networkManager = NetworkManager(decoder: decoder, encoder: encoder, session: session)
+//        networkManager = NetworkManager(decoder: decoder, encoder: encoder, session: session)
 
+        // NetworkClient содержит основные настройки сетевого слоя
+        asyncAwaitNetworkClient = AsyncAwaitNetworkClient(decoder: decoder, encoder: encoder, session: session)
 
-        // тест
-        asyncAwaitNetworkManager = NetworkManagerAsyncAwait(decoder: decoder, encoder: encoder, session: session)
-
+        // NetworkService содержит все запросы в сеть
+        networkService = NetworkService(networkClient: asyncAwaitNetworkClient)
 
         // Создаем хранилище
-        storage = DataStorage(networkManager: networkManager, asyncAwaitNetworkManager: asyncAwaitNetworkManager)
+        storage = DataStorage()
 
-        // тест
-        networkService = NetworkService(networkManager: asyncAwaitNetworkManager)
+        // В сервисе StartAppService происходит сборка всех необходимых запросов в сеть и app подготавливается к работе, чтобы в процессе работы загрузка из сети не производилась. Все необходимые для работы данные загружаются здесь.
         startAppService = StartAppService(networkService: networkService, storage: storage)
-
 
         // Создаем фабрику экранов
         screenFactory = ScreenFactory(storage: storage)

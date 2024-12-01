@@ -41,18 +41,12 @@ final class ChooseAddressVC: UIViewController {
 
 // MARK: - Fetch Data
 private extension ChooseAddressVC {
+    // Получаем данные об адресе
     func fetchData() {
-        if storage.isAddressesEmpty() {
-            storage.fetchUserAddresses()
-            storage.onDataFetchedSuccessfully = { [weak self] in
-                guard let self else { return }
-                getAddressesAndUpdateUI()
-            }
-        } else {
-            getAddressesAndUpdateUI()
-        }
+        getAddressesAndUpdateUI()
     }
 
+    // Получаем данные об адресе из хранилища и обновляем таблицу
     func getAddressesAndUpdateUI() {
         addresses = storage.getAddresses()
         addressTableView.updateUI(with: addresses)
