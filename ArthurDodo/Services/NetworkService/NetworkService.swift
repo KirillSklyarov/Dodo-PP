@@ -1,13 +1,17 @@
 import Foundation
 
+// Сетевой сервис, который отвечает за выполнение сетевых запросов
 struct NetworkService {
 
+    // MARK: - Network Client
     var networkClient: AsyncAwaitNetworkClient
 
+    // MARK: - Init
     init(networkClient: AsyncAwaitNetworkClient) {
         self.networkClient = networkClient
     }
 
+    // MARK: - Fetch methods
     func fetchUserData() async throws -> User {
         return try await networkClient.fetchData(.personal, type: User.self)
     }
