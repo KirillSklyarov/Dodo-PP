@@ -4,9 +4,9 @@ import UIKit
 final class PaymentButtonView: UIView {
 
     // MARK: - UI Properties
-    private lazy var paymentTitleLabel = AppLabel(type: .legalTitle)
+    private lazy var paymentTitleLabel = AppLabel(type: .maxiTitle)
     private lazy var paymentImageView = AppImageView(type: .payment, image: preferredPaymentMethod?.image)
-    private lazy var paymentMethodLabel = AppLabel(type: .legalTitle, text: preferredPaymentMethod?.title, textColor: AppColors.backgroundBlack)
+    private lazy var paymentMethodLabel = AppLabel(type: .maxiTitle, text: preferredPaymentMethod?.title, textColor: AppColors.backgroundBlack)
 
     private lazy var paymentStack = AppStackView([paymentImageView, paymentMethodLabel], axis: .horizontal, spacing: 5)
 

@@ -5,11 +5,6 @@ final class EditAddressView: UIView {
     // MARK: - Properties
     private lazy var addressStackView = EditAddressStackView()
 
-    private let topInset: CGFloat = 10
-    private let bottomInset: CGFloat = -10
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-
     var onSaveAddressTapped: (() -> Void)?
 
     // MARK: - Init
@@ -56,11 +51,6 @@ private extension EditAddressView {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            addressStackView.topAnchor.constraint(equalTo: topAnchor, constant: topInset),
-            addressStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
-            addressStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
-            addressStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        addressStackView.setConstraints(allInsets: 10)
     }
 }

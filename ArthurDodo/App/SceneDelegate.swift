@@ -12,13 +12,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         startAppBasedOnScheme()
 
-//        resetActiveOrder() // Сбрасывает активный заказ (использую для тестирования)
+        resetActiveOrder() // Сбрасывает активный заказ (использую для тестирования)
     }
 }
 
 // MARK: - Supporting methods
 private extension SceneDelegate {
-    // В зависимости от значения переменной isNeedToShowFeatureToggle либо показываем экран FeatureToggle, либо идем по стандартной процедуре (делаем навигацию, AppCoordinanor, и стартуем приложение)
+    // В зависимости от схемы либо показываем экран FeatureToggle (в схеме debug), либо идем по стандартной процедуре (делаем навигацию, AppCoordinanor, и стартуем приложение) (в схеме release)
     func startAppBasedOnScheme() {
 #if DEBUG
         showFeatureToggles()

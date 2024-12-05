@@ -33,8 +33,7 @@ private extension AppDismissButtonView {
         case .standard:
             setColors(xColor: .white, backgroundColor: AppColors.backgroundGray.withAlphaComponent(0.2))
 
-        case .chevron:
-            setChevron()
+        case .chevron: setChevron()
         case .storiesWhite:
             setColors(xColor: AppColors.buttonGray, backgroundColor: .white)
         }
@@ -82,7 +81,7 @@ private extension AppDismissButtonView {
     }
 
     func setChevron() {
-        let image = UIImage(systemName: "chevron.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        let image = UIImage(systemName: "chevron.left")?.withTintColor(AppColors.grayFont, renderingMode: .alwaysOriginal)
         dismissButton.setImage(image, for: .normal)
     }
 }

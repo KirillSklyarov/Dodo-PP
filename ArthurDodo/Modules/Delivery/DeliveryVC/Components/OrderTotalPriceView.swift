@@ -4,8 +4,8 @@ import UIKit
 final class OrderTotalPriceView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(type: .orderStatus, text: "Стоимость заказа")
-    private lazy var priceLabel = AppLabel(type: .orderStatus)
+    private lazy var titleLabel = AppLabel(type: .smallHeader, text: "Стоимость заказа")
+    private lazy var priceLabel = AppLabel(type: .smallHeader)
     private lazy var contentStack = AppStackView([titleLabel, priceLabel], axis: .horizontal, alignment: .center)
 
     // MARK: - Other Properties

@@ -4,9 +4,9 @@ import UIKit
 final class IngredientsView: UIView {
 
     // MARK: - UI Properties
-    private lazy var ingredientsLabel = AppLabel(type: .name)
+    private lazy var ingredientsLabel = AppLabel(type: .basicTitle)
     private lazy var infoButton = AppButtons(type: .infoButton)
-    private lazy var weightLabel = AppLabel(type: .name)
+    private lazy var weightLabel = AppLabel(type: .basicTitle)
 
     private lazy var ingredientsAndInfoStack = AppStackView([ingredientsLabel, infoButton], axis: .horizontal, spacing: 10, alignment: .leading)
 
@@ -16,10 +16,6 @@ final class IngredientsView: UIView {
 
     // MARK: - Properties&Callbacks
     private let cornerRadius: CGFloat = 10
-    private let topInset: CGFloat = 10
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-    private let bottomInset: CGFloat = -10
 
     private var item: Item?
 
@@ -75,12 +71,7 @@ private extension IngredientsView {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: topAnchor, constant: topInset),
-            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
-            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
-            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomInset)
-        ])
+        contentStack.setConstraints(allInsets: 10)
     }
 }
 
@@ -107,8 +98,8 @@ private extension IngredientsView {
     // Настраиваем откуда будет показываться экран и кто его источник (т.е. на какой вьюхе он будет показываться)
     func setupPopupView() {
         let sourceRect = CGRect(
-            origin: CGPoint(x: infoButton.frame.minX - rightInset,
-                            y: infoButton.frame.midY + topInset),
+            origin: CGPoint(x: infoButton.frame.minX + 10,
+                            y: infoButton.frame.midY + 10),
             size: .zero)
         cpfcPopupView.setupPopupView(sourceView: self, sourceRect: sourceRect)
     }

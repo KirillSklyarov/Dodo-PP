@@ -3,19 +3,14 @@ import UIKit
 final class CpfcPopupView: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(type: .orderStatus)
-    private lazy var subLabel = AppLabel(type: .addressName, text: "Пищевая ценность на 100 г")
-    private lazy var infoLabel = AppLabel(type: .addressName, text: "Может содержать: глютен, молоко и продукты его переработки (в том числе лактозу), а так же некоторые другие аллергены")
+    private lazy var titleLabel = AppLabel(type: .smallHeader)
+    private lazy var subLabel = AppLabel(type: .smallTitle, text: "Пищевая ценность на 100 г")
+    private lazy var infoLabel = AppLabel(type: .smallTitle, text: "Может содержать: глютен, молоко и продукты его переработки (в том числе лактозу), а так же некоторые другие аллергены")
     private lazy var cpfcTableView = CpfcTableView(dataSource: self)
     
     private lazy var contentStack = AppStackView([titleLabel, subLabel, cpfcTableView, infoLabel], axis: .vertical, distribution: .equalSpacing)
 
     // MARK: - Properties
-    private let leftInsets: CGFloat = 10
-    private let rightInsets: CGFloat = -20
-    private let topInsets: CGFloat = 10
-    private let bottomInset: CGFloat = -10
-
     private let cornerRadius: CGFloat = 20
 
     private let cpfcNames = CPFCData.allCases
@@ -72,12 +67,7 @@ private extension CpfcPopupView {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: view.topAnchor, constant: topInsets),
-            contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInsets),
-            contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInsets),
-            contentStack.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: bottomInset),
-        ])
+        contentStack.setConstraints(insets: UIEdgeInsets(top: 10, left: 10, bottom: 20, right: 20))
     }
 }
 

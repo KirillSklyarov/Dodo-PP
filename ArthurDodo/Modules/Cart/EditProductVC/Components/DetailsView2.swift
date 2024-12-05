@@ -16,11 +16,6 @@ final class DetailsView2: UIView {
     private let blurHeaderHeight: CGFloat = 70
     private let cornerRadius: CGFloat = 20
 
-    private let topInset: CGFloat = 10
-    private let bottomInset: CGFloat = -10
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-
     private var chosenSize: Size?
     private var chosenDough: Dough?
 
@@ -90,15 +85,11 @@ private extension DetailsView2 {
     }
 
     func setupContentStackLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: blurHeaderHeight),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset*2),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset*2),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomInset),
+        contentStackView.setLocalConstraints(left: 20, right: 20)
 
-            itemImageView.heightAnchor.constraint(equalToConstant: pizzaImageSize)
-
-        ])
+        contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: blurHeaderHeight).isActive = true
+        contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20).isActive = true
+        itemImageView.heightAnchor.constraint(equalToConstant: pizzaImageSize).isActive = true
     }
 }
 

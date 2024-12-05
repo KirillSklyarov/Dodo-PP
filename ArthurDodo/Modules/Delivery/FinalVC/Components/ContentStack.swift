@@ -3,13 +3,11 @@ import UIKit
 final class FinalVCContentStackView: UIStackView {
 
     // MARK: - UI properties
-    private lazy var titleLabel = AppLabel(type: .headerTitle, text: "Ваш заказ успешно оформлен")
+    private lazy var titleLabel = AppLabel(type: .smallHeader, text: "Ваш заказ успешно оформлен")
     private lazy var doneImageView = AppImageView(type: .checkmark)
-    private lazy var dismissInfoLabel = AppLabel(type: .promoTitle, text: "Это окно закроется через \(dismissDelay ?? 5) секунд")
+    private lazy var dismissInfoLabel = AppLabel(type: .basicTitle, text: "Это окно закроется через \(dismissDelay ?? 5) секунд", textColor: AppColors.grayFont)
 
     // MARK: - Other properties
-    private let leftInset: CGFloat = 20
-    private let rightInset: CGFloat = -20
     private var dismissDelay: Int?
 
     // MARK: - Init
@@ -35,9 +33,16 @@ extension FinalVCContentStackView {
 // MARK: - Setup UI
 private extension FinalVCContentStackView {
     func setupUI() {
+        setupUIElements()
+
         [titleLabel, doneImageView, dismissInfoLabel].forEach(addArrangedSubview)
         axis = .vertical
         alignment = .center
         spacing = 20
+    }
+
+    func setupUIElements() {
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 0
     }
 }

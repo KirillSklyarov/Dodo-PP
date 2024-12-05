@@ -71,6 +71,7 @@
 		73A738A42CDFBDEF003BA211 /* UICollection+Reload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A738A32CDFBDEF003BA211 /* UICollection+Reload.swift */; };
 		73A738A62CDFC16D003BA211 /* CustomSkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A738A52CDFC16D003BA211 /* CustomSkeletonView.swift */; };
 		73A738A82CDFE4C5003BA211 /* CustomSkeletonViewBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A738A72CDFE4C5003BA211 /* CustomSkeletonViewBorder.swift */; };
+		73AF74AE2D01C2A900F1A40F /* FeatureType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73AF74AD2D01C2A900F1A40F /* FeatureType.swift */; };
 		73B1EA3E2CFEF3A6004CFE17 /* Feature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B1EA382CFEF3A6004CFE17 /* Feature.swift */; };
 		73B1EA3F2CFEF3A6004CFE17 /* FeatureToggleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B1EA392CFEF3A6004CFE17 /* FeatureToggleService.swift */; };
 		73B1EA482CFEFB5E004CFE17 /* localFeatureToggles.json in Resources */ = {isa = PBXBuildFile; fileRef = 73B1EA462CFEFB5E004CFE17 /* localFeatureToggles.json */; };
@@ -274,6 +275,7 @@
 		73A738A32CDFBDEF003BA211 /* UICollection+Reload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollection+Reload.swift"; sourceTree = "<group>"; };
 		73A738A52CDFC16D003BA211 /* CustomSkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSkeletonView.swift; sourceTree = "<group>"; };
 		73A738A72CDFE4C5003BA211 /* CustomSkeletonViewBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSkeletonViewBorder.swift; sourceTree = "<group>"; };
+		73AF74AD2D01C2A900F1A40F /* FeatureType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureType.swift; sourceTree = "<group>"; };
 		73B1EA382CFEF3A6004CFE17 /* Feature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feature.swift; sourceTree = "<group>"; };
 		73B1EA392CFEF3A6004CFE17 /* FeatureToggleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureToggleService.swift; sourceTree = "<group>"; };
 		73B1EA462CFEFB5E004CFE17 /* localFeatureToggles.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = localFeatureToggles.json; sourceTree = "<group>"; };
@@ -732,15 +734,25 @@
 			isa = PBXGroup;
 			children = (
 				73999B552CF9E08200D7E236 /* AppImageViewTrash.swift */,
+				73B9690B2CC7C78700A2415A /* CartButton.swift */,
 			);
 			path = Trash;
+			sourceTree = "<group>";
+		};
+		73AF74AC2D01C29500F1A40F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				73B1EA382CFEF3A6004CFE17 /* Feature.swift */,
+				73AF74AD2D01C2A900F1A40F /* FeatureType.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		73B1EA3D2CFEF3A6004CFE17 /* FeatureToggle */ = {
 			isa = PBXGroup;
 			children = (
+				73AF74AC2D01C29500F1A40F /* Model */,
 				73B1EA4B2CFF03EE004CFE17 /* FeatureToggleVC */,
-				73B1EA382CFEF3A6004CFE17 /* Feature.swift */,
 				73B1EA392CFEF3A6004CFE17 /* FeatureToggleService.swift */,
 			);
 			path = FeatureToggle;
@@ -1124,11 +1136,9 @@
 		73B969242CC7C78700A2415A /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				73E72F572CF8CD2700CDF390 /* ProfileCoinsView */,
 				73EE04542CF10E420031CC37 /* HeaderView */,
 				73B969232CC7C78700A2415A /* ContentCollectionView */,
 				73FE978D2CE257F20056D53D /* OrderMainVCView.swift */,
-				73B9690B2CC7C78700A2415A /* CartButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1439,6 +1449,7 @@
 		73EE04542CF10E420031CC37 /* HeaderView */ = {
 			isa = PBXGroup;
 			children = (
+				73E72F572CF8CD2700CDF390 /* ProfileCoinsView */,
 				73B9690E2CC7C78700A2415A /* MainHeaderView.swift */,
 				73EE04552CF10E5E0031CC37 /* CourierView.swift */,
 				73EE04572CF113C70031CC37 /* ProfileView.swift */,
@@ -1550,6 +1561,7 @@
 			files = (
 				73B969592CC7C78700A2415A /* Address.swift in Sources */,
 				73B9695A2CC7C78700A2415A /* AddressTextField.swift in Sources */,
+				73AF74AE2D01C2A900F1A40F /* FeatureType.swift in Sources */,
 				7352D58D2CD91CA900F3357E /* ScreenEnum.swift in Sources */,
 				73B9695B2CC7C78700A2415A /* Category.swift in Sources */,
 				73B9695C2CC7C78700A2415A /* CPFCData.swift in Sources */,

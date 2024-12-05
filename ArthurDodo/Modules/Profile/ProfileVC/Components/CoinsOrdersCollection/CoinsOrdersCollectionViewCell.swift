@@ -5,17 +5,10 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UI Properties
     private lazy var iconImageView = AppImageView(type: .dodoCoinsLarge)
-    private lazy var titleLabel = AppLabel(type: .dodoCoinsTitle)
-    private lazy var subTitleLabel = AppLabel(type: .dodoCoinsSubtitle)
+    private lazy var titleLabel = AppLabel(type: .maxiHeader)
+    private lazy var subTitleLabel = AppLabel(type: .priceGrayRoundLabel)
 
     private lazy var contentStackView = AppStackView([iconImageView, titleLabel, subTitleLabel], axis: .vertical, spacing: 10, alignment: .leading)
-
-    // MARK: - Properties
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-    private let topInset: CGFloat = 10
-    private let bottomInset: CGFloat = -10
-    private let cornerRadius: CGFloat = 14
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -125,14 +118,14 @@ private extension CoinsOrdersCollectionViewCell {
     }
 
     func setSubTitleText(_ title: String) {
-        subTitleLabel.text = title
+        subTitleLabel.text = title.uppercased()
     }
 }
 
 // MARK: - Setup UI
 private extension CoinsOrdersCollectionViewCell {
     func setupUI() {
-        layer.cornerRadius = cornerRadius
+        layer.cornerRadius = 14
         clipsToBounds = true
         contentView.backgroundColor = AppColors.backgroundGray
 
@@ -146,11 +139,6 @@ private extension CoinsOrdersCollectionViewCell {
     }
 
     func setupContainerViewLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topInset),
-            contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
-            contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
-            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset),
-        ])
+        contentStackView.setConstraints(allInsets: 10)
     }
 }

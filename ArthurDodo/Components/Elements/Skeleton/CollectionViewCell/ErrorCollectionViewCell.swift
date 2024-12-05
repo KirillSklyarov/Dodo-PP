@@ -9,12 +9,6 @@ final class ErrorCollectionViewCell: UICollectionViewCell {
     private lazy var contentStackView = AppStackView([iconImageView, titleLabel, retryButton], axis: .vertical, alignment: .center, distribution: .equalSpacing)
 
     // MARK: - Properties
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-    private let topInset: CGFloat = 10
-    private let bottomInset: CGFloat = -10
-    private let cornerRadius: CGFloat = 14
-
     var onRetryButtonTapped: (() -> Void)?
 
     // MARK: - Init
@@ -31,7 +25,7 @@ final class ErrorCollectionViewCell: UICollectionViewCell {
 // MARK: - Setup UI
 private extension ErrorCollectionViewCell {
     func setupUI() {
-        layer.cornerRadius = cornerRadius
+        layer.cornerRadius = 14
         clipsToBounds = true
         backgroundColor = AppColors.backgroundGray
 
@@ -45,12 +39,7 @@ private extension ErrorCollectionViewCell {
     }
 
     func setupContentStackViewLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topInset),
-            contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
-            contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
-            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset),
-        ])
+        contentStackView.setConstraints(allInsets: 10)
     }
 }
 

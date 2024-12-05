@@ -4,13 +4,9 @@ import UIKit
 final class AddressTableViewCell: UITableViewCell {
 
     // MARK: - Properties
-    private lazy var titleLabel = AppLabel(type: .name)
+    private lazy var titleLabel = AppLabel(type: .basicTitle)
 
     private let cornerRadius: CGFloat = 10
-    private let topInset: CGFloat = 10
-    private let leftInset: CGFloat = 20
-    private let rightInset: CGFloat = -10
-    private let bottomInset: CGFloat = -10
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -38,17 +34,12 @@ private extension AddressTableViewCell {
         layer.masksToBounds = true
         selectionStyle = .none
 
-        setupAccessoryView()
+        setAccessoryView(.chevron)
 
         setupLayout()
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-        ])
+        titleLabel.setConstraints(insets: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
     }
 }

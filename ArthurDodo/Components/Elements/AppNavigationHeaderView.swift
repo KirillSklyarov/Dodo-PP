@@ -4,12 +4,11 @@ import UIKit
 final class AppNavigationHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(type: .timeLabel)
+    private lazy var titleLabel = AppLabel(type: .maxiTitle)
     private lazy var dismissButton = AppButtons(type: .orangeDismiss)
 
     // MARK: - Properties&Callbacks
     private let viewHeight: CGFloat = 60
-    private let leftInset: CGFloat = 10
 
     var onDismissButtonTapped: (() -> Void)?
 
@@ -41,17 +40,13 @@ private extension AppNavigationHeaderView {
     }
 
     func setupDismissButtonConstraints() {
-        NSLayoutConstraint.activate([
-            dismissButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            dismissButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
-        ])
+        dismissButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        dismissButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
     }
 
     func setupTitleLabelConstraints() {
-        NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
-        ])
+        titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     }
 }
 

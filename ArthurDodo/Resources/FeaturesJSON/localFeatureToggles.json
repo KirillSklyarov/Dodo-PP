@@ -1,10 +1,14 @@
 [
     {
         "name": "X-101: Profile",
-        "isEnabled": false
+        "isEnabled": true
     },
     {
         "name": "X-109: Cart",
+        "isEnabled": true
+    },
+    {
+        "name": "X-129: ProductDetails",
         "isEnabled": true
     }
 ]

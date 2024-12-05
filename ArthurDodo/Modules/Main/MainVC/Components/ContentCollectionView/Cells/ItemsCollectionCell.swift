@@ -4,8 +4,8 @@ final class ItemsCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
     private lazy var pizzaImageView = AppImageView(type: .justView)
-    private lazy var titleLabel = AppLabel(type: .name)
-    private lazy var ingredientsLabel = AppLabel(type: .itemSubtitle)
+    private lazy var titleLabel = AppLabel(type: .basicTitle)
+    private lazy var ingredientsLabel = AppLabel(type: .smallTitle, textColor: AppColors.grayFont)
     private lazy var priceButton = AppButtons(type: .grayPrice)
     private lazy var hitImageView = AppImageView(type: .hit)
 

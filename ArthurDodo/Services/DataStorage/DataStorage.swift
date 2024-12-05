@@ -390,24 +390,25 @@ extension DataStorage {
 
     //  Формируем итоговый словарь, где значение enable будет только в том случае, если у обоих массивов будет значение true
     func setFeaturesArray() {
-        var localDict = Dictionary(uniqueKeysWithValues: localFeatures.map { ($0.name, $0.isEnabled) } )
+        let localDict = Dictionary(uniqueKeysWithValues: localFeatures.map { ($0.name, $0.isEnabled) } )
         let remoteDict = Dictionary(uniqueKeysWithValues: remoteFeatures.map { ($0.name, $0.isEnabled) } )
 
-        var test: [FeatureType: Bool] = [:]
+        var appDict: [FeatureType: Bool] = [:]
 
         for (key, value) in localDict {
             let remoteValue = remoteDict[key]
             let isTrue = (value == true && remoteValue == true)
 
             if let newKey = FeatureType(rawValue: key) {
-                test[newKey] = isTrue
+                appDict[newKey] = isTrue
             }
         }
 
-        self.features = test
+        self.features = appDict
         print("features \(features)")
     }
 
+    // Отдаем правильные словарь фичей
     func getFeatures() -> [FeatureType: Bool] {
         features
     }

@@ -1,9 +1,10 @@
 import UIKit
 
+// Секция выйти из профиля личных данных на экране профиля
 final class QuitProfileTableViewCell: UITableViewCell {
     
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(type: .legalTitle)
+    private lazy var titleLabel = AppLabel(type: .maxiTitle)
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -25,15 +26,17 @@ final class QuitProfileTableViewCell: UITableViewCell {
 // MARK: - Setup UI
 private extension QuitProfileTableViewCell {
     func setupUI() {
+        titleLabel.textAlignment = .left
         backgroundColor = .clear
         selectionStyle = .none
 
         contentView.addSubviews(titleLabel)
 
-        NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-        ])
+        setupLayout()
+    }
+
+    func setupLayout() {
+        titleLabel.setLocalConstraints(left: 0, right: 0)
+        titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
     }
 }

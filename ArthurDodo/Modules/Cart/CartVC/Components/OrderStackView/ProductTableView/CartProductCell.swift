@@ -6,24 +6,18 @@ final class CartProductCell: UITableViewCell {
     // MARK: - UI Properties
     private lazy var itemImageView = AppImageView(type: .mediumView)
     private lazy var hitImageView = AppImageView(type: .hit)
-    private lazy var titleLabel = AppLabel(type: .name)
-    private lazy var sizeDoughLabel = AppLabel(type: .orderTitle)
-    private lazy var priceLabel = AppLabel(type: .legalTitle)
-    private lazy var changeLabel = AppLabel(type: .orangeChange, text: "Изменить")
+    private lazy var titleLabel = AppLabel(type: .basicTitle)
+    private lazy var sizeDoughLabel = AppLabel(type: .smallTitle, textColor: AppColors.grayFont)
+    private lazy var priceLabel = AppLabel(type: .maxiTitle)
+    private lazy var changeLabel = AppLabel(type: .basicTitle, text: "Изменить", textColor: AppColors.buttonOrange)
 
     private lazy var countStepper = CustomStepperView()
 
     private lazy var contentStackView = setupContentContainer()
 
     // MARK: - Properties
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-    private let topInset: CGFloat = 10
-    private let bottomInset: CGFloat = -10
-
     var onValueIsNull: (() -> Void)?
     var onStepperValueChanged: ((Int) -> Void)?
-
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -66,6 +60,7 @@ private extension CartProductCell {
 // MARK: - Setup UI
 private extension CartProductCell {
     func setupUI() {
+        priceLabel.textAlignment = .left
         selectionStyle = .none
         backgroundColor = .clear
 
@@ -80,19 +75,12 @@ private extension CartProductCell {
     }
 
     func setupContentStackViewLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topInset),
-            contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
-            contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
-            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset),
-        ])
+        contentStackView.setConstraints(allInsets: 10)
     }
 
     func setupElementsLayout() {
-        NSLayoutConstraint.activate([
-            hitImageView.trailingAnchor.constraint(equalTo: itemImageView.trailingAnchor),
-            hitImageView.topAnchor.constraint(equalTo: itemImageView.topAnchor),
-        ])
+        hitImageView.trailingAnchor.constraint(equalTo: itemImageView.trailingAnchor).isActive = true
+        hitImageView.topAnchor.constraint(equalTo: itemImageView.topAnchor).isActive = true
     }
 
     func setupContentContainer() -> UIStackView {

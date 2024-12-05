@@ -11,11 +11,6 @@ final class ProfileViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties
-    private let topInset: CGFloat = 10
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-    private let bottomInset: CGFloat = -10
-
     private var state: ScreenState = .loading
     private let storage: DataStorage
 
@@ -70,20 +65,12 @@ private extension ProfileViewController {
     }
 
     func setupHeaderViewLayout() {
-        NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topInset * 2),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-        ])
+        headerView.setLocalConstraints(isSafeArea: true, top: 10, left: 10, right: 10)
     }
 
     func setupScrollViewLayout() {
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-        ])
+        scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10).isActive = true
+        scrollView.setLocalConstraints(isSafeArea: true, bottom: 10, left: 10, right: 10)
     }
 
     func setupContentStackViewLayout() {

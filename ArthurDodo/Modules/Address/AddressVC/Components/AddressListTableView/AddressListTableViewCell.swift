@@ -4,15 +4,12 @@ final class AddressListTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
     private lazy var orangePoint = AppImageView(type: .addressPoint)
-    private lazy var titleLabel = AppLabel(type: .addressTitle)
+    private lazy var titleLabel = AppLabel(type: .maxiTitle)
     private lazy var editAddressButton = AppButtons(type: .mapEdit)
 
-    // MARK: - Properties
-    private let leftPadding: CGFloat = 0
-    private let rightPadding: CGFloat = -10
-    private let topPadding: CGFloat = 10
-    private let bottomPadding: CGFloat = -10
+    private lazy var contentStack = AppStackView([orangePoint, titleLabel], axis: .horizontal, spacing: 10, alignment: .center)
 
+    // MARK: - Properties
     var onEditAddressButtonTapped: (() -> Void)?
 
     // MARK: - Init
@@ -78,19 +75,19 @@ extension AddressListTableViewCell {
 // MARK: - Setup UI
 private extension AddressListTableViewCell {
     func setupUI() {
+        titleLabel.textAlignment = .left
+
         backgroundColor = .clear
         selectionStyle = .none
         accessoryView = editAddressButton
 
-        let contentStack = AppStackView([orangePoint, titleLabel], axis: .horizontal, spacing: 10)
-
         contentView.addSubviews(contentStack)
 
-        NSLayoutConstraint.activate([
-            contentStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftPadding),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightPadding),
-        ])
+        setupLayout()
+    }
+
+    func setupLayout() {
+        contentStack.setConstraints()
     }
 }
 

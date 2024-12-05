@@ -3,7 +3,7 @@ import UIKit
 final class TimeCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
-    private lazy var timeLabel = AppLabel(type: .timeLabel, text: "Побыстрее")
+    private lazy var timeLabel = AppLabel(type: .maxiTitle, text: "Побыстрее")
 
     private let cornerRadius: CGFloat = 10
 

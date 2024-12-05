@@ -3,7 +3,7 @@ import UIKit
 final class AddressTextFieldView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(type: .itemSubtitle)
+    private lazy var titleLabel = AppLabel(type: .smallTitle, textColor: AppColors.grayFont)
     private lazy var clearButton = AppButtons(type: .textFieldClear)
     private lazy var textField = AppTextField()
 

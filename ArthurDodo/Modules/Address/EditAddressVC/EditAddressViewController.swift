@@ -12,8 +12,6 @@ final class EditAddressViewController: UIViewController {
     private var addressToEdit: Address?
     private let storage: DataStorage
 
-    private let leftInset: CGFloat = 20
-
     var onDismissButtonTapped: (() -> Void)?
     var onSaveButtonTapped: (() -> Void)?
 
@@ -65,15 +63,9 @@ private extension EditAddressViewController {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: view.topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-
-            dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            dismissButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-        ])
+        dismissButton.setLocalConstraints(isSafeArea: true, top: 0, left: 20)
+        contentStackView.setConstraints()
+        contentStackView.setLocalConstraints(isSafeArea: true, bottom: 0)
     }
 }
 

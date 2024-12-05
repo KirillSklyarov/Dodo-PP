@@ -9,9 +9,6 @@ final class AddNewAddressViewController: UIViewController {
     private lazy var dismissButton = AppDismissButtonView(type: .chevron)
 
     // MARK: - Properties
-    private let leftInset: CGFloat = 20
-    private let bottomInset: CGFloat = -10
-
     private var mainAddress: Address?
     private let storage: DataStorage
 
@@ -66,15 +63,9 @@ private extension AddNewAddressViewController {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: view.topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: bottomInset).withPriority(.defaultLow), // Позволяет убирать конфликты с клавиатурой
-
-            dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            dismissButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-        ])
+        dismissButton.setLocalConstraints(isSafeArea: true, top: 0, left: 20)
+        contentStackView.setLocalConstraints(top: 0, left: 0, right: 0)
+        contentStackView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -10).withPriority(.defaultLow).isActive = true // Позволяет убирать конфликты с клавиатурой
     }
 }
 

@@ -3,7 +3,7 @@ import UIKit
 final class MissionView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(type: .orderTitle, text: "Каждый месяц мы придумываем небольшие задания. Выполняйте их и получайте Dodo Coins. Это весело!")
+    private lazy var titleLabel = AppLabel(type: .smallTitle, text: "Каждый месяц мы придумываем небольшие задания. Выполняйте их и получайте Dodo Coins. Это весело!", textColor: AppColors.grayFont)
 
     // MARK: - Properties
     private let leftPadding: CGFloat = 10

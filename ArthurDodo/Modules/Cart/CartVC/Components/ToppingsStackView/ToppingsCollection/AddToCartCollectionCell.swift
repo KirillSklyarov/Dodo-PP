@@ -1,23 +1,16 @@
 import UIKit
 
-// Ячейка раздела "Добавить в корзину" корзины
+// Ячейка раздела "Добавить к заказу" корзины
 final class AddToCartCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
     private lazy var detailsBackgroundView = AppView(type: .details)
     private lazy var itemImageView = AppImageView(type: .justView)
-    private lazy var titleLabel = AppLabel(type: .promoCellTitle)
-    private lazy var detailsLabel = AppLabel(type: .itemSubtitle)
-    private lazy var priceLabel = AppLabel(type: .priceGrayLabel)
+    private lazy var titleLabel = AppLabel(type: .basicTitle)
+    private lazy var detailsLabel = AppLabel(type: .smallTitle, textColor: AppColors.grayFont)
+    private lazy var priceLabel = AppLabel(type: .priceGrayRoundLabel)
 
     private lazy var contentStack = setupContentStack()
-
-    // MARK: - Properties
-    private let cornerRadius: CGFloat = 10
-    private let leftInset: CGFloat = 5
-    private let rightInset: CGFloat = -5
-    private let topInset: CGFloat = 5
-    private let bottomInset: CGFloat = -5
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -61,12 +54,21 @@ private extension AddToCartCollectionCell {
 // MARK: - Setup UI
 private extension AddToCartCollectionCell {
     func setupUI() {
-        layer.cornerRadius = cornerRadius
+        setupUIElements()
+
+        layer.cornerRadius = 10
         layer.masksToBounds = true
 
         contentView.addSubviews(detailsBackgroundView, contentStack)
 
         setupLayout()
+    }
+
+    func setupUIElements() {
+        titleLabel.numberOfLines = 3
+        titleLabel.adjustsFontSizeToFitWidth = true
+        detailsLabel.adjustsFontSizeToFitWidth = true
+        detailsLabel.numberOfLines = 2
     }
 
     // Настраиваем контент стек
@@ -89,22 +91,12 @@ private extension AddToCartCollectionCell {
     }
 
     func setupContentStackLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topInset),
-            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
-            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset),
-
-            itemImageView.widthAnchor.constraint(equalTo: itemImageView.heightAnchor),
-        ])
+        contentStack.setConstraints(allInsets: 5)
+        itemImageView.widthAnchor.constraint(equalTo: itemImageView.heightAnchor).isActive = true
     }
 
     func setupBackgroundViewLayout() {
-        NSLayoutConstraint.activate([
-            detailsBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            detailsBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            detailsBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            detailsBackgroundView.topAnchor.constraint(equalTo: itemImageView.centerYAnchor)
-        ])
+        detailsBackgroundView.setLocalConstraints(bottom: 0, left: 0, right: 0)
+        detailsBackgroundView.topAnchor.constraint(equalTo: itemImageView.centerYAnchor).isActive = true
     }
 }

@@ -8,11 +8,6 @@ final class MainHeaderView: UIView {
     private lazy var contentStackView = setupContentStack()
 
     // MARK: - Properties
-    private let topInset: CGFloat = 10
-    private let leftInset: CGFloat = 20
-    private let rightInset: CGFloat = -20
-    private let bottomInset: CGFloat = -5
-
     var onProfileButtonTapped: (() -> Void)?
     var onAddressTapped: (() -> Void)?
 
@@ -81,12 +76,7 @@ private extension MainHeaderView {
     }
 
     func contentStackViewLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: topInset),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomInset),
-        ])
+        contentStackView.setConstraints(insets: UIEdgeInsets(top: 10, left: 20, bottom: 5, right: 20))
     }
 
     // Настраиваем стек, указываем, что нужно увеличить размер address, но не нужно увеличивать размер profile (это позволяет нам не вставлять туда лишний UIView для расстояния)

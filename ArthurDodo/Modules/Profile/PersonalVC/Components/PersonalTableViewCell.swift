@@ -3,8 +3,8 @@ import UIKit
 final class PersonalTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(type: .promoTitle)
-    private lazy var dataLabel = AppLabel(type: .name)
+    private lazy var titleLabel = AppLabel(type: .basicTitle, textColor: AppColors.grayFont)
+    private lazy var dataLabel = AppLabel(type: .basicTitle)
     private lazy var switchLabel = AppSwitch()
     private lazy var contentStack = setupConfigureContentStack()
 

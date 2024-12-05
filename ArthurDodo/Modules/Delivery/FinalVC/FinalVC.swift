@@ -7,8 +7,6 @@ final class FinalVC: UIViewController {
     private lazy var contentStack = FinalVCContentStackView(dismissDelay)
 
     // MARK: - Properties
-    private let leftInset: CGFloat = 20
-    private let rightInset: CGFloat = -20
     private var countDownTimer: Timer?
     private var dismissDelay = 2
 
@@ -49,11 +47,8 @@ private extension FinalVC {
     }
 
     func setupContentStackLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-            contentStack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+        contentStack.setLocalConstraints(left: 20, right: 20)
+        contentStack.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 }
 

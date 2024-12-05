@@ -5,8 +5,8 @@ final class SpecialOfferCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
     private lazy var itemImageView = AppImageView(type: .justView)
-    private lazy var titleLabel = AppLabel(type: .name)
-    private lazy var priceLabel = AppLabel(type: .dodoCoinsSubtitle)
+    private lazy var titleLabel = AppLabel(type: .basicTitle)
+    private lazy var priceLabel = AppLabel(type: .priceGrayRoundLabel)
 
     private lazy var contentStack = setupContentStack()
 
@@ -36,17 +36,14 @@ private extension SpecialOfferCollectionCell {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-
-            itemImageView.widthAnchor.constraint(equalTo: contentStack.widthAnchor, multiplier: 0.4)
-        ])
+        contentStack.setConstraints()
+        itemImageView.widthAnchor.constraint(equalTo: contentStack.widthAnchor, multiplier: 0.4).isActive = true
     }
 
     func setupContentStack() -> UIStackView {
+        titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        priceLabel.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+
         let textStack = AppStackView([titleLabel, priceLabel], axis: .vertical, spacing: 5, alignment: .leading)
         let contentStack = AppStackView( [itemImageView, textStack], axis: .horizontal, spacing: 10, alignment: .center)
         return contentStack

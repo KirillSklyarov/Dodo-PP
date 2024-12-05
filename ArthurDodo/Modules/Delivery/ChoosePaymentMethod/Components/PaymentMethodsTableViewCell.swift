@@ -4,13 +4,9 @@ final class PaymentMethodsTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
     private lazy var methodImage = AppImageView(type: .smallView)
-    private lazy var titleLabel = AppLabel(type: .legalTitle)
+    private lazy var titleLabel = AppLabel(type: .maxiTitle)
 
-    // MARK: - Properties
-    private let leftPadding: CGFloat = 10
-    private let rightPadding: CGFloat = -10
-    private let topPadding: CGFloat = 10
-    private let bottomPadding: CGFloat = -10
+    private lazy var contentStack = AppStackView([methodImage, titleLabel], axis: .horizontal, spacing: 10, alignment: .center)
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -31,7 +27,7 @@ extension PaymentMethodsTableViewCell {
 
         // Если способ оплаты главный, то выделяем его галкой
         if isMainMethod {
-            setCheckMarkAccessoryView()
+            setAccessoryView(.checkmark)
         }
     }
 }
@@ -44,25 +40,17 @@ private extension PaymentMethodsTableViewCell {
 // MARK: - Setup UI
 private extension PaymentMethodsTableViewCell {
     func setupUI() {
+        titleLabel.textAlignment = .left
         backgroundColor = .clear
         selectionStyle = .none
 
-        let contentStack = AppStackView([methodImage, titleLabel], axis: .horizontal, spacing: 10)
-
         contentView.addSubviews(contentStack)
 
-        NSLayoutConstraint.activate([
-            contentStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftPadding),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightPadding),
-        ])
+        setupLayout()
     }
 
-    // Выделяет выбранный метод галкой
-    func setCheckMarkAccessoryView() {
-        let image = UIImage(systemName: "checkmark")?.withTintColor(AppColors.buttonOrange, renderingMode: .alwaysOriginal)
-        let checkmarkView = UIImageView(image: image)
-        accessoryView = checkmarkView
+    func setupLayout() {
+        contentStack.setConstraints(insets: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
     }
 }
 
@@ -70,4 +58,3 @@ private extension PaymentMethodsTableViewCell {
 private extension PaymentMethodsTableViewCell {
 
 }
-

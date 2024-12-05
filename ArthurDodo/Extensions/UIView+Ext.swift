@@ -27,4 +27,27 @@ extension UIView {
             bottomAnchor.constraint(equalTo: bottomConstraints, constant: -appliedInset.bottom)
         ])
     }
+
+    func setLocalConstraints(isSafeArea: Bool = false, top: CGFloat? = nil, bottom: CGFloat? = nil, left: CGFloat? = nil, right: CGFloat? = nil) {
+        guard let superview else { return }
+        let topConstraints = isSafeArea ? superview.safeAreaLayoutGuide.topAnchor : superview.topAnchor
+        let bottomConstraints = isSafeArea ? superview.safeAreaLayoutGuide.bottomAnchor : superview.bottomAnchor
+
+        if let top {
+            topAnchor.constraint(equalTo: topConstraints, constant: top).isActive = true
+        }
+
+        if let bottom {
+            bottomAnchor.constraint(equalTo: bottomConstraints, constant: -bottom).isActive = true
+        }
+
+        if let left {
+            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: left).isActive = true
+        }
+
+        if let right {
+            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -right).isActive = true
+        }
+
+    }
 }

@@ -4,14 +4,11 @@ final class AddToppingsCollectionViewCell: UICollectionViewCell {
 
     // MARK: - UI Properties
     private lazy var toppingImageView = AppImageView(type: .toppings)
-    private lazy var titleLabel = AppLabel(type: .topicsTitle)
-    private lazy var priceLabel = AppLabel(type: .topicsTitle)
+    private lazy var titleLabel = AppLabel(type: .smallTitle)
+    private lazy var priceLabel = AppLabel(type: .smallTitle)
     private lazy var chosenImageView = AppImageView(type: .chosenTopping)
 
     private lazy var contentStack = AppStackView([toppingImageView, titleLabel, priceLabel], axis: .vertical, spacing: 10, alignment: .center, distribution: .equalSpacing)
-
-    // MARK: - Properties
-    private let cornerRadius: CGFloat = 10
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -51,12 +48,21 @@ extension AddToppingsCollectionViewCell {
 // MARK: - Setup UI
 private extension AddToppingsCollectionViewCell {
     func setupUI() {
-        layer.cornerRadius = cornerRadius
+        setupUIElements()
+        layer.cornerRadius = 10
         layer.masksToBounds = true
 
         contentView.addSubviews(contentStack, chosenImageView)
 
         setupLayout()
+    }
+
+    func setupUIElements() {
+        [titleLabel, priceLabel].forEach {
+            $0.adjustsFontSizeToFitWidth = true
+            $0.textAlignment = .center
+            $0.numberOfLines = 1
+        }
     }
 
     func setupLayout() {

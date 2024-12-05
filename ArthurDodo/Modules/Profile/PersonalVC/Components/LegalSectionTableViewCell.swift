@@ -3,7 +3,7 @@ import UIKit
 final class LegalSectionTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(type: .legalTitle)
+    private lazy var titleLabel = AppLabel(type: .maxiTitle)
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -28,19 +28,20 @@ final class LegalSectionTableViewCell: UITableViewCell {
 // MARK: - Setup UI
 private extension LegalSectionTableViewCell {
     func setupUI() {
+        titleLabel.textAlignment = .left
         backgroundColor = .clear
         selectionStyle = .none
-        let image = UIImage(systemName: "chevron.right")?.withTintColor(AppColors.grayFont, renderingMode: .alwaysOriginal)
-        let chevronView = UIImageView(image: image)
-        accessoryView = chevronView
+        setAccessoryView(.chevron)
 
         contentView.addSubviews(titleLabel)
 
-        NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-        ])
+        setupLayout()
+    }
+
+
+    func setupLayout() {
+        titleLabel.setLocalConstraints(left: 0, right: 0)
+        titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
     }
 }
 

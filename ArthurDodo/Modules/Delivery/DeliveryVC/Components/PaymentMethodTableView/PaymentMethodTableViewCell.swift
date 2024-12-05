@@ -4,14 +4,8 @@ final class PreferredPaymentMethodTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
     private lazy var methodImage = AppImageView(type: .smallView)
-    private lazy var titleLabel = AppLabel(type: .legalTitle)
-    private lazy var contentStack = AppStackView([methodImage, titleLabel], axis: .horizontal, spacing: 10)
-
-    // MARK: - Properties
-    private let leftPadding: CGFloat = 10
-    private let rightPadding: CGFloat = -10
-    private let topPadding: CGFloat = 10
-    private let bottomPadding: CGFloat = -10
+    private lazy var titleLabel = AppLabel(type: .maxiTitle)
+    private lazy var contentStack = AppStackView([methodImage, titleLabel], axis: .horizontal, spacing: 10, alignment: .center)
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -40,9 +34,10 @@ private extension PreferredPaymentMethodTableViewCell {
 // MARK: - Setup UI
 private extension PreferredPaymentMethodTableViewCell {
     func setupUI() {
+        titleLabel.textAlignment = .left
         backgroundColor = .clear
         selectionStyle = .none
-        setupAccessoryView()
+        setAccessoryView(.chevron)
 
         contentView.addSubviews(contentStack)
 
@@ -50,11 +45,7 @@ private extension PreferredPaymentMethodTableViewCell {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftPadding),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightPadding),
-        ])
+        contentStack.setConstraints(insets: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
     }
 }
 

@@ -17,11 +17,6 @@ final class DeliveryVC: UIViewController {
     private lazy var contentStackView = configureStackView()
 
     // MARK: - Other properties
-    private let topInset: CGFloat = 10
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-    private let bottomInset: CGFloat = -10
-
     private var preferredPaymentMethod: PaymentMethod = .cbp
 
     private let storage: DataStorage

@@ -6,9 +6,7 @@ final class CustomSkeletonViewBorder: UIView {
     private lazy var fillView = AppView(type: .details)
     private var gradientLayer = CAGradientLayer()
 
-    private let cornerRadius: CGFloat = 10
     private let viewHeight: CGFloat = 200
-    private let inset: CGFloat = 3
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -30,7 +28,7 @@ final class CustomSkeletonViewBorder: UIView {
 // MARK: - Setup UI
 private extension CustomSkeletonViewBorder {
     func setupUI() {
-        layer.cornerRadius = cornerRadius
+        layer.cornerRadius = 10
         backgroundColor = AppColors.backgroundGray
         heightAnchor.constraint(greaterThanOrEqualToConstant: viewHeight).isActive = true
 
@@ -41,12 +39,7 @@ private extension CustomSkeletonViewBorder {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            fillView.topAnchor.constraint(equalTo: topAnchor, constant: inset),
-            fillView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
-            fillView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset),
-            fillView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -inset)
-        ])
+        fillView.setConstraints(allInsets: 3)
     }
 }
 

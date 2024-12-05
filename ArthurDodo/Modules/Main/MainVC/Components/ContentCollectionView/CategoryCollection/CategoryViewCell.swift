@@ -1,20 +1,17 @@
 import UIKit
 
+// Ячейка с названиями категорий на основном экране
 final class CategoryViewCell: UICollectionViewCell {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(type: .categoryTitle)
-
-    // MARK: - Properties
-    private let leftPadding: CGFloat = 10
-    private let rightPadding: CGFloat = -10
+    private lazy var titleLabel = AppLabel(type: .basicTitle)
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupConstraints()
+        setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -33,16 +30,18 @@ final class CategoryViewCell: UICollectionViewCell {
             titleLabel.textColor = AppColors.grayFont
         }
     }
+}
 
-    // MARK: - Private methods
-    private func setupConstraints() {
+// MARK: - Setup UI
+private extension CategoryViewCell {
+    func setupUI() {
         contentView.addSubviews(titleLabel)
+        setupLayout()
+    }
 
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightPadding),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+    func setupLayout() {
+        titleLabel.setConstraints(insets: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+
+        titleLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
 }

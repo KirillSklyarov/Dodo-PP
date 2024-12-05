@@ -29,7 +29,7 @@ extension MainCoordinator {
 
         // Настраиваем замыкания
         mainVC.onProfileButtonTapped = { [weak self] in
-            self?.checkFeatureToggleAndShowProfileFlow()
+            self?.checkFeatureToggleAndShowFlow(.profile)
         }
 
         mainVC.onAddressButtonTapped = { [weak self] in
@@ -41,11 +41,11 @@ extension MainCoordinator {
         }
 
         mainVC.onProductDetailsTapped = { [weak self] in
-            self?.showProductDetails()
+            self?.checkFeatureToggleAndShowFlow(.productDetails)
         }
 
         mainVC.onCartButtonTapped = { [weak self] in
-            self?.onShowCart?()
+            self?.checkFeatureToggleAndShowFlow(.cart)
         }
 
         router.setRootModule(mainVC) // Устанавливаем как главный и показываем его
@@ -96,8 +96,18 @@ private extension MainCoordinator {
 // MARK: - Alert
 private extension MainCoordinator {
     // Создаем экран алерта (нужен когда фича выключена) и показываем его
-    func showAlert() {
+    func showProfileAlert() {
         let vc = screenFactory.makeAlertScreen(.profile)
+        router.present(vc, isParent: true)
+    }
+
+    func showCartAlert() {
+        let vc = screenFactory.makeAlertScreen(.cart)
+        router.present(vc, isParent: true)
+    }
+
+    func showProductDetailsAlert() {
+        let vc = screenFactory.makeAlertScreen(.productDetails)
         router.present(vc, isParent: true)
     }
 }
@@ -115,14 +125,53 @@ private extension MainCoordinator {
             mainVC.updateStories()
         }
     }
+}
 
-    // Если в фичах у нас статус false (запретить фичу), то показываем алерт, если true (разрешить фичу) - то показываем startProfileFlow()
+// MARK: - FeatureToggles
+private extension MainCoordinator {
+    func checkFeatureToggleAndShowFlow(_ type: FeatureType) {
+
+#if DEBUG
+        switch type {
+        case .profile: checkFeatureToggleAndShowProfileFlow()
+        case .cart: checkFeatureToggleAndShowCartFlow()
+        case .productDetails: checkFeatureToggleAndShowProductDetailsScreen()
+        }
+#else
+        switch type {
+        case .profile: onShowProfile?()
+        case .cart: onShowCart?()
+        case .productDetails:  showProductDetails()
+        }
+#endif
+    }
+
+    // Проверяем (на всякий случай) есть ли в словаре фичей такая позиция. Если есть и у нее статус false (запретить фичу), то показываем алерт, если true (разрешить фичу) - то вызываем замыкание onShowProfile (это стандартная дорога приложения). Если же в словаре такой фичи нет (чего не должно быть, но лучше проверить), то тогда просто вызываем замыкание onShowProfile.
     func checkFeatureToggleAndShowProfileFlow() {
-        if let profileFeature = features[.profile] {
-            profileFeature ? onShowProfile?() : showAlert()
+        if let feature = features[.profile] {
+            feature ? onShowProfile?() : showProfileAlert()
         } else {
             print("No feature toggle for profile")
             onShowProfile?()
+        }
+    }
+
+    // Проверяем (на всякий случай) есть ли в словаре фичей такая позиция. Если есть и у нее статус false (запретить фичу), то показываем алерт, если true (разрешить фичу) - то вызываем замыкание onShowCart. Если же в словаре такой фичи нет (чего не должно быть, но лучше проверить), то тогда просто вызываем замыкание onShowCart (это стандартная дорога приложения)
+    func checkFeatureToggleAndShowCartFlow() {
+        if let feature = features[.cart] {
+            feature ? onShowCart?() : showCartAlert()
+        } else {
+            print("No feature toggle for cart")
+            onShowCart?()
+        }
+    }
+
+    func checkFeatureToggleAndShowProductDetailsScreen() {
+        if let feature = features[.productDetails] {
+            feature ? showProductDetails() : showProductDetailsAlert()
+        } else {
+            print("No feature toggle for product details")
+            showProductDetails()
         }
     }
 }

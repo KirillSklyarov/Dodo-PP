@@ -4,14 +4,10 @@ final class StoriesCollectionCell: UICollectionViewCell {
 
     // MARK: - UI Properties
     private lazy var coverImageView = AppImageView(type: .stories)
-    private lazy var titleLabel = AppLabel(type: .addressName)
+    private lazy var titleLabel = AppLabel(type: .smallTitle)
 
     // MARK: - Properties
     private let cornerRadius: CGFloat = 14
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-    private let topInset: CGFloat = 10
-    private let bottomInset: CGFloat = -10
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -61,19 +57,10 @@ private extension StoriesCollectionCell {
     }
 
     func setupCoverImageLayout() {
-        NSLayoutConstraint.activate([
-            coverImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            coverImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            coverImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-        ])
+        coverImageView.setConstraints()
     }
 
     func setupTitleLabelLayout() {
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leftInset),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: rightInset),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: bottomInset)
-        ])
+        titleLabel.setLocalConstraints(bottom: 10, left: 10, right: 10)
     }
 }

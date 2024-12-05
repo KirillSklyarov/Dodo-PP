@@ -3,7 +3,7 @@ import UIKit
 final class ProductHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(type: .headerTitle)
+    private lazy var titleLabel = AppLabel(type: .smallHeader)
     private lazy var dismissButton = AppDismissButtonView(type: .standard)
     private lazy var blurView = AppBlurView()
 
@@ -55,11 +55,18 @@ private extension ProductHeaderView {
 // MARK: - Setup UI
 private extension ProductHeaderView {
     func setupUI() {
+        setupUIElements()
+
         addSubviews(blurView)
 
         blurView.contentView.addSubviews(contentStackView)
 
         setupLayout()
+    }
+
+    func setupUIElements() {
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 0
     }
 
     func setupLayout() {

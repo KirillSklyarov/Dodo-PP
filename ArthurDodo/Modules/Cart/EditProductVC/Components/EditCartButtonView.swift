@@ -6,15 +6,11 @@ final class EditCartButtonView: UIView {
     // MARK: - UI Properties
     private lazy var blurView = AppBlurView()
     private lazy var cartButton = AppButtons(type: .cartOrange, text: "Готово")
-    private lazy var priceLabel = AppLabel(type: .orderStatus)
+    private lazy var priceLabel = AppLabel(type: .smallHeader)
     private lazy var contentStackView = AppStackView( [priceLabel, cartButton], axis: .horizontal, alignment: .top)
 
     // MARK: - Properties
     private let viewHeight: CGFloat = 90
-    private let topInset: CGFloat = 10
-    private let leftInset: CGFloat = 20
-    private let rightInset: CGFloat = -20
-
     private var currentPrice = 0
 
     var onCartButtonTapped: ( () -> Void )?
@@ -65,12 +61,7 @@ private extension EditCartButtonView {
     }
 
     func setupContentStackConstraints() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: topInset),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftInset),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
+        contentStackView.setConstraints(insets: UIEdgeInsets(top: 10, left: 20, bottom: 0, right: 20))
     }
 
     func setupElementsConstraints() {

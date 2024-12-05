@@ -1,10 +1,11 @@
 import UIKit
 
+// Это вью, которая появляется при оформлении заказа (с номером заказа и его статусом)
 final class OrderMainVCView: UIView {
 
     // MARK: - UI Properties
-    private lazy var orderLabel = AppLabel(type: .orderTitle)
-    private lazy var statusLabel = AppLabel(type: .orderStatus)
+    private lazy var orderLabel = AppLabel(type: .smallTitle, textColor: AppColors.grayFont)
+    private lazy var statusLabel = AppLabel(type: .smallHeader)
 
     private lazy var labelsStackView = AppStackView([orderLabel, statusLabel], axis: .vertical, alignment: .leading, distribution: .fillEqually)
     private lazy var contentStackView = AppStackView([labelsStackView], axis: .horizontal, alignment: .center)
@@ -12,8 +13,6 @@ final class OrderMainVCView: UIView {
     // MARK: - Properties
     private let viewHeight: CGFloat = 80
     private let cornerRadius: CGFloat = 10
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
 
     private var viewHeightConstraint: NSLayoutConstraint?
 
@@ -72,11 +71,6 @@ private extension OrderMainVCView {
     }
 
     func setupContentStackViewLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
+        contentStackView.setConstraints(insets: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
     }
 }

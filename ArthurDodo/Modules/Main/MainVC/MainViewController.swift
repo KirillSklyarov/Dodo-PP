@@ -11,11 +11,6 @@ final class MainViewController: UIViewController {
     private lazy var contentStackView = AppStackView([headerView, orderView, contentCollectionView], axis: .vertical, spacing: 5)
 
     // MARK: - Other properties
-    private let topInset: CGFloat = 10
-    private let bottomInset: CGFloat = -20
-    private let leftInset: CGFloat = 20
-    private let rightInset: CGFloat = -20
-
     private var state: ScreenState = .loading
 
     private let storage: DataStorage
@@ -47,8 +42,6 @@ final class MainViewController: UIViewController {
     // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        print(#function)
-//        updateUI()
         updateCart()
     }
 }
@@ -111,8 +104,8 @@ private extension MainViewController {
     // Настраиваем расположение кнопки
     func setupCartButtonLayout() {
         NSLayoutConstraint.activate([
-            cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
-            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
+            cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
     }
 }

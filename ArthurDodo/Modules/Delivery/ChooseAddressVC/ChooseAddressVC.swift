@@ -7,10 +7,6 @@ final class ChooseAddressVC: UIViewController {
     private lazy var addressTableView = DeliveryAddressListTableView()
 
     // MARK: - Other Properties
-    private let topInset: CGFloat = 10
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-    private let bottomInset: CGFloat = -10
     private var addresses: [Address] = []
 
     private let storage: DataStorage
@@ -68,19 +64,12 @@ private extension ChooseAddressVC {
     }
 
     func setupHeaderViewLayout() {
-        NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-        ])
+        headerView.setLocalConstraints(isSafeArea: true, top: 0, left: 10, right: 10)
     }
 
     func setupAddressTableViewLayout() {
-        NSLayoutConstraint.activate([
-            addressTableView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: topInset),
-            addressTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            addressTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-        ])
+        addressTableView.setLocalConstraints(left: 10, right: 10)
+        addressTableView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10).isActive = true
     }
 }
 

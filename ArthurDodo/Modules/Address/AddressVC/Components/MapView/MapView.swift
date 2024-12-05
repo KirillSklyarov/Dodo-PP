@@ -11,8 +11,6 @@ final class MapView: UIView {
     private lazy var pinView = AppImageView(type: .mapPin)
 
     // MARK: - Properties
-    private let rightInset: CGFloat = -20
-    private let bottomInset: CGFloat = -20
     private let locationRadius: CLLocationDistance = 500
 
     private var isAnimating = false
@@ -47,10 +45,9 @@ private extension MapView {
 
     func setupLayout() {
         mapView.setConstraints()
-        NSLayoutConstraint.activate([
-            userTrackingButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: bottomInset),
-            userTrackingButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightInset),
+        userTrackingButton.setLocalConstraints(isSafeArea: true, bottom: 20, right: 20)
 
+        NSLayoutConstraint.activate([
             pinView.centerXAnchor.constraint(equalTo: mapView.centerXAnchor),
             pinView.centerYAnchor.constraint(equalTo: mapView.centerYAnchor)
         ])

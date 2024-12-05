@@ -6,8 +6,8 @@ final class ItemsHeaderCell: UICollectionViewCell {
     // MARK: - UI Properties
     private lazy var backView = AppView(type: .roundedTopView)
     private lazy var pizzaImageView = AppImageView(type: .largeView)
-    private lazy var titleLabel = AppLabel(type: .orderStatus)
-    private lazy var ingredientsLabel = AppLabel(type: .orderTitle)
+    private lazy var titleLabel = AppLabel(type: .smallHeader)
+    private lazy var ingredientsLabel = AppLabel(type: .smallTitle, textColor: AppColors.grayFont)
     private lazy var priceButton = AppButtons(type: .grayPrice)
 
     private lazy var hitImageView = AppImageView(type: .hit)
