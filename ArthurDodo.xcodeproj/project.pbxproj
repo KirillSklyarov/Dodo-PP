@@ -71,6 +71,13 @@
 		73A738A42CDFBDEF003BA211 /* UICollection+Reload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A738A32CDFBDEF003BA211 /* UICollection+Reload.swift */; };
 		73A738A62CDFC16D003BA211 /* CustomSkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A738A52CDFC16D003BA211 /* CustomSkeletonView.swift */; };
 		73A738A82CDFE4C5003BA211 /* CustomSkeletonViewBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A738A72CDFE4C5003BA211 /* CustomSkeletonViewBorder.swift */; };
+		73B1EA3E2CFEF3A6004CFE17 /* Feature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B1EA382CFEF3A6004CFE17 /* Feature.swift */; };
+		73B1EA3F2CFEF3A6004CFE17 /* FeatureToggleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B1EA392CFEF3A6004CFE17 /* FeatureToggleService.swift */; };
+		73B1EA482CFEFB5E004CFE17 /* localFeatureToggles.json in Resources */ = {isa = PBXBuildFile; fileRef = 73B1EA462CFEFB5E004CFE17 /* localFeatureToggles.json */; };
+		73B1EA4C2CFF03EE004CFE17 /* FeatureToggleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B1EA4A2CFF03EE004CFE17 /* FeatureToggleVC.swift */; };
+		73B1EA5A2CFF0A93004CFE17 /* FeatureToggleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B1EA572CFF0A93004CFE17 /* FeatureToggleTableViewCell.swift */; };
+		73B1EA5C2CFF0AB3004CFE17 /* TableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B1EA5B2CFF0AB3004CFE17 /* TableViewHeaderView.swift */; };
+		73B1EA5E2D018313004CFE17 /* AlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B1EA5D2D018313004CFE17 /* AlertVC.swift */; };
 		73B969592CC7C78700A2415A /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968B72CC7C78700A2415A /* Address.swift */; };
 		73B9695A2CC7C78700A2415A /* AddressTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968B92CC7C78700A2415A /* AddressTextField.swift */; };
 		73B9695B2CC7C78700A2415A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968BA2CC7C78700A2415A /* Category.swift */; };
@@ -267,6 +274,13 @@
 		73A738A32CDFBDEF003BA211 /* UICollection+Reload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollection+Reload.swift"; sourceTree = "<group>"; };
 		73A738A52CDFC16D003BA211 /* CustomSkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSkeletonView.swift; sourceTree = "<group>"; };
 		73A738A72CDFE4C5003BA211 /* CustomSkeletonViewBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSkeletonViewBorder.swift; sourceTree = "<group>"; };
+		73B1EA382CFEF3A6004CFE17 /* Feature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feature.swift; sourceTree = "<group>"; };
+		73B1EA392CFEF3A6004CFE17 /* FeatureToggleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureToggleService.swift; sourceTree = "<group>"; };
+		73B1EA462CFEFB5E004CFE17 /* localFeatureToggles.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = localFeatureToggles.json; sourceTree = "<group>"; };
+		73B1EA4A2CFF03EE004CFE17 /* FeatureToggleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureToggleVC.swift; sourceTree = "<group>"; };
+		73B1EA572CFF0A93004CFE17 /* FeatureToggleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureToggleTableViewCell.swift; sourceTree = "<group>"; };
+		73B1EA5B2CFF0AB3004CFE17 /* TableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHeaderView.swift; sourceTree = "<group>"; };
+		73B1EA5D2D018313004CFE17 /* AlertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertVC.swift; sourceTree = "<group>"; };
 		73B665B72CD4E4A000B8A533 /* ArthurDodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArthurDodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73B968B72CC7C78700A2415A /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		73B968B92CC7C78700A2415A /* AddressTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTextField.swift; sourceTree = "<group>"; };
@@ -722,6 +736,43 @@
 			path = Trash;
 			sourceTree = "<group>";
 		};
+		73B1EA3D2CFEF3A6004CFE17 /* FeatureToggle */ = {
+			isa = PBXGroup;
+			children = (
+				73B1EA4B2CFF03EE004CFE17 /* FeatureToggleVC */,
+				73B1EA382CFEF3A6004CFE17 /* Feature.swift */,
+				73B1EA392CFEF3A6004CFE17 /* FeatureToggleService.swift */,
+			);
+			path = FeatureToggle;
+			sourceTree = "<group>";
+		};
+		73B1EA472CFEFB5E004CFE17 /* FeaturesJSON */ = {
+			isa = PBXGroup;
+			children = (
+				73B1EA462CFEFB5E004CFE17 /* localFeatureToggles.json */,
+			);
+			path = FeaturesJSON;
+			sourceTree = "<group>";
+		};
+		73B1EA4B2CFF03EE004CFE17 /* FeatureToggleVC */ = {
+			isa = PBXGroup;
+			children = (
+				73B1EA4A2CFF03EE004CFE17 /* FeatureToggleVC.swift */,
+				73B1EA592CFF0A93004CFE17 /* Components */,
+			);
+			path = FeatureToggleVC;
+			sourceTree = "<group>";
+		};
+		73B1EA592CFF0A93004CFE17 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				73B1EA572CFF0A93004CFE17 /* FeatureToggleTableViewCell.swift */,
+				73B1EA5B2CFF0AB3004CFE17 /* TableViewHeaderView.swift */,
+				73B1EA5D2D018313004CFE17 /* AlertVC.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		73B968B82CC7C78700A2415A /* Address */ = {
 			isa = PBXGroup;
 			children = (
@@ -836,6 +887,7 @@
 		73B968E02CC7C78700A2415A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				73B1EA472CFEFB5E004CFE17 /* FeaturesJSON */,
 				73999B562CF9E08200D7E236 /* Trash */,
 				7350E26C2CCD248B009BA276 /* Helpers */,
 				73B968DA2CC7C78700A2415A /* Font */,
@@ -870,6 +922,7 @@
 		73B968E62CC7C78700A2415A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				73B1EA3D2CFEF3A6004CFE17 /* FeatureToggle */,
 				734B01562CFCBB4C00DDD282 /* StartAppService */,
 				73F169302CEE5ABE009B8532 /* CoordinatorFactory */,
 				733A01DA2CDBC7CE0013D3EB /* Router */,
@@ -1473,6 +1526,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73B1EA482CFEFB5E004CFE17 /* localFeatureToggles.json in Resources */,
 				73B969B82CC7C78700A2415A /* SF-Pro-Rounded-Black.otf in Resources */,
 				73B969B92CC7C78700A2415A /* SF-Pro-Rounded-Bold.otf in Resources */,
 				73B969BA2CC7C78700A2415A /* SF-Pro-Rounded-Heavy.otf in Resources */,
@@ -1523,6 +1577,7 @@
 				73B969632CC7C78700A2415A /* Order.swift in Sources */,
 				7322F16D2CF4DC6100C59D60 /* AppImages.swift in Sources */,
 				73B969652CC7C78700A2415A /* Promo.swift in Sources */,
+				73B1EA5A2CFF0A93004CFE17 /* FeatureToggleTableViewCell.swift in Sources */,
 				73B969662CC7C78700A2415A /* SpecialOffer.swift in Sources */,
 				73B969672CC7C78700A2415A /* Story.swift in Sources */,
 				73B969682CC7C78700A2415A /* User.swift in Sources */,
@@ -1555,6 +1610,7 @@
 				73B9697D2CC7C78700A2415A /* AppNavigationHeaderView.swift in Sources */,
 				73E6EB422CC92FC5006831F2 /* CpfcPopupView.swift in Sources */,
 				736B0D2A2CCFE5C500975195 /* Array+BoolSorting.swift in Sources */,
+				73B1EA5E2D018313004CFE17 /* AlertVC.swift in Sources */,
 				73B9697E2CC7C78700A2415A /* CustomPageControl.swift in Sources */,
 				73238EFB2CD219FF006F3A92 /* PaymentMethodsTableViewCell.swift in Sources */,
 				73B9697F2CC7C78700A2415A /* OrderView.swift in Sources */,
@@ -1615,6 +1671,7 @@
 				73FD88A22CD28E5E007E0C82 /* PaymentMethodTableView.swift in Sources */,
 				73E72F582CF8CD2700CDF390 /* MainProfileCoinsView.swift in Sources */,
 				73238EFD2CD21ACF006F3A92 /* PaymentMethod.swift in Sources */,
+				73B1EA4C2CFF03EE004CFE17 /* FeatureToggleVC.swift in Sources */,
 				73B969A22CC7C78700A2415A /* ProductHeaderView.swift in Sources */,
 				73E6EB442CC948F2006831F2 /* AppTableView.swift in Sources */,
 				73C067D52CE73B2900AEB125 /* UITableView+Ext.swift in Sources */,
@@ -1639,6 +1696,8 @@
 				73E0EFF52CEF9FD9009520E0 /* PersonalData.swift in Sources */,
 				736B0D192CCD811E00975195 /* TimeInterval.swift in Sources */,
 				73BA01F82CE8C780003117F6 /* ErrorCollectionViewCell.swift in Sources */,
+				73B1EA3E2CFEF3A6004CFE17 /* Feature.swift in Sources */,
+				73B1EA3F2CFEF3A6004CFE17 /* FeatureToggleService.swift in Sources */,
 				73BA01F92CE8C780003117F6 /* SkeletonCollectionViewCell.swift in Sources */,
 				73BA01FA2CE8C780003117F6 /* SkeletonCollectionViewCell2.swift in Sources */,
 				731C4F712CD905560088CF51 /* ProfileCoordinator.swift in Sources */,
@@ -1671,6 +1730,7 @@
 				73B969AF2CC7C78700A2415A /* ApplyOfferViewController.swift in Sources */,
 				73B969B12CC7C78700A2415A /* MissionView.swift in Sources */,
 				73B969B42CC7C78700A2415A /* ProfileViewController.swift in Sources */,
+				73B1EA5C2CFF0AB3004CFE17 /* TableViewHeaderView.swift in Sources */,
 				734B01572CFCBB4C00DDD282 /* StartAppService.swift in Sources */,
 				736F04512CD17A4300BC59CA /* AddNewAddressVC.swift in Sources */,
 				73E72F4E2CF8BF9900CDF390 /* AppSwitch.swift in Sources */,

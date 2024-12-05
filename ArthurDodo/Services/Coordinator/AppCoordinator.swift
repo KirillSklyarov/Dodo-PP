@@ -36,13 +36,13 @@ private extension AppCoordinator {
             guard let self else { return }
 
             startCartFlow() {
-                // Вызываем обновление корзины на главном экране (так как у нас модальное представление .automatic, а не .fullScreen, то метод viewWillAppear у MainVC не сработает)
+                // Когда мы закрываем CartFlow, то вызываем обновление корзины на главном экране (так как у нас модальное представление .automatic, а не .fullScreen, то метод viewWillAppear у MainVC не сработает)
                 mainCoordinator.mainVCUpdateCart()
             }
         }
 
         mainCoordinator.onShowProfile = { [weak self] in
-            guard let self else { return }
+            guard let self else { print("Error: startProfileFlow"); return }
             startProfileFlow()
         }
 

@@ -13,17 +13,18 @@ extension UIView {
         layer.borderWidth = borderWidth
     }
 
-    // Делаем констреинты (если нужно учитываем safeArea, учитываем отступы)
-    func setConstraints(isSafeArea: Bool = false, insets: UIEdgeInsets = .zero) {
+    // Делаем констреинты (если нужно учитываем safeArea, если все отступы равны, то указываем только allInset, если нужны указать разные отступы, то пишем insets)
+    func setConstraints(isSafeArea: Bool = false, allInsets: CGFloat? = nil, insets: UIEdgeInsets = .zero) {
         guard let superview else { return }
         let topConstraints = isSafeArea ? superview.safeAreaLayoutGuide.topAnchor : superview.topAnchor
         let bottomConstraints = isSafeArea ? superview.safeAreaLayoutGuide.bottomAnchor : superview.bottomAnchor
+        let appliedInset = (allInsets != nil) ? UIEdgeInsets(top: allInsets!, left: allInsets!, bottom: allInsets!, right: allInsets!) : insets
 
         NSLayoutConstraint.activate([
-            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: insets.left),
-            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -insets.right),
-            topAnchor.constraint(equalTo: topConstraints, constant: insets.top),
-            bottomAnchor.constraint(equalTo: bottomConstraints, constant: -insets.bottom)
+            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: appliedInset.left),
+            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -appliedInset.right),
+            topAnchor.constraint(equalTo: topConstraints, constant: appliedInset.top),
+            bottomAnchor.constraint(equalTo: bottomConstraints, constant: -appliedInset.bottom)
         ])
     }
 }

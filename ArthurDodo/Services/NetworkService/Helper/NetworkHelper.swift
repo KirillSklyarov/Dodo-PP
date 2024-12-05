@@ -32,7 +32,7 @@ enum HttpMethod: String {
 
 // Точки доступа
 enum BaseURL: String {
-    case ngrok = "https://871d-213-183-59-146.ngrok-free.app"
+    case ngrok = "https://f4ce-213-183-59-146.ngrok-free.app"
     case mockoon = "http://localhost:3001"
 }
 
@@ -45,6 +45,7 @@ enum endPoint: String {
     case items = "/products"
     case promo = "/promo"
     case personal = "/personal"
+    case serverFeaturesToggle = "/featureToggles"
     case error = "/error"
 
     // Формирует ссылку

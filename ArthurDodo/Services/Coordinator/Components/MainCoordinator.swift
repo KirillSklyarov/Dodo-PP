@@ -4,15 +4,17 @@ final class MainCoordinator: Coordinator {
     // MARK: - Properties
     private let router: Router
     private let screenFactory: ScreenFactory
+    private var features: [FeatureType: Bool] = [:]
 
     var onShowCart: (() -> Void)?
     var onShowProfile: (() -> Void)?
     var onShowAddress: (() -> Void)?
 
     // MARK: - Init
-    init(router: Router, screenFactory: ScreenFactory) {
+    init(router: Router, screenFactory: ScreenFactory, storage: DataStorage) {
         self.router = router
         self.screenFactory = screenFactory
+        getFeaturesFromStorage(storage)
     }
 
     deinit {
@@ -27,7 +29,7 @@ extension MainCoordinator {
 
         // Настраиваем замыкания
         mainVC.onProfileButtonTapped = { [weak self] in
-            self?.onShowProfile?()
+            self?.checkFeatureToggleAndShowProfileFlow()
         }
 
         mainVC.onAddressButtonTapped = { [weak self] in
@@ -91,12 +93,36 @@ private extension MainCoordinator {
     }
 }
 
+// MARK: - Alert
+private extension MainCoordinator {
+    // Создаем экран алерта (нужен когда фича выключена) и показываем его
+    func showAlert() {
+        let vc = screenFactory.makeAlertScreen(.profile)
+        router.present(vc, isParent: true)
+    }
+}
+
 // MARK: - Supporting methods
 private extension MainCoordinator {
+    // Получаем из хранилища словарь фичей
+    private func getFeaturesFromStorage(_ storage: DataStorage) {
+        features = storage.getFeatures()
+    }
+
     // Находит в стеке родительский экран и вызывает обновление сторисов
     func mainVCUpdateStories() {
         if let mainVC = router.getMainViewController() {
             mainVC.updateStories()
+        }
+    }
+
+    // Если в фичах у нас статус false (запретить фичу), то показываем алерт, если true (разрешить фичу) - то показываем startProfileFlow()
+    func checkFeatureToggleAndShowProfileFlow() {
+        if let profileFeature = features[.profile] {
+            profileFeature ? onShowProfile?() : showAlert()
+        } else {
+            print("No feature toggle for profile")
+            onShowProfile?()
         }
     }
 }

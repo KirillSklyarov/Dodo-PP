@@ -19,6 +19,13 @@ final class DataStorage {
 
     private var changingItem: CartItem?
 
+    // Feature Toggles
+    private var localFeatures: [Feature] = []
+    private var remoteFeatures: [Feature] = []
+    private var features: [FeatureType: Bool] = [:]
+
+    var onLocalFeaturesChanged: (() -> Void)?
+
     // MARK: - Init
     init() {
         getOrderFromUserDefaults()
@@ -354,6 +361,55 @@ extension DataStorage {
         } else {
 //            print("Default payment method = .cbp")
         }
+    }
+}
+
+// MARK: - Feature toggles
+extension DataStorage {
+    func getLocalFeatureToggles() -> [Feature] {
+        localFeatures
+    }
+
+    func getRemoteFeatureToggles() -> [Feature] {
+        remoteFeatures
+    }
+
+    func setLocalFeatureToggles(_ features: [Feature]) {
+        self.localFeatures = features.sorted(by: { $0.name < $1.name })
+    }
+
+    func setRemoteFeatureToggles(_ features: [Feature]) {
+        self.remoteFeatures = features.sorted(by: { $0.name < $1.name })
+    }
+
+    func updateLocalFeatures(_ indexPath: IndexPath, _ status: Bool) {
+        localFeatures[indexPath.row].isEnabled = status
+        onLocalFeaturesChanged?()
+        //        print(localFeatures)
+    }
+
+    //  Формируем итоговый словарь, где значение enable будет только в том случае, если у обоих массивов будет значение true
+    func setFeaturesArray() {
+        var localDict = Dictionary(uniqueKeysWithValues: localFeatures.map { ($0.name, $0.isEnabled) } )
+        let remoteDict = Dictionary(uniqueKeysWithValues: remoteFeatures.map { ($0.name, $0.isEnabled) } )
+
+        var test: [FeatureType: Bool] = [:]
+
+        for (key, value) in localDict {
+            let remoteValue = remoteDict[key]
+            let isTrue = (value == true && remoteValue == true)
+
+            if let newKey = FeatureType(rawValue: key) {
+                test[newKey] = isTrue
+            }
+        }
+
+        self.features = test
+        print("features \(features)")
+    }
+
+    func getFeatures() -> [FeatureType: Bool] {
+        features
     }
 }
 

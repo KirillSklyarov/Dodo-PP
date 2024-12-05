@@ -77,4 +77,12 @@ extension ScreenFactory {
     func makeEditProductScreen() -> EditProductViewController {
         return EditProductViewController(storage: storage)
     }
+
+    func makeFeatureTogglesScreen() -> FeatureToggleVC {
+        return FeatureToggleVC(storage: storage)
+    }
+
+    func makeAlertScreen(_ type: AlertType) -> UIAlertController {
+        return AppAlert.create(type)
+    }
 }

@@ -1,6 +1,7 @@
 import UIKit
 import SafariServices
 
+// Экран с личными данными юзера (имя, почта, телефон и проч.)
 final class PersonalViewController: UIViewController {
 
     // MARK: - UI Properties
@@ -9,11 +10,6 @@ final class PersonalViewController: UIViewController {
     private lazy var contentStackView = AppStackView([headerView, personalTableView], axis: .vertical, spacing: 10)
 
     // MARK: - Other Properties
-    private let topInset: CGFloat = 10
-    private let leftInset: CGFloat = 10
-    private let rightInset: CGFloat = -10
-    private let bottomInset: CGFloat = -10
-
     private let storage: DataStorage
     private var personalData: User?
 
@@ -52,12 +48,7 @@ private extension PersonalViewController {
     }
 
     func setupContentStackViewLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftInset),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightInset),
-            contentStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomInset)
-        ])
+        contentStackView.setConstraints(isSafeArea: true, allInsets: 10)
     }
 }
 

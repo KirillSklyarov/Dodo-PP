@@ -31,4 +31,8 @@ struct NetworkService {
     func fetchToppings() async throws -> [Topping] {
         return try await networkClient.fetchData(.toppings, type: [Topping].self)
     }
+
+    func fetchFeatures() async throws -> [Feature] {
+        return try await networkClient.fetchData(.serverFeaturesToggle, type: [Feature].self)
+    }
 }

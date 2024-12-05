@@ -13,6 +13,8 @@ final class DependencyContainer {
     let startAppService: StartAppService
     let networkService: NetworkService
 
+    let featureToggleService: FeatureToggleService
+
     init() {
         let decoder = JSONDecoder()
         let encoder = JSONEncoder()
@@ -30,6 +32,8 @@ final class DependencyContainer {
         // Создаем хранилище
         storage = DataStorage()
 
+        featureToggleService = FeatureToggleService(networkService: networkService, storage: storage, decoder: decoder, encoder: encoder, session: session)
+
         // В сервисе StartAppService происходит сборка всех необходимых запросов в сеть и app подготавливается к работе, чтобы в процессе работы загрузка из сети не производилась. Все необходимые для работы данные загружаются здесь.
         startAppService = StartAppService(networkService: networkService, storage: storage)
 
@@ -40,6 +44,6 @@ final class DependencyContainer {
         router = Router()
 
         // Создаем фабрику координаторов
-        coordinatorFactory = CoordinatorFactory(router: router, screenFactory: screenFactory)
+        coordinatorFactory = CoordinatorFactory(router: router, screenFactory: screenFactory, storage: storage)
     }
 }

@@ -2,10 +2,10 @@ import UIKit
 
 final class AppSwitch: UISwitch {
 
-    override init(frame: CGRect) {
+    init(isHidden: Bool = true) {
         super.init(frame: .zero)
         isOn = false
-        isHidden = true
+        self.isHidden = isHidden
     }
     
     required init?(coder: NSCoder) {
