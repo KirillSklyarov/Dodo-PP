@@ -225,10 +225,8 @@ private extension CartViewController {
     }
 
     func setupScrollUpButtonConstraints() {
-        NSLayoutConstraint.activate([
-            scrollUpButton.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor, constant: -10),
-            scrollUpButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-        ])
+        scrollUpButton.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor, constant: -10).isActive = true
+        scrollUpButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
     }
 
     func setupCartButtonConstraints() {

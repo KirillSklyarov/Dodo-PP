@@ -11,10 +11,6 @@ final class CustomStepperView: UIView {
     private lazy var contentStack = AppStackView([decrementButton, valueLabel, incrementButton], axis: .horizontal, distribution: .fillEqually)
 
     // MARK: - Properties
-    private let viewHeight: CGFloat = 25
-    private let viewWidth: CGFloat = 90
-    private let cornerRadius: CGFloat = 10
-
     private var value: Int = 0 {
         didSet {
             if value < 0 { value = 0 }
@@ -70,7 +66,7 @@ private extension CustomStepperView {
         valueLabel.textAlignment = .center
 
         backgroundColor = AppColors.buttonGray
-        layer.cornerRadius = cornerRadius
+        layer.cornerRadius = 10
         layer.masksToBounds = true
 
         addSubviews(contentStack)
@@ -79,11 +75,8 @@ private extension CustomStepperView {
 
     func setupLayout() {
         contentStack.setConstraints()
-        
-        NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: viewHeight),
-            widthAnchor.constraint(equalToConstant: viewWidth)
-        ])
+        heightAnchor.constraint(equalToConstant: 25).isActive = true
+        widthAnchor.constraint(equalToConstant: 90).isActive = true
     }
 }
 

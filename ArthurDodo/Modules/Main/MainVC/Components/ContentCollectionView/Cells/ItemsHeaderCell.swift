@@ -9,7 +9,6 @@ final class ItemsHeaderCell: UICollectionViewCell {
     private lazy var titleLabel = AppLabel(type: .smallHeader)
     private lazy var ingredientsLabel = AppLabel(type: .smallTitle, textColor: AppColors.grayFont)
     private lazy var priceButton = AppButtons(type: .grayPrice)
-
     private lazy var hitImageView = AppImageView(type: .hit)
 
     private lazy var contentStack = setupContentStack()
@@ -59,21 +58,11 @@ private extension ItemsHeaderCell {
     }
 
     func setupBackViewLayout() {
-        NSLayoutConstraint.activate([
-            backView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+        backView.setConstraints(insets: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
     }
 
     func setupContentStackLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: backView.topAnchor, constant: 10),
-            contentStack.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 10),
-            contentStack.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -10),
-            contentStack.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -10),
-        ])
+        contentStack.setConstraints(allInsets: 10)
     }
 
     func setupContentStack() -> UIStackView {

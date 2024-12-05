@@ -10,11 +10,6 @@ final class AddressTextFieldView: UIView {
     private lazy var contentStack = setupContentStack()
 
     // MARK: - Properties
-    private let leftPadding: CGFloat = 10
-    private let rightPadding: CGFloat = -5
-    private let topPadding: CGFloat = 5
-    private let bottomPadding: CGFloat = -5
-
     private let viewHeight: CGFloat = 50
 
     var onTextFieldEndEditing: ((String) -> Void)?
@@ -62,15 +57,9 @@ private extension AddressTextFieldView {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: topAnchor, constant: topPadding),
-            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftPadding),
-            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightPadding),
-            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomPadding),
-
-            clearButton.widthAnchor.constraint(equalTo: contentStack.heightAnchor),
-            heightAnchor.constraint(equalToConstant: viewHeight)
-        ])
+        contentStack.setConstraints(allInsets: 5)
+        clearButton.widthAnchor.constraint(equalTo: contentStack.heightAnchor).isActive = true
+        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
     }
 
     func setupContentStack() -> UIStackView {

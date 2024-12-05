@@ -49,12 +49,8 @@ private extension ChoosePaymentMethodVC {
     }
 
     func setupContentStackLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentStack.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+        contentStack.setLocalConstraints(isSafeArea: true, top: 0, left: 10, right: 10)
+        contentStack.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
 }
 

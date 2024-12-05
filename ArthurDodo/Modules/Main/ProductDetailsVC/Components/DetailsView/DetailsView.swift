@@ -88,59 +88,22 @@ extension DetailsView {
 // MARK: - Setup UI
 private extension DetailsView {
     func setupUI() {
-//        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
-
         backgroundColor = AppColors.detailsBackground
         layer.cornerRadius = 20
         layer.masksToBounds = true
 
         addSubviews(contentStack)
 
-//        addSubviews(pizzaImageView, sizeSegmentControl, doughSegmentControl)
-
         setupLayout()
     }
 
     func setupLayout() {
         setupContentStackLayout()
-
-//        setupPizzaImageViewConstraints()
-//        setupSizeSegmentControlConstraints()
-//        setupDoughSegmentControlConstraints()
     }
 
     func setupContentStackLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: topAnchor, constant: 120),
-            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
-
-            itemImageView.heightAnchor.constraint(equalTo: widthAnchor),
-        ])
-    }
-
-    func setupPizzaImageViewConstraints() {
-        placeImageInCenter()
-        NSLayoutConstraint.activate([
-            itemImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-        ])
-    }
-
-    func setupSizeSegmentControlConstraints() {
-        NSLayoutConstraint.activate([
-            sizeSegmentControl.topAnchor.constraint(equalTo: itemImageView.bottomAnchor, constant: 10),
-            sizeSegmentControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            sizeSegmentControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-        ])
-    }
-
-    func setupDoughSegmentControlConstraints() {
-        NSLayoutConstraint.activate([
-            doughSegmentControl.topAnchor.constraint(equalTo: sizeSegmentControl.bottomAnchor, constant: 5),
-            doughSegmentControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            doughSegmentControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
-        ])
+        contentStack.setLocalConstraints(top: 120, bottom: 20, left: 20, right: 20)
+        itemImageView.heightAnchor.constraint(equalTo: widthAnchor).isActive = true
     }
 
     func setupSizeSegmentControl() {

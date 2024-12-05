@@ -40,14 +40,8 @@ private extension ItemsCollectionCell {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-            contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
-
-            pizzaImageView.widthAnchor.constraint(equalTo: contentStackView.widthAnchor, multiplier: 0.4),
-        ])
+        contentStackView.setConstraints(insets: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
+        pizzaImageView.widthAnchor.constraint(equalTo: contentStackView.widthAnchor, multiplier: 0.4).isActive = true
     }
 
     func setupContentStackView() -> UIStackView {

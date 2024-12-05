@@ -66,14 +66,7 @@ private extension AddToppingsCollectionViewCell {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-
-            chosenImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            chosenImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
-        ])
+        contentStack.setConstraints()
+        chosenImageView.setLocalConstraints(top: 0, right: -5)
     }
 }

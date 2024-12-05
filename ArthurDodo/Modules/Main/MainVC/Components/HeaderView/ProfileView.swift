@@ -45,29 +45,23 @@ private extension ProfileMainHeaderView {
     }
 
     func setupLayout() {
-        viewLayout()
-        profileImageViewLayout()
-        coinsViewLayout()
+        setupViewLayout()
+        setupProfileImageViewLayout()
+        setupCoinsViewLayout()
     }
 
     // Констреинты самого view
-    func viewLayout() {
-        NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: height),
-            widthAnchor.constraint(equalTo: heightAnchor),
-        ])
+    func setupViewLayout() {
+        heightAnchor.constraint(equalToConstant: height).isActive = true
+        widthAnchor.constraint(equalTo: heightAnchor).isActive = true
     }
 
     // Констреинты coinsView
-    func coinsViewLayout() {
-        NSLayoutConstraint.activate([
-            coinsView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            coinsView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            coinsView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
+    func setupCoinsViewLayout() {
+        coinsView.setLocalConstraints(bottom: 0, left: 0, right: 0)
     }
 
-    func profileImageViewLayout() {
+    func setupProfileImageViewLayout() {
         profileView.setConstraints()
     }
 }

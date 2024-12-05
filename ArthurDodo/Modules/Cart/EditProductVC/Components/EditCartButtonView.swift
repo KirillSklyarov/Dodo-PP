@@ -65,10 +65,8 @@ private extension EditCartButtonView {
     }
 
     func setupElementsConstraints() {
-        NSLayoutConstraint.activate([
-            cartButton.widthAnchor.constraint(equalTo: contentStackView.widthAnchor, multiplier: 0.4),
-            priceLabel.centerYAnchor.constraint(equalTo: cartButton.centerYAnchor),
-        ])
+        cartButton.widthAnchor.constraint(equalTo: contentStackView.widthAnchor, multiplier: 0.4).isActive = true
+        priceLabel.centerYAnchor.constraint(equalTo: cartButton.centerYAnchor).isActive = true
     }
 }
 

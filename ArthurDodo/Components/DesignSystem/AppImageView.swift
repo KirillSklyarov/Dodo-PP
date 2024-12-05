@@ -77,8 +77,8 @@ private extension AppImageView {
             widthAnchor.constraint(equalToConstant: 70).isActive = true
         case .promoImage:
             contentMode = .scaleAspectFit
-            heightAnchor.constraint(equalToConstant: 160).isActive = true
-            widthAnchor.constraint(equalToConstant: 160).isActive = true
+            heightAnchor.constraint(equalToConstant: 150).isActive = true
+            widthAnchor.constraint(equalToConstant: 150).isActive = true
             layer.cornerRadius = 14
             layer.masksToBounds = true
         case .mapPin:

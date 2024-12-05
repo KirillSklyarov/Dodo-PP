@@ -68,41 +68,22 @@ private extension EditProductViewController {
     }
 
     func setupScrollViewLayout() {
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor)
-        ])
+        scrollView.setLocalConstraints(top: 0, left: 0, right: 0)
+        scrollView.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor).isActive = true
     }
 
     func setupContentViewLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-
-            contentStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-        ])
+        contentStack.setConstraints()
+        contentStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
     }
 
     func setupProductHeaderViewLayout() {
         headerView.setViewHeight(60)
-
-        NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ])
+        headerView.setLocalConstraints(top: 0, left: 0, right: 0)
     }
 
     func setupCartButtonLayout() {
-        NSLayoutConstraint.activate([
-            cartButtonView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            cartButtonView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            cartButtonView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        cartButtonView.setLocalConstraints(bottom: 0, left: 0, right: 0)
     }
 }
 

@@ -32,6 +32,8 @@ final class MissionView: UIView {
 // MARK: - Setup UI
 private extension MissionView {
     func setupUI() {
+        titleLabel.textAlignment = .center
+
         layer.cornerRadius = 14
         layer.masksToBounds = true
 
@@ -43,21 +45,13 @@ private extension MissionView {
     }
 
     func setupContraints() {
-        NSLayoutConstraint.activate([
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomPadding),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightPadding)
-        ])
+        titleLabel.setLocalConstraints(bottom: 10, left: 10, right: 10)
     }
 
     func setupLayout() {
         guard let superview else { print("You must add superview to MissionView"); return }
-
-        NSLayoutConstraint.activate([
-            leadingAnchor.constraint(equalTo: superview.leadingAnchor),
-            trailingAnchor.constraint(equalTo: superview.trailingAnchor),
-
-            heightAnchor.constraint(equalToConstant: viewHeight)
-        ])
+        leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
+        trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
+        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
     }
 }

@@ -39,7 +39,7 @@ extension AppSegmentControlView {
 
 // MARK: - Setup UI
 private extension AppSegmentControlView {
-     func setupUI() {
+    func setupUI() {
         backgroundColor = AppColors.backgroundGray
         layer.cornerRadius = viewHeight / 2
         clipsToBounds = true
@@ -47,14 +47,12 @@ private extension AppSegmentControlView {
         guard let segmentControl else { return }
         addSubviews(segmentControl)
 
-        NSLayoutConstraint.activate([
-            segmentControl.topAnchor.constraint(equalTo: topAnchor, constant: 2),
-            segmentControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
-            segmentControl.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -2),
-            segmentControl.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
+        setupLayout()
+    }
 
-            heightAnchor.constraint(equalToConstant: viewHeight)
-        ])
+    func setupLayout() {
+        segmentControl?.setConstraints(allInsets: 2)
+        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
     }
 }
 

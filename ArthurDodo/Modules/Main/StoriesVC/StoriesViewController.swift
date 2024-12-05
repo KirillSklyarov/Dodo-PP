@@ -49,12 +49,5 @@ private extension StoriesVC {
         view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(storiesView)
         storiesView.setConstraints(isSafeArea: true)
-
-//        NSLayoutConstraint.activate([
-//            backgroundView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-//            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            backgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-//        ])
     }
 }

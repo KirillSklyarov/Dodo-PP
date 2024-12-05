@@ -11,11 +11,6 @@ final class DeliveryAddressView: UIView {
     private lazy var contentStackView = AppStackView([headerStackView, addressTableView, deliveryButton], axis: .vertical, spacing: 10)
 
     // MARK: - Properties
-    private let leftPadding: CGFloat = 10
-    private let rightPadding: CGFloat = -10
-    private let topPadding: CGFloat = 20
-    private let bottomPadding: CGFloat = -10
-
     var onEditAddressCellTapped: ((Address) -> Void)?
     var onAddNewAddressButtonTapped: (() -> Void)?
     var onAddressCellTapped: ((Address) -> Void)?
@@ -51,12 +46,7 @@ private extension DeliveryAddressView {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: topPadding),
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftPadding),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: rightPadding),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomPadding)
-        ])
+        contentStackView.setConstraints(insets: UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10))
     }
 }
 

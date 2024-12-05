@@ -30,12 +30,6 @@ private extension SkeletonPlaceholderCell {
 private extension SkeletonPlaceholderCell {
     func setupUI() {
         contentView.addSubviews(placeholderView)
-
-        NSLayoutConstraint.activate([
-            placeholderView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            placeholderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            placeholderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            placeholderView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+        placeholderView.setConstraints()
     }
 }

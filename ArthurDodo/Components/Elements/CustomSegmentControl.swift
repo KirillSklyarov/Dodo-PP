@@ -65,11 +65,8 @@ final class CustomSegmentControl: UISegmentedControl {
         leadingConstraint = selectedSegmentOval.leadingAnchor.constraint(equalTo: leadingAnchor)
         leadingConstraint?.isActive = true
 
-        NSLayoutConstraint.activate([
-            selectedSegmentOval.bottomAnchor.constraint(equalTo: bottomAnchor),
-            selectedSegmentOval.topAnchor.constraint(equalTo: topAnchor),
-            selectedSegmentOval.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0 / CGFloat(numberOfSegments))
-        ])
+        selectedSegmentOval.setLocalConstraints(top: 0, bottom: 0)
+        selectedSegmentOval.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0 / CGFloat(numberOfSegments)).isActive = true
     }
 
     private func moveOval(_ index: Int) {

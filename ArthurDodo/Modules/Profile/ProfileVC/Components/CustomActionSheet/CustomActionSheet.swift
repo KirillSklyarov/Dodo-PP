@@ -90,10 +90,7 @@ private extension CustomActionSheet {
         bottomConstraint = contentStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 250)
         bottomConstraint.isActive = true
 
-        NSLayoutConstraint.activate([
-            contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-        ])
+        contentStack.setLocalConstraints(left: 10, right: 10)
     }
 
     func setupContentStack() -> UIStackView {

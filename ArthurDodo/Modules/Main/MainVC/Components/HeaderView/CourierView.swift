@@ -30,12 +30,10 @@ private extension CourierView {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: height),
-            widthAnchor.constraint(equalTo: heightAnchor),
+        heightAnchor.constraint(equalToConstant: height).isActive = true
+        widthAnchor.constraint(equalTo: heightAnchor).isActive = true
 
-            courierImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            courierImageView.centerYAnchor.constraint(equalTo: centerYAnchor),     
-        ])
+        courierImageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        courierImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
 }

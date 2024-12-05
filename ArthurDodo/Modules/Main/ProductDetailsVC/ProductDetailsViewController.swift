@@ -70,12 +70,8 @@ private extension ProductDetailsViewController {
     }
 
     func setupScrollViewConstraints() {
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor)
-        ])
+        scrollView.setLocalConstraints(top: 0, left: 0, right: 0)
+        scrollView.bottomAnchor.constraint(equalTo: cartButtonView.topAnchor).isActive = true
     }
 
     func setupContentViewConstraints() {
@@ -84,19 +80,11 @@ private extension ProductDetailsViewController {
     }
 
     func setupProductHeaderViewConstraints() {
-        NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ])
+        headerView.setLocalConstraints(top: 0, left: 0, right: 0)
     }
 
     func setupCartButtonConstraints() {
-        NSLayoutConstraint.activate([
-            cartButtonView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            cartButtonView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            cartButtonView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        cartButtonView.setLocalConstraints(bottom: 0, left: 0, right: 0)
     }
 }
 

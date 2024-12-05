@@ -35,11 +35,6 @@ private extension TimeCollectionViewCell {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            timeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            timeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+        timeLabel.setConstraints()
     }
 }

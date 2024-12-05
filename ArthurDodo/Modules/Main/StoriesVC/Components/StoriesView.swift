@@ -6,6 +6,8 @@ final class StoriesView: UIView {
     private lazy var dismissButton = AppDismissButtonView(type: .storiesWhite)
     private lazy var storiesImageView = AppImageView(type: .stories)
     private lazy var progressViewsStack = AppStackView([], axis: .horizontal, spacing: 15, distribution: .fillEqually)
+    private lazy var contentStack = AppStackView([progressViewsStack, dismissButton], axis: .horizontal, spacing: 10, alignment: .center)
+
     private lazy var progressViews: [UIProgressView] = []
 
     // MARK: - Properties
@@ -235,21 +237,13 @@ private extension StoriesView {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
         addGestureRecognizer(gesture)
 
-        addSubviews(storiesImageView, progressViewsStack, dismissButton)
+        addSubviews(storiesImageView, contentStack)
 
         setupConstraints()
     }
 
     func setupConstraints() {
         storiesImageView.setConstraints()
-        
-        NSLayoutConstraint.activate([
-            progressViewsStack.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor),
-            progressViewsStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding),
-            progressViewsStack.trailingAnchor.constraint(equalTo: dismissButton.leadingAnchor, constant: -padding),
-
-            dismissButton.topAnchor.constraint(equalTo: topAnchor, constant: padding),
-            dismissButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding),
-        ])
+        contentStack.setLocalConstraints(top: 10, left: 10, right: 10)
     }
 }

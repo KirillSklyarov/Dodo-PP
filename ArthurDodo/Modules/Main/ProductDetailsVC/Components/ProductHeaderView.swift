@@ -1,5 +1,6 @@
 import UIKit
 
+// Заблюренный header на экране Product Details
 final class ProductHeaderView: UIView {
 
     // MARK: - UI Properties
@@ -80,12 +81,7 @@ private extension ProductHeaderView {
     }
 
     func setupContentStackLayout() {
-        NSLayoutConstraint.activate([
-            contentStackView.leadingAnchor.constraint(equalTo: blurView.contentView.leadingAnchor, constant: 10),
-            contentStackView.trailingAnchor.constraint(equalTo: blurView.contentView.trailingAnchor, constant: -50),
-            contentStackView.bottomAnchor.constraint(equalTo: blurView.contentView.bottomAnchor, constant: -10)
-        ])
-
+        contentStackView.setLocalConstraints(bottom: 10, left: 10, right: 50)
     }
 
     func setupContentStackView() -> UIStackView {

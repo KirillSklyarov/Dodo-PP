@@ -3,7 +3,7 @@ import UIKit
 final class AddressViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var addressHeaderStackView = AddressHeaderView()
+    private lazy var addressHeaderView = AddressHeaderView()
     private lazy var mapView = MapView(isTrackingButtonHidden: true)
     private lazy var addressView = DeliveryAddressView()
     private lazy var contentStack = AppStackView([mapView, addressView], axis: .vertical, spacing: -10)
@@ -62,11 +62,6 @@ private extension AddressViewController {
 
     // Запрашиваем данные с сервера и когда все получено, то просто забираем с него данные
     func fetchAddresses() {
-//        storage.fetchUserData()
-//        storage.onUserDataFetchedSuccessfully = { [weak self] userData in
-//            guard let self else { print("Error: We have no self"); return }
-//            getAddressFromStorage()
-//        }
         getAddressFromStorage()
     }
 
@@ -106,7 +101,7 @@ private extension AddressViewController {
 private extension AddressViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(contentStack, addressHeaderStackView)
+        view.addSubviews(contentStack, addressHeaderView)
         setupConstraints()
         setupMapView()
     }
@@ -116,12 +111,10 @@ private extension AddressViewController {
     }
 
     func setupConstraints() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: view.topAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-        ])
+        contentStack.setLocalConstraints(top: 0, left: 0, right: 0)
+        contentStack.setLocalConstraints(isSafeArea: true, bottom: 0)
+
+        addressHeaderView.setLocalConstraints(isSafeArea: true, top: 10, left: 20, right: 20)
     }
 }
 
@@ -133,7 +126,7 @@ private extension AddressViewController {
     }
 
     func setupAddressHeaderAction() {
-        addressHeaderStackView.onDismissButtonTapped = { [weak self] in
+        addressHeaderView.onDismissButtonTapped = { [weak self] in
             self?.onDismissButtonTapped?()
         }
     }

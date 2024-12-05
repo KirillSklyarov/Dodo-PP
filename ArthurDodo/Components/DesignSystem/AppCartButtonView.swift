@@ -54,14 +54,13 @@ private extension AppCartButtonView {
         guard let cartButton else { return }
         addSubviews(blurView, cartButton)
 
+        setupLayout(blurView, cartButton)
+    }
+
+    func setupLayout(_ blurView: AppBlurView, _ cartButton: AppButtons) {
         heightAnchor.constraint(equalToConstant: 90).isActive = true
         blurView.setConstraints()
-
-        NSLayoutConstraint.activate([
-            cartButton.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            cartButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            cartButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
-        ])
+        cartButton.setLocalConstraints(top: 10, left: 20, right: 20)
     }
 
     func setupActions() {

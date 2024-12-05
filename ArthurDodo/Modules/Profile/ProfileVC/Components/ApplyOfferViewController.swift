@@ -13,12 +13,6 @@ final class ApplyOfferViewController: UIViewController {
 
     private lazy var contentStack = setupContentStack()
 
-    // MARK: - Properties
-    private let leftPadding: CGFloat = 10
-    private let rightPadding: CGFloat = -10
-    private let topPadding: CGFloat = 20
-    private let bottomPadding: CGFloat = -10
-
     // MARK: - Init
     init(with offer: Promo) {
         super.init(nibName: nil, bundle: nil)
@@ -70,23 +64,21 @@ private extension ApplyOfferViewController {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: view.topAnchor, constant: topPadding),
-            contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leftPadding),
-            contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: rightPadding),
-            contentStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: bottomPadding),
-
-//            promoImageView.widthAnchor.constraint(equalTo: contentStack.widthAnchor, multiplier: 0.4),
-//            promoImageView.heightAnchor.constraint(equalTo: promoImageView.widthAnchor),
-        ])
+        contentStack.setConstraints(isSafeArea: true, allInsets: 10)
     }
 
     func setupContentStack() -> UIStackView {
-        let detailsStack = AppStackView([promoDateLabel, promoDetailsLabel, legalTextLabel, applyButton], axis: .vertical, distribution: .equalSpacing)
+        let imageContainer: UIView = {
+            let view = UIView()
+            view.addSubviews(promoImageView)
+            view.contentMode = .scaleAspectFit
+            return view
+        }()
 
-        let imageStack = AppStackView([promoImageView], axis: .vertical, alignment: .center)
+        promoImageView.setLocalConstraints(top: 15, bottom: 0)
+        promoImageView.centerXAnchor.constraint(equalTo: imageContainer.centerXAnchor).isActive = true
 
-        let contentStack = AppStackView([imageStack, detailsStack], axis: .vertical, spacing: 10)
+        let contentStack = AppStackView([imageContainer, promoDateLabel, promoDetailsLabel, legalTextLabel, applyButton], axis: .vertical, distribution: .equalSpacing)
 
         return contentStack
     }

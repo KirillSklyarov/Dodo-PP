@@ -4,9 +4,9 @@ import UIKit
 final class AddToCartCollectionView: UICollectionView {
 
     // MARK: - Properties
-    private let cellHeight: CGFloat = 215
+    private let cellHeight: CGFloat = 240
     private let cellSpacing: CGFloat = 10
-    private let countOfCellsInRow: CGFloat = 3
+    private let countOfCellsInRow: CGFloat = 2.5
     private let leftAndRightPadding: CGFloat = 20
     private let numberOfElements = 5
     private var correctWidth: CGFloat {

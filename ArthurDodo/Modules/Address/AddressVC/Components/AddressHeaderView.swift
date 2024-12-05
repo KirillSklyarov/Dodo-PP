@@ -1,16 +1,15 @@
 import UIKit
 
-final class AddressHeaderView: UIStackView {
+// Хэдер с сегмент контроллерами (доставки или в пиццерии) и кнопкой закрытия на экране карты
+final class AddressHeaderView: UIView {
 
     // MARK: - UI Properties
     private lazy var dismissButton = AppDismissButtonView(type: .standard)
     private lazy var segmentControl = AppSegmentControl(type: .address)
 
-    // MARK: - Properties
-    private let leftPadding: CGFloat = 20
-    private let rightPadding: CGFloat = -20
-    private let topPadding: CGFloat = 10
+    private lazy var contentStack = AppStackView([dismissButton, segmentControl], axis: .horizontal, spacing: 20)
 
+    // MARK: - Properties
     var onDismissButtonTapped: (() -> Void)?
     var onDeliveryButtonTapped: (() -> Void)?
 
@@ -37,20 +36,12 @@ final class AddressHeaderView: UIStackView {
 // MARK: - Setup UI
 private extension AddressHeaderView {
     func setupUI() {
-        axis = .horizontal
-        spacing = 20
-        addArrangedSubview(dismissButton)
-        addArrangedSubview(segmentControl)
+        addSubviews(contentStack)
+        setupLayout()
     }
 
     func setupLayout() {
-        guard let superview else { print("You must add AddressHeaderView to a superview"); return }
-
-        NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.topAnchor, constant: topPadding),
-            leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: leftPadding),
-            trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: rightPadding)
-        ])
+        contentStack.setConstraints()
     }
 }
 

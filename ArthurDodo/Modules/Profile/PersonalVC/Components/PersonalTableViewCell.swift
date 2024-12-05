@@ -53,12 +53,7 @@ private extension PersonalTableViewCell {
     }
 
     func setupLayout() {
-        NSLayoutConstraint.activate([
-            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+        contentStack.setConstraints(insets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10))
     }
 
     func setupConfigureContentStack() -> UIStackView {

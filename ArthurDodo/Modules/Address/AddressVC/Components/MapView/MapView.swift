@@ -46,11 +46,8 @@ private extension MapView {
     func setupLayout() {
         mapView.setConstraints()
         userTrackingButton.setLocalConstraints(isSafeArea: true, bottom: 20, right: 20)
-
-        NSLayoutConstraint.activate([
-            pinView.centerXAnchor.constraint(equalTo: mapView.centerXAnchor),
-            pinView.centerYAnchor.constraint(equalTo: mapView.centerYAnchor)
-        ])
+        pinView.centerXAnchor.constraint(equalTo: mapView.centerXAnchor).isActive = true
+        pinView.centerYAnchor.constraint(equalTo: mapView.centerYAnchor).isActive = true
     }
 }
 

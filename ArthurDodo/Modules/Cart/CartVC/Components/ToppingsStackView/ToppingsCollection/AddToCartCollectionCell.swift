@@ -66,7 +66,6 @@ private extension AddToCartCollectionCell {
 
     func setupUIElements() {
         titleLabel.numberOfLines = 3
-        titleLabel.adjustsFontSizeToFitWidth = true
         detailsLabel.adjustsFontSizeToFitWidth = true
         detailsLabel.numberOfLines = 2
     }
