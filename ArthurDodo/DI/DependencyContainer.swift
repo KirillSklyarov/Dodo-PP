@@ -7,12 +7,10 @@ final class DependencyContainer {
     let router: Router
     let coordinatorFactory: CoordinatorFactory
 
-    // MARK: - Netwok Layer
-    //    let networkClient: NetworkManager
-    let asyncAwaitNetworkClient: AsyncAwaitNetworkClient
-    let startAppService: StartAppService
+    let networkClient: AsyncAwaitNetworkClient
     let networkService: NetworkService
 
+    let appStartManager: AppStartManager
     let featureToggleService: FeatureToggleService
 
     init() {
@@ -20,22 +18,19 @@ final class DependencyContainer {
         let encoder = JSONEncoder()
         let session = URLSession(configuration: .default)
 
-        // Создаем сетевой слой
-//        networkManager = NetworkManager(decoder: decoder, encoder: encoder, session: session)
-
         // NetworkClient содержит основные настройки сетевого слоя
-        asyncAwaitNetworkClient = AsyncAwaitNetworkClient(decoder: decoder, encoder: encoder, session: session)
+        networkClient = AsyncAwaitNetworkClient(decoder: decoder, encoder: encoder, session: session)
 
         // NetworkService содержит все запросы в сеть
-        networkService = NetworkService(networkClient: asyncAwaitNetworkClient)
+        networkService = NetworkService(networkClient: networkClient)
 
         // Создаем хранилище
         storage = DataStorage()
 
         featureToggleService = FeatureToggleService(networkService: networkService, storage: storage, decoder: decoder, encoder: encoder, session: session)
 
-        // В сервисе StartAppService происходит сборка всех необходимых запросов в сеть и app подготавливается к работе, чтобы в процессе работы загрузка из сети не производилась. Все необходимые для работы данные загружаются здесь.
-        startAppService = StartAppService(networkService: networkService, storage: storage)
+
+        //        AppStartManager(networkService: networkService, storage: storage)
 
         // Создаем фабрику экранов
         screenFactory = ScreenFactory(storage: storage)
@@ -45,5 +40,9 @@ final class DependencyContainer {
 
         // Создаем фабрику координаторов
         coordinatorFactory = CoordinatorFactory(router: router, screenFactory: screenFactory, storage: storage)
+
+        // В сервисе AppStartManager происходит сборка всех необходимых запросов в сеть и app подготавливается к работе, чтобы в процессе работы загрузка из сети не производилась. Все необходимые для работы данные загружаются здесь.
+        appStartManager = AppStartManager(networkService: networkService, storage: storage, featureToggleService: featureToggleService, screenFactory: screenFactory, router: router, coordinatorFactory: coordinatorFactory)
     }
+
 }

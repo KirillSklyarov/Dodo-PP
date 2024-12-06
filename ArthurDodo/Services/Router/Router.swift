@@ -15,7 +15,7 @@ final class Router {
 extension Router {
     // Устанавливаем экран как основной у navigationController и он его показывает в этом же методе. С помощью методе setViewControllers убираем действующие VC в навигации и устанавливаем новый VC, при этом navigationController остается тем же, то есть не создается новый экземпляр.
     func setRootModule(_ module: UIViewController, animation: Bool = false) {
-        navigationController.setViewControllers([module], animated: false)
+        navigationController.setViewControllers([module], animated: animation)
     }
 
     // Устанавливаем root VC (нужен для SceneDelegate)

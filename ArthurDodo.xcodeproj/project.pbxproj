@@ -39,7 +39,7 @@
 		733A01D42CDBBF000013D3EB /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A01D32CDBBF000013D3EB /* DependencyContainer.swift */; };
 		733A01D82CDBBF380013D3EB /* ScreenFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A01D72CDBBF380013D3EB /* ScreenFactory.swift */; };
 		733A01DC2CDBC7D40013D3EB /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A01DB2CDBC7D40013D3EB /* Router.swift */; };
-		734B01572CFCBB4C00DDD282 /* StartAppService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734B01552CFCBB4C00DDD282 /* StartAppService.swift */; };
+		734B01572CFCBB4C00DDD282 /* AppStartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734B01552CFCBB4C00DDD282 /* AppStartManager.swift */; };
 		734B015C2CFCBC3F00DDD282 /* AsyncAwaitNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734B01592CFCBC3F00DDD282 /* AsyncAwaitNetworkClient.swift */; };
 		734B015D2CFCBC3F00DDD282 /* CompletionNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734B015A2CFCBC3F00DDD282 /* CompletionNetworkClient.swift */; };
 		734B01612CFCBC4E00DDD282 /* NetworkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734B015F2CFCBC4E00DDD282 /* NetworkHelper.swift */; };
@@ -244,7 +244,7 @@
 		733A01D32CDBBF000013D3EB /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 		733A01D72CDBBF380013D3EB /* ScreenFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenFactory.swift; sourceTree = "<group>"; };
 		733A01DB2CDBC7D40013D3EB /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
-		734B01552CFCBB4C00DDD282 /* StartAppService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAppService.swift; sourceTree = "<group>"; };
+		734B01552CFCBB4C00DDD282 /* AppStartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartManager.swift; sourceTree = "<group>"; };
 		734B01592CFCBC3F00DDD282 /* AsyncAwaitNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncAwaitNetworkClient.swift; sourceTree = "<group>"; };
 		734B015A2CFCBC3F00DDD282 /* CompletionNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionNetworkClient.swift; sourceTree = "<group>"; };
 		734B015F2CFCBC4E00DDD282 /* NetworkHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHelper.swift; sourceTree = "<group>"; };
@@ -589,12 +589,12 @@
 			path = Router;
 			sourceTree = "<group>";
 		};
-		734B01562CFCBB4C00DDD282 /* StartAppService */ = {
+		734B01562CFCBB4C00DDD282 /* AppStartManager */ = {
 			isa = PBXGroup;
 			children = (
-				734B01552CFCBB4C00DDD282 /* StartAppService.swift */,
+				734B01552CFCBB4C00DDD282 /* AppStartManager.swift */,
 			);
-			path = StartAppService;
+			path = AppStartManager;
 			sourceTree = "<group>";
 		};
 		734B015B2CFCBC3F00DDD282 /* Client */ = {
@@ -944,8 +944,8 @@
 		73B968E62CC7C78700A2415A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				734B01562CFCBB4C00DDD282 /* AppStartManager */,
 				73B1EA3D2CFEF3A6004CFE17 /* FeatureToggle */,
-				734B01562CFCBB4C00DDD282 /* StartAppService */,
 				73F169302CEE5ABE009B8532 /* CoordinatorFactory */,
 				733A01DA2CDBC7CE0013D3EB /* Router */,
 				733A01D62CDBBF2F0013D3EB /* ScreenFactory */,
@@ -1755,7 +1755,7 @@
 				73B969B12CC7C78700A2415A /* MissionView.swift in Sources */,
 				73B969B42CC7C78700A2415A /* ProfileViewController.swift in Sources */,
 				73B1EA5C2CFF0AB3004CFE17 /* TableViewHeaderView.swift in Sources */,
-				734B01572CFCBB4C00DDD282 /* StartAppService.swift in Sources */,
+				734B01572CFCBB4C00DDD282 /* AppStartManager.swift in Sources */,
 				736F04512CD17A4300BC59CA /* AddNewAddressVC.swift in Sources */,
 				73E72F4E2CF8BF9900CDF390 /* AppSwitch.swift in Sources */,
 				730452E82CE3865600FC6B17 /* Cart.swift in Sources */,
