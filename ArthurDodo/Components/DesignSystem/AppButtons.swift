@@ -144,11 +144,9 @@ private extension AppButtons {
             configuration = config
             widthAnchor.constraint(equalToConstant: 150).isActive = true
         case .actionSheetButton:
-            backgroundColor = AppColors.backgroundGray
-            let attributedTitle = NSAttributedString( string: text ?? "",
-                                                      attributes: [.foregroundColor: AppColors.buttonOrange, .font: AppFonts.semibold22 ])
+            backgroundColor = .clear
+            let attributedTitle = NSAttributedString(string: text ?? "", attributes: [.foregroundColor: AppColors.buttonOrange, .font: AppFonts.semibold22])
             setAttributedTitle(attributedTitle, for: .normal)
-            heightAnchor.constraint(equalToConstant: 60).isActive = true
         case .promoButton:
             setTitle("Ввести промокод", for: .normal)
             setTitleColor(.white, for: .normal)

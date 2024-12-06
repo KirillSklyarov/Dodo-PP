@@ -103,10 +103,8 @@ private extension MainViewController {
 
     // Настраиваем расположение кнопки
     func setupCartButtonLayout() {
-        NSLayoutConstraint.activate([
-            cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-        ])
+        cartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
+        cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
     }
 }
 

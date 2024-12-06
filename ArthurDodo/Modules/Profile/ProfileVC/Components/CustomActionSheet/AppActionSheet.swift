@@ -1,11 +1,11 @@
 import UIKit
 
-final class CustomActionSheet: UIViewController {
+final class AppActionSheet: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var callButton = AppButtons(type: .actionSheetButton, text: "Позвонить")
-    private lazy var chatButton = AppButtons(type: .actionSheetButton, text: "Написать в чат")
-    private lazy var dismissButton = AppButtons(type: .actionSheetButton, text: "Отменить")
+    private lazy var callButtonView = AppActionSheetButtonView(.call)
+    private lazy var chatButtonView = AppActionSheetButtonView(.chat)
+    private lazy var dismissButtonView = AppActionSheetButtonView(.dismiss)
     private lazy var separatorView = AppView(type: .separator)
 
     private lazy var contentStack = setupContentStack()
@@ -29,7 +29,7 @@ final class CustomActionSheet: UIViewController {
 }
 
 // MARK: - Supporting methods
-private extension CustomActionSheet {
+private extension AppActionSheet {
     // Плавно показываем окно - это достигается тем, что мы ставим нижний констреинт 0 - то есть нижняя граница стека = нижней границы окна
     func showContentStack() {
         UIView.animate(withDuration: 0.2) { [weak self] in
@@ -48,26 +48,26 @@ private extension CustomActionSheet {
 }
 
 // MARK: - Setup Actions
-private extension CustomActionSheet {
+private extension AppActionSheet {
     func setupAction() {
-        dismissButton.onButtonTapped = { [weak self] in
+        dismissButtonView.onButtonTapped = { [weak self] in
             guard let self else { return }
             hideContentStack()
             onDismissButtonTapped?()
         }
 
-        chatButton.onButtonTapped = {
+        chatButtonView.onButtonTapped = {
             print(#function)
         }
 
-        callButton.onButtonTapped = { 
+        callButtonView.onButtonTapped = { 
             print(#function)
         }
     }
 }
 
 // MARK: - Setup UI
-private extension CustomActionSheet {
+private extension AppActionSheet {
     func setupUI() {
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         view.addSubviews(contentStack)
@@ -78,8 +78,8 @@ private extension CustomActionSheet {
     }
 
     func setupDismissButton() {
-        dismissButton.layer.cornerRadius = 10
-        dismissButton.layer.masksToBounds = true
+        dismissButtonView.layer.cornerRadius = 10
+        dismissButtonView.layer.masksToBounds = true
     }
 
     func setupLayout() {
@@ -94,15 +94,15 @@ private extension CustomActionSheet {
     }
 
     func setupContentStack() -> UIStackView {
-        let callAndChatStack = AppStackView([callButton, separatorView, chatButton], axis: .vertical, cornerRadius: 10)
+        let callAndChatStack = AppStackView([callButtonView, separatorView, chatButtonView], axis: .vertical, cornerRadius: 10)
 
-        let contentStack = AppStackView([callAndChatStack, dismissButton], axis: .vertical, spacing: 5, distribution: .fillProportionally)
+        let contentStack = AppStackView([callAndChatStack, dismissButtonView], axis: .vertical, spacing: 5, distribution: .fillProportionally)
         return contentStack
     }
 }
 
 // MARK: - Setup Gesture
-private extension CustomActionSheet {
+private extension AppActionSheet {
     func setupGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
         view.addGestureRecognizer(tapGesture)

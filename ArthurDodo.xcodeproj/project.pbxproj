@@ -35,6 +35,7 @@
 		73349D482CEBDB3C00C3223E /* PersonalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73349D432CEBDB3C00C3223E /* PersonalTableViewCell.swift */; };
 		73349D492CEBDB3C00C3223E /* QuitProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73349D442CEBDB3C00C3223E /* QuitProfileTableViewCell.swift */; };
 		733546272CFB0D1E00338FBE /* AppCartButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733546262CFB0D1E00338FBE /* AppCartButtonView.swift */; };
+		7339CC5A2D02FA1D00A5471A /* AppActionSheetButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7339CC592D02FA1D00A5471A /* AppActionSheetButtonView.swift */; };
 		733A01D42CDBBF000013D3EB /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A01D32CDBBF000013D3EB /* DependencyContainer.swift */; };
 		733A01D82CDBBF380013D3EB /* ScreenFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A01D72CDBBF380013D3EB /* ScreenFactory.swift */; };
 		733A01DC2CDBC7D40013D3EB /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A01DB2CDBC7D40013D3EB /* Router.swift */; };
@@ -145,7 +146,7 @@
 		73B969A32CC7C78700A2415A /* ProductDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969382CC7C78700A2415A /* ProductDetailsViewController.swift */; };
 		73B969A42CC7C78700A2415A /* CoinsOrdersCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9693A2CC7C78700A2415A /* CoinsOrdersCollectionView.swift */; };
 		73B969A52CC7C78700A2415A /* CoinsOrdersCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9693B2CC7C78700A2415A /* CoinsOrdersCollectionViewCell.swift */; };
-		73B969A72CC7C78700A2415A /* CustomActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9693E2CC7C78700A2415A /* CustomActionSheet.swift */; };
+		73B969A72CC7C78700A2415A /* AppActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B9693E2CC7C78700A2415A /* AppActionSheet.swift */; };
 		73B969A82CC7C78700A2415A /* MissionStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969402CC7C78700A2415A /* MissionStackView.swift */; };
 		73B969AC2CC7C78700A2415A /* PersonalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969452CC7C78700A2415A /* PersonalViewController.swift */; };
 		73B969AE2CC7C78700A2415A /* PromoStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B969482CC7C78700A2415A /* PromoStackView.swift */; };
@@ -239,6 +240,7 @@
 		73349D432CEBDB3C00C3223E /* PersonalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalTableViewCell.swift; sourceTree = "<group>"; };
 		73349D442CEBDB3C00C3223E /* QuitProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuitProfileTableViewCell.swift; sourceTree = "<group>"; };
 		733546262CFB0D1E00338FBE /* AppCartButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCartButtonView.swift; sourceTree = "<group>"; };
+		7339CC592D02FA1D00A5471A /* AppActionSheetButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppActionSheetButtonView.swift; sourceTree = "<group>"; };
 		733A01D32CDBBF000013D3EB /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 		733A01D72CDBBF380013D3EB /* ScreenFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenFactory.swift; sourceTree = "<group>"; };
 		733A01DB2CDBC7D40013D3EB /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
@@ -362,7 +364,7 @@
 		73B969382CC7C78700A2415A /* ProductDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailsViewController.swift; sourceTree = "<group>"; };
 		73B9693A2CC7C78700A2415A /* CoinsOrdersCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinsOrdersCollectionView.swift; sourceTree = "<group>"; };
 		73B9693B2CC7C78700A2415A /* CoinsOrdersCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinsOrdersCollectionViewCell.swift; sourceTree = "<group>"; };
-		73B9693E2CC7C78700A2415A /* CustomActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActionSheet.swift; sourceTree = "<group>"; };
+		73B9693E2CC7C78700A2415A /* AppActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppActionSheet.swift; sourceTree = "<group>"; };
 		73B969402CC7C78700A2415A /* MissionStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionStackView.swift; sourceTree = "<group>"; };
 		73B969452CC7C78700A2415A /* PersonalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalViewController.swift; sourceTree = "<group>"; };
 		73B969482CC7C78700A2415A /* PromoStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoStackView.swift; sourceTree = "<group>"; };
@@ -551,6 +553,14 @@
 				73349D432CEBDB3C00C3223E /* PersonalTableViewCell.swift */,
 				73349D442CEBDB3C00C3223E /* QuitProfileTableViewCell.swift */,
 				73E72F4D2CF8BF9900CDF390 /* AppSwitch.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		7339CC582D02F9C600A5471A /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				7339CC592D02FA1D00A5471A /* AppActionSheetButtonView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1221,7 +1231,8 @@
 		73B9693F2CC7C78700A2415A /* CustomActionSheet */ = {
 			isa = PBXGroup;
 			children = (
-				73B9693E2CC7C78700A2415A /* CustomActionSheet.swift */,
+				73B9693E2CC7C78700A2415A /* AppActionSheet.swift */,
+				7339CC582D02F9C600A5471A /* Components */,
 			);
 			path = CustomActionSheet;
 			sourceTree = "<group>";
@@ -1594,6 +1605,7 @@
 				73B969672CC7C78700A2415A /* Story.swift in Sources */,
 				73B969682CC7C78700A2415A /* User.swift in Sources */,
 				73B969692CC7C78700A2415A /* Constants.swift in Sources */,
+				7339CC5A2D02FA1D00A5471A /* AppActionSheetButtonView.swift in Sources */,
 				73B9696A2CC7C78700A2415A /* DataStorage.swift in Sources */,
 				73E0EFF12CEF785E009520E0 /* AddAddressView.swift in Sources */,
 				73B9696D2CC7C78700A2415A /* AddressesView.swift in Sources */,
@@ -1699,7 +1711,7 @@
 				73EE04582CF113C70031CC37 /* ProfileView.swift in Sources */,
 				739D69C82CF90F700053BC81 /* AppNavigationBarView.swift in Sources */,
 				731C4F792CD912EE0088CF51 /* MainCoordinator.swift in Sources */,
-				73B969A72CC7C78700A2415A /* CustomActionSheet.swift in Sources */,
+				73B969A72CC7C78700A2415A /* AppActionSheet.swift in Sources */,
 				73C067D92CE73FA500AEB125 /* UICollectionViewCell.swift in Sources */,
 				7389E1C82CFB3AC50043E4A8 /* MoyaStyleNetworkLayer.swift in Sources */,
 				73B969A82CC7C78700A2415A /* MissionStackView.swift in Sources */,

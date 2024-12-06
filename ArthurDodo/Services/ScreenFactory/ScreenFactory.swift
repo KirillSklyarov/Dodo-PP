@@ -38,8 +38,8 @@ extension ScreenFactory {
         return CartViewController(storage: storage)
     }
     
-    func makeChatAlertScreen() -> CustomActionSheet {
-        return CustomActionSheet()
+    func makeChatAlertScreen() -> AppActionSheet {
+        return AppActionSheet()
     }
     
     func makePersonalDataScreen() -> PersonalViewController {

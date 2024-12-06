@@ -53,14 +53,12 @@ private extension MissionStackView {
     }
 
     func showSkeleton() {
-        skeletonView.heightAnchor.constraint(equalToConstant: 300).isActive = true
         addArrangedSubview(skeletonView)
+        skeletonView.heightAnchor.constraint(equalToConstant: 300).isActive = true
     }
 
     func showSuccessScreen() {
         skeletonView.removeFromSuperview()
-        addArrangedSubview(headerLabel)
-        addArrangedSubview(missionView)
-        missionView.setBorder()
+        [headerLabel, missionView].forEach { addArrangedSubview($0) }
     }
 }

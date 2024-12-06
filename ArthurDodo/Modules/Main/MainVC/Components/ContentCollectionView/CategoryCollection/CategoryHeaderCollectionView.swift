@@ -3,10 +3,7 @@ import UIKit
 final class CategoryHeaderCollectionView: UICollectionView {
 
     // MARK: - Properties
-    private let viewHeight: CGFloat = 50
-    private let cornerRadius: CGFloat = 0
     private var previousInd = IndexPath(row: 0, section: 0)
-
     private lazy var categories: [Category] = []
 
     var onUpdateProductsCollectionView: ( (Category) -> Void )?
@@ -21,37 +18,21 @@ final class CategoryHeaderCollectionView: UICollectionView {
         super.init(frame: .zero, collectionViewLayout: layout)
         configCollectionView()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    override func didMoveToSuperview() {
-        setupLayout()
-    }
-
+// MARK: - Public methods
+extension CategoryHeaderCollectionView {
     func getCategories(_ categories: [Category]) {
         self.categories = categories
     }
 
     func updateUI() {
-        reloadData()
-    }
-
-    func getPreviousInd() -> IndexPath {
-        previousInd
-    }
-
-    func setPreviousInd(_ indexPath: IndexPath)  {
-        previousInd = indexPath
-    }
-
-    func selectCell(_ indexPath: IndexPath) {
-        deSelectPreviousCell()
-        if let cell = cellForItem(at: indexPath) as? CategoryViewCell {
-            selectItem(at: indexPath, animated: false, scrollPosition: .centeredHorizontally)
-            cell.setTitleColor(.white)
-            setPreviousInd(indexPath)
+        DispatchQueue.main.async { [weak self] in
+            self?.reloadData()
         }
     }
 
@@ -61,26 +42,12 @@ final class CategoryHeaderCollectionView: UICollectionView {
             selectCell(indexPath)
         }
     }
+}
 
-    private func deSelectPreviousCell() {
-        if let previousCell = cellForItem(at: previousInd) as? CategoryViewCell {
-            previousCell.setTitleColor(AppColors.grayFont)
-        }
-    }
-
-    private func setupLayout() {
-        guard let superview else { print("You must add CategoryCollectionView to superview"); return }
-
-        NSLayoutConstraint.activate([
-            leadingAnchor.constraint(equalTo: superview.leadingAnchor),
-            trailingAnchor.constraint(equalTo: superview.trailingAnchor),
-            heightAnchor.constraint(equalToConstant: viewHeight)
-        ])
-    }
-
-    private func configCollectionView() {
+// MARK: - Setup UI
+private extension CategoryHeaderCollectionView {
+    func configCollectionView() {
         backgroundColor = AppColors.backgroundGray
-        layer.cornerRadius = cornerRadius
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         layer.masksToBounds = true
         showsHorizontalScrollIndicator = false
@@ -109,13 +76,35 @@ extension CategoryHeaderCollectionView: UICollectionViewDataSource, UICollection
         onUpdateProductsCollectionView?(categoryName)
     }
     
-    private func designChosenCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryViewCell else { print("Hey2"); return }
-        cell.setTitleColor(.white)
-    }
-    
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryViewCell else { return }
         cell.setTitleColor(.darkGray.withAlphaComponent(0.4))
+    }
+}
+
+// MARK: - Supporting methods
+private extension CategoryHeaderCollectionView {
+    func designChosenCategory(_ collectionView: UICollectionView, _ indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryViewCell else { print("Hey2"); return }
+        cell.setTitleColor(.white)
+    }
+
+    func deSelectPreviousCell() {
+        if let previousCell = cellForItem(at: previousInd) as? CategoryViewCell {
+            previousCell.setTitleColor(AppColors.grayFont)
+        }
+    }
+
+    func selectCell(_ indexPath: IndexPath) {
+        deSelectPreviousCell()
+        if let cell = cellForItem(at: indexPath) as? CategoryViewCell {
+            selectItem(at: indexPath, animated: false, scrollPosition: .centeredHorizontally)
+            cell.setTitleColor(.white)
+            setPreviousInd(indexPath)
+        }
+    }
+
+    func setPreviousInd(_ indexPath: IndexPath)  {
+        previousInd = indexPath
     }
 }

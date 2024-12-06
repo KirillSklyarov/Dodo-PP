@@ -5,7 +5,7 @@ final class AppBlurView: UIVisualEffectView {
     private let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
 
     override init(effect: UIVisualEffect?) {
-        super.init(effect: blurEffect)
+        super.init(effect: effect ?? blurEffect)
     }
 
     required init?(coder: NSCoder) {

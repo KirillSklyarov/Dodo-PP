@@ -48,17 +48,13 @@ private extension SkeletonCollectionViewCell {
     }
 
     func setupDarkTitleLayout() {
-        NSLayoutConstraint.activate([
-            darkPlaceholderTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            darkPlaceholderTitle.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-        ])
+        darkPlaceholderTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        darkPlaceholderTitle.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
     }
 
     func setupLightTitleLayout() {
-        NSLayoutConstraint.activate([
-            whitePlaceholderTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            whitePlaceholderTitle.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-        ])
+        whitePlaceholderTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        whitePlaceholderTitle.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
     }
 }
 
