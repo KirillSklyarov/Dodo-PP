@@ -34,7 +34,6 @@ private extension PreferredPaymentMethodTableViewCell {
 // MARK: - Setup UI
 private extension PreferredPaymentMethodTableViewCell {
     func setupUI() {
-        titleLabel.textAlignment = .left
         backgroundColor = .clear
         selectionStyle = .none
         setAccessoryView(.chevron)

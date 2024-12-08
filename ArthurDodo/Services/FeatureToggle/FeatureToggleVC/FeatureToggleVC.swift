@@ -3,15 +3,7 @@ import UIKit
 final class FeatureToggleVC: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var featuresTableView: AppTableView = {
-        let tableView = AppTableView()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.registerCell(FeatureToggleTableViewCell.self)
-        tableView.rowHeight = 90
-        tableView.backgroundColor = .clear
-        return tableView
-    }()
+    private lazy var featuresTableView = setupFeaturesTableView()
     private lazy var startButton = AppButtons(type: .cartOrange, text: "Start App")
     private lazy var contentStackView = setupContentStack()
 
@@ -61,6 +53,16 @@ private extension FeatureToggleVC {
 
     func setupLayout() {
         contentStackView.setConstraints(isSafeArea: true, insets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+    }
+
+    func setupFeaturesTableView() -> AppTableView {
+        let tableView = AppTableView()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.registerCell(FeatureToggleTableViewCell.self)
+        tableView.rowHeight = 90
+        tableView.backgroundColor = .clear
+        return tableView
     }
 
     // Настраиваем contentStack (тут два стека для того чтобы разместить не по высоте всего экрана, а сделать данные сверху)

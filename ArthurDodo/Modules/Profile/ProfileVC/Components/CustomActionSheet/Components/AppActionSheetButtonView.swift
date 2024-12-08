@@ -9,6 +9,7 @@ enum AppActionSheetButtonType {
 final class AppActionSheetButtonView: UIView {
 
     // MARK: - Properties
+    private let viewHeight: CGFloat = 60
     var actionSheetButton: AppButtons?
     var onButtonTapped: (() -> Void)?
 
@@ -45,7 +46,7 @@ private extension AppActionSheetButtonView {
     }
 
     func setupLayout(_ blurView: AppBlurView, _ cartButton: AppButtons) {
-        heightAnchor.constraint(equalToConstant: 60).isActive = true
+        heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
         blurView.setConstraints()
         cartButton.setConstraints()
     }

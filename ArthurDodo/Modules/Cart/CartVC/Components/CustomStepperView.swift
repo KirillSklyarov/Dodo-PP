@@ -6,7 +6,7 @@ final class CustomStepperView: UIView {
     // MARK: - UI properties
     private lazy var decrementButton = AppButtons(type: .decrementCount)
     private lazy var incrementButton = AppButtons(type: .incrementCount)
-    private lazy var valueLabel = AppLabel(type: .smallTitle, text: "\(value)")
+    private lazy var valueLabel = AppLabel(type: .smallTitle, text: "\(value)", alignment: .center)
 
     private lazy var contentStack = AppStackView([decrementButton, valueLabel, incrementButton], axis: .horizontal, distribution: .fillEqually)
 
@@ -63,8 +63,6 @@ private extension CustomStepperView {
 // MARK: - Setup UI
 private extension CustomStepperView {
     func setupUI() {
-        valueLabel.textAlignment = .center
-
         backgroundColor = AppColors.buttonGray
         layer.cornerRadius = 10
         layer.masksToBounds = true

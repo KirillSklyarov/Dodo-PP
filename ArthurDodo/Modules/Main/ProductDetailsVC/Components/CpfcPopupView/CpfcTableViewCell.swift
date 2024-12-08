@@ -4,7 +4,7 @@ final class CpfcTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
     private lazy var titleLabel = AppLabel(type: .smallTitle)
-    private lazy var cpfcValueLabel = AppLabel(type: .smallTitle)
+    private lazy var cpfcValueLabel = AppLabel(type: .smallTitle, alignment: .right)
 
     private lazy var contentStack = AppStackView([titleLabel, cpfcValueLabel], axis: .horizontal)
 
@@ -28,8 +28,6 @@ final class CpfcTableViewCell: UITableViewCell {
 // MARK: - Setup UI
 private extension CpfcTableViewCell {
     func setupUI() {
-        setupUIElements()
-
         backgroundColor = .clear
         selectionStyle = .none
 
@@ -40,10 +38,5 @@ private extension CpfcTableViewCell {
 
     func setupLayout() {
         contentStack.setConstraints()
-    }
-
-    func setupUIElements() {
-        titleLabel.textAlignment = .left
-        cpfcValueLabel.textAlignment = .right
     }
 }

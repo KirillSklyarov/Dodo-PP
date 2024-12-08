@@ -5,7 +5,7 @@ final class MainHeaderView: UIView {
     // MARK: - UI Properties
     private lazy var addressStackView = AddressStackView()
     private lazy var profileContainerView = ProfileMainHeaderView()
-    private lazy var contentStackView = setupContentStack()
+    private lazy var contentStackView = AppStackView([addressStackView, profileContainerView], axis: .horizontal, spacing: 10)
 
     // MARK: - Properties
     var onProfileButtonTapped: (() -> Void)?
@@ -77,14 +77,6 @@ private extension MainHeaderView {
 
     func contentStackViewLayout() {
         contentStackView.setConstraints(insets: UIEdgeInsets(top: 10, left: 20, bottom: 5, right: 20))
-    }
-
-    // Настраиваем стек, указываем, что нужно увеличить размер address, но не нужно увеличивать размер profile (это позволяет нам не вставлять туда лишний UIView для расстояния)
-    func setupContentStack() -> UIStackView {
-        let contentStackView = AppStackView([addressStackView, profileContainerView], axis: .horizontal, spacing: 10)
-        addressStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        profileContainerView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        return contentStackView
     }
 }
 

@@ -28,7 +28,6 @@ final class LegalSectionTableViewCell: UITableViewCell {
 // MARK: - Setup UI
 private extension LegalSectionTableViewCell {
     func setupUI() {
-        titleLabel.textAlignment = .left
         backgroundColor = .clear
         selectionStyle = .none
         setAccessoryView(.chevron)

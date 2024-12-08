@@ -40,20 +40,12 @@ extension ProfileMainHeaderView {
 private extension ProfileMainHeaderView {
     func setupUI() {
         addSubviews(profileView, coinsView)
-
         setupLayout()
     }
 
     func setupLayout() {
-        setupViewLayout()
         setupProfileImageViewLayout()
         setupCoinsViewLayout()
-    }
-
-    // Констреинты самого view
-    func setupViewLayout() {
-        heightAnchor.constraint(equalToConstant: height).isActive = true
-        widthAnchor.constraint(equalTo: heightAnchor).isActive = true
     }
 
     // Констреинты coinsView
@@ -62,7 +54,8 @@ private extension ProfileMainHeaderView {
     }
 
     func setupProfileImageViewLayout() {
-        profileView.setConstraints()
+        profileView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        profileView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
 }
 

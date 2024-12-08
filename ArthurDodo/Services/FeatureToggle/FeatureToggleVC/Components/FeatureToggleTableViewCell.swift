@@ -3,7 +3,7 @@ import UIKit
 final class FeatureToggleTableViewCell: UITableViewCell {
 
     // MARK: - UI Properties
-    private lazy var featureLabel = AppLabel(type: .smallHeader)
+    private lazy var featureLabel = AppLabel(type: .smallHeader, alignment: .center, numberOfLines: 0)
     private lazy var localFeatureSwitch = AppSwitch(isHidden: false)
     private lazy var remoteFeatureSwitch = AppSwitch(isHidden: false)
     private lazy var contentStack = setupConfigureContentStack()
@@ -32,7 +32,7 @@ final class FeatureToggleTableViewCell: UITableViewCell {
 // MARK: - Setup UI
 private extension FeatureToggleTableViewCell {
     func setupUI() {
-        uiElementsSetup()
+        setupUIElements()
 
         backgroundColor = .clear
         selectionStyle = .none
@@ -41,11 +41,8 @@ private extension FeatureToggleTableViewCell {
         setupLayout()
     }
 
-    func uiElementsSetup() {
-        featureLabel.numberOfLines = 0
-        featureLabel.textAlignment = .center
+    func setupUIElements() {
         remoteFeatureSwitch.isUserInteractionEnabled = false
-
     }
 
     func setupLayout() {

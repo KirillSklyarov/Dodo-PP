@@ -3,9 +3,9 @@ import UIKit
 final class TableViewHeaderView: UIView {
 
     // MARK: - UI Properties
-    private lazy var nameLabel = AppLabel(type: .maxiTitle, text: "Название фичи")
-    private lazy var localStatusLabel = AppLabel(type: .maxiTitle, text: "Локальный статус")
-    private lazy var remoteStatusLabel = AppLabel(type: .maxiTitle, text: "Удаленный статус")
+    private lazy var nameLabel = AppLabel(type: .maxiTitle, text: "Название фичи", alignment: .center)
+    private lazy var localStatusLabel = AppLabel(type: .maxiTitle, text: "Локальный статус", alignment: .center)
+    private lazy var remoteStatusLabel = AppLabel(type: .maxiTitle, text: "Удаленный статус", alignment: .center)
     private lazy var separatorView = AppView(type: .separator)
 
     private lazy var contentStack = setupContentStack()

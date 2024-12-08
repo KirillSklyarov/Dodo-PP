@@ -57,18 +57,19 @@ private extension AddressTextFieldView {
     }
 
     func setupLayout() {
-        contentStack.setConstraints(allInsets: 5)
+        contentStack.setLocalConstraints(top: 5, bottom: 5, left: 10, right: 5)
         clearButton.widthAnchor.constraint(equalTo: contentStack.heightAnchor).isActive = true
         heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
     }
 
     func setupContentStack() -> UIStackView {
-        let textStack = AppStackView([titleLabel, textField], axis: .vertical, spacing: 0)
-        let contentStack = AppStackView([textStack, clearButton], axis: .horizontal)
+        let textStack = AppStackView([titleLabel, textField], axis: .vertical)
+        let contentStack = AppStackView([textStack, clearButton], axis: .horizontal, alignment: .center)
         return contentStack
     }
 }
 
+// MARK: - Setup action
 private extension AddressTextFieldView {
     func setupActions() {
         setupClearButtonAction()

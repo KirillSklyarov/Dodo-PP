@@ -3,10 +3,10 @@ import UIKit
 final class AddNewAddressViewController: UIViewController {
 
     // MARK: - UI Properties
+    private lazy var dismissButton = AppDismissButtonView(type: .chevron)
     private lazy var mapView = AddAddressMapView()
     private lazy var addressView = AddAddressView()
     private lazy var contentStackView = AppStackView([mapView, addressView], axis: .vertical, spacing: -5, distribution: .fill)
-    private lazy var dismissButton = AppDismissButtonView(type: .chevron)
 
     // MARK: - Properties
     private var mainAddress: Address?

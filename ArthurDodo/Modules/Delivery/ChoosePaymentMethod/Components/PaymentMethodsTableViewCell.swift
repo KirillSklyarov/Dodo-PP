@@ -40,7 +40,6 @@ private extension PaymentMethodsTableViewCell {
 // MARK: - Setup UI
 private extension PaymentMethodsTableViewCell {
     func setupUI() {
-        titleLabel.textAlignment = .left
         backgroundColor = .clear
         selectionStyle = .none
 

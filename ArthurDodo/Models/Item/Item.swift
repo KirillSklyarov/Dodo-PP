@@ -48,7 +48,7 @@ struct Item: Equatable, Codable {
     func getCorrectDough() -> String? {
         if !hasOneSize() {
             let dough: Dough = .basic
-            return dough.displayName.lowercased()
+            return dough.displayName
         } else {
             return nil
         }

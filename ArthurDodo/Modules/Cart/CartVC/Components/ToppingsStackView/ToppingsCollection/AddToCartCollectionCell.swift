@@ -6,8 +6,8 @@ final class AddToCartCollectionCell: UICollectionViewCell {
     // MARK: - UI Properties
     private lazy var detailsBackgroundView = AppView(type: .details)
     private lazy var itemImageView = AppImageView(type: .justView)
-    private lazy var titleLabel = AppLabel(type: .basicTitle)
-    private lazy var detailsLabel = AppLabel(type: .smallTitle, textColor: AppColors.grayFont)
+    private lazy var titleLabel = AppLabel(type: .basicTitle, numberOfLines: 3)
+    private lazy var detailsLabel = AppLabel(type: .smallTitle, textColor: AppColors.grayFont, numberOfLines: 2)
     private lazy var priceLabel = AppLabel(type: .priceGrayRoundLabel)
 
     private lazy var contentStack = setupContentStack()
@@ -38,7 +38,7 @@ private extension AddToCartCollectionCell {
         let size = item.getCorrectSize().displayName
         let weight = item.getCorrectWeight()
         if let dough {
-            detailsLabel.text = "\(size), \(dough)"
+            detailsLabel.text = "\(dough), \(size)"
         } else {
             detailsLabel.text = "\(weight) г"
         }
@@ -54,20 +54,12 @@ private extension AddToCartCollectionCell {
 // MARK: - Setup UI
 private extension AddToCartCollectionCell {
     func setupUI() {
-        setupUIElements()
-
         layer.cornerRadius = 10
         layer.masksToBounds = true
 
         contentView.addSubviews(detailsBackgroundView, contentStack)
 
         setupLayout()
-    }
-
-    func setupUIElements() {
-        titleLabel.numberOfLines = 3
-        detailsLabel.adjustsFontSizeToFitWidth = true
-        detailsLabel.numberOfLines = 2
     }
 
     // Настраиваем контент стек
@@ -91,7 +83,7 @@ private extension AddToCartCollectionCell {
 
     func setupContentStackLayout() {
         contentStack.setConstraints(allInsets: 5)
-        itemImageView.widthAnchor.constraint(equalTo: itemImageView.heightAnchor).isActive = true
+        itemImageView.heightAnchor.constraint(equalTo: contentStack.heightAnchor, multiplier: 0.45).isActive = true
     }
 
     func setupBackgroundViewLayout() {

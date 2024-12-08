@@ -25,6 +25,8 @@ private extension AppView {
         case .profile:
             backgroundColor = AppColors.grayFont
             layer.masksToBounds = true
+            heightAnchor.constraint(equalToConstant: 40).isActive = true
+            widthAnchor.constraint(equalToConstant: 40).isActive = true
         case .separator:
             backgroundColor = AppColors.buttonGray
             heightAnchor.constraint(equalToConstant: 1).isActive = true

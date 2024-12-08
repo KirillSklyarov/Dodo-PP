@@ -3,7 +3,7 @@ import UIKit
 final class MissionView: UIView {
 
     // MARK: - UI Properties
-    private lazy var titleLabel = AppLabel(type: .smallTitle, text: "Каждый месяц мы придумываем небольшие задания. Выполняйте их и получайте Dodo Coins. Это весело!", textColor: AppColors.grayFont)
+    private lazy var titleLabel = AppLabel(type: .smallTitle, text: "Каждый месяц мы придумываем небольшие задания. Выполняйте их и получайте Dodo Coins. Это весело!", textColor: AppColors.grayFont, alignment: .center)
 
     // MARK: - Properties
     private let viewHeight: CGFloat = 250
@@ -22,8 +22,7 @@ final class MissionView: UIView {
 // MARK: - Setup UI
 private extension MissionView {
     func setupUI() {
-        titleLabel.textAlignment = .center
-
+        titleLabel.numberOfLines = 0
         backgroundColor = AppColors.backgroundGray
         layer.cornerRadius = 14
         layer.masksToBounds = true

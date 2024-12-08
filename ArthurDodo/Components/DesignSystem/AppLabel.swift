@@ -2,6 +2,7 @@ import UIKit
 
 enum LabelType {
     case priceGrayRoundLabel
+    case tinyTitle
     case smallTitle
     case basicTitle
     case maxiTitle
@@ -12,9 +13,9 @@ enum LabelType {
 
 final class AppLabel: InsetLabel {
 
-    init(type: LabelType, text: String? = nil, textColor: UIColor? = .white) {
+    init(type: LabelType, text: String? = nil, textColor: UIColor? = .white, alignment: NSTextAlignment = .left, numberOfLines: Int = 0) {
         super.init(frame: .zero)
-        configureLabel(type: type, text: text, textColor: textColor)
+        configureLabel(type: type, text: text, textColor: textColor, alignment: alignment, numberOfLines: numberOfLines)
     }
 
     required init?(coder: NSCoder) {
@@ -28,57 +29,59 @@ final class AppLabel: InsetLabel {
 }
 
 private extension AppLabel {
-    func configureLabel(type: LabelType, text: String?, textColor: UIColor?) {
+    func configureLabel(type: LabelType, text: String?, textColor: UIColor?, alignment: NSTextAlignment, numberOfLines: Int) {
         switch type {
         case .priceGrayRoundLabel:
             self.text = text
             self.textColor = textColor
             font = AppFontsEnum.bold(size: 12).font
             textAlignment = .center
-            numberOfLines = 1
+            self.numberOfLines = 1
             backgroundColor = .white.withAlphaComponent(0.2)
             layer.cornerRadius = 14
             clipsToBounds = true
             contentInset = UIEdgeInsets(top: 5, left: 15, bottom: 5, right: 15)
+        case .tinyTitle:
+            self.text = text
+            self.textColor = textColor
+            font = AppFontsEnum.regular(size: 12).font
+            textAlignment = alignment
         case .smallTitle:
             self.text = text
             self.textColor = textColor
             font = AppFontsEnum.regular(size: 14).font
-            textAlignment = .left
-            numberOfLines = 0
+            textAlignment = alignment
+            self.numberOfLines = numberOfLines
         case .basicTitle:
             self.text = text
             self.textColor = textColor
             font = AppFontsEnum.semibold(size: 16).font
-            textAlignment = .left
-            numberOfLines = 0
-            adjustsFontSizeToFitWidth = true
+            textAlignment = alignment
+            self.numberOfLines = numberOfLines
         case .maxiTitle:
             self.text = text
             self.textColor = textColor
             font = AppFontsEnum.semibold(size: 18).font
-            textAlignment = .center
-            numberOfLines = 0
-            adjustsFontSizeToFitWidth = true
+            textAlignment = alignment
+            self.numberOfLines = 0
         case .smallHeader:
             self.text = text
             self.textColor = textColor
             font = AppFontsEnum.bold(size: 22).font
             textAlignment = .left
-            numberOfLines = 1
-            adjustsFontSizeToFitWidth = true
+            self.numberOfLines = numberOfLines
         case .header:
             self.text = text
             self.textColor = textColor
             font = AppFontsEnum.bold(size: 26).font
-            textAlignment = .left
-            numberOfLines = 1
+            textAlignment = alignment
+            self.numberOfLines = 1
         case .maxiHeader:
             self.text = text
             self.textColor = textColor
             font = AppFontsEnum.bold(size: 40).font
-            textAlignment = .left
-            numberOfLines = 1
+            textAlignment = alignment
+            self.numberOfLines = 1
         }
     }
 

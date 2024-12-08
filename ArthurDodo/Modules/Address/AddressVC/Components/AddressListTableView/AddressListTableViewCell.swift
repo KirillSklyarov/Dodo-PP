@@ -75,8 +75,6 @@ extension AddressListTableViewCell {
 // MARK: - Setup UI
 private extension AddressListTableViewCell {
     func setupUI() {
-        titleLabel.textAlignment = .left
-
         backgroundColor = .clear
         selectionStyle = .none
         accessoryView = editAddressButton

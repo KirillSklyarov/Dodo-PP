@@ -60,7 +60,6 @@ private extension CartProductCell {
 // MARK: - Setup UI
 private extension CartProductCell {
     func setupUI() {
-        priceLabel.textAlignment = .left
         selectionStyle = .none
         backgroundColor = .clear
 
