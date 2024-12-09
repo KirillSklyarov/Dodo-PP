@@ -1,6 +1,11 @@
 import UIKit
 import SafariServices
 
+protocol PersonalViewProtocol: AnyObject {
+    func updateUserData(_ personalData: User)
+    func showURL(url: URL)
+}
+
 // Экран с личными данными юзера (имя, почта, телефон и проч.)
 final class PersonalViewController: UIViewController {
 
@@ -9,15 +14,12 @@ final class PersonalViewController: UIViewController {
     private lazy var personalTableView = PersonalTableView()
     private lazy var contentStackView = AppStackView([headerView, personalTableView], axis: .vertical, spacing: 10)
 
-    // MARK: - Other Properties
-    private let storage: DataStorage
-    private var personalData: User?
-
-    var onDismissButtonTapped: (() -> Void)?
+    // MARK: - Properties
+    let presenter: PersonalPresenter
 
     // MARK: - Init
-    init(storage: DataStorage) {
-        self.storage = storage
+    init(presenter: PersonalPresenter) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -30,7 +32,7 @@ final class PersonalViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        fetchData()
+        presenter.viewDidLoad()
     }
 }
 
@@ -62,37 +64,24 @@ private extension PersonalViewController {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            onDismissButtonTapped?()
+            presenter.onDismissButtonTapped?()
         }
     }
 
     func setupPersonalTableViewAction() {
         personalTableView.onShowURL = { [weak self] in
-            self?.showURL()
+            self?.presenter.showURL()
         }
     }
 }
 
-// MARK: - Fetch Data
-private extension PersonalViewController {
-    // Забираем данные с сервера и передаем их для отображения
-    func fetchData() {
-        self.personalData = storage.getUserData()
-        passUserDataToTableView()
+// MARK: - PersonalViewProtocol
+extension PersonalViewController: PersonalViewProtocol {
+    func updateUserData(_ personalData: User) {
+        personalTableView.getUserData(personalData)
     }
 
-    // Передаем данные на tableView для отображения
-    func passUserDataToTableView() {
-        if let personalData {
-            personalTableView.getUserData(personalData)
-        }
-    }
-}
-
-// MARK: - Supporting methods
-private extension PersonalViewController {
-    func showURL() {
-        guard let url = URL(string: "https://www.dodopizza.ru") else { return }
+    func showURL(url: URL) {
         let safariVC = SFSafariViewController(url: url)
         present(safariVC, animated: true)
     }

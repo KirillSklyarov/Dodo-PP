@@ -136,6 +136,7 @@ private extension AppStartManager {
         do {
             let userData = try await networkService.fetchUserData()
             storage.setUserData(userData)
+            storage.profileStorage.setUserData(userData)
             print("User data fetched")
         } catch {
             print("User Data fetch error:: \(error)")
@@ -164,11 +165,11 @@ private extension AppStartManager {
         }
     }
 
-    // Получаем акции с сервера и отправляем их в хранилище
+    // Получаем акции с сервера и отправляем их в хранилище (в данном случае в хранилище профиля)
     func fetchPromo() async {
         do {
             let promo = try await networkService.fetchPromo()
-            storage.setPromo(promo)
+            storage.profileStorage.setPromo(promo)
             print("Promo fetched")
         } catch {
             print("Promo fetch error: \(error)")

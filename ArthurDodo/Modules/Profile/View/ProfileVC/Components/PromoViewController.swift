@@ -1,7 +1,7 @@
 import UIKit
 
 // Вылезающий снизу экран "Акции"
-final class ApplyOfferViewController: UIViewController {
+final class PromoViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var promoImageView = AppImageView(type: .promoImage)
@@ -41,7 +41,7 @@ final class ApplyOfferViewController: UIViewController {
 }
 
 // MARK: - Setup Actions
-extension ApplyOfferViewController {
+extension PromoViewController {
     func setupActions() {
         setupButtonActions()
     }
@@ -56,7 +56,7 @@ extension ApplyOfferViewController {
 }
 
 // MARK: - Setup UI
-private extension ApplyOfferViewController {
+private extension PromoViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundGray
         view.addSubviews(contentStack)

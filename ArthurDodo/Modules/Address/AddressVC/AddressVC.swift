@@ -52,7 +52,7 @@ final class AddressViewController: UIViewController {
 private extension AddressViewController {
     // Если личные данные уже были загружены, то забираем из хранилища, если нет, то инициируем сетевой запрос
     func fetchData() {
-        if storage.isUserDataLoaded() {
+        if storage.profileStorage.isUserDataLoaded() {
             getAddressFromStorage()
         } else {
             fetchAddresses()

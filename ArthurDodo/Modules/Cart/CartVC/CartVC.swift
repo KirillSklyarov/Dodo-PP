@@ -79,7 +79,7 @@ private extension CartViewController {
 
     // Получаем данные из хранилища и передаем их в коллекцию и выставляем состояние экрана
     func getPromoFromStorage() {
-        let promo = storage.getPromo()
+        let promo = storage.profileStorage.getPromo()
         promoCollectionUpdateUI(promo)
         promoStackView.setState(.success)
     }

@@ -3,12 +3,12 @@ import UIKit
 final class ProfileCoordinator: Coordinator {
     // MARK: - Properties
     private let router: Router
-    private let screenFactory: ScreenFactory
+    private let screenFactory: ProfileScreenFactory
 
     var onFlowFinished: (() -> Void)?
 
     // MARK: - Init
-    init(router: Router, screenFactory: ScreenFactory) {
+    init(router: Router, screenFactory: ProfileScreenFactory) {
         self.router = router
         self.screenFactory = screenFactory
     }
@@ -21,23 +21,24 @@ final class ProfileCoordinator: Coordinator {
 extension ProfileCoordinator {
     func start() {
         let profileVC = screenFactory.makeProfileScreen()
+        let presenter = profileVC.presenter
 
         // Отрабатываем замыкания
-        profileVC.onDismissButtonTapped = { [weak self] in
+        presenter.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss() // Закрываем экран
             self?.onFlowFinished?() // Говорим что флоу закончен
         }
         
-        profileVC.onShowChatAlert = { [weak self] in
+        presenter.onShowChatAlert = { [weak self] in
             self?.showChatAlert()
         }
 
-        profileVC.onShowPersonalData = { [weak self] in
+        presenter.onShowPersonalData = { [weak self] in
             self?.showPersonalData()
         }
 
-        profileVC.onShowPromoVC = { [weak self] promo in
-            self?.showApplySpecialOffer(promo)
+        presenter.onShowPromoVC = { [weak self] promo in
+            self?.showPromo(promo)
         }
 
         router.present(profileVC) // Показываем экран
@@ -46,8 +47,8 @@ extension ProfileCoordinator {
 
 // MARK: - Supporting methods
 private extension ProfileCoordinator {
-    func showApplySpecialOffer(_ offer: Promo) {
-        let vc = screenFactory.makeApplySpecialOfferScreen(offer)
+    func showPromo(_ offer: Promo) {
+        let vc = screenFactory.makePromoScreen(offer)
         guard let configureSheet = vc.sheetPresentationController else { return }
         configureSheet.detents = [.medium()]
         configureSheet.prefersGrabberVisible = true
@@ -66,9 +67,10 @@ private extension ProfileCoordinator {
 
     func showPersonalData() {
         let vc = screenFactory.makePersonalDataScreen()
+        let presenter = vc.presenter
         router.present(vc, isParent: true, modalPresentation: .automatic)
 
-        vc.onDismissButtonTapped = { [weak self] in
+        presenter.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
         }
     }

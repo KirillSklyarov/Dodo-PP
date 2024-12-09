@@ -11,19 +11,11 @@ final class ProfileViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
 
     // MARK: - Other Properties
-    private var state: ScreenState = .loading
-    private let storage: DataStorage
-
-    private var personalData: User?
-
-    var onShowChatAlert: (() -> Void)?
-    var onDismissButtonTapped: (() -> Void)?
-    var onShowPersonalData: (() -> Void)?
-    var onShowPromoVC: ((Promo) -> Void)?
+    let presenter: ProfilePresenter
 
     // MARK: - Init
-    init(storage: DataStorage) {
-        self.storage = storage
+    init(presenter: ProfilePresenter) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -36,7 +28,7 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        fetchData()
+        presenter.viewDidLoad()
     }
 }
 
@@ -90,67 +82,38 @@ private extension ProfileViewController {
     func setupSpecialOfferActions() {
         promoStackView.onPromoSelected = { [weak self] specialOffer in
             guard let self else { return }
-            onShowPromoVC?(specialOffer)
-//            showSpecialOfferView(specialOffer)
+            presenter.onShowPromoVC?(specialOffer)
         }
     }
 
     // Настройка действий header view (где 3 кнопки)
     func setupHeaderViewActions() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.onDismissButtonTapped?()
+            self?.presenter.onDismissButtonTapped?()
         }
 
         headerView.onChatButtonTapped = { [weak self] in
-            self?.onShowChatAlert?()
+            self?.presenter.onShowChatAlert?()
         }
 
         headerView.onProfileButtonTapped = { [weak self] in
-            self?.onShowPersonalData?()
+            self?.presenter.onShowPersonalData?()
         }
     }
 }
 
-// MARK: - Fetch Data
-private extension ProfileViewController { // Запрашиваем данные с сервера
-    func fetchData() {
-        fetchUserDataFromStorage()
-        fetchPromoFromStorage()
-        setState(view: .mission, state: .success) // Выставляю нижней вью правильное состояние (потом можно будет убрать)
-    }
-
-    // Запрашиваем персональные данные с сервера: додокоины, кол-во заказов, адреса
-    func fetchUserDataFromStorage() {
-        guard let personalData = storage.getUserData() else { print("Error: fetchUserDataFromStorage"); return }
-        passPersonalDataToCollectionView(personalData)
-        setState(view: .personalData, state: .success)
-    }
-
-    // Запрашиваем спецпредложения с сервера (раздел Акции), передаем данные на вью и выставляем состояние у вьюхи
-    func fetchPromoFromStorage() {
-        let promo = storage.getPromo()
-        passPromoToCollectionView(promo)
-        setState(view: .promo, state: .success)
-    }
-}
-
-// MARK: - Supporting methods
-private extension ProfileViewController {
-    func passPersonalDataToCollectionView(_ personalData: User) {
+// MARK: - ProfileViewProtocol
+extension ProfileViewController: ProfileViewProtocol {
+    func updatePersonalData(_ personalData: User) {
         personalDataCollectionView.getPersonalData(personalData)
     }
 
-    func passPersonalDataToTableView(_ personalData: User) {
-        personalDataCollectionView.getPersonalData(personalData)
-    }
-
-    func passPromoToCollectionView(_ promo: [Promo]) {
+    func updatePromo(_ promo: [Promo]) {
         promoStackView.updateUI(promo)
     }
 
     func setState(view: ProfileView, state: ScreenState) {
         switch view {
-        case .profile: self.state = state
         case .personalData: personalDataCollectionView.setState(state)
         case .promo: promoStackView.setState(state)
         case .mission: missionStackView.setState(state)

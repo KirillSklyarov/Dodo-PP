@@ -1,6 +1,15 @@
 import UIKit
 
-// Класс фабрика экранов отвечает за создание экранов
+enum Modules {
+    case app
+    case main
+    case cart
+    case address
+    case profile
+    case delivery
+}
+
+// Класс "Фабрика координатором" отвечает за создание координаторов
 final class CoordinatorFactory {
     // MARK: - Properties
     private let router: Router
@@ -26,7 +35,7 @@ extension CoordinatorFactory {
     }
 
     func makeProfileCoordinator() -> ProfileCoordinator {
-        return ProfileCoordinator(router: router, screenFactory: screenFactory)
+        return ProfileCoordinator(router: router, screenFactory: screenFactory.profileScreenFactory)
     }
 
     func makeAddressCoordinator() -> AddressCoordinator {

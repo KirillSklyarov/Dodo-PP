@@ -2,13 +2,15 @@ import Foundation
 
 final class DataStorage {
 
+    // MARK: - Module storages
+    let profileStorage = ProfileStorage()
+
     // MARK: - Properties
     private var fetchedUserAddresses: [Address] = []
     private var fetchedToppings: [Topping] = []
     private var fetchedStories: [Story] = []
     private var fetchedItems: [Item] = []
-    private var fetchedPromo: [Promo] = []
-    private var fetchedUserData: User?
+    private var fetchedUserData: User? // Используется для адресов
     private var category: [Category] = []
     private var order: Order?
     private var cart: Cart?
@@ -98,7 +100,7 @@ extension DataStorage {
     }
 }
 
-// MARK: - User data
+//// MARK: - User data
 extension DataStorage {
     // Получаем личные данные
     func setUserData(_ user: User) {
@@ -259,19 +261,6 @@ extension DataStorage {
     // Отправляет выбранный товар, то есть тот, который открыл пользователь
     func getSelectedItemFromStorage() -> Item? {
         selectedItem?.item
-    }
-}
-
-// MARK: - Promo
-extension DataStorage {
-    // Получаем промо (коллекция "Акции" в корзине и в профиле)
-    func setPromo(_ promo: [Promo]) {
-        fetchedPromo = promo
-    }
-
-    // Возвращает загруженные акции 
-    func getPromo() -> [Promo] {
-        fetchedPromo
     }
 }
 

@@ -172,7 +172,7 @@ private extension MainViewController {
     func getMainAddressFromStorage() {
         guard let mainAddress = storage.getMainAddress() else { print("Error: mainAddress is nil"); return }
         let addressName = mainAddress.name
-        let userDodoCoins = storage.getDodoCoins()
+        let userDodoCoins = storage.profileStorage.getDodoCoins()
         headerView.updateUI(addressName, userDodoCoins)
     }
 

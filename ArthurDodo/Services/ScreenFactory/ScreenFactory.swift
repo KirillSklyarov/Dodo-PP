@@ -4,10 +4,12 @@ import UIKit
 final class ScreenFactory {
     // MARK: - Properties
     private let storage: DataStorage
+    let profileScreenFactory: ProfileScreenFactory
 
     // MARK: - Init
     init(storage: DataStorage) {
         self.storage = storage
+        profileScreenFactory = ProfileScreenFactory(storage: storage.profileStorage)
     }
 }
 
@@ -15,10 +17,6 @@ final class ScreenFactory {
 extension ScreenFactory {
     func makeMainScreen() -> MainViewController {
         return MainViewController(storage: storage)
-    }
-    
-    func makeProfileScreen() -> ProfileViewController {
-        return ProfileViewController(storage: storage)
     }
     
     func makeProductDetailsScreen() -> ProductDetailsViewController {
@@ -36,18 +34,6 @@ extension ScreenFactory {
     
     func makeCartScreen() -> CartViewController {
         return CartViewController(storage: storage)
-    }
-    
-    func makeChatAlertScreen() -> AppActionSheet {
-        return AppActionSheet()
-    }
-    
-    func makePersonalDataScreen() -> PersonalViewController {
-        return PersonalViewController(storage: storage)
-    }
-    
-    func makeApplySpecialOfferScreen(_ offer: Promo) -> ApplyOfferViewController {
-        return ApplyOfferViewController(with: offer)
     }
 
     func makeDeliveryScreen() -> DeliveryVC {
@@ -84,5 +70,24 @@ extension ScreenFactory {
 
     func makeAlertScreen(_ type: AlertType) -> UIAlertController {
         return AppAlert.create(type)
+    }
+}
+
+// MARK: - Profile module
+extension ScreenFactory {
+    func makeProfileScreen() -> ProfileViewController {
+        return profileScreenFactory.makeProfileScreen()
+    }
+
+    func makePersonalDataScreen() -> PersonalViewController {
+        return profileScreenFactory.makePersonalDataScreen()
+    }
+
+    func makeChatAlertScreen() -> AppActionSheet {
+        return profileScreenFactory.makeChatAlertScreen()
+    }
+
+    func makeApplySpecialOfferScreen(_ offer: Promo) -> PromoViewController {
+        return PromoViewController(with: offer)
     }
 }
