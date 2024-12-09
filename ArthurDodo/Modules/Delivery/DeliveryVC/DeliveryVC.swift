@@ -43,7 +43,7 @@ final class DeliveryVC: UIViewController {
 
     func updateAddress(_ addressName: String) {
         addressTableView.updateUI(with: addressName)
-        storage.setNewMainAddress(addressName)
+        storage.addressStorage.setNewMainAddress(addressName)
     }
 
     // MARK: - Life cycle
@@ -65,7 +65,7 @@ private extension DeliveryVC {
 
     // Получаем адреса и обновляем таблицу с активным адресом
     func fetchAddresses() {
-        guard let mainAddressName = storage.getMainAddress()?.name else { print("Error: No main address"); return }
+        guard let mainAddressName = storage.addressStorage.getMainAddress()?.name else { print("Error: No main address"); return }
         addressTableView.updateUI(with: mainAddressName)
     }
 

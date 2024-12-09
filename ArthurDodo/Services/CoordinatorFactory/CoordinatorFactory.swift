@@ -39,7 +39,7 @@ extension CoordinatorFactory {
     }
 
     func makeAddressCoordinator() -> AddressCoordinator {
-        return AddressCoordinator(router: router, screenFactory: screenFactory)
+        return AddressCoordinator(router: router, screenFactory: screenFactory.addressScreenFactory)
     }
 
     func makeCartCoordinator() -> CartCoordinator {

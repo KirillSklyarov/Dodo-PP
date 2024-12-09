@@ -3,12 +3,12 @@ import UIKit
 final class AddressCoordinator: Coordinator {
     // MARK: - Properties
     private let router: Router
-    private let screenFactory: ScreenFactory
+    private let screenFactory: AddressScreenFactory
 
     var onFlowFinished: (() -> Void)?
 
     // MARK: - Init
-    init(router: Router, screenFactory: ScreenFactory) {
+    init(router: Router, screenFactory: AddressScreenFactory) {
         self.router = router
         self.screenFactory = screenFactory
     }
@@ -19,23 +19,24 @@ final class AddressCoordinator: Coordinator {
 
     func start() {
         let addressVC = screenFactory.makeAddressScreen()
+        let presenter = addressVC.presenter
 
-        addressVC.onDismissButtonTapped = { [weak self] in
+        presenter.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
             router.dismiss()
             onFlowFinished?()
         }
 
-        addressVC.onShowEditAddressVC = { [weak self] address in
-            self?.showEditAddressVC(address)
+        presenter.onShowEditAddressVC = { [weak self] in
+            self?.showEditAddressVC()
         }
 
-        addressVC.onShowAddNewAddressVC = { [weak self] in
+        presenter.onShowAddNewAddressVC = { [weak self] in
             self?.showAddNewAddressVC()
         }
 
         // Нажали на кнопку "Доставить сюда"
-        addressVC.onDeliveryButtonTapped = { [weak self] in
+        presenter.onDeliveryButtonTapped = { [weak self] in
             self?.router.dismiss()
             self?.onFlowFinished?()
         }
@@ -46,28 +47,30 @@ final class AddressCoordinator: Coordinator {
 
 // MARK: - Supporting methods
 private extension AddressCoordinator {
-    func showEditAddressVC(_ address: Address) {
-        let editAddressVC = screenFactory.makeEditAddressScreen(address)
+    func showEditAddressVC() {
+        let editAddressVC = screenFactory.makeEditAddressScreen()
+        let presenter = editAddressVC.presenter
         router.present(editAddressVC, isParent: true, modalPresentation: .fullScreen)
 
-        editAddressVC.onDismissButtonTapped = { [weak self] in
+        presenter.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
         }
 
-        editAddressVC.onSaveButtonTapped = { [weak self] in
+        presenter.onSaveButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
         }
     }
 
     func showAddNewAddressVC() {
         let vc = screenFactory.makeAddNewAddressScreen()
+        let presenter = vc.presenter
         router.present(vc, isParent: true, modalPresentation: .fullScreen)
 
-        vc.onDismissButtonTapped = { [weak self] in
+        presenter.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
         }
 
-        vc.onSaveNewAddressButtonTapped = { [weak self] in
+        presenter.onSaveNewAddressButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
         }
     }

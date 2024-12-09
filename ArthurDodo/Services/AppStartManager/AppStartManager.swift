@@ -114,7 +114,7 @@ private extension AppStartManager {
             }
 
             group.addTask { [weak self] in
-                await self?.fetchItems()
+                await self?.fetchCatalog()
             }
 
             group.addTask { [weak self] in
@@ -137,6 +137,7 @@ private extension AppStartManager {
             let userData = try await networkService.fetchUserData()
             storage.setUserData(userData)
             storage.profileStorage.setUserData(userData)
+            storage.addressStorage.setFetchedUserData(userData)
             print("User data fetched")
         } catch {
             print("User Data fetch error:: \(error)")
@@ -155,7 +156,7 @@ private extension AppStartManager {
     }
 
     // Получаем каталог с сервера и отправляем его в хранилище
-    func fetchItems() async {
+    func fetchCatalog() async {
         do {
             let items = try await networkService.fetchItems()
             storage.setItems(items)

@@ -66,7 +66,7 @@ private extension DeliveryCoordinator {
 
         // Нажали на редактирование адреса
         vc.onEditAddressCellTapped = { [weak self] address in
-            self?.showEditAddressVC(vc, address: address)
+            self?.showEditAddressVC(vc)
         }
 
         // Нажали на добавить новый адрес
@@ -75,14 +75,15 @@ private extension DeliveryCoordinator {
         }
     }
 
-    func showEditAddressVC(_ parentVC: UIViewController, address: Address) {
-        let vc = screenFactory.makeEditAddressScreen(address)
+    func showEditAddressVC(_ parentVC: UIViewController) {
+        let vc = screenFactory.addressScreenFactory.makeEditAddressScreen()
+        let presenter = vc.presenter
 
-        vc.onDismissButtonTapped = { [weak self] in
+        presenter.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(from: parentVC)
         }
 
-        vc.onSaveButtonTapped = { [weak self] in
+        presenter.onSaveButtonTapped = { [weak self] in
             self?.router.dismiss(from: parentVC)
         }
 
@@ -90,13 +91,14 @@ private extension DeliveryCoordinator {
     }
 
     func showAddNewAddressVC(_ parentVC: UIViewController) {
-        let vc = screenFactory.makeAddNewAddressScreen()
+        let vc = screenFactory.addressScreenFactory.makeAddNewAddressScreen()
+        let presenter = vc.presenter
 
-        vc.onDismissButtonTapped = { [weak self] in
+        presenter.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(from: parentVC)
         }
 
-        vc.onSaveNewAddressButtonTapped = { [weak self] in
+        presenter.onSaveNewAddressButtonTapped = { [weak self] in
             self?.router.dismiss(from: parentVC)
         }
 

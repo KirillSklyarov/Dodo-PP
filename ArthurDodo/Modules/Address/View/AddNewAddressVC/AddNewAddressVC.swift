@@ -1,5 +1,10 @@
 import UIKit
 
+protocol AddNewAddressViewProtocol: AnyObject {
+    func showMainAddressOnMap(_ mainAddress: Address)
+    func updateUIWithData(_ mainAddress: Address)
+}
+
 final class AddNewAddressViewController: UIViewController {
 
     // MARK: - UI Properties
@@ -8,16 +13,12 @@ final class AddNewAddressViewController: UIViewController {
     private lazy var addressView = AddAddressView()
     private lazy var contentStackView = AppStackView([mapView, addressView], axis: .vertical, spacing: -5, distribution: .fill)
 
-    // MARK: - Properties
-    private var mainAddress: Address?
-    private let storage: DataStorage
-
-    var onDismissButtonTapped: (() -> Void)?
-    var onSaveNewAddressButtonTapped: (() -> Void)?
+    // MARK: - Presenter
+    let presenter: AddNewAddressPresenterProtocol
 
     // MARK: - Init
-    init(storage: DataStorage) {
-        self.storage = storage
+    init(presenter: AddNewAddressPresenterProtocol) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -30,27 +31,9 @@ final class AddNewAddressViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        fetchData()
+        presenter.viewDidLoad()
 
         setupGestureToDissmissKeyboard()
-    }
-}
-
-// MARK: - Fetch Data
-private extension AddNewAddressViewController {
-    // Запрашиваем основной адрес у хранилища и показываем его на карте
-    func fetchData() {
-        mainAddress = storage.getMainAddress()
-        showMainAddressOnMap() // Показываем основной адрес на карте
-        updateUIWithData() // Обновляем таблицу с данными адреса (город, дом и проч.)
-    }
-}
-
-// MARK: - Public methods
-extension AddNewAddressViewController {
-    func updateUIWithData() {
-        guard let mainAddress else { print("We have no address to edit"); return }
-        addressView.updateUIWithAddress(mainAddress)
     }
 }
 
@@ -80,7 +63,7 @@ private extension AddNewAddressViewController {
     // Настраиваем кнопку Закрыть
     func setupDismissButtonAction() {
         dismissButton.onButtonTapped = { [weak self] in
-            self?.onDismissButtonTapped?()
+            self?.presenter.onDismissButtonTapped?()
         }
     }
 
@@ -95,23 +78,20 @@ private extension AddNewAddressViewController {
     func setupSaveButtonAction() {
         addressView.onSaveButtonTapped = { [weak self] newAddress in
             guard let self else { return }
-            passNewAddressToStorage(newAddress)
-            onSaveNewAddressButtonTapped?()
+            presenter.saveNewAddressButtonTapped(newAddress)
         }
     }
 }
 
-// MARK: - Supporting methods
-private extension AddNewAddressViewController {
+// MARK: - AddNewAddressViewProtocol
+extension AddNewAddressViewController: AddNewAddressViewProtocol {
     // Метод находит координаты по адресу и центрирует карту по ним
-    func showMainAddressOnMap() {
-        guard let mainAddress else { print("We have no main address"); return }
+    func showMainAddressOnMap(_ mainAddress: Address) {
         mapView.showAddressOnMap(mainAddress)
     }
 
-    // Отправляем новый адрес в хранилище
-    func passNewAddressToStorage(_ newAddress: Address) {
-        storage.addAddress(newAddress)
+    func updateUIWithData(_ mainAddress: Address) {
+        addressView.updateUIWithAddress(mainAddress)
     }
 }
 

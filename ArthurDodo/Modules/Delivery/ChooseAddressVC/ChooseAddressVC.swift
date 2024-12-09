@@ -44,7 +44,7 @@ private extension ChooseAddressVC {
 
     // Получаем данные об адресе из хранилища и обновляем таблицу
     func getAddressesAndUpdateUI() {
-        addresses = storage.getAddresses()
+        addresses = storage.addressStorage.getAddresses()
         addressTableView.updateUI(with: addresses)
     }
 }

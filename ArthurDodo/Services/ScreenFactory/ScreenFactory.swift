@@ -5,11 +5,13 @@ final class ScreenFactory {
     // MARK: - Properties
     private let storage: DataStorage
     let profileScreenFactory: ProfileScreenFactory
+    let addressScreenFactory: AddressScreenFactory
 
     // MARK: - Init
     init(storage: DataStorage) {
         self.storage = storage
         profileScreenFactory = ProfileScreenFactory(storage: storage.profileStorage)
+        addressScreenFactory = AddressScreenFactory(storage: storage.addressStorage)
     }
 }
 
@@ -26,10 +28,6 @@ extension ScreenFactory {
     func makeStoriesScreen(indexPath: IndexPath) -> StoriesVC {
         let story = storage.getFetchedStories()
         return StoriesVC(indexPath: indexPath, story: story)
-    }
-    
-    func makeAddressScreen() -> AddressViewController {
-        return AddressViewController(storage: storage)
     }
     
     func makeCartScreen() -> CartViewController {
@@ -50,14 +48,6 @@ extension ScreenFactory {
 
     func makeFinalVCScreen() -> FinalVC {
         return FinalVC(storage: storage)
-    }
-
-    func makeEditAddressScreen(_ address: Address) -> EditAddressViewController {
-        return EditAddressViewController(address, storage: storage)
-    }
-
-    func makeAddNewAddressScreen() -> AddNewAddressViewController {
-        return AddNewAddressViewController(storage: storage)
     }
 
     func makeEditProductScreen() -> EditProductViewController {
@@ -91,3 +81,18 @@ extension ScreenFactory {
         return PromoViewController(with: offer)
     }
 }
+
+// MARK: - Address module
+//extension ScreenFactory {
+//    func makeAddressScreen() -> AddressViewController {
+//        return addressScreenFactory.makeAddressScreen()
+//    }
+//
+//    func makeEditAddressScreen() -> EditAddressViewController {
+//        return addressScreenFactory.makeEditAddressScreen()
+//    }
+//
+//    func makeAddNewAddressScreen() -> AddNewAddressViewController {
+//        return addressScreenFactory.makeAddNewAddressScreen()
+//    }
+//}

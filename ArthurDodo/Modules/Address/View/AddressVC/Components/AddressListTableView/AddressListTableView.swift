@@ -3,7 +3,7 @@ import UIKit
 final class AddressListTableView: AppTableView {
 
     // MARK: - Properties&Callbacks
-    private let tableRowHeight: CGFloat = 70
+    private let tableRowHeight: CGFloat = 65
     private var addresses: [Address] = []
 
     var onEditAddressButtonTapped: ( (Address) -> Void)?
@@ -36,7 +36,6 @@ private extension AddressListTableView {
         separatorStyle = .singleLine
         separatorColor = .darkGray
         separatorInset = .init(top: 0, left: 0, bottom: 0, right: 0)
-        tableHeaderView = UIView(frame: .zero)
         rowHeight = tableRowHeight
         isScrollEnabled = false
     }
@@ -74,6 +73,10 @@ extension AddressListTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? AddressListTableViewCell else { return }
         cell.deSelectedCell()
+    }
+
+    // Этот метод пустой, потому что мы "включили" сепаратор у последней ячейки (в классе AppTableView он выключен)
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
     }
 }
 

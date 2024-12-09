@@ -1,5 +1,10 @@
 import UIKit
 
+protocol EditAddressViewProtocol: AnyObject {
+    func updateAddress(_ addressToEdit: Address)
+    func updateShortAddress(_ shortAddress: String)
+}
+
 final class EditAddressViewController: UIViewController {
 
     // MARK: - UI Properties
@@ -8,17 +13,12 @@ final class EditAddressViewController: UIViewController {
     private lazy var contentStackView = AppStackView([mapView, addressContainerView], axis: .vertical, spacing: -5, distribution: .fillEqually)
     private lazy var dismissButton = AppDismissButtonView(type: .chevron)
 
-    // MARK: - Other properties
-    private var addressToEdit: Address?
-    private let storage: DataStorage
-
-    var onDismissButtonTapped: (() -> Void)?
-    var onSaveButtonTapped: (() -> Void)?
+    // MARK: - Presenter
+    let presenter: EditAddressPresenterProtocol
 
     // MARK: - Init
-    init(_ addressToEdit: Address, storage: DataStorage) {
-        self.storage = storage
-        self.addressToEdit = addressToEdit
+    init(presenter: EditAddressPresenter) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -30,27 +30,21 @@ final class EditAddressViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        updateUIWithData()
         setupActions()
+        presenter.viewDidLoad()
     }
 }
 
-// MARK: - Supporting methods
-private extension EditAddressViewController {
-    func updateUIWithData() {
-        updateAddressDetailsView()
-        showAddressOnMap()
+// MARK: - EditAddressViewProtocol
+extension EditAddressViewController: EditAddressViewProtocol {
+    // Обновляет адрес на вью
+    func updateAddress(_ addressToEdit: Address) {
+        updateAddressDetailsView(addressToEdit)
+        showAddressOnMap(addressToEdit)
     }
 
-    func updateAddressDetailsView() {
-        guard let addressToEdit else { print("We have no address to edit"); return }
-        addressContainerView.updateUIWithAddress(addressToEdit)
-    }
-
-
-    func showAddressOnMap() {
-        guard let addressToEdit else { print("We have no address to edit"); return }
-        mapView.showAddressOnMap(addressToEdit)
+    func updateShortAddress(_ shortAddress: String) {
+        addressContainerView.updateShortAddress(shortAddress)
     }
 }
 
@@ -64,8 +58,8 @@ private extension EditAddressViewController {
 
     func setupLayout() {
         dismissButton.setLocalConstraints(isSafeArea: true, top: 0, left: 20)
-        contentStackView.setConstraints()
-        contentStackView.setLocalConstraints(isSafeArea: true, bottom: 0)
+        contentStackView.setLocalConstraints(isSafeArea: true, bottom: 0, left: 0, right: 0)
+        contentStackView.setLocalConstraints(isSafeArea: false, top: 0)
     }
 }
 
@@ -80,25 +74,35 @@ private extension EditAddressViewController {
     // Отрабатываем нажатие на кнопку сохранить новый адрес
     func setupAddressContainerViewAction() {
         addressContainerView.onSaveAddressTapped = { [weak self] in
-            guard let self,
-                  let addressToEdit else { print("We have no self"); return }
-            storage.updateAddressesAfterEdition(correctAddress: addressToEdit)
-            onSaveButtonTapped?()
+            guard let self else { print("We have no self"); return }
+            presenter.saveButtonTapped()
         }
     }
 
     // Настраиваем когда двигается карта, то двигается и адрес в таблице
     func setupMapViewAction() {
         mapView.onChangeAddress = { [weak self] shortAddress in
-            self?.addressToEdit?.cityStreetHouse = shortAddress
-            self?.addressContainerView.updateShortAddress(shortAddress)
+            self?.presenter.changeAddressWhileMovingMap(shortAddress)
         }
     }
 
     // Настраиваем кнопку Закрыть
     func setupDismissButtonAction() {
         dismissButton.onButtonTapped = { [weak self] in
-            self?.onDismissButtonTapped?()
+            self?.presenter.dismissButtonTapped()
         }
+    }
+}
+
+// MARK: - Supporting methods
+private extension EditAddressViewController {
+    // Обновляет адрес на вью
+    func updateAddressDetailsView(_ addressToEdit: Address) {
+        addressContainerView.updateUIWithAddress(addressToEdit)
+    }
+
+    // Показывает адрес на карте
+    func showAddressOnMap(_ addressToEdit: Address) {
+        mapView.showAddressOnMap(addressToEdit)
     }
 }
