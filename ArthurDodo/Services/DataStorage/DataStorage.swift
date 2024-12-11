@@ -5,6 +5,7 @@ final class DataStorage {
     // MARK: - Module storages
     let profileStorage = ProfileStorage()
     let addressStorage = AddressStorage()
+    let cartStorage = CartStorage()
 
     // MARK: - Properties
     private var fetchedUserAddresses: [Address] = []
@@ -14,7 +15,6 @@ final class DataStorage {
     private var fetchedUserData: User? // Используется для адресов
     private var category: [Category] = []
     private var order: Order?
-    private var cart: Cart?
     private var specialOfferArray: [Item] = []
     private var selectedItem: SelectedItem?
     private lazy var preferredPaymentMethod: PaymentMethod = .cbp
@@ -35,71 +35,19 @@ final class DataStorage {
     }
 }
 
-// MARK: - Cart
+// MARK: - Special Offers
 extension DataStorage {
-    // Если корзина еще пустая (cart=nil), то создаем корзину с этим продуктов, если не пустая, то либо добавляем продукт в корзину, либо меняем на отредактированный товар
-    func addItemToCart(item: CartItem) {
-        if cart == nil {
-            cart = Cart(items: [item])
-        } else {
-            changeOrAddItemToCart(item: item)
-        }
+    // Из всего каталога выбираем кол-во (countOfElements) рандомных элементов
+    func getArrayOfRandomItems(_ countOfElements: Int) {
+        specialOfferArray = SpecialOffer.configRandomOffer(fetchedItems, countOfElements)
     }
 
-    // Устанавливаем продукт для редактирования
-    func setChangingItem(_ item: CartItem) {
-        changingItem = item
-    }
-
-    // Если продукт для редактирования есть, то находим его индекс в заказе и подменяем его на исправленный товар
-    private func changeOrAddItemToCart(item: CartItem) {
-        if let changingItem {
-            guard let index = cart?.items.firstIndex(where: { $0 == changingItem } ) else { print("No item found"); return }
-            cart?.items[index] = item
-            self.changingItem = nil
-        } else {
-            cart?.items.append(item)
-        }
-    }
-
-    func changeItemInCart(_ item: CartItem) {
-        guard let index = cart?.items.firstIndex(where: { $0 == changingItem } ) else { print("No item found"); return }
-        cart?.items[index] = item
-        self.changingItem = nil
-    }
-
-    func getCartFromStorage() -> Cart? {
-        guard let cart else { print("1.Cart is nil"); return nil }
-        return cart
-    }
-
-    // Мы возвращаем цену только в том случае,
-    func getTotalCartPrice() -> Int {
-        guard let cart else { return 0 }
-        return cart.items.compactMap{ $0.price * $0.count }.reduce(0, +)
-    }
-
-    // Изменяем кол-во позиций в корзине
-    func changeCountOfItems(_ indexPath: IndexPath, _ value: Int) {
-        cart?.items[indexPath.row].count = value
-    }
-
-    // Удаляем позицию из корзины
-    func removeItemFromCart(_ indexPath: IndexPath) {
-        cart?.items.remove(at: indexPath.row)
-    }
-
-    // Возвращаем кол-во товаров в корзине (например, в корзине 2 маргариты и 1 сок - ответ: 3)
-    func getCountOfItemsInCart() -> Int {
-        guard let cart else { print("Cart is nil"); return 0 }
-        return cart.items.compactMap{ $0.count }.reduce(0, +)
-    }
-
-    // Обнуляем корзину
-    func eraseCart() {
-        cart = nil
+    // Отдает специальные предложения
+    func getSpecialOffersArray() -> [Item] {
+        specialOfferArray
     }
 }
+
 
 //// MARK: - User data
 extension DataStorage {
@@ -165,7 +113,7 @@ extension DataStorage {
     }
 }
 
-// MARK: - Items
+// MARK: - Catalog
 extension DataStorage {
     // Принимаем полученные данные в хранилище
     func setItems(_ items: [Item]) {
@@ -269,6 +217,7 @@ extension DataStorage {
 
     // Делаем заказ из корзины (так как формы заказа и корзины отличаются, то нам нужно скастить корзину до заказа)
     private func castCartToOrder() -> [OrderPosition]? {
+        let cart = cartStorage.getCartFromStorage()
         guard let cart else { print("Cart is nil"); return nil}
         var orderPositions: [OrderPosition] = []
         for cartItem in cart.items {
@@ -276,19 +225,6 @@ extension DataStorage {
             orderPositions.append(position)
         }
         return orderPositions
-    }
-}
-
-// MARK: - Special Offers
-extension DataStorage {
-    // Из всего каталога выбираем кол-во (countOfElements) рандомных элементов
-    func getArrayOfRandomItems(_ countOfElements: Int) {
-        specialOfferArray = SpecialOffer.configRandomOffer(fetchedItems, countOfElements)
-    }
-
-    // Отдает специальные предложения
-    func getSpecialOffersArray() -> [Item] {
-        specialOfferArray
     }
 }
 

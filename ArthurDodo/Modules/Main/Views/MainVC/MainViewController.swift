@@ -63,7 +63,7 @@ extension MainViewController {
 
     // При каждом показе экрана мы запрашиваем актуальную корзину и если там есть позиции, то обновляем сумму на кнопке
     func updateCart() {
-        let totalPrice = storage.getTotalCartPrice()
+        let totalPrice = storage.cartStorage.getTotalCartPrice()
         cartButton.updateCart(with: totalPrice)
     }
 

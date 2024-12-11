@@ -78,7 +78,7 @@ private extension DeliveryVC {
 
     // Получаем общую сумму заказа и обновляем кнопку
     func fetchOrderDetails() {
-        let totalPrice = storage.getTotalCartPrice()
+        let totalPrice = storage.cartStorage.getTotalCartPrice()
         totalPriceView.updateUI(with: totalPrice)
     }
 }

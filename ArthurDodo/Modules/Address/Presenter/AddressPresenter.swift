@@ -3,7 +3,9 @@ import Foundation
 protocol AddressPresenterProtocol: AnyObject {
     func viewDidLoad()
     func addressTapped(_ address: Address)
-    func setEditingAddressToStorage(_ address: Address)
+    func editAddressTapped(_ address: Address)
+    func showAddNewAddressVC()
+    func deliveryButtonTapped()
     var onDismissButtonTapped: (() -> Void)? { get set }
     var onShowEditAddressVC: (() -> Void)? { get set }
     var onShowAddNewAddressVC: (() -> Void)? { get set }
@@ -65,10 +67,22 @@ extension AddressPresenter {
         view?.showAddressOnMap(mainAddress)
     }
 
-    func setEditingAddressToStorage(_ address: Address) {
+    // При нажатии на кнопку "редактировать адрес" передаем адрес в хранилище и показываем экран редактирования
+    func editAddressTapped(_ address: Address) {
         storage.setEditingAddress(address)
         onShowEditAddressVC?()
     }
+
+    // При нажатии на кнопку "добавить новый адрес" вызываем замыкание для показа нового экрана
+    func showAddNewAddressVC() {
+        onShowAddNewAddressVC?()
+    }
+
+    func deliveryButtonTapped() {
+        onDeliveryButtonTapped?()
+    }
+
+
 }
 
 

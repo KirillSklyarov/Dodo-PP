@@ -82,7 +82,7 @@ private extension AddressViewController {
     func setupAddressViewAction() {
         // Нажатие на кнопку редактирования адреса
         addressView.onEditAddressCellTapped = { [weak self] address in
-            self?.presenter.setEditingAddressToStorage(address)
+            self?.presenter.editAddressTapped(address)
         }
 
         // Отрабатываем нажатие на адрес
@@ -93,11 +93,11 @@ private extension AddressViewController {
 
         // Нажатие на кнопку "+Новый адрес"
         addressView.onAddNewAddressButtonTapped = { [weak self] in
-            self?.presenter.onShowAddNewAddressVC?()
+            self?.presenter.showAddNewAddressVC()
         }
 
         addressView.onDeliveryButtonTapped = { [weak self] in
-            self?.presenter.onDeliveryButtonTapped?()
+            self?.presenter.deliveryButtonTapped()
         }
     }
 }

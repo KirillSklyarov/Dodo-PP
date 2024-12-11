@@ -85,7 +85,7 @@ private extension FinalVC {
     // Выключаем таймер, обнуляем корзину и закрываем все окна
     func dismissVC() {
         countDownTimer?.invalidate()
-        storage.eraseCart()
+        storage.cartStorage.eraseCart()
         onFinalVCDismissed?()
     }
 

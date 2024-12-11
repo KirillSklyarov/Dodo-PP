@@ -22,26 +22,27 @@ final class CartCoordinator: Coordinator {
 
 extension CartCoordinator {
     func start() {
-        let cartVC = screenFactory.makeCartScreen() // Создаем экран
+        let cartVC = screenFactory.cartScreenFactory.makeCartScreen() // Создаем экран
+        let presenter = cartVC.presenter
 
         // Отрабатываем замыкания
-        cartVC.onCartVCDismissed = { [weak self] in
+        presenter.onCartVCDismissed = { [weak self] in
             guard let self else { return }
             router.dismiss()
             onCartDismissed?()
         }
 
-        cartVC.onShowEditProductVC = { [weak self, weak cartVC] in
+        presenter.onShowEditProductVC = { [weak self, weak presenter] in
             self?.showEditProduct {
-                cartVC?.updateCart() // При вызове комплишена мы обновляем корзину на экране
+                presenter?.updateCart() // При вызове комплишена мы обновляем корзину на экране
             }
         }
 
-        cartVC.onShowPromoVC = { [weak self] promo in
+        presenter.onShowPromoVC = { [weak self] promo in
             self?.showApplySpecialOffer(promo)
         }
 
-        cartVC.onShowDeliveryVC = { [weak self] in
+        presenter.onShowDeliveryVC = { [weak self] in
             self?.onFinishFlow?()
         }
 
@@ -76,7 +77,7 @@ private extension CartCoordinator {
 
     // Показываем всплывающий экран для акций
     func showApplySpecialOffer(_ offer: Promo) {
-        let vc = screenFactory.makeApplySpecialOfferScreen(offer)
+        let vc = screenFactory.makePromoScreen(offer)
         vc.sheetPresentationController?.detents = [.medium()]
         vc.sheetPresentationController?.prefersGrabberVisible = true
         router.present(vc, isParent: true)

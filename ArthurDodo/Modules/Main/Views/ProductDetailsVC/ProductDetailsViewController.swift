@@ -113,7 +113,7 @@ private extension ProductDetailsViewController {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
             guard let itemToCart = configureCart() else { return }
-            storage.addItemToCart(item: itemToCart)
+            storage.cartStorage.addItemToCart(item: itemToCart)
             onCartButtonTapped?()
             onDismissButtonTapped?()
         }

@@ -171,6 +171,7 @@ private extension AppStartManager {
         do {
             let promo = try await networkService.fetchPromo()
             storage.profileStorage.setPromo(promo)
+            storage.cartStorage.setPromo(promo)
             print("Promo fetched")
         } catch {
             print("Promo fetch error: \(error)")

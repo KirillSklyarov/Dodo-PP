@@ -109,7 +109,7 @@ private extension EditProductViewController {
             guard let self else { return }
             guard let cartItem else { return }
 
-            storage.changeItemInCart(cartItem)
+            storage.cartStorage.changeItemInCart(cartItem)
             onCartButtonTapped?()
         }
     }

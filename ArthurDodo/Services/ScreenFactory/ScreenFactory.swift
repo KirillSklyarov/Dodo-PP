@@ -6,12 +6,14 @@ final class ScreenFactory {
     private let storage: DataStorage
     let profileScreenFactory: ProfileScreenFactory
     let addressScreenFactory: AddressScreenFactory
+    let cartScreenFactory: CartScreenFactory
 
     // MARK: - Init
     init(storage: DataStorage) {
         self.storage = storage
         profileScreenFactory = ProfileScreenFactory(storage: storage.profileStorage)
         addressScreenFactory = AddressScreenFactory(storage: storage.addressStorage)
+        cartScreenFactory = CartScreenFactory(storage: storage.cartStorage, storageService: storage)
     }
 }
 
@@ -28,10 +30,6 @@ extension ScreenFactory {
     func makeStoriesScreen(indexPath: IndexPath) -> StoriesVC {
         let story = storage.getFetchedStories()
         return StoriesVC(indexPath: indexPath, story: story)
-    }
-    
-    func makeCartScreen() -> CartViewController {
-        return CartViewController(storage: storage)
     }
 
     func makeDeliveryScreen() -> DeliveryVC {
@@ -63,24 +61,35 @@ extension ScreenFactory {
     }
 }
 
-// MARK: - Profile module
+// MARK: - Cart module
 extension ScreenFactory {
-    func makeProfileScreen() -> ProfileViewController {
-        return profileScreenFactory.makeProfileScreen()
+    func makeCartScreen() -> CartViewController {
+        return cartScreenFactory.makeCartScreen()
     }
 
-    func makePersonalDataScreen() -> PersonalViewController {
-        return profileScreenFactory.makePersonalDataScreen()
-    }
-
-    func makeChatAlertScreen() -> AppActionSheet {
-        return profileScreenFactory.makeChatAlertScreen()
-    }
-
-    func makeApplySpecialOfferScreen(_ offer: Promo) -> PromoViewController {
+    func makePromoScreen(_ offer: Promo) -> PromoViewController {
         return PromoViewController(with: offer)
     }
 }
+
+// MARK: - Profile module
+//extension ScreenFactory {
+//    func makeProfileScreen() -> ProfileViewController {
+//        return profileScreenFactory.makeProfileScreen()
+//    }
+//
+//    func makePersonalDataScreen() -> PersonalViewController {
+//        return profileScreenFactory.makePersonalDataScreen()
+//    }
+//
+//    func makeChatAlertScreen() -> AppActionSheet {
+//        return profileScreenFactory.makeChatAlertScreen()
+//    }
+//
+//    func makeApplySpecialOfferScreen(_ offer: Promo) -> PromoViewController {
+//        return PromoViewController(with: offer)
+//    }
+//}
 
 // MARK: - Address module
 //extension ScreenFactory {
