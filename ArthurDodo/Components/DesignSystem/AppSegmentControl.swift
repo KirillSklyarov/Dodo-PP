@@ -9,7 +9,7 @@ enum AppSegmentControlType {
 final class AppSegmentControl: UIView {
 
     // MARK: - Properties
-    var segmentControl: CustomSegmentControl?
+    var segmentView: AppSegmentControlView?
 
     var onSegmentValueChanged: ((Int) -> Void)?
 
@@ -27,38 +27,36 @@ final class AppSegmentControl: UIView {
 // MARK: - Public methods
 extension AppSegmentControl {
     func setDefaultSelectedSegment(_ index: Int) {
-        segmentControl?.selectedSegmentIndex = index
+        segmentView?.setDefaultSelectedSegment(index)
     }
 }
 
+// Настраиваем сегмент вью
 private extension AppSegmentControl {
     func configure(type: AppSegmentControlType) {
         switch type {
         case .address:
-            let segmentView = AppSegmentControlView(items: ["Доставка", "В пиццерии"], defaultSelection: 0)
-            segmentControl = segmentView.getSegmentControll()
-            segmentView.setSegmentColor(AppColors.buttonOrange)
-            segmentView.backgroundColor = AppColors.backgroundBlack
-            setLayout(segmentView)
-
-            segmentView.onSegmentControllerValueChanged = { [weak self] value in
-                self?.onSegmentValueChanged?(value)
-            }
+            segmentView = AppSegmentControlView(items: ["Доставка", "В пиццерии"], defaultSelection: 0)
+            segmentView?.setSegmentColor(AppColors.buttonOrange)
+            segmentView?.backgroundColor = AppColors.backgroundBlack
         case .size:
-            let segmentView = AppSegmentControlView(items: AppConstants.sizeCases, defaultSelection: 1)
-            segmentControl = segmentView.getSegmentControll()
-            setLayout(segmentView)
+            segmentView = AppSegmentControlView(items: AppConstants.sizeCases, defaultSelection: 1)
         case .dough:
-            let segmentView = AppSegmentControlView(items: AppConstants.doughCases, defaultSelection: 0)
-            segmentControl = segmentView.getSegmentControll()
-            setLayout(segmentView)
+            segmentView = AppSegmentControlView(items: AppConstants.doughCases, defaultSelection: 0)
         }
 
+        guard let segmentView else { print("segmentView is nil"); return }
+        setupLayout(segmentView)
+
+        segmentView.onSegmentControllerValueChanged = { [weak self] value in
+            self?.onSegmentValueChanged?(value)
+        }
     }
 }
 
+// MARK: - Setup Layout
 extension AppSegmentControl {
-    func setLayout(_ segmentView: AppSegmentControlView) {
+    func setupLayout(_ segmentView: AppSegmentControlView) {
         addSubviews(segmentView)
         segmentView.setConstraints()
     }

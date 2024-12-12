@@ -60,6 +60,26 @@ extension CartStorage {
     func eraseCart() {
         cart = nil
     }
+
+    func getProductDetails(_ cartItem: CartItem, size: Size) -> WeightPrice? {
+        let item = cartItem.item
+        let index = size.rawValue
+
+        guard let productDetails = item.itemSize.getWeightAndPriceViaIndex(index) else {print("3. We have some problems here"); return nil }
+        return productDetails
+    }
+
+    // Возвращает товар для редактирования (в виде CartItem)
+    func getChangingCartItem() -> CartItem? {
+        changingItem
+    }
+
+    // Вытаскиваем допустимые топпинги для позиции в корзине
+    func getFetchedToppings(for cartItem: CartItem) -> [Topping]? {
+        let item = cartItem.item
+        let itemToppings = item.toppings
+        return itemToppings
+    }
 }
 
 // MARK: - Promo

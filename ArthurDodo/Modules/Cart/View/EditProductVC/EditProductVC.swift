@@ -5,26 +5,19 @@ final class EditProductViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = ProductHeaderView() // Заголовок с названием
-    private lazy var itemDetailsView = DetailsView2() // Основной блок с картинкой и сегментами
+    private lazy var itemDetailsView = EditItemDetailsView() // Основной блок с картинкой и сегментами
     private lazy var infoAndToppingsContainer = InfoAndToppingsView() // Блок с составом и топпингами
     private lazy var cartButtonView = EditCartButtonView() // Блок с ценой и кнопкой
 
     private lazy var contentStack = AppStackView([itemDetailsView, infoAndToppingsContainer], axis: .vertical, spacing: 5)
-    private lazy var scrollView = UIScrollView()
+    private lazy var scrollView = configScrollView()
 
-    // MARK: - Other Properties
-    private let storage: DataStorage
-
-    private var cartItem: CartItem?
-    private var toppings: [Topping] = []
-
-    var onCartButtonTapped: ( () -> Void )?
-    var onDismissButtonTapped: ( () -> Void )?
-    var onShowPopupVC: ( (CpfcPopupView) -> Void )?
+    // MARK: - Presenter
+    let presenter: EditProductPresenter
 
     // MARK: - Init
-    init(storage: DataStorage) {
-        self.storage = storage
+    init(presenter: EditProductPresenter) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -37,7 +30,7 @@ final class EditProductViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        fetchData()
+        presenter.viewDidLoad()
     }
 }
 
@@ -45,19 +38,20 @@ final class EditProductViewController: UIViewController {
 private extension EditProductViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundGray
-        configScrollView()
+        view.addSubviews(scrollView, headerView, cartButtonView)
         setupLayout()
     }
 
-    func configScrollView() {
-        view.addSubviews(scrollView, headerView, cartButtonView)
-
+    func configScrollView() -> UIScrollView {
+        let scrollView = UIScrollView()
         scrollView.backgroundColor = AppColors.backgroundGray
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.showsVerticalScrollIndicator = false
         scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
 
         scrollView.addSubviews(contentStack)
+
+        return scrollView
     }
 
     func setupLayout() {
@@ -78,7 +72,7 @@ private extension EditProductViewController {
     }
 
     func setupProductHeaderViewLayout() {
-        headerView.setViewHeight(60)
+        headerView.setViewHeight(.small)
         headerView.setLocalConstraints(top: 0, left: 0, right: 0)
     }
 
@@ -99,7 +93,7 @@ private extension EditProductViewController {
     // Отрабатываем коллбэк для закрытия окна
     func setupHeaderAction() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.onDismissButtonTapped?()
+            self?.presenter.onDismissButtonTapped?()
         }
     }
 
@@ -107,113 +101,72 @@ private extension EditProductViewController {
     func setupCartViewAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
-            guard let cartItem else { return }
-
-            storage.cartStorage.changeItemInCart(cartItem)
-            onCartButtonTapped?()
+            presenter.cartButtonTapped()
         }
     }
 
     func setupSizeSegmentAction() {
         itemDetailsView.onSizeValueChanged = { [weak self] size in
             guard let self else { return }
-            guard let size else { print("1. We have some problems here"); return }
-            cartItem?.chosenSize = size
-            updateUIWithChosenSize(size)
+            print(#function)
+            presenter.itemSizeChanged(size)
         }
 
         itemDetailsView.onDoughValueChanged = { [weak self] dough in
             guard let self else { return }
-            cartItem?.chosenDough = dough
+            presenter.itemDoughChanged(dough)
         }
-    }
-
-    func updateUIWithChosenSize(_ size: Size) {
-        guard let cartItem else { print("CartItem is nil"); return }
-        guard let productDetails = storage.getProductDetails(cartItem, size: size) else {print("2. We have some problems here"); return }
-        infoAndToppingsContainer.updateUI(productDetails: productDetails)
-        let price = productDetails.price
-        self.cartItem?.price = price
-        cartButtonView.updatePriceLabel(price)
     }
 
     func setupInfoButtonAction() {
         infoAndToppingsContainer.onShowPopupVC = { [weak self] popupVC in
             guard let self else { print("Self is nil"); return }
-            guard let popupVC = popupVC as? CpfcPopupView else {
-                print("No popupVC"); return }
-            onShowPopupVC?(popupVC)
+            presenter.showPopUP(popupVC)
         }
-    }
-}
-
-// MARK: - Fetch Data
-private extension EditProductViewController {
-    func fetchData() {
-        fetchSelectedItem()
-        fetchToppings()
-    }
-
-    func fetchSelectedItem() {
-        guard let cartItem = storage.getChangingCartItem() else { print("No changing item"); return }
-        self.cartItem = cartItem
-
-        updateUIWithCorrectSizeAndDough()
-        updateUIWithCorrectWeightAndIngredients()
-        updateUIWithSelectedItem()
-    }
-
-    func updateUIWithCorrectSizeAndDough() {
-        guard let cartItem else { return }
-        let size = cartItem.chosenSize
-        guard let dough = cartItem.chosenDough else { print("No dough"); return }
-        itemDetailsView.setChosenSizeAndDough(size, dough)
-    }
-
-    func updateUIWithCorrectWeightAndIngredients() {
-        guard let cartItem else { print("Cart item is nil"); return }
-        infoAndToppingsContainer.getSelectedItem(cartItem.item)
-    }
-
-    // Загружаем ВСЕ начинки
-    func fetchToppings() {
-        filterToppings()
-    }
-
-    // Отбираем только нужные нам начинки
-    func filterToppings() {
-        guard let cartItem else { return }
-        guard let toppings = storage.getFetchedToppings(for: cartItem) else { return }
-        passToppingsToView(toppings)
-    }
-
-    // Отправляем данные о топпингов дальше ко вью
-    func passToppingsToView(_ toppings: [Topping]) {
-        infoAndToppingsContainer.passToppingsToView(toppings)
     }
 }
 
 // MARK: - Update UI for The Item (настраиваем экран для конкретного товара)
 private extension EditProductViewController {
-    func updateUIWithSelectedItem() {
-        updateUIWithItem()
-        isItemPizza()
-    }
-
-    func updateUIWithItem() {
-        guard let cartItem else { return }
+    // Обновляем все view (название, картинку, вес, состав и цену)
+    func updateUIWithItem(_ cartItem: CartItem) {
         let item = cartItem.item
-
-        headerView.updateTitle(cartItem.item.name)
-        itemDetailsView.updatePizzaImage(cartItem.item.imageName)
+        headerView.updateTitle(item.name)
+        itemDetailsView.updatePizzaImage(item.imageName)
         infoAndToppingsContainer.updateIngredientsAndWeight(item)
         cartButtonView.updatePriceLabel(cartItem.price)
     }
 
     // Если это не пицца, то не нужно показывать поле с тестом
-    func isItemPizza() {
-        if cartItem?.item.category != .pizza {
+    func isItemPizza(_ cartItem: CartItem) {
+        let category = cartItem.item.category
+        if category != .pizza {
             itemDetailsView.hideDoughSegment()
         }
+    }
+}
+
+extension EditProductViewController {
+    func updateUIWithChosenSize(_ productDetails: WeightPrice) {
+        infoAndToppingsContainer.updateUI(productDetails: productDetails)
+        let price = productDetails.price
+        cartButtonView.updatePriceLabel(price)
+    }
+
+    func updateUIWithSelectedItem(_ cartItem: CartItem) {
+        updateUIWithItem(cartItem)
+        isItemPizza(cartItem)
+    }
+
+    func updateSizeAndDough(_ size: Size, _ dough: Dough) {
+        itemDetailsView.setChosenSizeAndDough(size, dough)
+    }
+
+    func updateInfo(_ item: Item) {
+        infoAndToppingsContainer.getSelectedItem(item)
+    }
+
+    func updateToppings(_ toppings: [Topping]) {
+        infoAndToppingsContainer.passToppingsToView(toppings)
     }
 }

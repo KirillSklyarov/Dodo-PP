@@ -48,10 +48,6 @@ extension ScreenFactory {
         return FinalVC(storage: storage)
     }
 
-    func makeEditProductScreen() -> EditProductViewController {
-        return EditProductViewController(storage: storage)
-    }
-
     func makeFeatureTogglesScreen() -> FeatureToggleVC {
         return FeatureToggleVC(storage: storage)
     }
@@ -70,6 +66,11 @@ extension ScreenFactory {
     func makePromoScreen(_ offer: Promo) -> PromoViewController {
         return PromoViewController(with: offer)
     }
+
+    //    func makeEditProductScreen() -> EditProductViewController {
+    //        return EditProductViewController(storage: storage)
+    //    }
+
 }
 
 // MARK: - Profile module

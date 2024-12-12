@@ -20,10 +20,14 @@ extension CartScreenFactory {
         return view
     }
 
-//    func makePromoScreen(_ offer: Promo) -> PromoViewController {
-//        let presenter = PromoPresenter(storage: storage, offer: offer)
-//        let view = PromoViewController(presenter: presenter)
-//        presenter.view = view
-//        return view
-//    }
+    func makeEditProductScreen() -> EditProductViewController {
+        let presenter = EditProductPresenter(storage: storage)
+        let view = EditProductViewController(presenter: presenter)
+        presenter.view = view
+        return view
+    }
+
+    func makePromoScreen(_ offer: Promo) -> PromoViewController {
+        return PromoViewController(with: offer)
+    }
 }

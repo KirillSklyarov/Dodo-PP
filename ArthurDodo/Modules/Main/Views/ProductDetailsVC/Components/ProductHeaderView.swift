@@ -1,6 +1,11 @@
 import UIKit
 
-// Заблюренный header на экране Product Details
+enum ViewHeight {
+    case small
+    case large
+}
+
+// Заблюренный header на экране Product Details (и на EditProduct)
 final class ProductHeaderView: UIView {
 
     // MARK: - UI Properties
@@ -11,8 +16,6 @@ final class ProductHeaderView: UIView {
     private lazy var contentStackView = setupContentStackView()
 
     // MARK: - Properties
-    private let viewHeight: CGFloat = 110
-
     private var heightConstraint: NSLayoutConstraint?
 
     var onDismissButtonTapped: (() -> Void)?
@@ -35,11 +38,15 @@ extension ProductHeaderView {
         titleLabel.text = title
     }
 
-    // Метод позволяет менять высоту у вью (сначала выключаем текущий констреинт, определяем правильную высоту, потом выставляем констреинт и активируем его)
-    func setViewHeight(_ height: CGFloat = 0) {
+    // Метод позволяет менять высоту у вью (сначала выключаем текущий констреинт, определяем правильную высоту, потом выставляем констреинт и активируем его). Так как мы используем две разные высоты (для Product details у нас большая высота - 110, а для экрана EditProduct - 60), то и в этом методе мы можем менять высоту передавая туда параметр
+    func setViewHeight(_ height: ViewHeight) {
         heightConstraint?.isActive = false
-        let correctHeight = height == 0 ? viewHeight : height
-        heightConstraint = heightAnchor.constraint(equalToConstant: correctHeight)
+
+        switch height {
+        case .small: heightConstraint = heightAnchor.constraint(equalToConstant: 60)
+        case .large: heightConstraint = heightAnchor.constraint(equalToConstant: 110)
+        }
+        
         heightConstraint?.isActive = true
     }
 }
@@ -64,7 +71,7 @@ private extension ProductHeaderView {
     }
 
     func setupLayout() {
-        setViewHeight()
+        setViewHeight(.large)
         setupBlurConstraints()
         setupContentStackLayout()
     }

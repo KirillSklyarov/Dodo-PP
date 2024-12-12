@@ -43,7 +43,7 @@ extension CoordinatorFactory {
     }
 
     func makeCartCoordinator() -> CartCoordinator {
-        return CartCoordinator(router: router, screenFactory: screenFactory)
+        return CartCoordinator(router: router, screenFactory: screenFactory.cartScreenFactory)
     }
 
     func makeDeliveryCoordinator() -> DeliveryCoordinator {

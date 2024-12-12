@@ -1,15 +1,13 @@
 import UIKit
 
-final class DetailsView2: UIView {
+// Вью с картинкой и сегмент контроллерами на экране редактирования товара
+final class EditItemDetailsView: UIView {
 
     // MARK: - UI Properties
     private lazy var itemImageView = AppImageView(type: .justView)
     private lazy var sizeSegmentControl = AppSegmentControl(type: .size)
     private lazy var doughSegmentControl = AppSegmentControl(type: .dough)
-
-    private lazy var segmentsControlStackView = AppStackView([sizeSegmentControl, doughSegmentControl], axis: .vertical, spacing: 5)
-
-    private lazy var contentStackView = AppStackView([itemImageView, segmentsControlStackView], axis: .vertical, spacing: 10)
+    private lazy var contentStackView = setupContentStackView()
 
     // MARK: - Size Properties
     private let pizzaImageSize: CGFloat = 340
@@ -28,8 +26,7 @@ final class DetailsView2: UIView {
         self.chosenSize = chosenSize
         self.chosenDough = chosenDough
         setupUI()
-        setupSizeSegmentControl()
-        setupDoughSegmentControl()
+        setupAction()
     }
 
     required init?(coder: NSCoder) {
@@ -45,7 +42,7 @@ final class DetailsView2: UIView {
 }
 
 // MARK: - Public methods
-extension DetailsView2 {
+extension EditItemDetailsView {
     func hideDoughSegment() {
         doughSegmentControl.isHidden = true
     }
@@ -69,7 +66,7 @@ extension DetailsView2 {
 }
 
 // MARK: - Setup UI
-private extension DetailsView2 {
+private extension EditItemDetailsView {
     func setupUI() {
         backgroundColor = AppColorsEnum.productBackground.color
         layer.cornerRadius = cornerRadius
@@ -85,16 +82,15 @@ private extension DetailsView2 {
     }
 
     func setupContentStackLayout() {
-        contentStackView.setLocalConstraints(left: 20, right: 20)
-
+        contentStackView.setLocalConstraints(bottom: 20, left: 20, right: 20)
         contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: blurHeaderHeight).isActive = true
-        contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20).isActive = true
+        
         itemImageView.heightAnchor.constraint(equalToConstant: pizzaImageSize).isActive = true
     }
 }
 
 // MARK: - Setup actions
-private extension DetailsView2 {
+private extension EditItemDetailsView {
     func setupAction() {
         setupSizeSegmentControl()
         setupDoughSegmentControl()
@@ -108,6 +104,7 @@ private extension DetailsView2 {
             case 1: chosenSize = .medium
             case 2: chosenSize = .large
             default: break }
+            print(#function)
             onSizeValueChanged?(chosenSize)
         }
     }
@@ -126,7 +123,15 @@ private extension DetailsView2 {
 }
 
 // MARK: - Supporting methods
-private extension DetailsView2 {
+private extension EditItemDetailsView {
+    func setupContentStackView() -> UIStackView {
+        let  segmentsControlStackView = AppStackView([sizeSegmentControl, doughSegmentControl], axis: .vertical, spacing: 5)
+        let  contentStackView = AppStackView([itemImageView, segmentsControlStackView], axis: .vertical, spacing: 10)
+        return contentStackView
+    }
+}
+
+
     // Если сегменты скрыты, то помещаем картинку в центре
 //     func placeImageInCenter() {
 //        imageCenterY?.isActive = false
@@ -140,7 +145,7 @@ private extension DetailsView2 {
 //        }
 //        imageCenterY?.isActive = true
 //    }
-}
+//}
 
 
 //    func turningOffUserInteractionSegments() {

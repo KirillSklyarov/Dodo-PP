@@ -68,7 +68,7 @@ private extension AppLabel {
             self.text = text
             self.textColor = textColor
             font = AppFontsEnum.bold(size: 22).font
-            textAlignment = .left
+            textAlignment = alignment
             self.numberOfLines = numberOfLines
         case .header:
             self.text = text
