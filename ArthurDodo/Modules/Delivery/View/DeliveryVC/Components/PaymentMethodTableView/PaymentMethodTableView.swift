@@ -11,14 +11,7 @@ final class PreferredPaymentMethodTableView: UITableView {
     var onCellSelected: (() -> Void)?
 
     // MARK: - Init
-    init(frame: CGRect = .zero, style: UITableView.Style = .plain, _  preferredPaymentMethod: PaymentMethod) {
-        super.init(frame: frame, style: style)
-        self.preferredPaymentMethod = preferredPaymentMethod
-        setupTableView()
-        updateUI(with: preferredPaymentMethod)
-    }
-
-    override init(frame: CGRect, style: UITableView.Style) {
+    override init(frame: CGRect = .zero, style: UITableView.Style = .plain) {
         super.init(frame: frame, style: style)
         setupTableView()
     }

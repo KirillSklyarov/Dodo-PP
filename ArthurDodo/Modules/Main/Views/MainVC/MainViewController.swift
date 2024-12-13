@@ -251,7 +251,7 @@ private extension MainViewController {
     }
 
     func passOrderToView() {
-        guard let order = storage.getOrderFromStorage() else { print("We have no order in storage"); return }
+        guard let order = storage.deliveryStorage.getOrderFromStorage() else { print("We have no order in storage"); return }
         let totalPrice = storage.getTotalOrderPrice()
         orderView.getOrder(order, totalPrice)
     }

@@ -22,13 +22,11 @@ final class PaymentButtonView: UIView {
     var onPayButtonTapped: (() -> Void)?
 
     // MARK: - Init
-    init(frame: CGRect = .zero, _ preferredPaymentMethod: PaymentMethod) {
+    override init(frame: CGRect = .zero) {
         super.init(frame: frame)
-        self.preferredPaymentMethod = preferredPaymentMethod
         setupUI()
         setupLayout()
         setupTap()
-        updateUI(with: preferredPaymentMethod)
     }
 
     required init?(coder: NSCoder) {

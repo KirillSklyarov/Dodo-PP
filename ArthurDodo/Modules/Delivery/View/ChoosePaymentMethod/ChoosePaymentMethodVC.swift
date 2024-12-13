@@ -10,14 +10,14 @@ final class ChoosePaymentMethodVC: UIViewController {
 
     // MARK: - Other Properties
     private let userDefaults = UserDefaults.standard
-    private let storage: DataStorage
+    private let storage: DeliveryStorage
 
     var preferredPaymentMethod: PaymentMethod = .cbp
     var onPaymentMethodSelected: ((PaymentMethod) -> Void)?
     var onDismissButtonTapped: (() -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage) {
+    init(storage: DeliveryStorage) {
         self.storage = storage
         super.init(nibName: nil, bundle: nil)
     }

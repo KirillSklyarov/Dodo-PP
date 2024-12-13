@@ -24,23 +24,24 @@ final class DeliveryCoordinator: Coordinator {
 // MARK: - Start
 extension DeliveryCoordinator {
     func start() {
-        let vc = screenFactory.makeDeliveryScreen()
+        let vc = screenFactory.deliveryScreenFactory.makeDeliveryScreen()
+        let presenter = vc.presenter
         self.deliveryVC = vc
 
-        vc.onDismissButtonTapped = { [weak self] in
+        presenter.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
             self?.onDismissed?()
         }
 
-        vc.onShowChooseAddress = { [weak self] in
+        presenter.onShowChooseAddress = { [weak self] in
             self?.showChooseAddress(vc)
         }
 
-        vc.onShowChoosePaymentMethod = { [weak self] in
+        presenter.onShowChoosePaymentMethod = { [weak self] in
             self?.showChoosePaymentMethod(vc)
         }
 
-        vc.onShowFinalVC = { [weak self] in
+        presenter.onShowFinalVC = { [weak self] in
             self?.showFinalVC(parentVC: vc)
         }
 

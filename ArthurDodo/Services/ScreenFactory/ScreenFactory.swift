@@ -7,6 +7,7 @@ final class ScreenFactory {
     let profileScreenFactory: ProfileScreenFactory
     let addressScreenFactory: AddressScreenFactory
     let cartScreenFactory: CartScreenFactory
+    let deliveryScreenFactory: DeliveryScreenFactory
 
     // MARK: - Init
     init(storage: DataStorage) {
@@ -14,6 +15,7 @@ final class ScreenFactory {
         profileScreenFactory = ProfileScreenFactory(storage: storage.profileStorage)
         addressScreenFactory = AddressScreenFactory(storage: storage.addressStorage)
         cartScreenFactory = CartScreenFactory(storage: storage.cartStorage, storageService: storage)
+        deliveryScreenFactory = DeliveryScreenFactory(storage: storage.deliveryStorage, storageService: storage)
     }
 }
 
@@ -32,16 +34,12 @@ extension ScreenFactory {
         return StoriesVC(indexPath: indexPath, story: story)
     }
 
-    func makeDeliveryScreen() -> DeliveryVC {
-        return DeliveryVC(storage: storage)
-    }
-
     func makeChooseAddressScreen() -> ChooseAddressVC {
         return ChooseAddressVC(storage: storage)
     }
 
     func makeChoosePaymentMethodScreen() -> ChoosePaymentMethodVC {
-        return ChoosePaymentMethodVC(storage: storage)
+        return ChoosePaymentMethodVC(storage: storage.deliveryStorage)
     }
 
     func makeFinalVCScreen() -> FinalVC {

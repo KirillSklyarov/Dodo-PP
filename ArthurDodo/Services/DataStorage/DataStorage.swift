@@ -6,6 +6,7 @@ final class DataStorage {
     let profileStorage = ProfileStorage()
     let addressStorage = AddressStorage()
     let cartStorage = CartStorage()
+    lazy var deliveryStorage = DeliveryStorage(storageService: self)
 
     // MARK: - Properties
     private var fetchedUserAddresses: [Address] = []
@@ -35,6 +36,35 @@ final class DataStorage {
     }
 }
 
+// MARK: - Common methods (методы, которые будут использоваться из разных модулей)
+extension DataStorage {
+    // Мы обнуляем для всех isMain и назначаем для нового, и потом сортируем чтобы isMain был первым
+    func setNewMainAddress(_ newMainAddressName: String) {
+        guard var fetchedUserData =  profileStorage.getUserData() else { print("fetchedUserData is nil"); return }
+        let addresses = fetchedUserData.address
+        let newAddresses = addresses.map { address in
+            var newAddress = address
+            newAddress.isMain = (newAddress.name == newMainAddressName)
+            return newAddress
+        }
+        fetchedUserData.address = newAddresses.sortedMainFirst()
+        profileStorage.setUserData(fetchedUserData)
+    }
+
+    func getMainAddress() -> Address? {
+        return addressStorage.getMainAddress()
+    }
+
+    func getTotalOrderPrice() -> Int {
+        return cartStorage.getTotalCartPrice()
+    }
+
+    func getCart() -> Cart? {
+        guard let cart = cartStorage.getCartFromStorage() else { print("Cart is nil"); return nil}
+        return cart
+    }
+}
+
 // MARK: - Special Offers
 extension DataStorage {
     // Из всего каталога выбираем кол-во (countOfElements) рандомных элементов
@@ -61,9 +91,9 @@ extension DataStorage {
         fetchedUserData
     }
 
-    func getMainAddress() -> Address? {
-        return fetchedUserData?.address.first(where: \.isMain)
-    }
+//    func getMainAddress() -> Address? {
+//        return fetchedUserData?.address.first(where: \.isMain)
+//    }
 
     // Проверяем были ли ранее загружены данные
     func isUserDataLoaded() -> Bool {
@@ -187,62 +217,15 @@ extension DataStorage {
 // MARK: - Orders
 extension DataStorage {
     // Возвращаем общую цену заказа, полученную как сумму перемножения кол-ва единиц на цену
-    func getTotalOrderPrice() -> Int {
-        guard let order else { print("Order is nil"); return 0 }
-        let totalPrice = order.position.compactMap{ $0.price * $0.count }.reduce(0, +)
-        return totalPrice
-    }
-
-    // Отдаем активный заказ
-    func getOrderFromStorage() -> Order? {
-        order
-    }
+//    func getTotalOrderPrice() -> Int {
+//        guard let order else { print("Order is nil"); return 0 }
+//        let totalPrice = order.position.compactMap{ $0.price * $0.count }.reduce(0, +)
+//        return totalPrice
+//    }
 
     // Получаем заказ из UserDefaults
     private func getOrderFromUserDefaults() {
         order = UserDefaults.standard.getOrder()
-    }
-
-    // Принимаем время доставки
-    func setDeliveryTime(time: String) {
-        deliveryTime = time
-    }
-
-    // Формируем заказ (получаем позиции, получаем адрес)
-    func configureOrder() {
-        guard let orderPositions = castCartToOrder() else { print("OrderPositions is nil"); return }
-        guard let address = getMainAddress()?.cityStreetHouse else { print("No main address"); return }
-        order = Order(position: orderPositions, deliveryAddress: address, deliveryTime: deliveryTime, status: .inProgress)
-    }
-
-    // Делаем заказ из корзины (так как формы заказа и корзины отличаются, то нам нужно скастить корзину до заказа)
-    private func castCartToOrder() -> [OrderPosition]? {
-        let cart = cartStorage.getCartFromStorage()
-        guard let cart else { print("Cart is nil"); return nil}
-        var orderPositions: [OrderPosition] = []
-        for cartItem in cart.items {
-            let position = OrderPosition(itemName: cartItem.item.name, size: cartItem.chosenSize, dough: cartItem.chosenDough, weight: cartItem.weight, price: cartItem.price, count: cartItem.count)
-            orderPositions.append(position)
-        }
-        return orderPositions
-    }
-}
-
-// MARK: - Preferred payment method
-extension DataStorage {
-    func getPreferredPaymentMethodFromStorage() -> PaymentMethod {
-        getPreferredPaymentMethodFromUserDefaults()
-        return preferredPaymentMethod
-    }
-
-    private func getPreferredPaymentMethodFromUserDefaults() {
-        if let preferredMethod = UserDefaults.standard.getPreferredPaymentMethod() {
-            if let tempMethod = PaymentMethod.getMethodFrom(preferredMethod) {
-                preferredPaymentMethod = tempMethod
-            }
-        } else {
-//            print("Default payment method = .cbp")
-        }
     }
 }
 

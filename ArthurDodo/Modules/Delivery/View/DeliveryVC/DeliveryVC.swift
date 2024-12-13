@@ -9,31 +9,28 @@ final class DeliveryVC: UIViewController {
     private lazy var timeLabel = DeliveryVCLabel(title: "Время доставки") // Время доставки
     private lazy var timeCollection = TimeCollectionView() // Коллекция со временем
     private lazy var paymentLabel = DeliveryVCLabel(title: "Оплата") // Оплата
-    private lazy var paymentTableView = PreferredPaymentMethodTableView(preferredPaymentMethod) // Коллекция с методами оплаты
+    private lazy var paymentTableView = PreferredPaymentMethodTableView() // Коллекция с методами оплаты
     private lazy var orderDetailsView = DodoCoinsView(title: "Доставка", value: "Бесплатно", textColor: AppColors.grayFont) // Блок с доставкой
     private lazy var totalPriceView = OrderTotalPriceView() // Общая стоимость заказа
-    private lazy var payButton = PaymentButtonView(preferredPaymentMethod) // Кнопка оплатить
+    private lazy var payButton = PaymentButtonView() // Кнопка оплатить
 
     private lazy var contentStackView = configureStackView()
 
-    // MARK: - Other properties
-    private var preferredPaymentMethod: PaymentMethod = .cbp
-
-    private let storage: DataStorage
-
-    var onDismissButtonTapped: (() -> Void)?
-    var onShowChooseAddress: (() -> Void)?
-    var onShowChoosePaymentMethod: (() -> Void)?
-    var onShowFinalVC: (() -> Void)?
+    let presenter: DeliveryPresenter
 
     // MARK: - Init
-    init(storage: DataStorage) {
-        self.storage = storage
+    init(presenter: DeliveryPresenter) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func setupUI(_ paymentMethod: PaymentMethod) {
+        paymentTableView.updateUI(with: paymentMethod)
+        payButton.updateUI(with: paymentMethod)
     }
 
     func updateUI(_ paymentMethod: PaymentMethod) {
@@ -43,7 +40,15 @@ final class DeliveryVC: UIViewController {
 
     func updateAddress(_ addressName: String) {
         addressTableView.updateUI(with: addressName)
-        storage.addressStorage.setNewMainAddress(addressName)
+        presenter.sendNewAddressToStorage(addressName)
+    }
+
+    func updateAddressUI(_ mainAddressName: String) {
+        addressTableView.updateUI(with: mainAddressName)
+    }
+
+    func updateTotalPriceView(_ totalPrice: Int) {
+        totalPriceView.updateUI(with: totalPrice)
     }
 
     // MARK: - Life cycle
@@ -51,35 +56,7 @@ final class DeliveryVC: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        fetchData()
-    }
-}
-
-// MARK: - Fetch Data
-private extension DeliveryVC {
-    func fetchData() {
-        fetchAddresses()
-        fetchPreferredPaymentMethod()
-        fetchOrderDetails()
-    }
-
-    // Получаем адреса и обновляем таблицу с активным адресом
-    func fetchAddresses() {
-        guard let mainAddressName = storage.addressStorage.getMainAddress()?.name else { print("Error: No main address"); return }
-        addressTableView.updateUI(with: mainAddressName)
-    }
-
-    // Получаем выбранный способ оплаты и обновляем таблицу со способами и кнопку оплаты
-    func fetchPreferredPaymentMethod() {
-        preferredPaymentMethod = storage.getPreferredPaymentMethodFromStorage()
-        paymentTableView.updateUI(with: preferredPaymentMethod)
-        payButton.updateUI(with: preferredPaymentMethod)
-    }
-
-    // Получаем общую сумму заказа и обновляем кнопку
-    func fetchOrderDetails() {
-        let totalPrice = storage.cartStorage.getTotalCartPrice()
-        totalPriceView.updateUI(with: totalPrice)
+        presenter.viewDidLoad()
     }
 }
 
@@ -129,45 +106,34 @@ private extension DeliveryVC {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            onDismissButtonTapped?()
+            presenter.onDismissButtonTapped?()
         }
     }
 
     func setupAddressTableViewAction() {
         addressTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            onShowChooseAddress?()
+            presenter.onShowChooseAddress?()
         }
     }
 
     func setupTimeCollectionAction() {
         timeCollection.onDeliveryTimeSelected = { [weak self] time in
-            self?.storage.setDeliveryTime(time: time)
+            self?.presenter.deliveryTimeSelected(time)
         }
     }
 
     func setupPaymentTableView() {
         paymentTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            onShowChoosePaymentMethod?()
+            presenter.onShowChoosePaymentMethod?()
         }
     }
 
     func setupPayButtonActions() {
         payButton.onPayButtonTapped = { [weak self] in
             guard let self else { return }
-            storage.configureOrder()
-            guard let order = storage.getOrderFromStorage() else { print("We have no order"); return }
-            setActiveOrderToUserDefaults(order)
-            onShowFinalVC?()
+            presenter.payButtonTapped()
         }
-    }
-}
-
-// MARK: - Supporting methods
-private extension DeliveryVC {
-    // Отправляет в UserDefaults инфу, что есть активный заказ
-    func setActiveOrderToUserDefaults(_ order: Order) {
-        UserDefaults.standard.sendOrder(order)
     }
 }
