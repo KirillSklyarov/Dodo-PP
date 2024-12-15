@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         setupAppCoordinator()
         startApp()
 
-//        resetActiveOrder() // Сбрасывает активный заказ (использую для тестирования)
+        resetActiveOrder() // Сбрасывает активный заказ (использую для тестирования)
     }
 }
 

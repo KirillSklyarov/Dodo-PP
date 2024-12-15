@@ -1,24 +1,23 @@
 import UIKit
 
+protocol ChoosePaymentMethodVCProtocol: AnyObject {
+    func updateUI(_ preferredPaymentMethod: PaymentMethod)
+}
+
 final class ChoosePaymentMethodVC: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = AppNavigationBarView(type: .payment) // Заголовок с кнопкой
-    private lazy var paymentMethodsTableView = PaymentAddressesTableView(preferredPaymentMethod: preferredPaymentMethod)
+    private lazy var paymentMethodsTableView = PaymentAddressesTableView()
 
     private lazy var contentStack = AppStackView([headerView, paymentMethodsTableView], axis: .vertical, spacing: 10)
 
-    // MARK: - Other Properties
-    private let userDefaults = UserDefaults.standard
-    private let storage: DeliveryStorage
-
-    var preferredPaymentMethod: PaymentMethod = .cbp
-    var onPaymentMethodSelected: ((PaymentMethod) -> Void)?
-    var onDismissButtonTapped: (() -> Void)?
+    // MARK: - Presenter
+    let presenter: ChoosePaymentMethodPresenterProtocol
 
     // MARK: - Init
-    init(storage: DeliveryStorage) {
-        self.storage = storage
+    init(presenter: ChoosePaymentMethodPresenterProtocol) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -31,7 +30,14 @@ final class ChoosePaymentMethodVC: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        fetchPreferredPaymentMethod()
+        presenter.viewDidLoad()
+    }
+}
+
+// MARK: - ChoosePaymentMethodVCProtocol
+extension ChoosePaymentMethodVC: ChoosePaymentMethodVCProtocol {
+    func updateUI(_ preferredPaymentMethod: PaymentMethod) {
+        paymentMethodsTableView.updatePreferredPaymentMethod(preferredPaymentMethod)
     }
 }
 
@@ -65,7 +71,7 @@ private extension ChoosePaymentMethodVC {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            onDismissButtonTapped?()
+            presenter.dismissButtonTapped()
         }
     }
 
@@ -74,26 +80,7 @@ private extension ChoosePaymentMethodVC {
         paymentMethodsTableView.onPaymentMethodTapped = { [weak self]
             paymentMethod in
             guard let self else { return }
-            onPaymentMethodSelected?(paymentMethod)
-        }
-    }
-}
-
-// MARK: - Fetch data
-private extension ChoosePaymentMethodVC {
-    func fetchPreferredPaymentMethod() {
-        self.preferredPaymentMethod = storage.getPreferredPaymentMethodFromStorage()
-        paymentMethodsTableView.updatePreferredPaymentMethod(preferredPaymentMethod)
-    }
-}
-
-// MARK: - Supporting methods
-private extension ChoosePaymentMethodVC {
-    func checkPreferredPaymentMethod() {
-        if let preferredPaymentMethod = userDefaults.string(forKey: "preferredPaymentMethod") {
-            print("We have a preferred payment method: \(preferredPaymentMethod)")
-        } else {
-            print("We have NO preferred payment method")
+            presenter.paymentMethodSelected(paymentMethod)
         }
     }
 }

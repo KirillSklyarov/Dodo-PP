@@ -1,5 +1,11 @@
 import UIKit
 
+protocol AddressScreenFactoryProtocol: AnyObject {
+    func makeAddressScreen() -> AddressViewController
+    func makeAddNewAddressScreen() -> AddNewAddressViewController
+    func makeEditAddressScreen() -> EditAddressViewController
+}
+
 // Класс фабрика экранов отвечает за создание экранов
 final class AddressScreenFactory {
     // MARK: - Properties
@@ -12,7 +18,7 @@ final class AddressScreenFactory {
 }
 
 // MARK: - Methods
-extension AddressScreenFactory {
+extension AddressScreenFactory: AddressScreenFactoryProtocol {
     func makeAddressScreen() -> AddressViewController {
         let presenter = AddressPresenter(storage: storage)
         let view = AddressViewController(presenter: presenter)
@@ -34,4 +40,3 @@ extension AddressScreenFactory {
         return view
     }
 }
-

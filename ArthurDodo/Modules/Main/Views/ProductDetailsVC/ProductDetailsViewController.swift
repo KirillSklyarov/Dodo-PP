@@ -10,22 +10,16 @@ final class ProductDetailsViewController: UIViewController {
     private lazy var cartButtonView = AppCartButtonView(type: .itemDetail)
     private lazy var contentStack = AppStackView( [itemDetailsView, infoAndToppingsContainer], axis: .vertical, spacing: 5)
    
-    private lazy var scrollView = UIScrollView()
+    private lazy var scrollView = configScrollView()
 
-    // MARK: - Other Properties
-    private let storage: DataStorage
+    // MARK: - Presenter
+    let presenter: ProductDetailsPresenter
 
-    private var item: Item?
-    private var order: Order?
-    private var toppings: [Topping] = []
-
-    var onCartButtonTapped: ( () -> Void )?
-    var onDismissButtonTapped: ( () -> Void )?
     var onShowPopupVC: ( (CpfcPopupView) -> Void)?
 
     // MARK: - Init
-    init(storage: DataStorage) {
-        self.storage = storage
+    init(presenter: ProductDetailsPresenter) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -38,8 +32,21 @@ final class ProductDetailsViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        fetchData()
+        presenter.viewDidLoad()
         setupSwipe()
+    }
+
+    func getChosenSize() -> Size {
+        itemDetailsView.getChosenSize()
+    }
+
+    func getChosenDough() -> Dough {
+        itemDetailsView.getChosenDough()
+    }
+
+    func updateInfoAndCart(_ productDetails: WeightPrice) {
+        infoAndToppingsContainer.updateUI(with: productDetails)
+        cartButtonView.updatePrice(productDetails.price)
     }
 }
 
@@ -48,18 +55,18 @@ private extension ProductDetailsViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundGray
         view.addSubviews(scrollView, headerView, cartButtonView)
-
-        configScrollView()
         setupConstraints()
     }
 
-    func configScrollView() {
+    func configScrollView() -> UIScrollView {
+        let scrollView = UIScrollView()
         scrollView.backgroundColor = AppColors.backgroundGray
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.showsVerticalScrollIndicator = false
         scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
 
         scrollView.addSubviews(contentStack)
+        return scrollView
     }
 
     func setupConstraints() {
@@ -100,7 +107,7 @@ private extension ProductDetailsViewController {
 
     func setupHeaderAction() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.onDismissButtonTapped?()
+            self?.presenter.onDismissButtonTapped?()
         }
     }
 
@@ -112,145 +119,68 @@ private extension ProductDetailsViewController {
     func setupCartViewAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
-            guard let itemToCart = configureCart() else { return }
-            storage.cartStorage.addItemToCart(item: itemToCart)
-            onCartButtonTapped?()
-            onDismissButtonTapped?()
+            presenter.cartButtonTapped()
         }
-    }
-
-    func configureCart() -> CartItem? {
-        guard let item else { return nil}
-        let chosenSize = getCorrectSize()
-        let chosenDough = getCorrectDough()
-        let weight = getCorrectWeight()
-        let price = item.getPrice(size: chosenSize)
-        let isOneSize = item.hasOneSize()
-
-        let positionToAddToCart = CartItem(item: item, chosenSize: chosenSize, chosenDough: chosenDough, weight: weight, price: price, isOneSize: isOneSize)
-        return positionToAddToCart
-    }
-
-    func getCorrectWeight() -> Int {
-        guard let item else { return 0 }
-        var weight: Int?
-        if item.hasOneSize() {
-            weight = item.itemSize.oneSize?.weight
-        } else {
-            weight = item.itemSize.medium?.weight
-        }
-        return weight ?? 0
-    }
-
-    // Если есть размер oneSize, то берем его, если нет - выбранный размер
-    func getCorrectSize() -> Size {
-        guard let item else { return .oneSize }
-        let correctSize: Size = if item.hasOneSize() {
-            .oneSize
-        } else { itemDetailsView.getChosenSize() }
-        return correctSize
-    }
-
-    // Если товар - пицца, то берем тесто, если нет - ничего
-    func getCorrectDough() -> Dough? {
-        guard let item else { return nil }
-        let chosenDough: Dough? = if item.category == .pizza {
-            itemDetailsView.getChosenDough()
-        } else { nil }
-        return chosenDough
     }
 
     func setupSizeSegmentAction() {
         itemDetailsView.onSegmentValueChanged = { [weak self] index in
             guard let self else { return }
-            updateUIWithChosenSize(index)
+            presenter.itemSegmentValueChanged(index)
         }
     }
 
-    func updateUIWithChosenSize(_ index: Int) {
-        guard let productDetails = item?.itemSize.getWeightAndPriceViaIndex(index) else {print("We have some problems here"); return }
-        infoAndToppingsContainer.updateUI(productDetails: productDetails)
-        let price = productDetails.price
-        cartButtonView.updatePrice(price)
-    }
+//    func updateUIWithChosenSize(_ index: Int) {
+//        guard let productDetails = item?.itemSize.getWeightAndPriceViaIndex(index) else { print("We have some problems here"); return }
+//        infoAndToppingsContainer.updateUI(productDetails: productDetails)
+//        let price = productDetails.price
+//        cartButtonView.updatePrice(price)
+//    }
 
     func setupInfoButtonAction() {
         infoAndToppingsContainer.onShowPopupVC = { [weak self] popupVC in
             guard let self else { print("Self is nil"); return }
-            guard let popupVC = popupVC as? CpfcPopupView else {
-                print("No popupVC"); return }
-            onShowPopupVC?(popupVC)
+//            guard let popupVC = popupVC as? CpfcPopupView else {
+//                print("No popupVC"); return }
+            presenter.showPopupVC(popupVC)
         }
     }
 }
 
-// MARK: - Fetch Data
-private extension ProductDetailsViewController {
-    func fetchData() {
-        fetchSelectedItem()
-        fetchToppings()
+// MARK: - Update UI for The Item (настраиваем экран для конкретного товара)
+extension ProductDetailsViewController {
+
+    // Обновляем все поля
+    func updateUIWithSelectedItem(_ item: Item) {
+        headerView.updateTitle(item.name)
+        itemDetailsView.updatePizzaImage(item.imageName)
+
+        infoAndToppingsContainer.updateIngredientsAndWeight(item)
+        cartButtonView.updatePrice(item.itemSize.medium?.price ?? 0)
     }
 
-    func fetchSelectedItem() {
-        guard let item = storage.getSelectedItemFromStorage() else { print("No item selected"); return }
-        self.item = item
-        passSelectedItemToView(item)
-        updateUIWithSelectedItem()
+    // Если это не пицца, то не нужно показывать поле с тестом
+    func hideDoughSegmentView() {
+        itemDetailsView.hideDoughSegment()
+    }
+
+    // Если размер один, то не нужно показывать поле с размерами
+    func hideSizeSegmentView() {
+        itemDetailsView.hideSizeSegment()
+    }
+
+    // Если размер один, то обновляем вес и цену товара
+    func updateWeightAndPriceUI(_ weight: Int, _ price: Int) {
+        infoAndToppingsContainer.updateWeight(weight)
+        cartButtonView.updatePrice(price)
     }
 
     func passSelectedItemToView(_ item: Item) {
         infoAndToppingsContainer.getSelectedItem(item)
     }
 
-    // Загружаем ВСЕ начинки
-    func fetchToppings() {
-        filterToppings()
-    }
-
-    // Отбираем только нужные нам начинки
-    func filterToppings() {
-        guard let toppings = item?.toppings else { return }
-        self.toppings = toppings
-        passToppingsToView()
-    }
-
-    // Отправляем данные о топпингов дальше ко вью
-    func passToppingsToView() {
+    func passToppingsToView(_ toppings: [Topping]) {
         infoAndToppingsContainer.passToppingsToView(toppings)
-    }
-}
-
-// MARK: - Update UI for The Item (настраиваем экран для конкретного товара)
-private extension ProductDetailsViewController {
-    func updateUIWithSelectedItem() {
-        updateUIWithItem()
-        isItemPizza()
-        isOneSize()
-    }
-
-    // Если это не пицца, то не нужно показывать поле с тестом
-    func isItemPizza() {
-        if item?.category != .pizza {
-            itemDetailsView.hideDoughSegment()
-        }
-    }
-
-    // Если размер один, то не нужно показывать поле с размерами, обновляем вес и цену товара
-    func isOneSize() {
-        if let oneSize = item?.itemSize.oneSize {
-            itemDetailsView.hideSizeSegment()
-            infoAndToppingsContainer.updateWeight(oneSize.weight)
-            cartButtonView.updatePrice(oneSize.price)
-        }
-    }
-
-    func updateUIWithItem() {
-        guard let item else { return }
-        headerView.updateTitle(item.name)
-        itemDetailsView.updatePizzaImage(item.imageName)
-
-        infoAndToppingsContainer.updateIngredientsAndWeight(item)
-        cartButtonView.updatePrice(item.itemSize.medium?.price ?? 0)
     }
 }
 
@@ -263,36 +193,6 @@ private extension ProductDetailsViewController {
     }
 
     @objc private func vcSwiped() {
-        onDismissButtonTapped?()
+        presenter.onDismissButtonTapped?()
     }
 }
-
-
-// MARK: - Setup navigation bar
-//private extension ProductDetailsViewController {
-//    func setupNavigationBar() {
-//        let color = UIColor.black.withAlphaComponent(0.2)
-//        let dismissButtonView = DismissButtonView(backgroundColor: color)
-//
-//        print(navigationController ?? "navigationController is nil")
-//
-//        let appearance = UINavigationBarAppearance()
-//        appearance.configureWithTransparentBackground()
-//        appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
-//        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-//        navigationController?.navigationBar.standardAppearance = appearance
-//        title = "ТЕСТ"
-//
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButtonView)
-//
-//        // Настраиваем действия кнопок навигации
-//        setupNavigationViewActions(dismissButtonView)
-//    }
-//
-//    // Настройка действий навигации
-//    func setupNavigationViewActions(_ dismissButtonView: DismissButtonView) {
-//        dismissButtonView.onButtonTapped = { [weak self] in
-//            self?.onDismissButtonTapped?()
-//        }
-//    }
-//}

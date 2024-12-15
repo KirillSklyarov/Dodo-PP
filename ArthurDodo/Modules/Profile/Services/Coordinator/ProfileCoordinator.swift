@@ -3,12 +3,12 @@ import UIKit
 final class ProfileCoordinator: Coordinator {
     // MARK: - Properties
     private let router: Router
-    private let screenFactory: ProfileScreenFactory
+    private let screenFactory: ProfileScreenFactoryProtocol
 
     var onFlowFinished: (() -> Void)?
 
     // MARK: - Init
-    init(router: Router, screenFactory: ProfileScreenFactory) {
+    init(router: Router, screenFactory: ProfileScreenFactoryProtocol) {
         self.router = router
         self.screenFactory = screenFactory
     }

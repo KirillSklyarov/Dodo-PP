@@ -7,6 +7,7 @@ final class DataStorage {
     let addressStorage = AddressStorage()
     let cartStorage = CartStorage()
     lazy var deliveryStorage = DeliveryStorage(storageService: self)
+    lazy var mainStorage = MainStorage(storageService: self)
 
     // MARK: - Properties
     private var fetchedUserAddresses: [Address] = []
@@ -63,18 +64,38 @@ extension DataStorage {
         guard let cart = cartStorage.getCartFromStorage() else { print("Cart is nil"); return nil}
         return cart
     }
-}
 
-// MARK: - Special Offers
-extension DataStorage {
-    // Из всего каталога выбираем кол-во (countOfElements) рандомных элементов
-    func getArrayOfRandomItems(_ countOfElements: Int) {
-        specialOfferArray = SpecialOffer.configRandomOffer(fetchedItems, countOfElements)
+    func eraseCart() {
+        cartStorage.eraseCart()
     }
 
-    // Отдает специальные предложения
-    func getSpecialOffersArray() -> [Item] {
-        specialOfferArray
+    func getAllAddresses() -> [Address] {
+        return addressStorage.getAddresses()
+    }
+
+    // Отдаем кол-во додокоинов у юзера
+    func getDodoCoins() -> Int {
+        return profileStorage.getDodoCoins()
+    }
+
+    func getOrder() -> Order? {
+        return deliveryStorage.getOrderFromStorage()
+    }
+
+    func getSpecialOfferArray() -> [Item] {
+        return mainStorage.getSpecialOffersArray()
+    }
+
+    func setStories(_ stories: [Story]) {
+        mainStorage.setStories(stories)
+    }
+
+    func setItems(_ items: [Item]) {
+        mainStorage.setCatalog(items)
+    }
+
+    func addItemToCart(itemToCart: CartItem) {
+        cartStorage.addItemToCart(item: itemToCart)
     }
 }
 
@@ -98,22 +119,6 @@ extension DataStorage {
     // Проверяем были ли ранее загружены данные
     func isUserDataLoaded() -> Bool {
         fetchedUserData != nil
-    }
-
-    // Отдаем кол-во додокоинов у юзера
-    func getDodoCoins() -> Int {
-        fetchedUserData?.dodoCoins ?? 0
-    }
-}
-
-// MARK: - Stories
-extension DataStorage {
-    func setStories(_ stories: [Story]) {
-        fetchedStories = stories
-    }
-
-    func getFetchedStories() -> [Story] {
-        fetchedStories
     }
 }
 
@@ -140,77 +145,6 @@ extension DataStorage {
     func getIngredients(for cartItem: CartItem) -> String? {
         guard let item = getItem(for: cartItem) else { return nil }
         return item.ingredients
-    }
-}
-
-// MARK: - Catalog
-extension DataStorage {
-    // Принимаем полученные данные в хранилище
-    func setItems(_ items: [Item]) {
-        fetchedItems = items.sorted { $0.category.rawValue < $1.category.rawValue }
-        getArrayOfRandomItems(5)
-        getCategoriesFromCatalog()
-    }
-
-    // Отправляет весь каталог товаров
-    func getCatalog() -> [Item] {
-        fetchedItems
-    }
-
-    // Устанавливает выбранный товар, то есть тот, который открыл пользователь
-    func sendSelectedItemToStorage(_ item: Item) {
-        selectedItem = SelectedItem(item: item)
-    }
-
-    // Устанавливает выбранный товар, то есть тот, который открыл пользователь по его ID и тк он идет под редактирование, то устанавливаем ему isChanging: true
-    func sendSelectedItemToStorage(with itemId: String) {
-        guard let item = fetchedItems.first(where: { $0.id == itemId }) else { return }
-        selectedItem = SelectedItem(item: item, isChanging: true)
-    }
-
-    // Если есть позиция для редактирования, то возвращает ее, если позиции для редактирования нет, то отправляет выбранный товар
-    func getSelectedOrChangingItemFromStorage() -> Item? {
-        if changingItem != nil {
-            return castChangingItemToItem()
-        } else {
-            return getSelectedItemFromStorage()
-        }
-    }
-
-    // Возвращает товар для редактирования, но в виде Item
-    func getChangingItem() -> Item? {
-        guard let changingItem else { return nil }
-        return changingItem.item
-    }
-
-    // Возвращает товар для редактирования (в виде CartItem)
-    func getChangingCartItem() -> CartItem? {
-        changingItem
-    }
-
-    // Находит в каталоге позицию для редактирования
-    func castChangingItemToItem() -> Item? {
-        return getChangingItem()
-    }
-
-    // Отправляет выбранный товар, то есть тот, который открыл пользователь
-    func getSelectedItemFromStorage() -> Item? {
-        selectedItem?.item
-    }
-}
-
-// MARK: - Categories
-extension DataStorage {
-    // Формируем список категории (путем обработки каталога, вычленения уникальных категорий и сортировка их в алфавитном порядке)
-    func getCategoriesFromCatalog() {
-        let set = Set(fetchedItems.compactMap(\.category))
-        let sorted = Array(set).sorted { $0.rawValue < $1.rawValue }
-        category = sorted
-    }
-
-    // Отдаем список категорий
-    func getCategories() -> [Category] {
-        category
     }
 }
 

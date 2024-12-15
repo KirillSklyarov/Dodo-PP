@@ -19,7 +19,7 @@ final class IngredientsView: UIView {
 
     private var item: Item?
 
-    var onShowPopupVC: ((UIViewController) -> Void)?
+    var onShowPopupVC: ((CpfcPopupView) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect = .zero) {

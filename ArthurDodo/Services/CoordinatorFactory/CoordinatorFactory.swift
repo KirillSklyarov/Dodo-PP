@@ -1,14 +1,5 @@
 import UIKit
 
-enum Modules {
-    case app
-    case main
-    case cart
-    case address
-    case profile
-    case delivery
-}
-
 // Класс "Фабрика координатором" отвечает за создание координаторов
 final class CoordinatorFactory {
     // MARK: - Properties
@@ -31,7 +22,7 @@ extension CoordinatorFactory {
     }
 
     func makeMainCoordinator() -> MainCoordinator {
-        return MainCoordinator(router: router, screenFactory: screenFactory, storage: storage)
+        return MainCoordinator(router: router, screenFactory: screenFactory.mainScreenFactory, storage: storage)
     }
 
     func makeProfileCoordinator() -> ProfileCoordinator {

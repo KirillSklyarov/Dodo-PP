@@ -5,7 +5,7 @@ final class InfoAndToppingsView: UIView {
     // MARK: - Properties
     private lazy var infoAndToppingsStack = InfoAndToppingsStack()
 
-    var onShowPopupVC: ((UIViewController) -> Void)?
+    var onShowPopupVC: ((CpfcPopupView) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -31,7 +31,7 @@ extension InfoAndToppingsView {
     }
 
     // Отправляем данные о выбранных деталях (вес, КБЖУ и проч) выбранного товара
-    func updateUI(productDetails: WeightPrice) {
+    func updateUI(with productDetails: WeightPrice) {
         infoAndToppingsStack.updateUI(productDetails: productDetails)
     }
 

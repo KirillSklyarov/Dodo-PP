@@ -148,7 +148,7 @@ private extension EditProductViewController {
 
 extension EditProductViewController {
     func updateUIWithChosenSize(_ productDetails: WeightPrice) {
-        infoAndToppingsContainer.updateUI(productDetails: productDetails)
+        infoAndToppingsContainer.updateUI(with: productDetails)
         let price = productDetails.price
         cartButtonView.updatePriceLabel(price)
     }

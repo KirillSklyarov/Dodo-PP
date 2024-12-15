@@ -1,24 +1,21 @@
 import UIKit
 
+protocol ChooseAddressVCProtocol: AnyObject {
+    func updateUI(_ addresses: [Address])
+}
+
 final class ChooseAddressVC: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = AppNavigationBarView(type: .chooseAddress) // Заголовок с кнопкой
     private lazy var addressTableView = DeliveryAddressListTableView()
 
-    // MARK: - Other Properties
-    private var addresses: [Address] = []
-
-    private let storage: DataStorage
-
-    var onAddressCellTapped: ((String) -> Void)?
-    var onDismissButtonTapped: (() -> Void)?
-    var onEditAddressCellTapped: ( (Address) -> Void)?
-    var onShowAddNewAddress: (() -> Void)?
+    // MARK: - Presenter
+    let presenter: ChooseAddressPresenterProtocol
 
     // MARK: - Init
-    init(storage: DataStorage) {
-        self.storage = storage
+    init(presenter: ChooseAddressPresenterProtocol) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -30,21 +27,14 @@ final class ChooseAddressVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        fetchData()
         setupActions()
+        presenter.viewDidLoad()
     }
 }
 
-// MARK: - Fetch Data
-private extension ChooseAddressVC {
-    // Получаем данные об адресе
-    func fetchData() {
-        getAddressesAndUpdateUI()
-    }
-
-    // Получаем данные об адресе из хранилища и обновляем таблицу
-    func getAddressesAndUpdateUI() {
-        addresses = storage.addressStorage.getAddresses()
+// MARK: - ChooseAddressVCProtocol
+extension ChooseAddressVC: ChooseAddressVCProtocol {
+    func updateUI(_ addresses: [Address]) {
         addressTableView.updateUI(with: addresses)
     }
 }
@@ -83,7 +73,7 @@ private extension ChooseAddressVC {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            onDismissButtonTapped?()
+            presenter.dismissButtonTapped()
         }
     }
 
@@ -91,20 +81,19 @@ private extension ChooseAddressVC {
     func setupAddressTableViewActions() {
         addressTableView.onAddressCellTapped = { [weak self] addressName in
             guard let self else { return }
-            onAddressCellTapped?(addressName)
-            onDismissButtonTapped?()
+            presenter.addressCellTapped(addressName)
         }
 
         // Настраиваем action: нажатие на редактирование адреса
         addressTableView.onEditAddressButtonTapped = { [weak self] indexPath in
             guard let self else { return }
-            let address = addresses[indexPath.row]
-            onEditAddressCellTapped?(address)
+            presenter.editAddressCellTapped(indexPath)
         }
 
         // Настраиваем action: переход на экран добавления нового адреса
         addressTableView.onAddNewAddressCellTapped = { [weak self] in
-            self?.onShowAddNewAddress?()
+            guard let self else { return }
+            presenter.addNewAddressButtonTapped()
         }
     }
 }

@@ -7,7 +7,7 @@ final class InfoAndToppingsStack: UIStackView {
     private lazy var toppingsCollectionView = AddToppingsCollectionView()
     private var cart: AppCartButtonView?
 
-    var onShowPopupVC: ((UIViewController) -> Void)?
+    var onShowPopupVC: ((CpfcPopupView) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {

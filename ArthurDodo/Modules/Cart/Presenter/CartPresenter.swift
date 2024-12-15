@@ -32,8 +32,8 @@ final class CartPresenter {
     var onShowPromoVC: ((Promo) -> Void)?
     var onShowDeliveryVC: (() -> Void)?
 
-    init(storage: CartStorage, storageService: DataStorage) {
-        self.storage = storage
+    init(storageService: DataStorage) {
+        self.storage = storageService.cartStorage
         self.storageService = storageService
     }
 
@@ -64,7 +64,7 @@ private extension CartPresenter {
 
     // Получаем товары, для отражения в корзине в категории "Добавить к заказу"
     func getItemsToAddFromStorage() {
-        let itemsToAdd = storageService.getSpecialOffersArray()
+        let itemsToAdd = storageService.getSpecialOfferArray()
         sendItemsToAdd(itemsToAdd)
     }
 

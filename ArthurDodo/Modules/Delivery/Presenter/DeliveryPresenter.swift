@@ -1,7 +1,22 @@
 import Foundation
 
+protocol DeliveryPresenterProtocol: AnyObject {
+    func sendNewAddressToStorage(_ addressName: String)
+    func viewDidLoad()
+    func dismissButtonTapped()
+    func addressCellTapped()
+    func deliveryTimeSelected(_ time: String)
+    func payButtonTapped()
+    func paymentMethodCellTapped()
+
+    var onDismissButtonTapped: (() -> Void)? { get set }
+    var onShowChooseAddress: (() -> Void)? { get set }
+    var onShowChoosePaymentMethod: (() -> Void)? { get set }
+    var onShowFinalVC: (() -> Void)? { get set }
+}
+
 final class DeliveryPresenter {
-    weak var view: DeliveryVC?
+    weak var view: DeliveryViewProtocol?
 
     // MARK: - Other properties
     private var preferredPaymentMethod: PaymentMethod = .cbp
@@ -18,21 +33,41 @@ final class DeliveryPresenter {
         self.storageService = storageService
         self.storage = storage
     }
+}
 
+// MARK: - DeliveryPresenterProtocol
+extension DeliveryPresenter: DeliveryPresenterProtocol {
+    // Загружаем данные из хранилища
     func viewDidLoad() {
         fetchData()
     }
-}
 
-extension DeliveryPresenter {
+    // Отправляем новый главный адрес в хранилище
     func sendNewAddressToStorage(_ addressName: String) {
         storageService.setNewMainAddress(addressName)
     }
 
+    // Отправляем время доставки в хранилище
     func deliveryTimeSelected(_ time: String) {
         storage.setDeliveryTime(time: time)
     }
 
+    // Отрабатываем нажатие на закрытие окна
+    func dismissButtonTapped() {
+        onDismissButtonTapped?()
+    }
+
+    // Отрабатываем нажатие на выбор метода оплаты
+    func paymentMethodCellTapped() {
+        onShowChoosePaymentMethod?()
+    }
+
+    // Отрабатываем нажатие на выбор адреса доставки
+    func addressCellTapped() {
+        onShowChooseAddress?()
+    }
+
+    // Отрабатываем нажатие на кнопку оплаты. Сначала формируем заказ, потом в UserDefaults сохраняем активный заказ и вызываем замыкание показать финальный экран
     func payButtonTapped() {
         storage.configureOrder()
         guard let order = storage.getOrderFromStorage() else { print("We have no order"); return }
@@ -58,7 +93,7 @@ private extension DeliveryPresenter {
     // Получаем выбранный способ оплаты и обновляем таблицу со способами и кнопку оплаты
     func fetchPreferredPaymentMethod() {
         preferredPaymentMethod = storage.getPreferredPaymentMethodFromStorage()
-        view?.updateUI(preferredPaymentMethod)
+        view?.updatePaymentMethodUI(preferredPaymentMethod)
     }
 
     // Получаем общую сумму заказа и обновляем кнопку
@@ -75,4 +110,3 @@ private extension DeliveryPresenter {
         UserDefaults.standard.sendOrder(order)
     }
 }
-

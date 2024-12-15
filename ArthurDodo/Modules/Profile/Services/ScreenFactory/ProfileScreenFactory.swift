@@ -1,4 +1,11 @@
-import UIKit
+import Foundation
+
+protocol ProfileScreenFactoryProtocol: AnyObject {
+    func makeProfileScreen() -> ProfileViewController
+    func makePersonalDataScreen() -> PersonalViewController
+    func makeChatAlertScreen() -> AppActionSheet
+    func makePromoScreen(_ offer: Promo) -> PromoViewController
+}
 
 // Класс фабрика экранов отвечает за создание экранов
 final class ProfileScreenFactory {
@@ -12,7 +19,7 @@ final class ProfileScreenFactory {
 }
 
 // MARK: - Methods
-extension ProfileScreenFactory {
+extension ProfileScreenFactory: ProfileScreenFactoryProtocol {
     func makeProfileScreen() -> ProfileViewController {
         let presenter = ProfilePresenter(storage: storage)
         let view = ProfileViewController(presenter: presenter)

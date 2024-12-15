@@ -3,12 +3,12 @@ import UIKit
 final class AddressCoordinator: Coordinator {
     // MARK: - Properties
     private let router: Router
-    private let screenFactory: AddressScreenFactory
+    private let screenFactory: AddressScreenFactoryProtocol
 
     var onFlowFinished: (() -> Void)?
 
     // MARK: - Init
-    init(router: Router, screenFactory: AddressScreenFactory) {
+    init(router: Router, screenFactory: AddressScreenFactoryProtocol) {
         self.router = router
         self.screenFactory = screenFactory
     }

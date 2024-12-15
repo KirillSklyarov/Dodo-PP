@@ -1,22 +1,21 @@
 import UIKit
 
+protocol FinalViewProtocol: AnyObject {
+    func updateUI(_ seconds: Int)
+}
+
 final class FinalVC: UIViewController {
 
     // MARK: - UI Properties
     private lazy var dismissButton = AppDismissButtonView(type: .standard)
-    private lazy var contentStack = FinalVCContentStackView(dismissDelay)
+    private lazy var contentStack = FinalVCContentStackView()
 
-    // MARK: - Properties
-    private var countDownTimer: Timer?
-    private var dismissDelay = 2
-
-    private let storage: DataStorage
-
-    var onFinalVCDismissed: (() -> Void)?
+    // MARK: - Presenter
+    let presenter: FinalPresenterProtocol
 
     // MARK: - Init
-    init(storage: DataStorage) {
-        self.storage = storage
+    init(presenter: FinalPresenterProtocol) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -29,7 +28,7 @@ final class FinalVC: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        setupTimer()
+        presenter.viewDidLoad()
     }
 }
 
@@ -57,39 +56,14 @@ private extension FinalVC {
     func setupActions() {
         dismissButton.onButtonTapped = { [weak self] in
             guard let self else { return }
-            dismissVC()
+            presenter.dismissVC()
         }
     }
 }
 
-// MARK: - Setup timer
-private extension FinalVC {
-    func setupTimer() {
-        countDownTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
-    }
-
-    // Уменьшаем таймер и либо закрываем окно, либо обновляем label
-    @objc private func timerAction() {
-        dismissDelay -= 1
-
-        if dismissDelay <= 0 {
-            dismissVC()
-        } else {
-            updateTitle(dismissDelay)
-        }
-    }
-}
-
-// MARK: - Supporting methods
-private extension FinalVC {
-    // Выключаем таймер, обнуляем корзину и закрываем все окна
-    func dismissVC() {
-        countDownTimer?.invalidate()
-        storage.cartStorage.eraseCart()
-        onFinalVCDismissed?()
-    }
-
-    func updateTitle(_ seconds: Int) {
+// MARK: - FinalViewProtocol
+extension FinalVC: FinalViewProtocol {
+    func updateUI(_ seconds: Int) {
         contentStack.updateTitle(seconds)
     }
 }

@@ -1,5 +1,11 @@
 import UIKit
 
+protocol DeliveryViewProtocol: AnyObject {
+    func updateAddressUI(_ mainAddressName: String)
+    func updatePaymentMethodUI(_ paymentMethod: PaymentMethod)
+    func updateTotalPriceView(_ totalPrice: Int)
+}
+
 final class DeliveryVC: UIViewController {
 
     // MARK: - UI Properties
@@ -16,10 +22,10 @@ final class DeliveryVC: UIViewController {
 
     private lazy var contentStackView = configureStackView()
 
-    let presenter: DeliveryPresenter
+    let presenter: DeliveryPresenterProtocol
 
     // MARK: - Init
-    init(presenter: DeliveryPresenter) {
+    init(presenter: DeliveryPresenterProtocol) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -28,19 +34,25 @@ final class DeliveryVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setupUI(_ paymentMethod: PaymentMethod) {
-        paymentTableView.updateUI(with: paymentMethod)
-        payButton.updateUI(with: paymentMethod)
+    // MARK: - Life cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+        setupActions()
+        presenter.viewDidLoad()
     }
+}
 
-    func updateUI(_ paymentMethod: PaymentMethod) {
-        paymentTableView.updateUI(with: paymentMethod)
-        payButton.updateUI(with: paymentMethod)
-    }
-
+// MARK: - DeliveryViewProtocol
+extension DeliveryVC: DeliveryViewProtocol {
     func updateAddress(_ addressName: String) {
         addressTableView.updateUI(with: addressName)
         presenter.sendNewAddressToStorage(addressName)
+    }
+
+    func updatePaymentMethodUI(_ paymentMethod: PaymentMethod) {
+        paymentTableView.updateUI(with: paymentMethod)
+        payButton.updateUI(with: paymentMethod)
     }
 
     func updateAddressUI(_ mainAddressName: String) {
@@ -49,14 +61,6 @@ final class DeliveryVC: UIViewController {
 
     func updateTotalPriceView(_ totalPrice: Int) {
         totalPriceView.updateUI(with: totalPrice)
-    }
-
-    // MARK: - Life cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupUI()
-        setupActions()
-        presenter.viewDidLoad()
     }
 }
 
@@ -106,27 +110,28 @@ private extension DeliveryVC {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            presenter.onDismissButtonTapped?()
+            presenter.dismissButtonTapped()
         }
     }
 
     func setupAddressTableViewAction() {
         addressTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            presenter.onShowChooseAddress?()
+            presenter.addressCellTapped()
         }
     }
 
     func setupTimeCollectionAction() {
         timeCollection.onDeliveryTimeSelected = { [weak self] time in
-            self?.presenter.deliveryTimeSelected(time)
+            guard let self else { return }
+            presenter.deliveryTimeSelected(time)
         }
     }
 
     func setupPaymentTableView() {
         paymentTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            presenter.onShowChoosePaymentMethod?()
+            presenter.paymentMethodCellTapped()
         }
     }
 

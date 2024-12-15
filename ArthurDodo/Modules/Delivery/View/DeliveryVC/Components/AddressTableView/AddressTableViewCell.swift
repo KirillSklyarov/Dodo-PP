@@ -4,8 +4,7 @@ import UIKit
 final class AddressTableViewCell: UITableViewCell {
 
     // MARK: - Properties
-    private lazy var titleLabel = AppLabel(type: .basicTitle)
-
+    private lazy var titleLabel = AppLabel(type: .maxiTitle)
     private let cornerRadius: CGFloat = 10
 
     // MARK: - Init

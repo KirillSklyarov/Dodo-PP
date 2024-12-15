@@ -3,7 +3,7 @@ import UIKit
 final class MainCoordinator: Coordinator {
     // MARK: - Properties
     private let router: Router
-    private let screenFactory: ScreenFactory
+    private let screenFactory: MainScreenFactoryProtocol
     private var features: [FeatureType: Bool] = [:]
 
     var onShowCart: (() -> Void)?
@@ -11,7 +11,7 @@ final class MainCoordinator: Coordinator {
     var onShowAddress: (() -> Void)?
 
     // MARK: - Init
-    init(router: Router, screenFactory: ScreenFactory, storage: DataStorage) {
+    init(router: Router, screenFactory: MainScreenFactoryProtocol, storage: DataStorage) {
         self.router = router
         self.screenFactory = screenFactory
         getFeaturesFromStorage(storage)
@@ -26,25 +26,26 @@ final class MainCoordinator: Coordinator {
 extension MainCoordinator {
     func start() {
         let mainVC = screenFactory.makeMainScreen() // Создаем экран
+        let presenter = mainVC.presenter
 
         // Настраиваем замыкания
-        mainVC.onProfileButtonTapped = { [weak self] in
+        presenter.onProfileButtonTapped = { [weak self] in
             self?.checkFeatureToggleAndShowFlow(.profile)
         }
 
-        mainVC.onAddressButtonTapped = { [weak self] in
+        presenter.onAddressButtonTapped = { [weak self] in
             self?.onShowAddress?()
         }
 
-        mainVC.onStoryTapped = { [weak self] indexPath in
+        presenter.onStoryTapped = { [weak self] indexPath in
             self?.showStories(indexPath)
         }
 
-        mainVC.onProductDetailsTapped = { [weak self] in
+        presenter.onProductDetailsTapped = { [weak self] in
             self?.checkFeatureToggleAndShowFlow(.productDetails)
         }
 
-        mainVC.onCartButtonTapped = { [weak self] in
+        presenter.onCartButtonTapped = { [weak self] in
             self?.checkFeatureToggleAndShowFlow(.cart)
         }
 
@@ -54,7 +55,7 @@ extension MainCoordinator {
     // Вызываем обновление корзины на главном экране
     func mainVCUpdateCart() {
         if let vc = router.getMainViewController() {
-            vc.updateCart()
+            vc.presenter.updateCart()
         }
     }
 }
@@ -64,13 +65,14 @@ private extension MainCoordinator {
     // Показ экрана деталей товара и связанные с ним операции
     func showProductDetails() {
         let vc = screenFactory.makeProductDetailsScreen() // Создаем экран
+        let presenter = vc.presenter
 
         // Настраиваем замыкания
-        vc.onDismissButtonTapped = { [weak self] in
+        presenter.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss()
         }
 
-        vc.onShowPopupVC = { [weak self] popUpView in
+        presenter.onShowPopupVC = { [weak self] popUpView in
             self?.router.present(popUpView, isParent: true, modalPresentation: .popover)
         }
 

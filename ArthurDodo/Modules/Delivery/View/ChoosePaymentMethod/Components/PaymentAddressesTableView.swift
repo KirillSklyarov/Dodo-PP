@@ -10,10 +10,9 @@ final class PaymentAddressesTableView: AppTableView {
     var onPaymentMethodTapped: ( (PaymentMethod) -> Void)?
 
     // MARK: - Init
-    init(frame: CGRect = .zero, style: UITableView.Style = .plain, preferredPaymentMethod: PaymentMethod) {
+    override init(frame: CGRect = .zero, style: UITableView.Style = .plain) {
         super.init(frame: frame, style: style)
         configTableView()
-        self.preferredPaymentMethod = preferredPaymentMethod
     }
 
     required init?(coder: NSCoder) {

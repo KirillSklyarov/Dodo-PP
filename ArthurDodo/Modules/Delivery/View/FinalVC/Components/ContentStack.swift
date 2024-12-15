@@ -5,7 +5,7 @@ final class FinalVCContentStackView: UIStackView {
     // MARK: - UI properties
     private lazy var titleLabel = AppLabel(type: .smallHeader, text: "Ваш заказ успешно оформлен", alignment: .center, numberOfLines: 0)
     private lazy var doneImageView = AppImageView(type: .checkmark)
-    private lazy var dismissInfoLabel = AppLabel(type: .basicTitle, text: "Это окно закроется через \(dismissDelay ?? 5) секунд", textColor: AppColors.grayFont)
+    private lazy var dismissInfoLabel = AppLabel(type: .basicTitle, text: "Это окно закроется через \(dismissDelay ?? 2) секунд", textColor: AppColors.grayFont)
 
     // MARK: - Other properties
     private var dismissDelay: Int?
@@ -24,6 +24,10 @@ final class FinalVCContentStackView: UIStackView {
 
 // MARK: - Public methods
 extension FinalVCContentStackView {
+    func setupContentStackView(_ dismissDelay: Int) {
+        self.dismissDelay = dismissDelay
+    }
+
     func updateTitle(_ seconds: Int) {
         let secondsString = seconds.getRightFormOfSeconds()
         dismissInfoLabel.text = "Это окно закроется через \(seconds) \(secondsString)"

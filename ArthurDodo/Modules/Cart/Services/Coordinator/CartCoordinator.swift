@@ -4,13 +4,13 @@ final class CartCoordinator: Coordinator {
 
     // MARK: - Properties
     private let router: Router
-    private let screenFactory: CartScreenFactory
+    private let screenFactory: CartScreenFactoryProtocol
 
     var onFinishFlow: (() -> Void)?
     var onCartDismissed: (() -> Void)?
 
     // MARK: - Init
-    init(router: Router, screenFactory: CartScreenFactory) {
+    init(router: Router, screenFactory: CartScreenFactoryProtocol) {
         self.router = router
         self.screenFactory = screenFactory
     }

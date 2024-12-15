@@ -73,6 +73,15 @@
 		733A01D82CDBBF380013D3EB /* ScreenFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A01D72CDBBF380013D3EB /* ScreenFactory.swift */; };
 		733A01DC2CDBC7D40013D3EB /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A01DB2CDBC7D40013D3EB /* Router.swift */; };
 		733B2FC32D0AFADC00249880 /* EditProductPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733B2FC22D0AFADC00249880 /* EditProductPresenter.swift */; };
+		7344CCC82D0C7F6A00CF2011 /* ChooseAddressPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344CCC72D0C7F6A00CF2011 /* ChooseAddressPresenter.swift */; };
+		7344CCCC2D0C834500CF2011 /* DeliveryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344CCCA2D0C834500CF2011 /* DeliveryCoordinator.swift */; };
+		7344CCCE2D0C835D00CF2011 /* ChoosePaymentMethodPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344CCCD2D0C835D00CF2011 /* ChoosePaymentMethodPresenter.swift */; };
+		7344CCD02D0DB69E00CF2011 /* FinalPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344CCCF2D0DB69E00CF2011 /* FinalPresenter.swift */; };
+		7344CCD22D0DE94A00CF2011 /* MainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344CCD12D0DE94A00CF2011 /* MainPresenter.swift */; };
+		7344CCD82D0DF0FD00CF2011 /* MainScreenFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344CCD62D0DF0FD00CF2011 /* MainScreenFactory.swift */; };
+		7344CCE02D0F1A9F00CF2011 /* MainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344CCDE2D0F1A9F00CF2011 /* MainStorage.swift */; };
+		7344CCE22D0F1AC700CF2011 /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344CCE12D0F1AC700CF2011 /* NavigationBar.swift */; };
+		7344CCE42D0F1ADE00CF2011 /* ProductDetailsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344CCE32D0F1ADE00CF2011 /* ProductDetailsPresenter.swift */; };
 		734ACE6F2D06FD3C00FC1841 /* AddAddressMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734ACE552D06FD3C00FC1841 /* AddAddressMapView.swift */; };
 		734ACE702D06FD3C00FC1841 /* AddAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734ACE562D06FD3C00FC1841 /* AddAddressView.swift */; };
 		734ACE712D06FD3C00FC1841 /* AddNewAddressStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734ACE572D06FD3C00FC1841 /* AddNewAddressStackView.swift */; };
@@ -223,7 +232,6 @@
 		73E72F5A2CF8DA1500CDF390 /* AppImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E72F592CF8DA1500CDF390 /* AppImageView.swift */; };
 		73EA17352CCBE21E0079A16C /* String+Plural.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EA17342CCBE21E0079A16C /* String+Plural.swift */; };
 		73F169312CEE5ABE009B8532 /* CoordinatorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1692F2CEE5ABE009B8532 /* CoordinatorFactory.swift */; };
-		73F3EDC42CEDCB9300BFD147 /* DeliveryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F3EDC32CEDCB9300BFD147 /* DeliveryCoordinator.swift */; };
 		73FE978A2CE253E40056D53D /* ProfileViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FE97892CE253E40056D53D /* ProfileViews.swift */; };
 /* End PBXBuildFile section */
 
@@ -294,6 +302,15 @@
 		733A01D72CDBBF380013D3EB /* ScreenFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenFactory.swift; sourceTree = "<group>"; };
 		733A01DB2CDBC7D40013D3EB /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		733B2FC22D0AFADC00249880 /* EditProductPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProductPresenter.swift; sourceTree = "<group>"; };
+		7344CCC72D0C7F6A00CF2011 /* ChooseAddressPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressPresenter.swift; sourceTree = "<group>"; };
+		7344CCCA2D0C834500CF2011 /* DeliveryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryCoordinator.swift; sourceTree = "<group>"; };
+		7344CCCD2D0C835D00CF2011 /* ChoosePaymentMethodPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePaymentMethodPresenter.swift; sourceTree = "<group>"; };
+		7344CCCF2D0DB69E00CF2011 /* FinalPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalPresenter.swift; sourceTree = "<group>"; };
+		7344CCD12D0DE94A00CF2011 /* MainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
+		7344CCD62D0DF0FD00CF2011 /* MainScreenFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenFactory.swift; sourceTree = "<group>"; };
+		7344CCDE2D0F1A9F00CF2011 /* MainStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainStorage.swift; sourceTree = "<group>"; };
+		7344CCE12D0F1AC700CF2011 /* NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
+		7344CCE32D0F1ADE00CF2011 /* ProductDetailsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailsPresenter.swift; sourceTree = "<group>"; };
 		734ACE552D06FD3C00FC1841 /* AddAddressMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAddressMapView.swift; sourceTree = "<group>"; };
 		734ACE562D06FD3C00FC1841 /* AddAddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAddressView.swift; sourceTree = "<group>"; };
 		734ACE572D06FD3C00FC1841 /* AddNewAddressStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewAddressStackView.swift; sourceTree = "<group>"; };
@@ -445,7 +462,6 @@
 		73E72F592CF8DA1500CDF390 /* AppImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImageView.swift; sourceTree = "<group>"; };
 		73EA17342CCBE21E0079A16C /* String+Plural.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Plural.swift"; sourceTree = "<group>"; };
 		73F1692F2CEE5ABE009B8532 /* CoordinatorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorFactory.swift; sourceTree = "<group>"; };
-		73F3EDC32CEDCB9300BFD147 /* DeliveryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryCoordinator.swift; sourceTree = "<group>"; };
 		73FE97892CE253E40056D53D /* ProfileViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -494,14 +510,6 @@
 			path = DesignSystem;
 			sourceTree = "<group>";
 		};
-		731C4F732CD90CBF0088CF51 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				73F3EDC32CEDCB9300BFD147 /* DeliveryCoordinator.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
 		7321AB642D06263D00380085 /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
@@ -513,6 +521,8 @@
 		7321AB652D06263D00380085 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				7344CCDF2D0F1A9F00CF2011 /* Storage */,
+				7344CCD72D0DF0FD00CF2011 /* ScreenFactory */,
 				7321AB642D06263D00380085 /* Coordinator */,
 			);
 			path = Services;
@@ -592,8 +602,8 @@
 		7321ABCF2D06265000380085 /* MainVC */ = {
 			isa = PBXGroup;
 			children = (
-				7321ABCD2D06265000380085 /* Components */,
 				7321ABCE2D06265000380085 /* MainViewController.swift */,
+				7321ABCD2D06265000380085 /* Components */,
 			);
 			path = MainVC;
 			sourceTree = "<group>";
@@ -658,8 +668,8 @@
 		7321ABE12D06265000380085 /* ProductDetailsVC */ = {
 			isa = PBXGroup;
 			children = (
-				7321ABDF2D06265000380085 /* Components */,
 				7321ABE02D06265000380085 /* ProductDetailsViewController.swift */,
+				7321ABDF2D06265000380085 /* Components */,
 			);
 			path = ProductDetailsVC;
 			sourceTree = "<group>";
@@ -702,6 +712,8 @@
 		7321AC0A2D06266100380085 /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				7344CCD12D0DE94A00CF2011 /* MainPresenter.swift */,
+				7344CCE32D0F1ADE00CF2011 /* ProductDetailsPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -866,6 +878,30 @@
 				733A01DB2CDBC7D40013D3EB /* Router.swift */,
 			);
 			path = Router;
+			sourceTree = "<group>";
+		};
+		7344CCCB2D0C834500CF2011 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				7344CCCA2D0C834500CF2011 /* DeliveryCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		7344CCD72D0DF0FD00CF2011 /* ScreenFactory */ = {
+			isa = PBXGroup;
+			children = (
+				7344CCD62D0DF0FD00CF2011 /* MainScreenFactory.swift */,
+			);
+			path = ScreenFactory;
+			sourceTree = "<group>";
+		};
+		7344CCDF2D0F1A9F00CF2011 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				7344CCDE2D0F1A9F00CF2011 /* MainStorage.swift */,
+			);
+			path = Storage;
 			sourceTree = "<group>";
 		};
 		734ACE582D06FD3C00FC1841 /* Components */ = {
@@ -1044,8 +1080,8 @@
 		734CC6FA2D0C588800E902ED /* ChooseAddressVC */ = {
 			isa = PBXGroup;
 			children = (
-				734CC6F82D0C588800E902ED /* Components */,
 				734CC6F92D0C588800E902ED /* ChooseAddressVC.swift */,
+				734CC6F82D0C588800E902ED /* Components */,
 			);
 			path = ChooseAddressVC;
 			sourceTree = "<group>";
@@ -1062,8 +1098,8 @@
 		734CC6FF2D0C588800E902ED /* ChoosePaymentMethod */ = {
 			isa = PBXGroup;
 			children = (
-				734CC6FD2D0C588800E902ED /* Components */,
 				734CC6FE2D0C588800E902ED /* ChoosePaymentMethodVC.swift */,
+				734CC6FD2D0C588800E902ED /* Components */,
 			);
 			path = ChoosePaymentMethod;
 			sourceTree = "<group>";
@@ -1130,8 +1166,8 @@
 		734CC7142D0C588800E902ED /* FinalVC */ = {
 			isa = PBXGroup;
 			children = (
-				734CC7122D0C588800E902ED /* Components */,
 				734CC7132D0C588800E902ED /* FinalVC.swift */,
+				734CC7122D0C588800E902ED /* Components */,
 			);
 			path = FinalVC;
 			sourceTree = "<group>";
@@ -1158,6 +1194,9 @@
 			isa = PBXGroup;
 			children = (
 				734CC72F2D0C58DB00E902ED /* DeliveryPresenter.swift */,
+				7344CCC72D0C7F6A00CF2011 /* ChooseAddressPresenter.swift */,
+				7344CCCD2D0C835D00CF2011 /* ChoosePaymentMethodPresenter.swift */,
+				7344CCCF2D0DB69E00CF2011 /* FinalPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -1165,6 +1204,7 @@
 		734CC72E2D0C58B700E902ED /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				7344CCCB2D0C834500CF2011 /* Coordinator */,
 				734CC7392D0C655000E902ED /* ScreenFactory */,
 				734CC7322D0C5AD100E902ED /* Storage */,
 			);
@@ -1403,6 +1443,7 @@
 			children = (
 				73999B552CF9E08200D7E236 /* AppImageViewTrash.swift */,
 				73B9690B2CC7C78700A2415A /* CartButton.swift */,
+				7344CCE12D0F1AC700CF2011 /* NavigationBar.swift */,
 			);
 			path = Trash;
 			sourceTree = "<group>";
@@ -1777,7 +1818,6 @@
 			isa = PBXGroup;
 			children = (
 				73D0FAAC2CCA3FA90009AEE5 /* AppCoordinator.swift */,
-				731C4F732CD90CBF0088CF51 /* Components */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -1882,6 +1922,7 @@
 				73B9695C2CC7C78700A2415A /* CPFCData.swift in Sources */,
 				73B9695D2CC7C78700A2415A /* Dough.swift in Sources */,
 				73B9695E2CC7C78700A2415A /* Size.swift in Sources */,
+				7344CCD22D0DE94A00CF2011 /* MainPresenter.swift in Sources */,
 				73031AF22CDE3ABD005928D2 /* SkeletonTableViewCell.swift in Sources */,
 				73CBABC22CEF3DB40018936C /* CPFC.swift in Sources */,
 				73A738A42CDFBDEF003BA211 /* UICollection+Reload.swift in Sources */,
@@ -1900,6 +1941,7 @@
 				734CC71B2D0C588800E902ED /* AddressTableView.swift in Sources */,
 				734CC71C2D0C588800E902ED /* AddressTableViewCell.swift in Sources */,
 				734CC71D2D0C588800E902ED /* PaymentMethodTableView.swift in Sources */,
+				7344CCE22D0F1AC700CF2011 /* NavigationBar.swift in Sources */,
 				734CC71E2D0C588800E902ED /* PaymentMethodTableViewCell.swift in Sources */,
 				734CC71F2D0C588800E902ED /* TimeCollectionView.swift in Sources */,
 				734CC7202D0C588800E902ED /* TimeCollectionViewCell.swift in Sources */,
@@ -1924,6 +1966,7 @@
 				73B969682CC7C78700A2415A /* User.swift in Sources */,
 				73B969692CC7C78700A2415A /* Constants.swift in Sources */,
 				7321ABE82D06265000380085 /* CategoryHeaderCollectionView.swift in Sources */,
+				7344CCC82D0C7F6A00CF2011 /* ChooseAddressPresenter.swift in Sources */,
 				7321ABE92D06265000380085 /* CategoryViewCell.swift in Sources */,
 				7321ABEA2D06265000380085 /* ItemsCollectionCell.swift in Sources */,
 				7321AC4F2D06269400380085 /* AppSwitch.swift in Sources */,
@@ -1953,6 +1996,7 @@
 				7321ABF02D06265000380085 /* SpecialOfferHeaderView.swift in Sources */,
 				7321ABF12D06265000380085 /* ContentCollectionView.swift in Sources */,
 				7321ABF22D06265000380085 /* MainProfileCoinsView.swift in Sources */,
+				7344CCE42D0F1ADE00CF2011 /* ProductDetailsPresenter.swift in Sources */,
 				7321ABF32D06265000380085 /* AddressStackView.swift in Sources */,
 				7321ABF42D06265000380085 /* CourierView.swift in Sources */,
 				7321ABF52D06265000380085 /* MainHeaderView.swift in Sources */,
@@ -1961,6 +2005,7 @@
 				7321ABF82D06265000380085 /* MainViewController.swift in Sources */,
 				7321ABF92D06265000380085 /* AddToppingsCollectionView.swift in Sources */,
 				7321ABFA2D06265000380085 /* AddToppingsCollectionViewCell.swift in Sources */,
+				7344CCCC2D0C834500CF2011 /* DeliveryCoordinator.swift in Sources */,
 				7321ABFB2D06265000380085 /* СpfcTableView.swift in Sources */,
 				7321ABFC2D06265000380085 /* CpfcPopupView.swift in Sources */,
 				7321ABFD2D06265000380085 /* CpfcTableViewCell.swift in Sources */,
@@ -1970,10 +2015,12 @@
 				7321AC002D06265000380085 /* InfoAndToppingsStack.swift in Sources */,
 				7321AC012D06265000380085 /* IngredientsView.swift in Sources */,
 				7321AC022D06265000380085 /* ProductHeaderView.swift in Sources */,
+				7344CCD82D0DF0FD00CF2011 /* MainScreenFactory.swift in Sources */,
 				736389E22D06EC8100A80964 /* PersonalPresenter.swift in Sources */,
 				7321AC032D06265000380085 /* ProductDetailsViewController.swift in Sources */,
 				7321AC042D06265000380085 /* AppProgressView.swift in Sources */,
 				7321AC052D06265000380085 /* StoriesView.swift in Sources */,
+				7344CCE02D0F1A9F00CF2011 /* MainStorage.swift in Sources */,
 				7321AC062D06265000380085 /* StoriesViewController.swift in Sources */,
 				73B9696A2CC7C78700A2415A /* DataStorage.swift in Sources */,
 				734ACE9B2D070EDA00FC1841 /* AddNewAddressPresenter.swift in Sources */,
@@ -1986,6 +2033,7 @@
 				73B9697D2CC7C78700A2415A /* AppNavigationHeaderView.swift in Sources */,
 				736B0D2A2CCFE5C500975195 /* Array+BoolSorting.swift in Sources */,
 				73B1EA5E2D018313004CFE17 /* AlertVC.swift in Sources */,
+				7344CCCE2D0C835D00CF2011 /* ChoosePaymentMethodPresenter.swift in Sources */,
 				734B01612CFCBC4E00DDD282 /* NetworkHelper.swift in Sources */,
 				733A01D82CDBBF380013D3EB /* ScreenFactory.swift in Sources */,
 				73B969852CC7C78700A2415A /* CartButton.swift in Sources */,
@@ -2016,6 +2064,7 @@
 				73B1EA4C2CFF03EE004CFE17 /* FeatureToggleVC.swift in Sources */,
 				73E6EB442CC948F2006831F2 /* AppTableView.swift in Sources */,
 				73C067D52CE73B2900AEB125 /* UITableView+Ext.swift in Sources */,
+				7344CCD02D0DB69E00CF2011 /* FinalPresenter.swift in Sources */,
 				7389E1CE2CFB4A710043E4A8 /* NetworkService.swift in Sources */,
 				73E72F5A2CF8DA1500CDF390 /* AppImageView.swift in Sources */,
 				739D69C82CF90F700053BC81 /* AppNavigationBarView.swift in Sources */,
@@ -2027,7 +2076,6 @@
 				73B1EA3F2CFEF3A6004CFE17 /* FeatureToggleService.swift in Sources */,
 				73BA01F92CE8C780003117F6 /* SkeletonCollectionViewCell.swift in Sources */,
 				73BA01FA2CE8C780003117F6 /* SkeletonCollectionViewCell2.swift in Sources */,
-				73F3EDC42CEDCB9300BFD147 /* DeliveryCoordinator.swift in Sources */,
 				734ACE992D07041F00FC1841 /* AddressScreenFactory.swift in Sources */,
 				73B969D72CC7C7C000A2415A /* UICollection+Ext.swift in Sources */,
 				73B969D82CC7C7C000A2415A /* UIColor+hex .swift in Sources */,

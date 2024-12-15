@@ -2,11 +2,14 @@ import Foundation
 
 final class DeliveryStorage {
 
-    private let storageService: DataStorage
+    let storageService: DataStorage
 
     private lazy var preferredPaymentMethod: PaymentMethod = .cbp
     private var deliveryTime = ""
     private var order: Order?
+
+    var editingAddress: Address? // В этой переменной лежит адрес, который редактируется
+    var fetchedUserData: User?
 
     // MARK: - Init
     init(storageService: DataStorage) {
@@ -65,5 +68,19 @@ extension DeliveryStorage {
         } else {
 //            print("Default payment method = .cbp")
         }
+    }
+}
+
+// MARK: - CrossStorageProtocol
+extension DeliveryStorage: CrossStorageProtocol {
+    func getEditingAddress() -> Address? {
+        editingAddress
+    }
+
+    func updateAddressesAfterEdition(correctAddress: Address) {
+        var deleteOldAddress = fetchedUserData?.address.filter { $0.addressId != correctAddress.addressId }
+        deleteOldAddress?.append(correctAddress)
+        guard let deleteOldAddress else { return }
+        fetchedUserData?.address = deleteOldAddress
     }
 }

@@ -1,5 +1,13 @@
 import Foundation
 
+protocol CrossStorageProtocol {
+    func getEditingAddress() -> Address?
+    func updateAddressesAfterEdition(correctAddress: Address)
+
+    var editingAddress: Address? { get set }
+    var fetchedUserData: User? { get set }
+}
+
 // MARK: - User Addresses
 final class AddressStorage {
 

@@ -3,15 +3,15 @@ import UIKit
 final class StoriesVC: UIViewController {
 
     // MARK: - Properties
-    private lazy var storiesView = StoriesView(story)
+    private lazy var storiesView = StoriesView(stories)
 
-    private var story: [Story]
+    private var stories: [Story]
 
     var onDismissed: (() -> Void)?
 
     // MARK: - Init
-    init(indexPath: IndexPath, story: [Story]) {
-        self.story = story
+    init(indexPath: IndexPath, stories: [Story]) {
+        self.stories = stories
         super.init(nibName: nil, bundle: nil)
         showStories(indexPath)
     }
