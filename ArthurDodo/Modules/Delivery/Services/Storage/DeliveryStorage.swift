@@ -2,7 +2,7 @@ import Foundation
 
 final class DeliveryStorage {
 
-    let storageService: DataStorage
+    var storageService: DataStorageService?
 
     private lazy var preferredPaymentMethod: PaymentMethod = .cbp
     private var deliveryTime = ""
@@ -12,14 +12,19 @@ final class DeliveryStorage {
     var fetchedUserData: User?
 
     // MARK: - Init
-    init(storageService: DataStorage) {
+    //    init(storageService: DataManager) {
+    //        self.storageService = storageService
+    //    }
+
+    func setStorageService(_ storageService: DataStorageService) {
         self.storageService = storageService
     }
+
 }
 
 extension DeliveryStorage {
     func getMainAddressName() -> String {
-        guard let mainAddressName = storageService.getMainAddress()?.name else { print("Error: No main address"); return ""}
+        guard let mainAddressName = storageService?.getMainAddress()?.name else { print("Error: No main address"); return ""}
         return mainAddressName
     }
 
@@ -36,13 +41,13 @@ extension DeliveryStorage {
     // Формируем заказ (получаем позиции, получаем адрес)
     func configureOrder() {
         guard let orderPositions = castCartToOrder() else { print("OrderPositions is nil"); return }
-        guard let address = storageService.getMainAddress()?.cityStreetHouse else { print("No main address"); return }
+        guard let address = storageService?.getMainAddress()?.cityStreetHouse else { print("No main address"); return }
         order = Order(position: orderPositions, deliveryAddress: address, deliveryTime: deliveryTime, status: .inProgress)
     }
 
     // Делаем заказ из корзины (так как формы заказа и корзины отличаются, то нам нужно скастить корзину до заказа)
     private func castCartToOrder() -> [OrderPosition]? {
-        let cart = storageService.getCart()
+        let cart = storageService?.getCart()
         guard let cart else { print("Cart is nil"); return nil}
         var orderPositions: [OrderPosition] = []
         for cartItem in cart.items {

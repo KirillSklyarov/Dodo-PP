@@ -20,14 +20,14 @@ final class ChooseAddressPresenter {
     private var addresses: [Address] = []
 
     private let storage: DeliveryStorage
-    private let storageService: DataStorage
+    private let storageService: DataStorageService
 
     var onAddressCellTapped: ((String) -> Void)?
     var onDismissButtonTapped: (() -> Void)?
     var onEditAddressCellTapped: ( (Address) -> Void)?
     var onShowAddNewAddress: (() -> Void)?
 
-    init(storage: DeliveryStorage, storageService: DataStorage) {
+    init(storage: DeliveryStorage, storageService: DataStorageService) {
         self.storage = storage
         self.storageService = storageService
     }

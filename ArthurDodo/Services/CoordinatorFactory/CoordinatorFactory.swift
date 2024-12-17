@@ -5,10 +5,10 @@ final class CoordinatorFactory {
     // MARK: - Properties
     private let router: Router
     private let screenFactory: ScreenFactory
-    private let storage: DataStorage
+    private let storage: DataManager
 
     // MARK: - Init
-    init(router: Router, screenFactory: ScreenFactory, storage: DataStorage) {
+    init(router: Router, screenFactory: ScreenFactory, storage: DataManager) {
         self.router = router
         self.screenFactory = screenFactory
         self.storage = storage
@@ -22,7 +22,7 @@ extension CoordinatorFactory {
     }
 
     func makeMainCoordinator() -> MainCoordinator {
-        return MainCoordinator(router: router, screenFactory: screenFactory.mainScreenFactory, storage: storage)
+        return MainCoordinator(router: router, screenFactory: screenFactory.mainScreenFactory, storage: storage.featureToggleStorage)
     }
 
     func makeProfileCoordinator() -> ProfileCoordinator {

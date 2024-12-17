@@ -1,44 +1,80 @@
 import UIKit
 
+protocol StoriesViewProtocol: AnyObject {
+    func updateStoryImage(_ imageName: String)
+    func setupProgressViews(_ countOfSubStories: Int)
+    func updateProgressViewProgress(_ index: Int, progress: Float)
+    func resetProgressView(_ index: Int)
+    func fillProgressView(_ index: Int)
+    func fillAllProgressViewsExceptLast()
+}
+
 final class StoriesVC: UIViewController {
 
-    // MARK: - Properties
-    private lazy var storiesView = StoriesView(stories)
+    // MARK: - UI Properties
+    private lazy var dismissButton = AppDismissButtonView(type: .storiesWhite)
+    private lazy var storiesImageView = AppImageView(type: .stories)
+    private lazy var progressViewsStack = AppStackView([], axis: .horizontal, spacing: 15, distribution: .fillEqually)
+    private lazy var contentStack = AppStackView([progressViewsStack, dismissButton], axis: .horizontal, spacing: 10, alignment: .center)
 
-    private var stories: [Story]
+    // MARK: - Other properties
+    private lazy var progressViews: [UIProgressView] = []
 
-    var onDismissed: (() -> Void)?
+    let presenter: StoriesPresenterProtocol
 
     // MARK: - Init
-    init(indexPath: IndexPath, stories: [Story]) {
-        self.stories = stories
+    init(presenter: StoriesPresenterProtocol) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
-        showStories(indexPath)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
-    }
-
-    // MARK: - Public methods
-    func showStories(_ indexPath: IndexPath) {
-        storiesView.showSelectedStory(indexPath)
+        presenter.viewDidLoad()
     }
 }
 
-// MARK: - Setup Actions
-private extension StoriesVC {
-     func setupActions() {
-        storiesView.onDismissButtonTapped = { [weak self] in
-            guard let self else { return }
-            onDismissed?()
+// MARK: - StoriesViewProtocol
+extension StoriesVC: StoriesViewProtocol {
+    // Метод позволяет для каждого экрана сформировать ряд одинаковых панелей (сверху) для таймера
+    func setupProgressViews(_ countOfSubStories: Int) {
+        clearOldProgressViews()
+        configureNewProgressViewsStack(countOfSubStories)
+    }
+
+    // Устанавливает значение прогресса у бара (то есть делает движение прогресс бара)
+    func updateProgressViewProgress(_ index: Int, progress: Float) {
+        progressViews[index].setProgress(progress, animated: true)
+    }
+
+    // Обнуляет прогресс у конкретной progressView
+    func resetProgressView(_ index: Int) {
+        progressViews[index].setProgress(0.0, animated: false)
+    }
+
+    // Обнуляет прогресс у конкретной progressView
+    func fillProgressView(_ index: Int) {
+        progressViews[index].setProgress(1.0, animated: false)
+    }
+
+    // Устанавливаем картинку
+    func updateStoryImage(_ imageName: String) {
+        storiesImageView.image = UIImage(named: imageName)
+    }
+
+    // Мгновенно закрашиваем все прогрессы кроме последнего
+    func fillAllProgressViewsExceptLast() {
+        for view in progressViews {
+            if view != progressViews.last {
+                view.setProgress(1.0, animated: false)
+            }
         }
     }
 }
@@ -47,7 +83,59 @@ private extension StoriesVC {
 private extension StoriesVC {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(storiesView)
-        storiesView.setConstraints(isSafeArea: true)
+        view.addSubviews(storiesImageView, contentStack)
+        setupTapGesture()
+        setupConstraints()
+    }
+
+    func setupConstraints() {
+        storiesImageView.setConstraints(isSafeArea: true)
+        contentStack.setLocalConstraints(isSafeArea: true, top: 10, left: 10, right: 10)
+    }
+}
+
+// MARK: - Setup Actions
+private extension StoriesVC {
+    func setupActions() {
+        dismissButtonAction()
+    }
+
+    func dismissButtonAction() {
+        dismissButton.onButtonTapped = { [weak self] in
+            guard let self else { return }
+            presenter.dismissButtonTapped()
+        }
+    }
+}
+
+// MARK: - Setup progressViews
+private extension StoriesVC {
+    // Очищаем стек и views от старых данных
+    func clearOldProgressViews() {
+        progressViewsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        progressViews = []
+    }
+
+    // В зависимости от того сколько сабСторисов формируется массив из одинаковых элементов
+     func configureNewProgressViewsStack(_ countOfSubStories: Int) {
+        for _ in 0..<countOfSubStories {
+            let progressView = AppProgressView()
+            progressViewsStack.addArrangedSubview(progressView)
+            progressViews.append(progressView)
+        }
+    }
+}
+
+// MARK: - Setup TapGesture
+private extension StoriesVC {
+    func setupTapGesture() {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
+        view.addGestureRecognizer(gesture)
+    }
+
+    // Отправляет в презентер точку касания экрана и границы экрана
+    @objc func onTap(_ sender: UITapGestureRecognizer) {
+        let location = sender.location(in: view)
+        presenter.storyTapped(location, view.bounds)
     }
 }

@@ -14,13 +14,13 @@ final class FinalPresenter {
     private var dismissDelay = 2
 
     weak var view: FinalViewProtocol?
-    private let storage: DeliveryStorage
+    private let storageService: DataStorageService
 
     var onFinalVCDismissed: (() -> Void)?
 
     // MARK: - Init
-    init(storage: DeliveryStorage) {
-        self.storage = storage
+    init(storageService: DataStorageService) {
+        self.storageService = storageService
     }
 }
 
@@ -33,7 +33,7 @@ extension FinalPresenter: FinalPresenterProtocol {
     // Выключаем таймер, обнуляем корзину и закрываем все окна
     func dismissVC() {
         countDownTimer?.invalidate()
-        storage.storageService.eraseCart()
+        storageService.eraseCart()
         onFinalVCDismissed?()
     }
 }

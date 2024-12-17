@@ -8,11 +8,14 @@ protocol CrossStorageProtocol {
     var fetchedUserData: User? { get set }
 }
 
-// MARK: - User Addresses
 final class AddressStorage {
 
+    // MARK: - Properties
     private var fetchedUserData: User?
     private var editingAddress: Address? // В этой переменной лежит адрес, который редактируется
+
+
+    // MARK: - Methods
 
     // Временное решение, потом нужно переделать
     func setFetchedUserData(_ fetchedUserData: User) {

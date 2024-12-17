@@ -23,7 +23,7 @@ final class CartPresenter {
 
     // MARK: - Other Properties
     private let storage: CartStorage
-    private let storageService: DataStorage
+    private let storageService: DataStorageService
 
     private var state: ScreenState = .loading
 
@@ -32,8 +32,8 @@ final class CartPresenter {
     var onShowPromoVC: ((Promo) -> Void)?
     var onShowDeliveryVC: (() -> Void)?
 
-    init(storageService: DataStorage) {
-        self.storage = storageService.cartStorage
+    init(storage: CartStorage, storageService: DataStorageService) {
+        self.storage = storage
         self.storageService = storageService
     }
 

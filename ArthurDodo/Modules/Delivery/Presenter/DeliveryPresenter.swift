@@ -21,7 +21,7 @@ final class DeliveryPresenter {
     // MARK: - Other properties
     private var preferredPaymentMethod: PaymentMethod = .cbp
 
-    private let storageService: DataStorage
+    private let storageService: DataStorageService
     private let storage: DeliveryStorage
 
     var onDismissButtonTapped: (() -> Void)?
@@ -29,7 +29,7 @@ final class DeliveryPresenter {
     var onShowChoosePaymentMethod: (() -> Void)?
     var onShowFinalVC: (() -> Void)?
 
-    init(storageService: DataStorage, storage: DeliveryStorage) {
+    init(storageService: DataStorageService, storage: DeliveryStorage) {
         self.storageService = storageService
         self.storage = storage
     }

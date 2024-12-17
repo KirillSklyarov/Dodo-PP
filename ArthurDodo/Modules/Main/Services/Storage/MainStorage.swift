@@ -3,7 +3,7 @@ import Foundation
 final class MainStorage {
 
     // MARK: - Properties
-    let storageService: DataStorage
+    var storageService: DataStorageService?
 
     private var fetchedItems: [Item] = []
     private var specialOfferArray: [Item] = []
@@ -11,17 +11,24 @@ final class MainStorage {
     private var category: [Category] = []
     private var selectedItem: SelectedItem?
     private var editingItem: CartItem?
+    private var order: Order?
+    private var fetchedToppings: [Topping] = []
 
     // MARK: - Init
-    init(storageService: DataStorage) {
+    init() {
+        getOrderFromUserDefaults()
+    }
+
+    func setStorageService(_ storageService: DataStorageService) {
         self.storageService = storageService
     }
 }
 
+// MARK: - Public methods
 extension MainStorage {
-
     func getTotalOrderPrice() -> Int {
-        storageService.getTotalOrderPrice()
+        guard let storageService else { return 0 }
+        return storageService.getTotalOrderPrice()
     }
 
     // Отправляет весь каталог товаров
@@ -30,19 +37,29 @@ extension MainStorage {
     }
 
     func getMainAddress() -> Address? {
-       storageService.getMainAddress()
+       storageService?.getMainAddress()
     }
 
     func getDodoCoins() -> Int {
-        storageService.getDodoCoins()
-    }
-
-    func getOrder() -> Order? {
-        storageService.getOrder()
+        guard let storageService else { return 0 }
+        return storageService.getDodoCoins()
     }
 
     func addItemToCart(_ item: CartItem) {
-        storageService.addItemToCart(itemToCart: item)
+        storageService?.addItemToCart(itemToCart: item)
+    }
+
+    func getOrder() -> Order? {
+        getOrderFromUserDefaults()
+        return order
+    }
+}
+
+// MARK: - Order
+private extension MainStorage {
+    // Получаем заказ из UserDefaults
+    func getOrderFromUserDefaults() {
+        order = UserDefaults.standard.getOrder()
     }
 }
 
@@ -135,3 +152,35 @@ extension MainStorage {
         selectedItem?.item
     }
 }
+
+// MARK: - Toppings
+extension MainStorage {
+    // Получаем топпинги
+    func setToppings(_ toppings: [Topping]) {
+        fetchedToppings = toppings
+    }
+
+    // Вытаскиваем допустимые топпинги для продукта
+    func getFetchedToppings(for item: Item) -> [Topping]? {
+        let itemToppings = item.toppings
+        return itemToppings
+    }
+
+    // Вытаскиваем допустимые топпинги для позиции в корзине
+    func getFetchedToppings(for cartItem: CartItem) -> [Topping]? {
+        guard let item = getItem(for: cartItem) else { return nil }
+        let itemToppings = item.toppings
+        return itemToppings
+    }
+
+    func getIngredients(for cartItem: CartItem) -> String? {
+        guard let item = getItem(for: cartItem) else { return nil }
+        return item.ingredients
+    }
+
+    // По cartItem находим Item
+    private func getItem(for cartItem: CartItem) -> Item? {
+        return cartItem.item
+    }
+}
+

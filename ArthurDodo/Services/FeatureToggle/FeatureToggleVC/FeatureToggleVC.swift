@@ -13,10 +13,10 @@ final class FeatureToggleVC: UIViewController {
 
     var onStartButtonTapped: (() -> Void)?
 
-    private var storage: DataStorage
+    private var storage: FeatureToggleStorage
 
     // MARK: - Init
-    init(storage: DataStorage) {
+    init(storage: FeatureToggleStorage) {
         self.storage = storage
         super.init(nibName: nil, bundle: nil)
     }

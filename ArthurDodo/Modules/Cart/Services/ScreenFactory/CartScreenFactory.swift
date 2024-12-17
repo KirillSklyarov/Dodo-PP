@@ -10,18 +10,18 @@ protocol CartScreenFactoryProtocol: AnyObject {
 final class CartScreenFactory {
 
     let storage: CartStorage
-    let storageService: DataStorage
+    let storageService: DataStorageService
 
-    init(storageService: DataStorage) {
-        self.storage = storageService.cartStorage
-        self.storageService = storageService
+    init(dataManager: DataManager) {
+        self.storage = dataManager.cartStorage
+        self.storageService = dataManager.dataStorageService
     }
 }
 
 // MARK: - Methods
 extension CartScreenFactory: CartScreenFactoryProtocol {
     func makeCartScreen() -> CartViewController {
-        let presenter = CartPresenter(storageService: storageService)
+        let presenter = CartPresenter(storage: storage, storageService: storageService)
         let view = CartViewController(presenter: presenter)
         presenter.view = view
         return view

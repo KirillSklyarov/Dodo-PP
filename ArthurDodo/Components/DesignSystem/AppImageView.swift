@@ -63,6 +63,8 @@ private extension AppImageView {
             contentMode = .scaleAspectFit
         case .stories:
             contentMode = .scaleAspectFill
+            layer.cornerRadius = 20
+            layer.masksToBounds = true
         case .toppings:
             contentMode = .scaleAspectFit
             heightAnchor.constraint(equalToConstant: 60).isActive = true

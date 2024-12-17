@@ -14,12 +14,14 @@ final class DeliveryScreenFactory {
 
     // MARK: - Properties
     let storage: DeliveryStorage
-    let storageService: DataStorage
+    let addressStorage: AddressStorage
+    let storageService: DataStorageService
 
     // MARK: - Init
-    init(storageService: DataStorage) {
+    init(storageService: DataManager) {
         self.storage = storageService.deliveryStorage
-        self.storageService = storageService
+        self.storageService = storageService.dataStorageService
+        self.addressStorage = storageService.addressStorage
     }
 }
 
@@ -47,7 +49,6 @@ extension DeliveryScreenFactory: DeliveryScreenFactoryProtocol {
     }
 
     func makeEditAddressScreen() -> EditAddressViewController {
-        let addressStorage = storageService.addressStorage
         let presenter = EditAddressPresenter(storage: addressStorage)
         let view = EditAddressViewController(presenter: presenter)
         presenter.view = view
@@ -55,7 +56,6 @@ extension DeliveryScreenFactory: DeliveryScreenFactoryProtocol {
     }
 
     func makeAddNewAddressScreen() -> AddNewAddressViewController {
-        let addressStorage = storageService.addressStorage
         let presenter = AddNewAddressPresenter(storage: addressStorage)
         let view = AddNewAddressViewController(presenter: presenter)
         presenter.view = view
@@ -63,7 +63,7 @@ extension DeliveryScreenFactory: DeliveryScreenFactoryProtocol {
     }
 
     func makeFinalVCScreen() -> FinalVC {
-        let presenter = FinalPresenter(storage: storage)
+        let presenter = FinalPresenter(storageService: storageService)
         let view = FinalVC(presenter: presenter)
         presenter.view = view
         return view

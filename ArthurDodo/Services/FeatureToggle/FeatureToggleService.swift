@@ -12,10 +12,10 @@ final class FeatureToggleService {
     private let session: URLSession
 
     private let networkService: NetworkService
-    private let storage: DataStorage
+    private let storage: FeatureToggleStorage
 
     // MARK: - Init
-    init(networkService: NetworkService, storage: DataStorage, decoder: JSONDecoder, encoder: JSONEncoder, session: URLSession) {
+    init(networkService: NetworkService, storage: FeatureToggleStorage, decoder: JSONDecoder, encoder: JSONEncoder, session: URLSession) {
         self.networkService = networkService
         self.storage = storage
         self.decoder = decoder

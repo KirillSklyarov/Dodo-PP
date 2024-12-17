@@ -11,7 +11,7 @@ final class MainCoordinator: Coordinator {
     var onShowAddress: (() -> Void)?
 
     // MARK: - Init
-    init(router: Router, screenFactory: MainScreenFactoryProtocol, storage: DataStorage) {
+    init(router: Router, screenFactory: MainScreenFactoryProtocol, storage: FeatureToggleStorage) {
         self.router = router
         self.screenFactory = screenFactory
         getFeaturesFromStorage(storage)
@@ -84,9 +84,10 @@ private extension MainCoordinator {
 private extension MainCoordinator {
     func showStories(_ indexPath: IndexPath) {
         let vc = screenFactory.makeStoriesScreen(indexPath: indexPath)
+        let presenter = vc.presenter
 
         // Когда экран сторис закрыт, то обновляем сторисы на главном экране и закрываем окно
-        vc.onDismissed = { [weak self] in
+        presenter.onDismissed = { [weak self] in
             self?.mainVCUpdateStories() // Обновляем сторисы на главном экране
             self?.router.dismiss() // Закрываем окно
         }
@@ -117,7 +118,7 @@ private extension MainCoordinator {
 // MARK: - Supporting methods
 private extension MainCoordinator {
     // Получаем из хранилища словарь фичей
-    private func getFeaturesFromStorage(_ storage: DataStorage) {
+    func getFeaturesFromStorage(_ storage: FeatureToggleStorage) {
         features = storage.getFeatures()
     }
 

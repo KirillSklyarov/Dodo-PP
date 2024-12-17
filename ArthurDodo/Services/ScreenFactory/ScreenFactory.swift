@@ -4,7 +4,7 @@ import Foundation
 final class ScreenFactory {
 
     // MARK: - Properties
-    private let storageService: DataStorage
+    private let storageService: DataManager
 
     let mainScreenFactory: MainScreenFactoryProtocol
     let profileScreenFactory: ProfileScreenFactoryProtocol
@@ -13,12 +13,12 @@ final class ScreenFactory {
     let deliveryScreenFactory: DeliveryScreenFactoryProtocol
 
     // MARK: - Init
-    init(storageService: DataStorage) {
+    init(storageService: DataManager) {
         self.storageService = storageService
         mainScreenFactory = MainScreenFactory(storage: storageService.mainStorage)
         profileScreenFactory = ProfileScreenFactory(storage: storageService.profileStorage)
         addressScreenFactory = AddressScreenFactory(storage: storageService.addressStorage)
-        cartScreenFactory = CartScreenFactory(storageService: storageService)
+        cartScreenFactory = CartScreenFactory(dataManager: storageService)
         deliveryScreenFactory = DeliveryScreenFactory(storageService: storageService)
     }
 }
@@ -26,6 +26,6 @@ final class ScreenFactory {
 // MARK: - Methods
 extension ScreenFactory {
     func makeFeatureTogglesScreen() -> FeatureToggleVC {
-        return FeatureToggleVC(storage: storageService)
+        return FeatureToggleVC(storage: storageService.featureToggleStorage)
     }
 }

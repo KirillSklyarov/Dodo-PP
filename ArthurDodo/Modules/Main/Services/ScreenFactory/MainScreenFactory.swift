@@ -36,8 +36,10 @@ extension MainScreenFactory: MainScreenFactoryProtocol {
     }
 
     func makeStoriesScreen(indexPath: IndexPath) -> StoriesVC {
-        let stories = storage.getFetchedStories()
-        return StoriesVC(indexPath: indexPath, stories: stories)
+        let presenter = StoriesPresenter(storage: storage, indexPath: indexPath)
+        let view = StoriesVC(presenter: presenter)
+        presenter.view = view
+        return view
     }
 
     func makeAlertScreen(_ type: AlertType) -> UIAlertController {

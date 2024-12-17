@@ -4,7 +4,7 @@ final class AppStartManager {
 
     // MARK: - Properties
     var networkService: NetworkService
-    var storage: DataStorage
+    var storage: DataManager
     var featureToggleService: FeatureToggleService
     var screenFactory: ScreenFactory
     var router: Router
@@ -13,7 +13,7 @@ final class AppStartManager {
     var appCoordinator: AppCoordinator?
 
     // MARK: - Init
-    init(networkService: NetworkService, storage: DataStorage, featureToggleService: FeatureToggleService, screenFactory: ScreenFactory, router: Router, coordinatorFactory: CoordinatorFactory) {
+    init(networkService: NetworkService, storage: DataManager, featureToggleService: FeatureToggleService, screenFactory: ScreenFactory, router: Router, coordinatorFactory: CoordinatorFactory) {
         self.networkService = networkService
         self.storage = storage
         self.featureToggleService = featureToggleService
@@ -135,7 +135,7 @@ private extension AppStartManager {
     func fetchUserData() async {
         do {
             let userData = try await networkService.fetchUserData()
-            storage.setUserData(userData)
+//            storage setUserData(userData)
             storage.profileStorage.setUserData(userData)
             storage.addressStorage.setFetchedUserData(userData)
             print("User data fetched")
@@ -148,7 +148,7 @@ private extension AppStartManager {
     func fetchStories() async {
         do {
             let stories = try await networkService.fetchStories()
-            storage.setStories(stories)
+            storage.dataStorageService.setStories(stories)
             print("Stories fetched")
         } catch {
             print("Stories fetch error: \(error)")
@@ -159,7 +159,7 @@ private extension AppStartManager {
     func fetchCatalog() async {
         do {
             let items = try await networkService.fetchItems()
-            storage.setItems(items)
+            storage.dataStorageService.setItems(items)
             print("Items fetched")
         } catch {
             print("Items fetch error: \(error)")
@@ -182,7 +182,7 @@ private extension AppStartManager {
     func fetchToppings() async {
         do {
             let toppings = try await networkService.fetchToppings()
-            storage.setToppings(toppings)
+            storage.mainStorage.setToppings(toppings)
             print("Toppings fetched")
         } catch {
             print("Toppings fetch error: \(error)")
