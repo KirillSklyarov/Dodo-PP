@@ -180,11 +180,6 @@
 		73B1EA5C2CFF0AB3004CFE17 /* TableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B1EA5B2CFF0AB3004CFE17 /* TableViewHeaderView.swift */; };
 		73B1EA5E2D018313004CFE17 /* AlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B1EA5D2D018313004CFE17 /* AlertVC.swift */; };
 		73B969592CC7C78700A2415A /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968B72CC7C78700A2415A /* Address.swift */; };
-		73B9695A2CC7C78700A2415A /* AddressTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968B92CC7C78700A2415A /* AddressTextField.swift */; };
-		73B9695B2CC7C78700A2415A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968BA2CC7C78700A2415A /* Category.swift */; };
-		73B9695C2CC7C78700A2415A /* CPFCData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968BB2CC7C78700A2415A /* CPFCData.swift */; };
-		73B9695D2CC7C78700A2415A /* Dough.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968BC2CC7C78700A2415A /* Dough.swift */; };
-		73B9695E2CC7C78700A2415A /* Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968BD2CC7C78700A2415A /* Size.swift */; };
 		73B969602CC7C78700A2415A /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968C02CC7C78700A2415A /* Item.swift */; };
 		73B969612CC7C78700A2415A /* ItemSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968C12CC7C78700A2415A /* ItemSize.swift */; };
 		73B969622CC7C78700A2415A /* Topping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B968C22CC7C78700A2415A /* Topping.swift */; };
