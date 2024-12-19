@@ -1,6 +1,6 @@
 import Foundation
 
-final class DataManager {
+struct DataManager {
 
     // MARK: - Module storages
     let profileStorage = ProfileStorage()

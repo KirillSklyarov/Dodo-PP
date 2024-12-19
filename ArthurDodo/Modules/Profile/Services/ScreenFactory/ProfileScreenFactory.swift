@@ -21,16 +21,14 @@ final class ProfileScreenFactory {
 // MARK: - Methods
 extension ProfileScreenFactory: ProfileScreenFactoryProtocol {
     func makeProfileScreen() -> ProfileViewController {
-        let presenter = ProfilePresenter(storage: storage)
-        let view = ProfileViewController(presenter: presenter)
-        presenter.view = view
+        let viewModel = ProfileViewModel(storage: storage)
+        let view = ProfileViewController(viewModel: viewModel)
         return view
     }
 
     func makePersonalDataScreen() -> PersonalViewController {
-        let presenter = PersonalPresenter(storage: storage)
-        let view = PersonalViewController(presenter: presenter)
-        presenter.view = view
+        let viewModel = PersonalViewModel(storage: storage)
+        let view = PersonalViewController(viewModel: viewModel)
         return view
     }
 

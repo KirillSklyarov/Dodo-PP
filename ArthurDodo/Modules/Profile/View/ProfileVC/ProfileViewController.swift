@@ -1,4 +1,11 @@
 import UIKit
+import Combine
+
+protocol ProfileViewProtocol: AnyObject {
+    func updatePersonalData(_ personalData: User)
+    func updatePromo(_ promo: [Promo])
+    func getViewModel() -> ProfileViewModelProtocol
+}
 
 final class ProfileViewController: UIViewController {
 
@@ -8,14 +15,15 @@ final class ProfileViewController: UIViewController {
     private lazy var promoStackView = PromoStackView()
     private lazy var missionStackView = MissionStackView()
     private lazy var contentStackView = AppStackView([personalDataCollectionView, promoStackView, missionStackView], axis: .vertical, spacing: 10)
-    private lazy var scrollView = UIScrollView()
+    private lazy var scrollView = setupScrollView()
 
     // MARK: - Other Properties
-    let presenter: ProfilePresenter
+    private let viewModel: ProfileViewModelProtocol
+    private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(presenter: ProfilePresenter) {
-        self.presenter = presenter
+    init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -28,7 +36,8 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        presenter.viewDidLoad()
+        dataBinding()
+        viewModel.fetchData()
     }
 }
 
@@ -37,16 +46,7 @@ private extension ProfileViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
         view.addSubviews(headerView, scrollView)
-
-        setupScrollView()
-
         setupLayout()
-    }
-
-    // Настраиваем скролл вью
-    func setupScrollView() {
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.addSubviews(contentStackView)
     }
 
     // Настраиваем констреинты
@@ -69,6 +69,14 @@ private extension ProfileViewController {
         contentStackView.setConstraints()
         contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
     }
+
+    // Настраиваем скролл вью
+    func setupScrollView() -> UIScrollView {
+        let scrollView = UIScrollView()
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.addSubviews(contentStackView)
+        return scrollView
+    }
 }
 
 // MARK: - Setup Actions
@@ -80,38 +88,72 @@ private extension ProfileViewController {
 
     // Настройка действий секции Акции
     func setupSpecialOfferActions() {
-        promoStackView.onPromoSelected = { [weak self] specialOffer in
+        promoStackView.onPromoSelected = { [weak self] promo in
             guard let self else { return }
-            presenter.onShowPromoVC?(specialOffer)
+            viewModel.onShowPromoVC?(promo)
         }
     }
 
     // Настройка действий header view (где 3 кнопки)
     func setupHeaderViewActions() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.presenter.onDismissButtonTapped?()
+            self?.viewModel.onDismissButtonTapped?()
         }
 
         headerView.onChatButtonTapped = { [weak self] in
-            self?.presenter.onShowChatAlert?()
+            self?.viewModel.onShowChatAlert?()
         }
 
         headerView.onProfileButtonTapped = { [weak self] in
-            self?.presenter.onShowPersonalData?()
+            self?.viewModel.onShowPersonalData?()
         }
     }
 }
 
 // MARK: - ProfileViewProtocol
 extension ProfileViewController: ProfileViewProtocol {
+    // Обновляем личные данные и устанавливаем состояние экрана
     func updatePersonalData(_ personalData: User) {
         personalDataCollectionView.getPersonalData(personalData)
+        setState(view: .personalData, state: .success)
     }
 
+    // Обновляем раздел акции и устанавливаем состояние экрана
     func updatePromo(_ promo: [Promo]) {
         promoStackView.updateUI(promo)
+        setState(view: .promo, state: .success)
     }
 
+    // Отдаем viewModel
+    func getViewModel() -> ProfileViewModelProtocol {
+        viewModel
+    }
+}
+
+// MARK: - DataBinding
+extension ProfileViewController {
+    func dataBinding() {
+        viewModel.userDataPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] userData in
+                guard let self, let userData else { print("User data or presenter is nil"); return }
+                updatePersonalData(userData)
+            }
+            .store(in: &cancellables)
+
+        viewModel.promoPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] promo in
+                guard let self, let promo else { print("Promo or presenter is nil"); return }
+                updatePromo(promo)
+                setState(view: .mission, state: .success)
+            }
+            .store(in: &cancellables)
+    }
+}
+
+// MARK: - Supporting methods
+private extension ProfileViewController {
     func setState(view: ProfileView, state: ScreenState) {
         switch view {
         case .personalData: personalDataCollectionView.setState(state)

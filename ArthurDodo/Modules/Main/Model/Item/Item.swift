@@ -1,5 +1,13 @@
 import Foundation
 
+enum Category: String, Codable {
+    case breakfast = "Завтрак"
+    case combo = "Комбо"
+    case starter = "Закуски"
+    case pizza = "Пицца"
+    case cocktail = "Коктейль"
+}
+
 struct Item: Equatable, Codable {
     var id: String
     var category: Category

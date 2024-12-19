@@ -3,12 +3,12 @@ import UIKit
 final class AppStartManager {
 
     // MARK: - Properties
-    var networkService: NetworkService
-    var storage: DataManager
-    var featureToggleService: FeatureToggleService
-    var screenFactory: ScreenFactory
-    var router: Router
-    var coordinatorFactory: CoordinatorFactory
+    let networkService: NetworkService
+    let storage: DataManager
+    let featureToggleService: FeatureToggleService
+    let screenFactory: ScreenFactory
+    let router: Router
+    let coordinatorFactory: CoordinatorFactory
     var window: UIWindow?
     var appCoordinator: AppCoordinator?
 
@@ -59,7 +59,8 @@ private extension AppStartManager {
         Task {
             await featureToggleService.fetchAllFeatures()
             DispatchQueue.main.async { [weak self] in
-                self?.showFeatureTogglesVC()
+                guard let self else { return }
+                showFeatureTogglesVC()
             }
         }
     }
@@ -135,7 +136,6 @@ private extension AppStartManager {
     func fetchUserData() async {
         do {
             let userData = try await networkService.fetchUserData()
-//            storage setUserData(userData)
             storage.profileStorage.setUserData(userData)
             storage.addressStorage.setFetchedUserData(userData)
             print("User data fetched")

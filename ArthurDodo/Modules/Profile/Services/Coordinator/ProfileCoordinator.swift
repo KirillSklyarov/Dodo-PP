@@ -21,23 +21,23 @@ final class ProfileCoordinator: Coordinator {
 extension ProfileCoordinator {
     func start() {
         let profileVC = screenFactory.makeProfileScreen()
-        let presenter = profileVC.presenter
+        let viewModel = profileVC.getViewModel()
 
         // Отрабатываем замыкания
-        presenter.onDismissButtonTapped = { [weak self] in
+        viewModel.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss() // Закрываем экран
             self?.onFlowFinished?() // Говорим что флоу закончен
         }
         
-        presenter.onShowChatAlert = { [weak self] in
+        viewModel.onShowChatAlert = { [weak self] in
             self?.showChatAlert()
         }
 
-        presenter.onShowPersonalData = { [weak self] in
+        viewModel.onShowPersonalData = { [weak self] in
             self?.showPersonalData()
         }
 
-        presenter.onShowPromoVC = { [weak self] promo in
+        viewModel.onShowPromoVC = { [weak self] promo in
             self?.showPromo(promo)
         }
 
@@ -67,10 +67,10 @@ private extension ProfileCoordinator {
 
     func showPersonalData() {
         let vc = screenFactory.makePersonalDataScreen()
-        let presenter = vc.presenter
+        var viewModel = vc.getViewModel()
         router.present(vc, isParent: true, modalPresentation: .automatic)
 
-        presenter.onDismissButtonTapped = { [weak self] in
+        viewModel.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
         }
     }

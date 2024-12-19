@@ -6,6 +6,8 @@ protocol DeliveryViewProtocol: AnyObject {
     func updateTotalPriceView(_ totalPrice: Int)
 }
 
+
+
 final class DeliveryVC: UIViewController {
 
     // MARK: - UI Properties

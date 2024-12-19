@@ -1,11 +1,5 @@
 import Foundation
 
-protocol ProfileViewProtocol: AnyObject {
-    func updatePersonalData(_ personalData: User)
-    func updatePromo(_ promo: [Promo])
-    func setState(view: ProfileView, state: ScreenState)
-}
-
 // Презентер профиля
 final class ProfilePresenter {
 
@@ -37,22 +31,22 @@ final class ProfilePresenter {
 // MARK: - Fetch Data
 private extension ProfilePresenter { // Запрашиваем данные с сервера
     func fetchData() {
-        fetchUserDataFromStorage()
+//        fetchUserDataFromStorage()
         fetchPromoFromStorage()
-        view?.setState(view: .mission, state: .success) // Выставляю нижней вью правильное состояние (потом можно будет убрать)
+//        view?.setState(view: .mission, state: .success) // Выставляю нижней вью правильное состояние (потом можно будет убрать)
     }
 
     // Запрашиваем персональные данные с сервера: додокоины, кол-во заказов, адреса
     func fetchUserDataFromStorage() {
         guard let personalData = storage.getUserData() else { print("Error: fetchUserDataFromStorage"); return }
         view?.updatePersonalData(personalData)
-        view?.setState(view: .personalData, state: .success)
+//        view?.setState(view: .personalData, state: .success)
     }
 
     // Запрашиваем спецпредложения с сервера (раздел Акции), передаем данные на вью и выставляем состояние у вьюхи
     func fetchPromoFromStorage() {
         let promo = storage.getPromo()
         view?.updatePromo(promo)
-        view?.setState(view: .promo, state: .success)
+//        view?.setState(view: .promo, state: .success)
     }
 }

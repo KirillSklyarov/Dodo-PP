@@ -4,7 +4,7 @@ import Foundation
 struct NetworkService {
 
     // MARK: - Network Client
-    var networkClient: AsyncAwaitNetworkClient
+    let networkClient: AsyncAwaitNetworkClient
 
     // MARK: - Init
     init(networkClient: AsyncAwaitNetworkClient) {

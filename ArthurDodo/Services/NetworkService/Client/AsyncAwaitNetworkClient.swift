@@ -1,6 +1,6 @@
 import Foundation
 
-final class AsyncAwaitNetworkClient {
+struct AsyncAwaitNetworkClient: Sendable {
 
     // MARK: - Properties
     private let decoder: JSONDecoder
