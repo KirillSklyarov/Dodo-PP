@@ -94,13 +94,13 @@ private extension DeliveryCoordinator {
 
     func showAddNewAddressVC(_ parentVC: UIViewController) {
         let vc = screenFactory.deliveryScreenFactory.makeAddNewAddressScreen()
-        let presenter = vc.presenter
+        let viewModel = vc.viewModel
 
-        presenter.onDismissButtonTapped = { [weak self] in
+        viewModel.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(from: parentVC)
         }
 
-        presenter.onSaveNewAddressButtonTapped = { [weak self] in
+        viewModel.onSaveNewAddressButtonTapped = { [weak self] in
             self?.router.dismiss(from: parentVC)
         }
 

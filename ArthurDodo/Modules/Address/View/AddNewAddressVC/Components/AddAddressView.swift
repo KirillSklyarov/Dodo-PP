@@ -24,6 +24,8 @@ final class AddAddressView: UIView {
 extension AddAddressView {
     func updateUIWithAddress(_ addressToShow: Address) {
         let shortAddress = addressToShow.cityStreetHouse
+//        print("shortAddress \(shortAddress)")
+
         addressStackView.updateUIShortAddress(shortAddress)
     }
 
@@ -46,6 +48,8 @@ private extension AddAddressView {
         addressStackView.onTextFieldEndEditing = { [weak self] text in
             self?.onTextFieldBeginEditing?()
         }
+
+
     }
 }
 

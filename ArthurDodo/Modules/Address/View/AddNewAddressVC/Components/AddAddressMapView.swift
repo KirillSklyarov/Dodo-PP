@@ -15,6 +15,7 @@ final class AddAddressMapView: UIView {
     private let geocoder = CLGeocoder()
 
     var onChangeAddress: ((String) -> Void)?
+    var onMapLoaded: (() -> Void)?
 
     // MARK: - Init
     init(frame: CGRect = .zero, isHidden: Bool = true, isPinHidden: Bool = false, isTrackingButtonHidden: Bool = false, address: String? = nil) {
@@ -99,6 +100,10 @@ extension AddAddressMapView: MKMapViewDelegate {
         let mapCenter = mapView.centerCoordinate
         showPinAnimation()
         getAddress(from: mapCenter)
+    }
+
+    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+        onMapLoaded?()
     }
 }
 

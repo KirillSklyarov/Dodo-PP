@@ -19,24 +19,24 @@ final class AddressCoordinator: Coordinator {
 
     func start() {
         let addressVC = screenFactory.makeAddressScreen()
-        let presenter = addressVC.presenter
+        var viewModel = addressVC.getViewModel()
 
-        presenter.onDismissButtonTapped = { [weak self] in
+        viewModel.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
             router.dismiss()
             onFlowFinished?()
         }
 
-        presenter.onShowEditAddressVC = { [weak self] in
+        viewModel.onShowEditAddressVC = { [weak self] in
             self?.showEditAddressVC()
         }
 
-        presenter.onShowAddNewAddressVC = { [weak self] in
+        viewModel.onShowAddNewAddressVC = { [weak self] in
             self?.showAddNewAddressVC()
         }
 
         // Нажали на кнопку "Доставить сюда"
-        presenter.onDeliveryButtonTapped = { [weak self] in
+        viewModel.onDeliveryButtonTapped = { [weak self] in
             self?.router.dismiss()
             self?.onFlowFinished?()
         }
@@ -63,14 +63,14 @@ private extension AddressCoordinator {
 
     func showAddNewAddressVC() {
         let vc = screenFactory.makeAddNewAddressScreen()
-        let presenter = vc.presenter
+        let viewModel = vc.viewModel
         router.present(vc, isParent: true, modalPresentation: .fullScreen)
 
-        presenter.onDismissButtonTapped = { [weak self] in
+        viewModel.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
         }
 
-        presenter.onSaveNewAddressButtonTapped = { [weak self] in
+        viewModel.onSaveNewAddressButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
         }
     }

@@ -20,16 +20,14 @@ final class AddressScreenFactory {
 // MARK: - Methods
 extension AddressScreenFactory: AddressScreenFactoryProtocol {
     func makeAddressScreen() -> AddressViewController {
-        let presenter = AddressPresenter(storage: storage)
-        let view = AddressViewController(presenter: presenter)
-        presenter.view = view
+        let viewModel = AddressViewModel(storage: storage)
+        let view = AddressViewController(viewModel: viewModel)
         return view
     }
 
     func makeAddNewAddressScreen() -> AddNewAddressViewController {
-        let presenter = AddNewAddressPresenter(storage: storage)
-        let view = AddNewAddressViewController(presenter: presenter)
-        presenter.view = view
+        let viewModel = AddNewAddressVM(storage: storage)
+        let view = AddNewAddressViewController(viewModel: viewModel)
         return view
     }
 

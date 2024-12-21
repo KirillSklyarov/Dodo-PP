@@ -56,9 +56,10 @@ extension DeliveryScreenFactory: DeliveryScreenFactoryProtocol {
     }
 
     func makeAddNewAddressScreen() -> AddNewAddressViewController {
-        let presenter = AddNewAddressPresenter(storage: addressStorage)
-        let view = AddNewAddressViewController(presenter: presenter)
-        presenter.view = view
+//        let presenter = AddNewAddressPresenter(storage: addressStorage)
+        let viewModel = AddNewAddressVM(storage: addressStorage)
+        let view = AddNewAddressViewController(viewModel: viewModel)
+//        presenter.view = view
         return view
     }
 

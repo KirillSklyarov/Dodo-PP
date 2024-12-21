@@ -2,8 +2,8 @@ import UIKit
 import Combine
 
 protocol ProfileViewProtocol: AnyObject {
-    func updatePersonalData(_ personalData: User)
-    func updatePromo(_ promo: [Promo])
+    func updatePersonalData(_ personalData: User?)
+    func updatePromo(_ promo: [Promo]?)
     func getViewModel() -> ProfileViewModelProtocol
 }
 
@@ -31,13 +31,17 @@ final class ProfileViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        cancellables.removeAll()
+    }
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
         dataBinding()
-        viewModel.fetchData()
+        viewModel.initialize()
     }
 }
 
@@ -113,15 +117,18 @@ private extension ProfileViewController {
 // MARK: - ProfileViewProtocol
 extension ProfileViewController: ProfileViewProtocol {
     // Обновляем личные данные и устанавливаем состояние экрана
-    func updatePersonalData(_ personalData: User) {
+    func updatePersonalData(_ personalData: User?) {
+        guard let personalData else { return }
         personalDataCollectionView.getPersonalData(personalData)
         setState(view: .personalData, state: .success)
     }
 
     // Обновляем раздел акции и устанавливаем состояние экрана
-    func updatePromo(_ promo: [Promo]) {
+    func updatePromo(_ promo: [Promo]?) {
+        guard let promo else { return }
         promoStackView.updateUI(promo)
         setState(view: .promo, state: .success)
+        setState(view: .mission, state: .success)
     }
 
     // Отдаем viewModel
@@ -136,7 +143,7 @@ extension ProfileViewController {
         viewModel.userDataPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] userData in
-                guard let self, let userData else { print("User data or presenter is nil"); return }
+                guard let self else { print("ViewModel is nil"); return }
                 updatePersonalData(userData)
             }
             .store(in: &cancellables)
@@ -144,9 +151,8 @@ extension ProfileViewController {
         viewModel.promoPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] promo in
-                guard let self, let promo else { print("Promo or presenter is nil"); return }
+                guard let self else { print("ViewModel is nil"); return }
                 updatePromo(promo)
-                setState(view: .mission, state: .success)
             }
             .store(in: &cancellables)
     }

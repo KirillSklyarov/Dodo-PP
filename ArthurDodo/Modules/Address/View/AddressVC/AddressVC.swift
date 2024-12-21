@@ -1,8 +1,10 @@
 import UIKit
+import Combine
 
 protocol AddressViewProtocol: AnyObject {
-    func showAddressOnMap(_ address: Address)
+    func showAddressOnMap(_ address: Address?)
     func updateAddress(_ addresses: [Address])
+    func getViewModel() -> AddressViewModelProtocol 
 }
 
 final class AddressViewController: UIViewController {
@@ -14,11 +16,12 @@ final class AddressViewController: UIViewController {
     private lazy var contentStack = AppStackView([mapView, addressView], axis: .vertical, spacing: -10)
 
     // MARK: - Properties
-    let presenter: AddressPresenterProtocol
+    let viewModel: AddressViewModelProtocol
+    private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(presenter: AddressPresenterProtocol) {
-        self.presenter = presenter
+    init(viewModel: AddressViewModelProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -30,18 +33,23 @@ final class AddressViewController: UIViewController {
         print("AddressViewController deinit")
     }
 
+    func getViewModel() -> AddressViewModelProtocol {
+        viewModel
+    }
+
     // MARK: - Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        presenter.viewDidLoad()
+        dataBinding()
+        viewModel.initialize()
     }
 
     // Когда экран опять появляется (после закрытия предыдущих, то мы обновляем данные из хранилища)
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        presenter.viewDidLoad()
+        viewModel.initialize()
     }
 }
 
@@ -75,29 +83,30 @@ private extension AddressViewController {
 
     func setupAddressHeaderAction() {
         addressHeaderView.onDismissButtonTapped = { [weak self] in
-            self?.presenter.onDismissButtonTapped?()
+            self?.viewModel.onDismissButtonTapped?()
         }
     }
 
     func setupAddressViewAction() {
         // Нажатие на кнопку редактирования адреса
         addressView.onEditAddressCellTapped = { [weak self] address in
-            self?.presenter.editAddressTapped(address)
+            self?.viewModel.editAddressTapped(address)
         }
 
         // Отрабатываем нажатие на адрес
         addressView.onAddressCellTapped = { [weak self] address in
             guard let self else { return }
-            presenter.addressTapped(address)
+            viewModel.addressTapped(address)
         }
 
         // Нажатие на кнопку "+Новый адрес"
         addressView.onAddNewAddressButtonTapped = { [weak self] in
-            self?.presenter.showAddNewAddressVC()
+            self?.viewModel.showAddNewAddressVC()
         }
 
+        // Нажатие на кнопку "Доставить сюда"
         addressView.onDeliveryButtonTapped = { [weak self] in
-            self?.presenter.deliveryButtonTapped()
+            self?.viewModel.deliveryButtonTapped()
         }
     }
 }
@@ -105,12 +114,34 @@ private extension AddressViewController {
 // MARK: - AddressViewProtocol
 extension AddressViewController: AddressViewProtocol {
     // Двигаем карту на главный адрес
-    func showAddressOnMap(_ address: Address) {
+    func showAddressOnMap(_ address: Address?) {
+        guard let address else { return }
         mapView.showAddressOnMap(address)
     }
 
     // Обновляем список адресов
     func updateAddress(_ addresses: [Address]) {
         addressView.getAddresses(addresses)
+    }
+}
+
+// MARK: - Data binging
+extension AddressViewController {
+    func dataBinding() {
+        viewModel.addressesPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] addresses in
+                guard let self else { return }
+                updateAddress(addresses)
+            }
+            .store(in: &cancellables)
+
+        viewModel.mainAddressPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] address in
+                guard let self else { return }
+                showAddressOnMap(address)
+            }
+            .store(in: &cancellables)
     }
 }

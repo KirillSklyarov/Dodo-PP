@@ -41,7 +41,7 @@ final class PersonalViewController: UIViewController {
         setupUI()
         setupActions()
         dataBinding()
-        viewModel.fetchData()
+        viewModel.initialize()
     }
 }
 
