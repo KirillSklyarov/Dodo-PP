@@ -144,6 +144,8 @@
 		737537EA2D15D4B500D6E056 /* AddressViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737537E72D15D4B500D6E056 /* AddressViewModelProtocol.swift */; };
 		737537EF2D15D4EA00D6E056 /* AddNewAddressVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737537EE2D15D4EA00D6E056 /* AddNewAddressVM.swift */; };
 		737537F12D15F4EA00D6E056 /* AddNewAddressVMProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737537F02D15F4EA00D6E056 /* AddNewAddressVMProtocol.swift */; };
+		7385524E2D16FB8C00270BF4 /* AddNewAddressViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7385524D2D16FB8C00270BF4 /* AddNewAddressViewProtocol.swift */; };
+		738552522D16FBE800270BF4 /* EditAddressVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738552512D16FBE800270BF4 /* EditAddressVM.swift */; };
 		7389E1C62CFB3AC00043E4A8 /* MoyaStyleNetworkLayerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389E1C42CFB3AC00043E4A8 /* MoyaStyleNetworkLayerHelper.swift */; };
 		7389E1C82CFB3AC50043E4A8 /* MoyaStyleNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389E1C72CFB3AC50043E4A8 /* MoyaStyleNetworkLayer.swift */; };
 		7389E1CE2CFB4A710043E4A8 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389E1CD2CFB4A710043E4A8 /* NetworkService.swift */; };
@@ -375,6 +377,8 @@
 		737537E72D15D4B500D6E056 /* AddressViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressViewModelProtocol.swift; sourceTree = "<group>"; };
 		737537EE2D15D4EA00D6E056 /* AddNewAddressVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewAddressVM.swift; sourceTree = "<group>"; };
 		737537F02D15F4EA00D6E056 /* AddNewAddressVMProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewAddressVMProtocol.swift; sourceTree = "<group>"; };
+		7385524D2D16FB8C00270BF4 /* AddNewAddressViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewAddressViewProtocol.swift; sourceTree = "<group>"; };
+		738552512D16FBE800270BF4 /* EditAddressVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressVM.swift; sourceTree = "<group>"; };
 		7389E1C42CFB3AC00043E4A8 /* MoyaStyleNetworkLayerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoyaStyleNetworkLayerHelper.swift; sourceTree = "<group>"; };
 		7389E1C72CFB3AC50043E4A8 /* MoyaStyleNetworkLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoyaStyleNetworkLayer.swift; sourceTree = "<group>"; };
 		7389E1CD2CFB4A710043E4A8 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -949,6 +953,7 @@
 			isa = PBXGroup;
 			children = (
 				734ACE592D06FD3C00FC1841 /* AddNewAddressVC.swift */,
+				7385524D2D16FB8C00270BF4 /* AddNewAddressViewProtocol.swift */,
 				734ACE582D06FD3C00FC1841 /* Components */,
 			);
 			path = AddNewAddressVC;
@@ -1309,6 +1314,7 @@
 		737537E02D15C57E00D6E056 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				738552502D16FBE200270BF4 /* EditAdderessVM */,
 				737537ED2D15D4D200D6E056 /* AddNewAddressVM */,
 				737537E82D15D4B500D6E056 /* AddressVM */,
 			);
@@ -1349,6 +1355,14 @@
 				734CC72E2D0C58B700E902ED /* Services */,
 			);
 			path = Delivery;
+			sourceTree = "<group>";
+		};
+		738552502D16FBE200270BF4 /* EditAdderessVM */ = {
+			isa = PBXGroup;
+			children = (
+				738552512D16FBE800270BF4 /* EditAddressVM.swift */,
+			);
+			path = EditAdderessVM;
 			sourceTree = "<group>";
 		};
 		7389E1C52CFB3AC00043E4A8 /* Moya */ = {
@@ -2056,6 +2070,7 @@
 				7321ABF72D06265000380085 /* OrderMainVCView.swift in Sources */,
 				7321ABF82D06265000380085 /* MainViewController.swift in Sources */,
 				7321ABF92D06265000380085 /* AddToppingsCollectionView.swift in Sources */,
+				738552522D16FBE800270BF4 /* EditAddressVM.swift in Sources */,
 				7321ABFA2D06265000380085 /* AddToppingsCollectionViewCell.swift in Sources */,
 				7344CCCC2D0C834500CF2011 /* DeliveryCoordinator.swift in Sources */,
 				7321ABFB2D06265000380085 /* СpfcTableView.swift in Sources */,
@@ -2080,6 +2095,7 @@
 				734ACE9D2D07145700FC1841 /* EditAddressPresenter.swift in Sources */,
 				73272C942CF37C6200AEAF09 /* Layout+Ext.swift in Sources */,
 				73A738A82CDFE4C5003BA211 /* CustomSkeletonViewBorder.swift in Sources */,
+				7385524E2D16FB8C00270BF4 /* AddNewAddressViewProtocol.swift in Sources */,
 				739D69C62CF8F3DF0053BC81 /* AppSegmentControl.swift in Sources */,
 				73B9697D2CC7C78700A2415A /* AppNavigationHeaderView.swift in Sources */,
 				736B0D2A2CCFE5C500975195 /* Array+BoolSorting.swift in Sources */,

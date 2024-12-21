@@ -1,11 +1,6 @@
 import UIKit
 import Combine
 
-protocol AddNewAddressViewProtocol: AnyObject {
-    func showMainAddressOnMap(_ mainAddress: Address?)
-    func updateUIWithData(_ mainAddress: Address?)
-}
-
 // ВАЖНО: мы вызываем метод initialize у viewModel только после загрузки карты (это замыкание  mapView.onMapLoaded), тогда не прилетают ошибки при загрузке адреса
 final class AddNewAddressViewController: UIViewController {
 
@@ -39,9 +34,16 @@ final class AddNewAddressViewController: UIViewController {
         setupUI()
         setupActions()
         dataBinding()
+        viewModelSetup()
 
         setupGestureToDissmissKeyboard()
+    }
 
+    // Мы начинаем флоу вью модели только после того как закончилась загрузка карты (чтобы не допустить ошибок и опережения)
+    func viewModelSetup() {
+        mapView.onMapLoaded = { [weak self] in
+            self?.viewModel.initialize()
+        }
     }
 }
 
@@ -80,10 +82,6 @@ private extension AddNewAddressViewController {
         mapView.onChangeAddress = { [weak self] address in
             self?.addressView.updateShortAddress(address)
         }
-
-        mapView.onMapLoaded = { [weak self] in
-            self?.viewModel.initialize()
-        }
     }
 
     // Настраиваем кнопку Сохранить - отправляем новый адрес на сервер
@@ -96,7 +94,7 @@ private extension AddNewAddressViewController {
 }
 
 // MARK: - Data binding
-extension AddNewAddressViewController {
+private extension AddNewAddressViewController {
     func dataBinding() {
         viewModel.mainAddressPublisher
             .compactMap { $0 }

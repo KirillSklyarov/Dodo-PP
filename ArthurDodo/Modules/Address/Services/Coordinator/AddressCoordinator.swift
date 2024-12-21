@@ -49,14 +49,14 @@ final class AddressCoordinator: Coordinator {
 private extension AddressCoordinator {
     func showEditAddressVC() {
         let editAddressVC = screenFactory.makeEditAddressScreen()
-        let presenter = editAddressVC.presenter
+        let viewModel = editAddressVC.viewModel
         router.present(editAddressVC, isParent: true, modalPresentation: .fullScreen)
 
-        presenter.onDismissButtonTapped = { [weak self] in
+        viewModel.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
         }
 
-        presenter.onSaveButtonTapped = { [weak self] in
+        viewModel.onSaveButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
         }
     }

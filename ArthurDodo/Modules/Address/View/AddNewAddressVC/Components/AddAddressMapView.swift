@@ -17,6 +17,8 @@ final class AddAddressMapView: UIView {
     var onChangeAddress: ((String) -> Void)?
     var onMapLoaded: (() -> Void)?
 
+    private var isLoaded = false
+
     // MARK: - Init
     init(frame: CGRect = .zero, isHidden: Bool = true, isPinHidden: Bool = false, isTrackingButtonHidden: Bool = false, address: String? = nil) {
         super.init(frame: frame)
@@ -102,8 +104,11 @@ extension AddAddressMapView: MKMapViewDelegate {
         getAddress(from: mapCenter)
     }
 
-    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
-        onMapLoaded?()
+    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
+        if fullyRendered && !isLoaded {
+            onMapLoaded?()
+            isLoaded.toggle()
+        }
     }
 }
 
@@ -173,4 +178,3 @@ private extension AddAddressMapView {
         mapView.setRegion(region, animated: false)
     }
 }
-
