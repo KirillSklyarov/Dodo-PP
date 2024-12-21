@@ -28,14 +28,16 @@ final class EditAddressViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        cancellations.removeAll()
+    }
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
         dataBinding()
-
-//        viewModel.initialize()
         viewModelSetup()
     }
 
@@ -50,7 +52,7 @@ final class EditAddressViewController: UIViewController {
 extension EditAddressViewController: EditAddressViewProtocol {
     // Обновляет адрес на вью
     func updateAddress(_ addressToEdit: Address?) {
-        guard let addressToEdit else { return }
+        guard let addressToEdit else { print("We have no address"); return }
         updateAddressDetailsView(addressToEdit)
         showAddressOnMap(addressToEdit)
         updateShortAddress(addressToEdit)
@@ -108,6 +110,7 @@ private extension EditAddressViewController {
     }
 }
 
+// MARK: - Data binding
 private extension EditAddressViewController {
     func dataBinding() {
         viewModel.addressToEditPublisher

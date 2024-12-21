@@ -3,7 +3,6 @@ import Combine
 
 protocol EditAddressVMProtocol: AnyObject {
     func changeAddressWhileMovingMap(_ newShortAddress: String)
-//    func updateAddress()
 
     func initialize()
     func saveButtonTapped()
@@ -41,7 +40,6 @@ final class EditAddressVM: EditAddressVMProtocol {
 extension EditAddressVM {
     func changeAddressWhileMovingMap(_ newShortAddress: String) {
         addressToEdit?.cityStreetHouse = newShortAddress
-//        view?.updateShortAddress(newShortAddress)
     }
 
     func saveButtonTapped() {

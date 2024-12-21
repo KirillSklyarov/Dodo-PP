@@ -103,8 +103,6 @@
 		734ACE7F2D06FD3C00FC1841 /* EditAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734ACE6C2D06FD3C00FC1841 /* EditAddressViewController.swift */; };
 		734ACE8F2D06FE1600FC1841 /* AddressStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734ACE8D2D06FE1600FC1841 /* AddressStorage.swift */; };
 		734ACE992D07041F00FC1841 /* AddressScreenFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734ACE972D07041F00FC1841 /* AddressScreenFactory.swift */; };
-		734ACE9B2D070EDA00FC1841 /* AddNewAddressPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734ACE9A2D070EDA00FC1841 /* AddNewAddressPresenter.swift */; };
-		734ACE9D2D07145700FC1841 /* EditAddressPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734ACE9C2D07145700FC1841 /* EditAddressPresenter.swift */; };
 		734B01572CFCBB4C00DDD282 /* AppStartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734B01552CFCBB4C00DDD282 /* AppStartManager.swift */; };
 		734B015C2CFCBC3F00DDD282 /* AsyncAwaitNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734B01592CFCBC3F00DDD282 /* AsyncAwaitNetworkClient.swift */; };
 		734B015D2CFCBC3F00DDD282 /* CompletionNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734B015A2CFCBC3F00DDD282 /* CompletionNetworkClient.swift */; };
@@ -162,7 +160,7 @@
 		73954F812D09B211008D0953 /* CustomPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73954F6B2D09B211008D0953 /* CustomPageControl.swift */; };
 		73954F822D09B211008D0953 /* CustomStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73954F6C2D09B211008D0953 /* CustomStepperView.swift */; };
 		73954F832D09B211008D0953 /* OrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73954F6D2D09B211008D0953 /* OrderView.swift */; };
-		73954F842D09B211008D0953 /* CartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73954F6F2D09B211008D0953 /* CartVC.swift */; };
+		73954F842D09B211008D0953 /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73954F6F2D09B211008D0953 /* CartViewController.swift */; };
 		73954F852D09B211008D0953 /* EditItemDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73954F712D09B211008D0953 /* EditItemDetailsView.swift */; };
 		73954F862D09B211008D0953 /* EditCartButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73954F722D09B211008D0953 /* EditCartButtonView.swift */; };
 		73954F872D09B211008D0953 /* EditProductVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73954F742D09B211008D0953 /* EditProductVC.swift */; };
@@ -237,6 +235,10 @@
 		73E72F5A2CF8DA1500CDF390 /* AppImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E72F592CF8DA1500CDF390 /* AppImageView.swift */; };
 		73EA17352CCBE21E0079A16C /* String+Plural.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EA17342CCBE21E0079A16C /* String+Plural.swift */; };
 		73F169312CEE5ABE009B8532 /* CoordinatorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F1692F2CEE5ABE009B8532 /* CoordinatorFactory.swift */; };
+		73FC09912D172C7000D6F644 /* CartVCViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FC09902D172C7000D6F644 /* CartVCViews.swift */; };
+		73FC09992D17419F00D6F644 /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FC09962D17419F00D6F644 /* CartViewModel.swift */; };
+		73FC099A2D17419F00D6F644 /* CartViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FC09972D17419F00D6F644 /* CartViewModelProtocol.swift */; };
+		73FC099E2D1741C700D6F644 /* EditItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FC099D2D1741C700D6F644 /* EditItemViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -336,8 +338,6 @@
 		734ACE6C2D06FD3C00FC1841 /* EditAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressViewController.swift; sourceTree = "<group>"; };
 		734ACE8D2D06FE1600FC1841 /* AddressStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressStorage.swift; sourceTree = "<group>"; };
 		734ACE972D07041F00FC1841 /* AddressScreenFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressScreenFactory.swift; sourceTree = "<group>"; };
-		734ACE9A2D070EDA00FC1841 /* AddNewAddressPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewAddressPresenter.swift; sourceTree = "<group>"; };
-		734ACE9C2D07145700FC1841 /* EditAddressPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressPresenter.swift; sourceTree = "<group>"; };
 		734B01552CFCBB4C00DDD282 /* AppStartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartManager.swift; sourceTree = "<group>"; };
 		734B01592CFCBC3F00DDD282 /* AsyncAwaitNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncAwaitNetworkClient.swift; sourceTree = "<group>"; };
 		734B015A2CFCBC3F00DDD282 /* CompletionNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionNetworkClient.swift; sourceTree = "<group>"; };
@@ -395,7 +395,7 @@
 		73954F6B2D09B211008D0953 /* CustomPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPageControl.swift; sourceTree = "<group>"; };
 		73954F6C2D09B211008D0953 /* CustomStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStepperView.swift; sourceTree = "<group>"; };
 		73954F6D2D09B211008D0953 /* OrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderView.swift; sourceTree = "<group>"; };
-		73954F6F2D09B211008D0953 /* CartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartVC.swift; sourceTree = "<group>"; };
+		73954F6F2D09B211008D0953 /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
 		73954F712D09B211008D0953 /* EditItemDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemDetailsView.swift; sourceTree = "<group>"; };
 		73954F722D09B211008D0953 /* EditCartButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCartButtonView.swift; sourceTree = "<group>"; };
 		73954F742D09B211008D0953 /* EditProductVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProductVC.swift; sourceTree = "<group>"; };
@@ -471,6 +471,11 @@
 		73E72F592CF8DA1500CDF390 /* AppImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImageView.swift; sourceTree = "<group>"; };
 		73EA17342CCBE21E0079A16C /* String+Plural.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Plural.swift"; sourceTree = "<group>"; };
 		73F1692F2CEE5ABE009B8532 /* CoordinatorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorFactory.swift; sourceTree = "<group>"; };
+		73FC09902D172C7000D6F644 /* CartVCViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartVCViews.swift; sourceTree = "<group>"; };
+		73FC09942D173FD800D6F644 /* CartViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewProtocol.swift; sourceTree = "<group>"; };
+		73FC09962D17419F00D6F644 /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
+		73FC09972D17419F00D6F644 /* CartViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModelProtocol.swift; sourceTree = "<group>"; };
+		73FC099D2D1741C700D6F644 /* EditItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1028,15 +1033,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		734ACE822D06FD4800FC1841 /* Presenter */ = {
-			isa = PBXGroup;
-			children = (
-				734ACE9A2D070EDA00FC1841 /* AddNewAddressPresenter.swift */,
-				734ACE9C2D07145700FC1841 /* EditAddressPresenter.swift */,
-			);
-			path = Presenter;
-			sourceTree = "<group>";
-		};
 		734ACE832D06FD4800FC1841 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -1397,6 +1393,7 @@
 			isa = PBXGroup;
 			children = (
 				730452EA2CE3865D00FC6B17 /* Cart */,
+				73FC09902D172C7000D6F644 /* CartVCViews.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1472,7 +1469,8 @@
 		73954F702D09B211008D0953 /* CartVC */ = {
 			isa = PBXGroup;
 			children = (
-				73954F6F2D09B211008D0953 /* CartVC.swift */,
+				73954F6F2D09B211008D0953 /* CartViewController.swift */,
+				73FC09942D173FD800D6F644 /* CartViewProtocol.swift */,
 				73954F6E2D09B211008D0953 /* Components */,
 			);
 			path = CartVC;
@@ -1725,9 +1723,8 @@
 			isa = PBXGroup;
 			children = (
 				734ACE832D06FD4800FC1841 /* Model */,
-				737537E02D15C57E00D6E056 /* ViewModel */,
 				734ACE6E2D06FD3C00FC1841 /* View */,
-				734ACE822D06FD4800FC1841 /* Presenter */,
+				737537E02D15C57E00D6E056 /* ViewModel */,
 				734ACE852D06FD6900FC1841 /* Services */,
 			);
 			path = Address;
@@ -1738,6 +1735,7 @@
 			children = (
 				73954F5A2D09B211008D0953 /* Model */,
 				73954F762D09B211008D0953 /* View */,
+				73FC098D2D17219100D6F644 /* ViewModel */,
 				73954F592D09B211008D0953 /* Presenter */,
 				73954F582D09B211008D0953 /* Services */,
 			);
@@ -1768,8 +1766,8 @@
 			isa = PBXGroup;
 			children = (
 				7321AC642D0626BC00380085 /* Model */,
-				734153632D1473C600116AAE /* ViewModel */,
 				7321AC4E2D06269400380085 /* View */,
+				734153632D1473C600116AAE /* ViewModel */,
 				7321AC622D0626B800380085 /* Services */,
 			);
 			path = Profile;
@@ -1896,6 +1894,32 @@
 				73F1692F2CEE5ABE009B8532 /* CoordinatorFactory.swift */,
 			);
 			path = CoordinatorFactory;
+			sourceTree = "<group>";
+		};
+		73FC098D2D17219100D6F644 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				73FC09982D17419F00D6F644 /* CartViewModel */,
+				73FC099C2D1741BB00D6F644 /* EditItemViewModel */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		73FC09982D17419F00D6F644 /* CartViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				73FC09962D17419F00D6F644 /* CartViewModel.swift */,
+				73FC09972D17419F00D6F644 /* CartViewModelProtocol.swift */,
+			);
+			path = CartViewModel;
+			sourceTree = "<group>";
+		};
+		73FC099C2D1741BB00D6F644 /* EditItemViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				73FC099D2D1741C700D6F644 /* EditItemViewModel.swift */,
+			);
+			path = EditItemViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2089,10 +2113,8 @@
 				7321AC062D06265000380085 /* StoriesViewController.swift in Sources */,
 				73B9696A2CC7C78700A2415A /* DataManager.swift in Sources */,
 				7315FE8A2D11CBC000EE6E74 /* FeatureToggleStorage.swift in Sources */,
-				734ACE9B2D070EDA00FC1841 /* AddNewAddressPresenter.swift in Sources */,
 				730BB1002CF75E2800C18126 /* AppLabel.swift in Sources */,
 				73C067D72CE73B7000AEB125 /* UITableViewCell+Ext.swift in Sources */,
-				734ACE9D2D07145700FC1841 /* EditAddressPresenter.swift in Sources */,
 				73272C942CF37C6200AEAF09 /* Layout+Ext.swift in Sources */,
 				73A738A82CDFE4C5003BA211 /* CustomSkeletonViewBorder.swift in Sources */,
 				7385524E2D16FB8C00270BF4 /* AddNewAddressViewProtocol.swift in Sources */,
@@ -2105,6 +2127,7 @@
 				737537D82D15C00A00D6E056 /* ProfileViewModel.swift in Sources */,
 				737537D92D15C00A00D6E056 /* ProfileViewModelProtocol.swift in Sources */,
 				737537DD2D15C00A00D6E056 /* PersonalViewModel.swift in Sources */,
+				73FC09912D172C7000D6F644 /* CartVCViews.swift in Sources */,
 				737537DE2D15C00A00D6E056 /* PersonalViewModelProtocol.swift in Sources */,
 				733A01D82CDBBF380013D3EB /* ScreenFactory.swift in Sources */,
 				73B969852CC7C78700A2415A /* CartButton.swift in Sources */,
@@ -2132,6 +2155,7 @@
 				73954F952D09D884008D0953 /* CartScreenFactory.swift in Sources */,
 				73B1EA4C2CFF03EE004CFE17 /* FeatureToggleVC.swift in Sources */,
 				73E6EB442CC948F2006831F2 /* AppTableView.swift in Sources */,
+				73FC099E2D1741C700D6F644 /* EditItemViewModel.swift in Sources */,
 				73C067D52CE73B2900AEB125 /* UITableView+Ext.swift in Sources */,
 				7344CCD02D0DB69E00CF2011 /* FinalPresenter.swift in Sources */,
 				7389E1CE2CFB4A710043E4A8 /* NetworkService.swift in Sources */,
@@ -2146,6 +2170,8 @@
 				73BA01F92CE8C780003117F6 /* SkeletonCollectionViewCell.swift in Sources */,
 				73BA01FA2CE8C780003117F6 /* SkeletonCollectionViewCell2.swift in Sources */,
 				734ACE992D07041F00FC1841 /* AddressScreenFactory.swift in Sources */,
+				73FC09992D17419F00D6F644 /* CartViewModel.swift in Sources */,
+				73FC099A2D17419F00D6F644 /* CartViewModelProtocol.swift in Sources */,
 				73B969D72CC7C7C000A2415A /* UICollection+Ext.swift in Sources */,
 				73B969D82CC7C7C000A2415A /* UIColor+hex .swift in Sources */,
 				730BB1022CF76C1800C18126 /* InsetLabel.swift in Sources */,
@@ -2192,7 +2218,7 @@
 				7315FE842D0F588700EE6E74 /* StoriesPresenter.swift in Sources */,
 				73954F822D09B211008D0953 /* CustomStepperView.swift in Sources */,
 				73954F832D09B211008D0953 /* OrderView.swift in Sources */,
-				73954F842D09B211008D0953 /* CartVC.swift in Sources */,
+				73954F842D09B211008D0953 /* CartViewController.swift in Sources */,
 				73954F852D09B211008D0953 /* EditItemDetailsView.swift in Sources */,
 				73954F862D09B211008D0953 /* EditCartButtonView.swift in Sources */,
 				73954F872D09B211008D0953 /* EditProductVC.swift in Sources */,

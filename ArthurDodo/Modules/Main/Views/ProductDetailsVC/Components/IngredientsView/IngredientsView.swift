@@ -36,8 +36,12 @@ final class IngredientsView: UIView {
 // MARK: - Public methods
 extension IngredientsView {
     // Получаем выбранный товар
+    func getSelectedItem(_ item: CartItem) {
+        self.item = item.item
+        updateUI(item)
+    }
+
     func getSelectedItem(_ item: Item) {
-        self.item = item
         cpfcPopupView.getItem(item)
     }
 
@@ -109,5 +113,15 @@ private extension IngredientsView {
 extension IngredientsView: UIPopoverPresentationControllerDelegate {
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         .none
+    }
+}
+
+// MARK: - Supporting methods
+private extension IngredientsView {
+    // Обновляем UI: окно с КБЖУ и вес во view
+    func updateUI(_ item: CartItem) {
+        cpfcPopupView.getItem(item.item)
+        let selectedWeight = item.weight
+        updateWeight(selectedWeight)
     }
 }

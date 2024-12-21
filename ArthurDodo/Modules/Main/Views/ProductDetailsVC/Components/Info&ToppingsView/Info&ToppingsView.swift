@@ -26,6 +26,10 @@ extension InfoAndToppingsView {
         infoAndToppingsStack.getSelectedItem(item)
     }
 
+    func getSelectedItem(_ item: CartItem) {
+        infoAndToppingsStack.getSelectedItem(item)
+    }
+
     func getCartView(_ cart: AppCartButtonView) {
         infoAndToppingsStack.getButtonView(cart)
     }

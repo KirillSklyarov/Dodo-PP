@@ -72,4 +72,15 @@ struct Item: Equatable, Codable {
             }
         return price ?? 0
     }
+
+    func getWeight(size: Size) -> Int {
+        let weight =
+            switch size {
+            case .oneSize: itemSize.oneSize?.weight
+            case .small: itemSize.small?.weight
+            case .medium: itemSize.medium?.weight
+            case .large: itemSize.large?.weight
+            }
+        return weight ?? 0
+    }
 }

@@ -113,12 +113,14 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
         return positionToAdd
     }
 
-    func castOrderFromItem(_ item: Item) -> CartItem {
+    private func castOrderFromItem(_ item: Item) -> CartItem {
         let size = item.getCorrectSize()
         let dough: Dough? = item.category == .pizza ? .basic : nil
-        let weight = item.getCorrectWeight()
+        let weight = item.getWeight(size: size)
         let price = item.getCorrectPrice()
         let isOneSize = item.hasOneSize()
+
+        print("size: \(size), weight: \(weight), price: \(price)")
 
         let cartPosition = CartItem(item: item, chosenSize: size, chosenDough: dough, weight: weight, price: price, isOneSize: isOneSize)
 

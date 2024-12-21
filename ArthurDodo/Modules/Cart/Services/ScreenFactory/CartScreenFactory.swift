@@ -21,16 +21,14 @@ final class CartScreenFactory {
 // MARK: - Methods
 extension CartScreenFactory: CartScreenFactoryProtocol {
     func makeCartScreen() -> CartViewController {
-        let presenter = CartPresenter(storage: storage, storageService: storageService)
-        let view = CartViewController(presenter: presenter)
-        presenter.view = view
+        let viewModel = CartViewModel(storage: storage, storageService: storageService)
+        let view = CartViewController(viewModel: viewModel)
         return view
     }
 
     func makeEditProductScreen() -> EditProductViewController {
-        let presenter = EditProductPresenter(storage: storage)
-        let view = EditProductViewController(presenter: presenter)
-        presenter.view = view
+        let viewModel = EditItemViewModel(storage: storage)
+        let view = EditProductViewController(viewModel: viewModel)
         return view
     }
 

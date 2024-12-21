@@ -47,7 +47,7 @@ extension ProductDetailsPresenter {
         guard let item else { return nil}
         let chosenSize = getCorrectSize()
         let chosenDough = getCorrectDough()
-        let weight = getCorrectWeight()
+        let weight = item.getWeight(size: chosenSize)
         let price = item.getPrice(size: chosenSize)
         let isOneSize = item.hasOneSize()
 

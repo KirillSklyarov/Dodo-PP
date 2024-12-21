@@ -1,4 +1,5 @@
 import UIKit
+import Combine
 
 // Класс, который отвечает за показ экрана с редактированием товара
 final class EditProductViewController: UIViewController {
@@ -13,11 +14,12 @@ final class EditProductViewController: UIViewController {
     private lazy var scrollView = configScrollView()
 
     // MARK: - Presenter
-    let presenter: EditProductPresenter
+    private let viewModel: EditItemViewModelProtocol
+    private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(presenter: EditProductPresenter) {
-        self.presenter = presenter
+    init(viewModel: EditItemViewModelProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -25,12 +27,19 @@ final class EditProductViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func getViewModel() -> EditItemViewModelProtocol {
+        viewModel
+    }
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        presenter.viewDidLoad()
+        dataBinding()
+//        presenter.viewDidLoad()
+
+        viewModel.initialize()
     }
 }
 
@@ -40,18 +49,6 @@ private extension EditProductViewController {
         view.backgroundColor = AppColors.backgroundGray
         view.addSubviews(scrollView, headerView, cartButtonView)
         setupLayout()
-    }
-
-    func configScrollView() -> UIScrollView {
-        let scrollView = UIScrollView()
-        scrollView.backgroundColor = AppColors.backgroundGray
-        scrollView.contentInsetAdjustmentBehavior = .never
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
-
-        scrollView.addSubviews(contentStack)
-
-        return scrollView
     }
 
     func setupLayout() {
@@ -79,6 +76,17 @@ private extension EditProductViewController {
     func setupCartButtonLayout() {
         cartButtonView.setLocalConstraints(bottom: 0, left: 0, right: 0)
     }
+
+    func configScrollView() -> UIScrollView {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = AppColors.backgroundGray
+        scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+        scrollView.addSubviews(contentStack)
+        return scrollView
+    }
+
 }
 
 // MARK: - Setup Actions
@@ -93,7 +101,7 @@ private extension EditProductViewController {
     // Отрабатываем коллбэк для закрытия окна
     func setupHeaderAction() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.presenter.onDismissButtonTapped?()
+            self?.viewModel.onDismissButtonTapped?()
         }
     }
 
@@ -101,7 +109,7 @@ private extension EditProductViewController {
     func setupCartViewAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
-            presenter.cartButtonTapped()
+            viewModel.cartButtonTapped()
         }
     }
 
@@ -109,19 +117,19 @@ private extension EditProductViewController {
         itemDetailsView.onSizeValueChanged = { [weak self] size in
             guard let self else { return }
             print(#function)
-            presenter.itemSizeChanged(size)
+            viewModel.itemSizeChanged(size)
         }
 
         itemDetailsView.onDoughValueChanged = { [weak self] dough in
             guard let self else { return }
-            presenter.itemDoughChanged(dough)
+            viewModel.itemDoughChanged(dough)
         }
     }
 
     func setupInfoButtonAction() {
         infoAndToppingsContainer.onShowPopupVC = { [weak self] popupVC in
             guard let self else { print("Self is nil"); return }
-            presenter.showPopUP(popupVC)
+            viewModel.showPopUP(popupVC)
         }
     }
 }
@@ -147,26 +155,63 @@ private extension EditProductViewController {
 }
 
 extension EditProductViewController {
-    func updateUIWithChosenSize(_ productDetails: WeightPrice) {
+    func updateUIWithChosenSize(_ productDetails: WeightPrice?) {
+        guard let productDetails else { print("Error: productDetails is nil"); return }
         infoAndToppingsContainer.updateUI(with: productDetails)
         let price = productDetails.price
         cartButtonView.updatePriceLabel(price)
     }
 
-    func updateUIWithSelectedItem(_ cartItem: CartItem) {
+    func updateUIWithSelectedItem(_ cartItem: CartItem?) {
+        guard let cartItem else { return }
         updateUIWithItem(cartItem)
         isItemPizza(cartItem)
     }
 
-    func updateSizeAndDough(_ size: Size, _ dough: Dough) {
+    func updateSizeAndDough(_ size: Size?, _ dough: Dough?) {
+        guard let size, let dough else { return }
         itemDetailsView.setChosenSizeAndDough(size, dough)
     }
 
-    func updateInfo(_ item: Item) {
+    func updateInfo(_ item: Item?) {
+        guard let item else { return }
         infoAndToppingsContainer.getSelectedItem(item)
     }
 
-    func updateToppings(_ toppings: [Topping]) {
+    func updateInfo(_ item: CartItem?) {
+        guard let item else { return }
+        infoAndToppingsContainer.getSelectedItem(item)
+    }
+
+    func updateToppings(_ toppings: [Topping]?) {
+        guard let toppings else { return }
         infoAndToppingsContainer.passToppingsToView(toppings)
+    }
+}
+
+private extension EditProductViewController {
+    func dataBinding() {
+        viewModel.cartItemPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] cartItem in
+                self?.updateUIWithSelectedItem(cartItem)
+                self?.updateSizeAndDough(cartItem?.chosenSize, cartItem?.chosenDough)
+                self?.updateInfo(cartItem)
+            }
+            .store(in: &cancellables)
+
+        viewModel.toppingsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] toppings in
+                self?.updateToppings(toppings)
+            }
+            .store(in: &cancellables)
+
+        viewModel.productDetailsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] productDetails in
+                self?.updateUIWithChosenSize(productDetails)
+            }
+            .store(in: &cancellables)
     }
 }

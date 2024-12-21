@@ -12,7 +12,9 @@ final class EditAddressMapView: UIView {
     private let locationRadius: CLLocationDistance = 500
 
     private var isAnimating = false
+    private var isLoaded = false
     private let geocoder = CLGeocoder()
+    private var oldAddress: String = ""
 
     var onChangeAddress: ((String) -> Void)?
     var onMapLoaded: (() -> Void)?
@@ -36,8 +38,8 @@ final class EditAddressMapView: UIView {
 extension EditAddressMapView {
     // Показываем адрес на карте
     func showAddressOnMap(_ address: Address) {
-        let shortAddress = address.cityStreetHouse
-        getCoordinates(from: shortAddress) { [weak self] coordinates, error in // Получаем координаты
+        oldAddress = address.cityStreetHouse
+        getCoordinates(from: oldAddress) { [weak self] coordinates, error in // Получаем координаты
             guard let self, let coordinates else { print("123"); return }
             showMap() // Показываем карту
             setMapViewCenter(coordinates, radius: locationRadius) // Показываем карту по координатам
@@ -102,8 +104,11 @@ extension EditAddressMapView: MKMapViewDelegate {
         getAddress(from: mapCenter)
     }
 
-    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
-        onMapLoaded?()
+    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
+        if fullyRendered && !isLoaded {
+            onMapLoaded?()
+            isLoaded.toggle()
+        }
     }
 }
 
@@ -119,7 +124,16 @@ private extension EditAddressMapView {
             guard let placemark = placemarks?.first else {
                 print("No placemark found"); return }
 
-            let newShortAddress = getAddress(from: placemark)
+            updateNewAddress(placemark)
+        }
+    }
+
+    // Получаем новый адрес из локации и сравниваем если новый адрес == старому адресу, то ничего не делаем, и только если адрес изменился, то вызываем замыкание на обновление адреса
+    func updateNewAddress(_ placemark: CLPlacemark) {
+        let newShortAddress = getAddress(from: placemark)
+
+        if newShortAddress != oldAddress {
+            self.oldAddress = newShortAddress
             onChangeAddress?(newShortAddress)
         }
     }

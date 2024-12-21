@@ -24,26 +24,26 @@ final class CartCoordinator: Coordinator {
 extension CartCoordinator {
     func start() {
         let cartVC = screenFactory.makeCartScreen() // Создаем экран
-        let presenter = cartVC.presenter
+        let viewModel = cartVC.getViewModel()
 
         // Отрабатываем замыкания
-        presenter.onCartVCDismissed = { [weak self] in
+        viewModel.onCartVCDismissed = { [weak self] in
             guard let self else { return }
             router.dismiss()
             onCartDismissed?()
         }
 
-        presenter.onShowEditProductVC = { [weak self, weak presenter] in
+        viewModel.onShowEditProductVC = { [weak self, weak viewModel] in
             self?.showEditProduct {
-                presenter?.updateCart() // При вызове комплишена мы обновляем корзину на экране
+                viewModel?.updateCart() // При вызове комплишена мы обновляем корзину на экране
             }
         }
 
-        presenter.onShowPromoVC = { [weak self] promo in
+        viewModel.onShowPromoVC = { [weak self] promo in
             self?.showPromoScreen(promo)
         }
 
-        presenter.onShowDeliveryVC = { [weak self] in
+        viewModel.onShowDeliveryVC = { [weak self] in
             self?.onFinishFlow?()
         }
 
@@ -55,21 +55,21 @@ extension CartCoordinator {
 private extension CartCoordinator {
     func showEditProduct(completion: @escaping (() -> Void)) {
         let vc = screenFactory.makeEditProductScreen() // Создаем экран
-        let presenter = vc.presenter
+        var viewModel = vc.getViewModel()
 
         // Настраиваем замыкания
-        presenter.onCartButtonTapped = { [weak self] in
+        viewModel.onCartButtonTapped = { [weak self] in
             guard let self else { print("Error: self is nil: showEditProduct vc.onCartButtonTapped"); return }
             completion() // Вызываем комплишн
             router.dismiss(isParent: true) // Закрываем текущий экран
         }
 
-        presenter.onDismissButtonTapped = { [weak self] in
+        viewModel.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true) // Закрываем текущий экран
         }
 
         // Показываем всплывающий экран с КБЖУ
-        presenter.onShowPopupVC = { [weak self] popUpView in
+        viewModel.onShowPopupVC = { [weak self] popUpView in
             self?.router.present(popUpView, isParent: true, modalPresentation: .popover)
         }
 

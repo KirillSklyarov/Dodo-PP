@@ -25,6 +25,11 @@ final class InfoAndToppingsStack: UIStackView {
         ingredientsView.getSelectedItem(item)
     }
 
+    // Передаем выбранный товар дальше
+    func getSelectedItem(_ item: CartItem) {
+        ingredientsView.getSelectedItem(item)
+    }
+
     // Передаем топпинги (доп ингредиенты) дальше
     func passToppingsToView(_ toppings: [Topping]) {
         toppingsCollectionView.getToppings(toppings)
@@ -39,7 +44,7 @@ extension InfoAndToppingsStack {
 
     func updateUI(productDetails: WeightPrice) {
         let weight = productDetails.weight
-        ingredientsView.updateWeight(weight)
+        updateWeight(weight)
         ingredientsView.setProductDetails(productDetails)
     }
 
@@ -47,15 +52,16 @@ extension InfoAndToppingsStack {
         let ingredients = item.ingredients
         ingredientsView.updateIngredients(ingredients)
         guard let weight = item.itemSize.medium?.weight else { return }
+        updateWeight(weight)
+    }
+
+    // Обновляет тайтл с весом на вью
+    func updateWeight(_ weight: Int) {
         ingredientsView.updateWeight(weight)
     }
 
     func getItemFromVC(_ item: Item) {
         toppingsCollectionView.getItem(item)
-    }
-
-    func updateWeight(_ weight: Int) {
-        ingredientsView.updateWeight(weight)
     }
 }
 
