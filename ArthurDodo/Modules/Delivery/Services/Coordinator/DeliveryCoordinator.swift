@@ -25,23 +25,23 @@ final class DeliveryCoordinator: Coordinator {
 extension DeliveryCoordinator {
     func start() {
         let vc = screenFactory.deliveryScreenFactory.makeDeliveryScreen()
-        let presenter = vc.presenter
+        let viewModel = vc.getViewModel()
         self.deliveryVC = vc
 
-        presenter.onDismissButtonTapped = { [weak self] in
+        viewModel.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
             self?.onDismissed?()
         }
 
-        presenter.onShowChooseAddress = { [weak self] in
+        viewModel.onShowChooseAddress = { [weak self] in
             self?.showChooseAddress(vc)
         }
 
-        presenter.onShowChoosePaymentMethod = { [weak self] in
+        viewModel.onShowChoosePaymentMethod = { [weak self] in
             self?.showChoosePaymentMethod(vc)
         }
 
-        presenter.onShowFinalVC = { [weak self] in
+        viewModel.onShowFinalVC = { [weak self] in
             self?.showFinalVC(parentVC: vc)
         }
 
@@ -53,26 +53,26 @@ extension DeliveryCoordinator {
 private extension DeliveryCoordinator {
     func showChooseAddress(_ parentVC: UIViewController) {
         let vc = screenFactory.deliveryScreenFactory.makeChooseAddressScreen()
-        let presenter = vc.presenter
+        var viewModel = vc.getViewModel()
         router.present(parentVC, vcToShow: vc)
 
         // Нажали на закрыть окно
-        presenter.onDismissButtonTapped = { [weak self] in
+        viewModel.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(from: parentVC)
         }
 
         // Выбрали ячейку
-        presenter.onAddressCellTapped = { [weak self] addressName in
+        viewModel.onAddressCellTapped = { [weak self] addressName in
             self?.updateUI(addressName: addressName)
         }
 
         // Нажали на редактирование адреса
-        presenter.onEditAddressCellTapped = { [weak self] address in
+        viewModel.onEditAddressCellTapped = { [weak self] address in
             self?.showEditAddressVC(vc)
         }
 
         // Нажали на добавить новый адрес
-        presenter.onShowAddNewAddress = { [weak self] in
+        viewModel.onShowAddNewAddress = { [weak self] in
             self?.showAddNewAddressVC(vc)
         }
     }

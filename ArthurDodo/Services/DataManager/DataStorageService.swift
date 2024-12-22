@@ -29,6 +29,7 @@ extension DataStorageService {
         }
         fetchedUserData.address = newAddresses.sortedMainFirst()
         profileStorage.setUserData(fetchedUserData)
+        print("fetchedUserData.address \(fetchedUserData.address)")
     }
 
     func getMainAddress() -> Address? {

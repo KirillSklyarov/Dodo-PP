@@ -27,17 +27,12 @@ final class EditProductViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func getViewModel() -> EditItemViewModelProtocol {
-        viewModel
-    }
-
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
         dataBinding()
-//        presenter.viewDidLoad()
 
         viewModel.initialize()
     }
@@ -86,7 +81,6 @@ private extension EditProductViewController {
         scrollView.addSubviews(contentStack)
         return scrollView
     }
-
 }
 
 // MARK: - Setup Actions
@@ -116,7 +110,6 @@ private extension EditProductViewController {
     func setupSizeSegmentAction() {
         itemDetailsView.onSizeValueChanged = { [weak self] size in
             guard let self else { return }
-            print(#function)
             viewModel.itemSizeChanged(size)
         }
 
@@ -154,7 +147,12 @@ private extension EditProductViewController {
     }
 }
 
+// MARK: - Protocol
 extension EditProductViewController {
+    func getViewModel() -> EditItemViewModelProtocol {
+        viewModel
+    }
+
     func updateUIWithChosenSize(_ productDetails: WeightPrice?) {
         guard let productDetails else { print("Error: productDetails is nil"); return }
         infoAndToppingsContainer.updateUI(with: productDetails)
@@ -189,6 +187,7 @@ extension EditProductViewController {
     }
 }
 
+// MARK: - Data Binding
 private extension EditProductViewController {
     func dataBinding() {
         viewModel.cartItemPublisher
@@ -208,6 +207,7 @@ private extension EditProductViewController {
             .store(in: &cancellables)
 
         viewModel.productDetailsPublisher
+            .compactMap { $0 }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] productDetails in
                 self?.updateUIWithChosenSize(productDetails)

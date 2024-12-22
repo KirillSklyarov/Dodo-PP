@@ -70,7 +70,7 @@ private extension CartCoordinator {
 
         // Показываем всплывающий экран с КБЖУ
         viewModel.onShowPopupVC = { [weak self] popUpView in
-            self?.router.present(popUpView, isParent: true, modalPresentation: .popover)
+            self?.router.present(vc, vcToShow: popUpView, modalPresentation: .popover)
         }
 
         // Показываем экран

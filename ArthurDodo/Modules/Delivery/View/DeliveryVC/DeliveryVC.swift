@@ -1,12 +1,12 @@
 import UIKit
+import Combine
 
 protocol DeliveryViewProtocol: AnyObject {
     func updateAddressUI(_ mainAddressName: String)
     func updatePaymentMethodUI(_ paymentMethod: PaymentMethod)
-    func updateTotalPriceView(_ totalPrice: Int)
+    func updateCartPriceView(_ totalPrice: Int)
+    func getViewModel() -> DeliveryViewModelProtocol
 }
-
-
 
 final class DeliveryVC: UIViewController {
 
@@ -24,11 +24,13 @@ final class DeliveryVC: UIViewController {
 
     private lazy var contentStackView = configureStackView()
 
-    let presenter: DeliveryPresenterProtocol
+    // MARK: - Other Properties
+    private let viewModel: DeliveryViewModelProtocol
+    private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(presenter: DeliveryPresenterProtocol) {
-        self.presenter = presenter
+    init(viewModel: DeliveryViewModelProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -41,15 +43,21 @@ final class DeliveryVC: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        presenter.viewDidLoad()
+        dataBinding()
+
+        viewModel.initialize()
     }
 }
 
 // MARK: - DeliveryViewProtocol
 extension DeliveryVC: DeliveryViewProtocol {
+    func getViewModel() -> DeliveryViewModelProtocol {
+        viewModel
+    }
+
     func updateAddress(_ addressName: String) {
         addressTableView.updateUI(with: addressName)
-        presenter.sendNewAddressToStorage(addressName)
+        viewModel.sendNewAddressToStorage(addressName)
     }
 
     func updatePaymentMethodUI(_ paymentMethod: PaymentMethod) {
@@ -61,7 +69,7 @@ extension DeliveryVC: DeliveryViewProtocol {
         addressTableView.updateUI(with: mainAddressName)
     }
 
-    func updateTotalPriceView(_ totalPrice: Int) {
+    func updateCartPriceView(_ totalPrice: Int) {
         totalPriceView.updateUI(with: totalPrice)
     }
 }
@@ -112,35 +120,65 @@ private extension DeliveryVC {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            presenter.dismissButtonTapped()
+            viewModel.dismissButtonTapped()
         }
     }
 
     func setupAddressTableViewAction() {
         addressTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            presenter.addressCellTapped()
+            viewModel.addressCellTapped()
         }
     }
 
     func setupTimeCollectionAction() {
         timeCollection.onDeliveryTimeSelected = { [weak self] time in
             guard let self else { return }
-            presenter.deliveryTimeSelected(time)
+            viewModel.deliveryTimeSelected(time)
         }
     }
 
     func setupPaymentTableView() {
         paymentTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            presenter.paymentMethodCellTapped()
+            viewModel.paymentMethodCellTapped()
         }
     }
 
     func setupPayButtonActions() {
         payButton.onPayButtonTapped = { [weak self] in
             guard let self else { return }
-            presenter.payButtonTapped()
+            viewModel.payButtonTapped()
         }
+    }
+}
+
+// MARK: - Data Binding
+extension DeliveryVC {
+    // Настраиваем байндинги: адрес, метод оплаты и общую стоимость заказа
+    func dataBinding() {
+        viewModel.mainAddressPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] address in
+                guard let self else { return }
+                updateAddress(address)
+            }
+            .store(in: &cancellables)
+
+        viewModel.preferredPaymentMethodPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] paymentMethod in
+                guard let self else { return }
+                updatePaymentMethodUI(paymentMethod)
+            }
+            .store(in: &cancellables)
+
+        viewModel.cartPricePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] price in
+                guard let self else { return }
+                updateCartPriceView(price)
+            }
+            .store(in: &cancellables)
     }
 }

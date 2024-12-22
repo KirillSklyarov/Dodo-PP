@@ -28,16 +28,14 @@ final class DeliveryScreenFactory {
 // MARK: - Methods
 extension DeliveryScreenFactory: DeliveryScreenFactoryProtocol {
     func makeDeliveryScreen() -> DeliveryVC {
-        let presenter = DeliveryPresenter(storageService: storageService, storage: storage)
-        let view = DeliveryVC(presenter: presenter)
-        presenter.view = view
+        let viewModel = DeliveryViewModel(storageService: storageService, storage: storage)
+        let view = DeliveryVC(viewModel: viewModel)
         return view
     }
 
     func makeChooseAddressScreen() -> ChooseAddressVC {
-        let presenter = ChooseAddressPresenter(storage: storage, storageService: storageService)
-        let view = ChooseAddressVC(presenter: presenter)
-        presenter.view = view
+        let viewModel = ChooseAddressVM(storage: storage, storageService: storageService)
+        let view = ChooseAddressVC(viewModel: viewModel)
         return view
     }
 

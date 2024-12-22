@@ -56,25 +56,6 @@ private extension EditItemViewModel {
 //        updateUI()
     }
 
-    func updateUI() {
-        guard let cartItem else { print("Cart item is nil"); return }
-        updateUIWithCorrectSizeAndDough()
-        updateUIWithCorrectWeightAndIngredients()
-//        view?.updateUIWithSelectedItem(cartItem)
-    }
-
-    func updateUIWithCorrectSizeAndDough() {
-        guard let cartItem else { return }
-        guard let dough = cartItem.chosenDough else { print("No dough"); return }
-        let size = cartItem.chosenSize
-//        view?.updateSizeAndDough(size, dough)
-    }
-
-    func updateUIWithCorrectWeightAndIngredients() {
-        guard let cartItem else { print("Cart item is nil"); return }
-//        view?.updateInfo(cartItem.item)
-    }
-
     // Загружаем ВСЕ начинки
     func fetchToppings() {
         filterToppings()
@@ -86,15 +67,9 @@ private extension EditItemViewModel {
         toppings = storage.getFetchedToppings(for: cartItem)
 //        passToppingsToView(toppings)
     }
-
-    // Отправляем данные о топпингов дальше ко вью
-//    func passToppingsToView(_ toppings: [Topping]) {
-//        view?.updateToppings(toppings)
-//    }
 }
 
 extension EditItemViewModel {
-
     func cartButtonTapped() {
         guard let cartItem else { return }
         storage.changeItemInCart(cartItem)
@@ -103,7 +78,7 @@ extension EditItemViewModel {
 
     func itemSizeChanged(_ size: Size?) {
         guard let size else { print("1. We have some problems here"); return }
-        cartItem?.chosenSize = size
+        updateCartItem(size)
         updateUIWithChosenSize()
     }
 
@@ -124,3 +99,42 @@ extension EditItemViewModel {
         productDetails = storage.getProductDetails(cartItem, size: size)
     }
 }
+
+// MARK: - Supporting methods
+private extension EditItemViewModel {
+    // Этот метод получает правильную вес и цену в зависимости от выбранного веса
+    func updateCartItem(_ size: Size) {
+        guard var cartItem else { print("2. We have some problems here"); return }
+        cartItem.chosenSize = size
+        let correctWeight = storage.getCorrectWeight(cartItem, size)
+        let correctPrice = storage.getCorrectPrice(cartItem, size)
+        cartItem.weight = correctWeight
+        cartItem.price = correctPrice
+        self.cartItem = cartItem
+    }
+}
+
+
+//    func updateUI() {
+//        guard let cartItem else { print("Cart item is nil"); return }
+//        updateUIWithCorrectSizeAndDough()
+//        updateUIWithCorrectWeightAndIngredients()
+////        view?.updateUIWithSelectedItem(cartItem)
+//    }
+
+//    func updateUIWithCorrectSizeAndDough() {
+//        guard let cartItem else { return }
+//        guard let dough = cartItem.chosenDough else { print("No dough"); return }
+//        let size = cartItem.chosenSize
+////        view?.updateSizeAndDough(size, dough)
+//    }
+
+//    func updateUIWithCorrectWeightAndIngredients() {
+//        guard let cartItem else { print("Cart item is nil"); return }
+////        view?.updateInfo(cartItem.item)
+//    }
+
+// Отправляем данные о топпингов дальше ко вью
+//    func passToppingsToView(_ toppings: [Topping]) {
+//        view?.updateToppings(toppings)
+//    }

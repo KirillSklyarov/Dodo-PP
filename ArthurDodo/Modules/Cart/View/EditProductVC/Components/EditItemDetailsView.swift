@@ -104,7 +104,6 @@ private extension EditItemDetailsView {
             case 1: chosenSize = .medium
             case 2: chosenSize = .large
             default: break }
-            print(#function)
             onSizeValueChanged?(chosenSize)
         }
     }

@@ -1,7 +1,9 @@
 import UIKit
+import Combine
 
 protocol ChooseAddressVCProtocol: AnyObject {
     func updateUI(_ addresses: [Address])
+    func getViewModel() -> ChooseAddressVMProtocol
 }
 
 final class ChooseAddressVC: UIViewController {
@@ -11,11 +13,12 @@ final class ChooseAddressVC: UIViewController {
     private lazy var addressTableView = DeliveryAddressListTableView()
 
     // MARK: - Presenter
-    let presenter: ChooseAddressPresenterProtocol
+    private let viewModel: ChooseAddressVMProtocol
+    private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(presenter: ChooseAddressPresenterProtocol) {
-        self.presenter = presenter
+    init(viewModel: ChooseAddressVMProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -23,17 +26,29 @@ final class ChooseAddressVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        cancellables.removeAll()
+    }
+
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        presenter.viewDidLoad()
+        dataBinding()
+        
+        viewModel.initialize()
     }
 }
 
 // MARK: - ChooseAddressVCProtocol
 extension ChooseAddressVC: ChooseAddressVCProtocol {
+    // Отдаем viewModel
+    func getViewModel() -> ChooseAddressVMProtocol {
+        viewModel
+    }
+
+    // Обновляем таблицу с адресами
     func updateUI(_ addresses: [Address]) {
         addressTableView.updateUI(with: addresses)
     }
@@ -73,7 +88,7 @@ private extension ChooseAddressVC {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            presenter.dismissButtonTapped()
+            viewModel.dismissButtonTapped()
         }
     }
 
@@ -81,19 +96,33 @@ private extension ChooseAddressVC {
     func setupAddressTableViewActions() {
         addressTableView.onAddressCellTapped = { [weak self] addressName in
             guard let self else { return }
-            presenter.addressCellTapped(addressName)
+            viewModel.addressCellTapped(addressName)
         }
 
         // Настраиваем action: нажатие на редактирование адреса
         addressTableView.onEditAddressButtonTapped = { [weak self] indexPath in
             guard let self else { return }
-            presenter.editAddressCellTapped(indexPath)
+            viewModel.editAddressCellTapped(indexPath)
         }
 
         // Настраиваем action: переход на экран добавления нового адреса
         addressTableView.onAddNewAddressCellTapped = { [weak self] in
             guard let self else { return }
-            presenter.addNewAddressButtonTapped()
+            viewModel.addNewAddressButtonTapped()
         }
+    }
+}
+
+// MARK: - Data Binding
+private extension ChooseAddressVC {
+    func dataBinding() {
+        viewModel.addressesPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] addresses in
+                guard let self else { return }
+                updateUI(addresses)
+            }
+            .store(in: &cancellables)
     }
 }

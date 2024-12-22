@@ -120,8 +120,6 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
         let price = item.getCorrectPrice()
         let isOneSize = item.hasOneSize()
 
-        print("size: \(size), weight: \(weight), price: \(price)")
-
         let cartPosition = CartItem(item: item, chosenSize: size, chosenDough: dough, weight: weight, price: price, isOneSize: isOneSize)
 
         return cartPosition

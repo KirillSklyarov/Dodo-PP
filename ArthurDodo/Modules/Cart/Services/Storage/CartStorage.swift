@@ -65,8 +65,18 @@ extension CartStorage {
         let item = cartItem.item
         let index = size.rawValue
 
-        guard let productDetails = item.itemSize.getWeightAndPriceViaIndex(index) else {print("3. We have some problems here"); return nil }
+        guard let productDetails = item.itemSize.getWeightAndPriceViaIndex(index) else { print("3. We have some problems here"); return nil }
         return productDetails
+    }
+
+    func getCorrectWeight(_ cartItem: CartItem, _ size: Size) -> Int {
+        guard let productDetails = getProductDetails(cartItem, size: size) else { print("4. We have some problems here"); return 0 }
+        return productDetails.weight
+    }
+
+    func getCorrectPrice(_ cartItem: CartItem, _ size: Size) -> Int {
+        guard let productDetails = getProductDetails(cartItem, size: size) else { print("5. We have some problems here"); return 0 }
+        return productDetails.price
     }
 
     // Возвращает товар для редактирования (в виде CartItem)
