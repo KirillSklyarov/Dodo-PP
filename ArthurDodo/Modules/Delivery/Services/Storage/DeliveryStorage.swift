@@ -71,7 +71,8 @@ extension DeliveryStorage {
                 preferredPaymentMethod = tempMethod
             }
         } else {
-//            print("Default payment method = .cbp")
+            preferredPaymentMethod = .cbp
+            print("Default payment method = .cbp")
         }
     }
 }

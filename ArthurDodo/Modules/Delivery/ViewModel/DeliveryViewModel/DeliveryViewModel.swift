@@ -4,10 +4,10 @@ import Combine
 final class DeliveryViewModel: DeliveryViewModelProtocol {
 
     @Published private var preferredPaymentMethod: PaymentMethod = .cbp
-    @Published private var mainAddressName: String = ""
+    @Published private var mainAddressName: String?
     @Published private var cartPrice: Int = 0
 
-    var mainAddressPublisher: Published<String>.Publisher { $mainAddressName }
+    var mainAddressPublisher: Published<String?>.Publisher { $mainAddressName }
     var preferredPaymentMethodPublisher: Published<PaymentMethod>.Publisher { $preferredPaymentMethod }
     var cartPricePublisher: Published<Int>.Publisher { $cartPrice }
 

@@ -32,11 +32,6 @@ extension PaymentMethodsTableViewCell {
     }
 }
 
-// MARK: - Supporting methods
-private extension PaymentMethodsTableViewCell {
-
-}
-
 // MARK: - Setup UI
 private extension PaymentMethodsTableViewCell {
     func setupUI() {
@@ -51,9 +46,4 @@ private extension PaymentMethodsTableViewCell {
     func setupLayout() {
         contentStack.setConstraints(insets: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
     }
-}
-
-// MARK: - Setup actions
-private extension PaymentMethodsTableViewCell {
-
 }

@@ -40,9 +40,8 @@ extension DeliveryScreenFactory: DeliveryScreenFactoryProtocol {
     }
 
     func makeChoosePaymentMethodScreen() -> ChoosePaymentMethodVC {
-        let presenter = ChoosePaymentMethodPresenter(storage: storage)
-        let view = ChoosePaymentMethodVC(presenter: presenter)
-        presenter.view = view
+        let viewModel = ChoosePaymentMethodVM(storage: storage)
+        let view = ChoosePaymentMethodVC(viewModel: viewModel)
         return view
     }
 
@@ -59,9 +58,8 @@ extension DeliveryScreenFactory: DeliveryScreenFactoryProtocol {
     }
 
     func makeFinalVCScreen() -> FinalVC {
-        let presenter = FinalPresenter(storageService: storageService)
-        let view = FinalVC(presenter: presenter)
-        presenter.view = view
+        let viewModel = FinalViewModel(storageService: storageService)
+        let view = FinalVC(viewModel: viewModel)
         return view
     }
 }

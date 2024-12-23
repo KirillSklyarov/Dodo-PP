@@ -1,22 +1,17 @@
 import Foundation
+import Combine
 
-protocol FinalPresenterProtocol: AnyObject {
-    func viewDidLoad()
-    func dismissVC()
-
-    var onFinalVCDismissed: (() -> Void)? { get set }
-}
-
-final class FinalPresenter {
-
+final class FinalViewModel {
     // MARK: - Properties
     private var countDownTimer: Timer?
-    private var dismissDelay = 2
 
-    weak var view: FinalViewProtocol?
-    private let storageService: DataStorageService
+    @Published private var dismissTimer = 2
+
+    var timerPublisher: Published<Int>.Publisher { $dismissTimer }
 
     var onFinalVCDismissed: (() -> Void)?
+
+    private let storageService: DataStorageService
 
     // MARK: - Init
     init(storageService: DataStorageService) {
@@ -25,8 +20,8 @@ final class FinalPresenter {
 }
 
 // MARK: - FinalPresenterProtocol
-extension FinalPresenter: FinalPresenterProtocol {
-    func viewDidLoad() {
+extension FinalViewModel: FinalViewModelProtocol {
+    func initialize() {
         setupTimer()
     }
 
@@ -39,26 +34,16 @@ extension FinalPresenter: FinalPresenterProtocol {
 }
 
 // MARK: - Setup timer
-private extension FinalPresenter {
+private extension FinalViewModel {
     func setupTimer() {
         countDownTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
     }
 
     // Уменьшаем таймер и либо закрываем окно, либо обновляем label
     @objc private func timerAction() {
-        dismissDelay -= 1
+        dismissTimer -= 1
 
-        if dismissDelay <= 0 {
-            dismissVC()
-        } else {
-            updateUI(dismissDelay)
-        }
-    }
-}
+        if dismissTimer <= 0 { dismissVC() }
 
-// MARK: - Supporting methods
-extension FinalPresenter {
-    func updateUI(_ seconds: Int) {
-        view?.updateUI(seconds)
     }
 }

@@ -35,15 +35,13 @@ extension UserDefaults {
 
 // MARK: - Preferred payment method
 extension UserDefaults {
+    // Возвращает способ оплаты из UserDefaults
     func getPreferredPaymentMethod() -> String? {
-        if let paymentMethodTitle = string(forKey: Keys.preferredPaymentMethod) {
-            return paymentMethodTitle
-        } else {
-//            print("No preferred payment method set")
-            return nil
-        }
+        let paymentMethodTitle = string(forKey: Keys.preferredPaymentMethod)
+        return paymentMethodTitle
     }
 
+    // Устанавливаем способ оплаты в UserDefaults
     func setPreferredPaymentMethod(_ paymentMethod: PaymentMethod) {
         set(paymentMethod.title, forKey: Keys.preferredPaymentMethod)
     }

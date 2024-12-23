@@ -18,18 +18,10 @@ final class DataStorageService {
 
     // MARK: - Common methods (методы, которые будут использоваться из разных модулей)
 extension DataStorageService {
-    // Мы обнуляем для всех isMain и назначаем для нового, и потом сортируем чтобы isMain был первым
+    // Устанавливает новый главный адрес и обновляет соответствующее хранилище
     func setNewMainAddress(_ newMainAddressName: String) {
-        guard var fetchedUserData = profileStorage.getUserData() else { print("fetchedUserData is nil"); return }
-        let addresses = fetchedUserData.address
-        let newAddresses = addresses.map { address in
-            var newAddress = address
-            newAddress.isMain = (newAddress.name == newMainAddressName)
-            return newAddress
-        }
-        fetchedUserData.address = newAddresses.sortedMainFirst()
-        profileStorage.setUserData(fetchedUserData)
-        print("fetchedUserData.address \(fetchedUserData.address)")
+        guard let updatedUserData = updateUserData(with: newMainAddressName) else { return }
+        profileStorage.setUserData(updatedUserData)
     }
 
     func getMainAddress() -> Address? {
@@ -50,7 +42,8 @@ extension DataStorageService {
     }
 
     func getAllAddresses() -> [Address] {
-        return addressStorage.getAddresses()
+        guard let userAddresses = profileStorage.getUserAddresses() else { print("userAddresses is nil"); return []}
+        return userAddresses
     }
 
     // Отдаем кол-во додокоинов у юзера
@@ -76,5 +69,21 @@ extension DataStorageService {
 
     func addItemToCart(itemToCart: CartItem) {
         cartStorage.addItemToCart(item: itemToCart)
+    }
+}
+
+// MARK: - Supporting methods
+private extension DataStorageService {
+    // Получаем данные пользователя из хранилища и заменяем старый главный адрес на новый адрес (обнуляем для всех isMain и назначаем для нового, и потом сортируем чтобы isMain был первым)
+    func updateUserData(with newMainAddressName: String) -> User? {
+        guard var fetchedUserData = profileStorage.getUserData() else { print("fetchedUserData is nil"); return nil }
+        let addresses = fetchedUserData.address
+        let newAddresses = addresses.map { address in
+            var newAddress = address
+            newAddress.isMain = (newAddress.name == newMainAddressName)
+            return newAddress
+        }
+        fetchedUserData.address = newAddresses.sortedMainFirst()
+        return fetchedUserData
     }
 }

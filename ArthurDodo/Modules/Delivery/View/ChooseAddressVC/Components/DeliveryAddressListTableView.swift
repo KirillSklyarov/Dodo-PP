@@ -48,9 +48,7 @@ private extension DeliveryAddressListTableView {
     func setupActions() {
 
     }
-
 }
-
 
 // MARK: - Setup UI
 private extension DeliveryAddressListTableView {
@@ -87,6 +85,7 @@ extension DeliveryAddressListTableView: UITableViewDataSource, UITableViewDelega
         cell.onEditAddressButtonTapped = { [weak self] in
             self?.onEditAddressButtonTapped?(indexPath)
         }
+
         return cell
     }
 

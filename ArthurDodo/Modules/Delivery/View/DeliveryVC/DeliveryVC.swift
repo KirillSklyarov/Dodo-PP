@@ -158,6 +158,7 @@ extension DeliveryVC {
     // Настраиваем байндинги: адрес, метод оплаты и общую стоимость заказа
     func dataBinding() {
         viewModel.mainAddressPublisher
+            .compactMap { $0 }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] address in
                 guard let self else { return }

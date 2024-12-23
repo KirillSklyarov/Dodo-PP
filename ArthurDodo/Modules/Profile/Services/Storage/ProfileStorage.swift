@@ -20,6 +20,11 @@ extension ProfileStorage {
         fetchedUserData
     }
 
+    // Отдаем адреса юзера
+    func getUserAddresses() -> [Address]? {
+        fetchedUserData?.address
+    }
+
     // Проверяем были ли ранее загружены данные
     func isUserDataLoaded() -> Bool {
         fetchedUserData != nil

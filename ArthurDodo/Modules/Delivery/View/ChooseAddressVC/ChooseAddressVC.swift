@@ -1,11 +1,6 @@
 import UIKit
 import Combine
 
-protocol ChooseAddressVCProtocol: AnyObject {
-    func updateUI(_ addresses: [Address])
-    func getViewModel() -> ChooseAddressVMProtocol
-}
-
 final class ChooseAddressVC: UIViewController {
 
     // MARK: - UI Properties
@@ -13,11 +8,11 @@ final class ChooseAddressVC: UIViewController {
     private lazy var addressTableView = DeliveryAddressListTableView()
 
     // MARK: - Presenter
-    private let viewModel: ChooseAddressVMProtocol
+    private let viewModel: ChooseAddressViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: ChooseAddressVMProtocol) {
+    init(viewModel: ChooseAddressViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -44,7 +39,7 @@ final class ChooseAddressVC: UIViewController {
 // MARK: - ChooseAddressVCProtocol
 extension ChooseAddressVC: ChooseAddressVCProtocol {
     // Отдаем viewModel
-    func getViewModel() -> ChooseAddressVMProtocol {
+    func getViewModel() -> ChooseAddressViewModelProtocol {
         viewModel
     }
 

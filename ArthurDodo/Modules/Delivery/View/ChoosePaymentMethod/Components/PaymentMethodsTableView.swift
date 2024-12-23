@@ -1,12 +1,12 @@
 import UIKit
 
-final class PaymentAddressesTableView: AppTableView {
+final class PaymentMethodsTableView: AppTableView {
 
     // MARK: - Properties&Callbacks
     private let tableRowHeight: CGFloat = 70
     private let cornerRadius: CGFloat = 10
 
-    var preferredPaymentMethod: PaymentMethod = .cbp
+    var preferredPaymentMethod: PaymentMethod?
     var onPaymentMethodTapped: ( (PaymentMethod) -> Void)?
 
     // MARK: - Init
@@ -18,31 +18,23 @@ final class PaymentAddressesTableView: AppTableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+}
+// MARK: - Public methods
+extension PaymentMethodsTableView {
     func updatePreferredPaymentMethod(_ paymentMethod: PaymentMethod) {
         preferredPaymentMethod = paymentMethod
-        reloadData()
-    }
-}
-
-// MARK: - Supporting methods
-private extension PaymentAddressesTableView {
-    // Сохраняем выбранный способ оплаты в UserDefaults
-    func setPreferredPaymentMethodToUserDefaults(_ paymentMethod: PaymentMethod) {
-        UserDefaults.standard.setPreferredPaymentMethod(paymentMethod)
+        reloadSections(IndexSet(integer: 0), with: .automatic)
     }
 }
 
 // MARK: - Setup UI
-private extension PaymentAddressesTableView {
+private extension PaymentMethodsTableView {
     func configTableView() {
         backgroundColor = AppColors.backgroundGray
         dataSource = self
         delegate = self
         registerCell(PaymentMethodsTableViewCell.self)
-        separatorStyle = .singleLine
         separatorColor = .darkGray
-        tableHeaderView = UIView(frame: .zero)
         rowHeight = tableRowHeight
         isScrollEnabled = false
         layer.cornerRadius = cornerRadius
@@ -50,29 +42,15 @@ private extension PaymentAddressesTableView {
     }
 }
 
-// MARK: - Setup action
-private extension PaymentAddressesTableView {
-    func setupActions() {
-
-    }
-
-}
-
 // MARK: - UITableViewDataSource, UITableViewDelegate
-extension PaymentAddressesTableView: UITableViewDataSource {
+extension PaymentMethodsTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         PaymentMethod.allCases.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueCell(indexPath) as PaymentMethodsTableViewCell
-        guard let paymentMethod = PaymentMethod(rawValue: indexPath.row) else {
-            print("We don't have payment method"); return UITableViewCell()}
-
-        let paymentMethodName = paymentMethod.title
-        let paymentMethodImage = paymentMethod.image
-        let isMainMethod = (paymentMethod == preferredPaymentMethod)
-        cell.configureCell(title: paymentMethodName, image: paymentMethodImage, isMainMethod: isMainMethod)
+        configureCell(cell, at: indexPath)
         return cell
     }
 
@@ -80,6 +58,17 @@ extension PaymentAddressesTableView: UITableViewDataSource {
         guard let paymentMethod = PaymentMethod(rawValue: indexPath.row) else {
             print("We don't have payment method"); return }
         onPaymentMethodTapped?(paymentMethod)
-        setPreferredPaymentMethodToUserDefaults(paymentMethod)
+    }
+}
+
+// MARK: - Supporting methods
+private extension PaymentMethodsTableView {
+    func configureCell(_ cell: PaymentMethodsTableViewCell, at indexPath: IndexPath) {
+        guard let paymentMethod = PaymentMethod(rawValue: indexPath.row) else {
+            print("We don't have payment method"); return }
+        let paymentMethodName = paymentMethod.title
+        let paymentMethodImage = paymentMethod.image
+        let isMainMethod = (paymentMethod == preferredPaymentMethod)
+        cell.configureCell(title: paymentMethodName, image: paymentMethodImage, isMainMethod: isMainMethod)
     }
 }

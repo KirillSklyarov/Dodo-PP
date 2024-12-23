@@ -1,23 +1,21 @@
 import UIKit
-
-protocol ChoosePaymentMethodVCProtocol: AnyObject {
-    func updateUI(_ preferredPaymentMethod: PaymentMethod)
-}
+import Combine
 
 final class ChoosePaymentMethodVC: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = AppNavigationBarView(type: .payment) // Заголовок с кнопкой
-    private lazy var paymentMethodsTableView = PaymentAddressesTableView()
+    private lazy var paymentMethodsTableView = PaymentMethodsTableView()
 
     private lazy var contentStack = AppStackView([headerView, paymentMethodsTableView], axis: .vertical, spacing: 10)
 
-    // MARK: - Presenter
-    let presenter: ChoosePaymentMethodPresenterProtocol
+    // MARK: - ViewModel
+    private let viewModel: ChoosePaymentMethodVMProtocol
+    private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(presenter: ChoosePaymentMethodPresenterProtocol) {
-        self.presenter = presenter
+    init(viewModel: ChoosePaymentMethodVMProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -30,12 +28,17 @@ final class ChoosePaymentMethodVC: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        presenter.viewDidLoad()
+        dataBinding()
+        viewModel.initialize()
     }
 }
 
 // MARK: - ChoosePaymentMethodVCProtocol
 extension ChoosePaymentMethodVC: ChoosePaymentMethodVCProtocol {
+    func getViewModel() -> ChoosePaymentMethodVMProtocol {
+        viewModel
+    }
+
     func updateUI(_ preferredPaymentMethod: PaymentMethod) {
         paymentMethodsTableView.updatePreferredPaymentMethod(preferredPaymentMethod)
     }
@@ -71,7 +74,7 @@ private extension ChoosePaymentMethodVC {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            presenter.dismissButtonTapped()
+            viewModel.dismissButtonTapped()
         }
     }
 
@@ -80,7 +83,21 @@ private extension ChoosePaymentMethodVC {
         paymentMethodsTableView.onPaymentMethodTapped = { [weak self]
             paymentMethod in
             guard let self else { return }
-            presenter.paymentMethodSelected(paymentMethod)
+            viewModel.paymentMethodSelected(paymentMethod)
         }
+    }
+}
+
+// MARK: - Data binding
+private extension ChoosePaymentMethodVC {
+    func dataBinding() {
+        viewModel.paymentMethodPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] paymentMethod in
+                guard let self else { return }
+                updateUI(paymentMethod)
+            }
+            .store(in: &cancellables)
     }
 }

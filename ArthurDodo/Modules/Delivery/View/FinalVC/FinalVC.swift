@@ -1,8 +1,5 @@
 import UIKit
-
-protocol FinalViewProtocol: AnyObject {
-    func updateUI(_ seconds: Int)
-}
+import Combine
 
 final class FinalVC: UIViewController {
 
@@ -10,12 +7,13 @@ final class FinalVC: UIViewController {
     private lazy var dismissButton = AppDismissButtonView(type: .standard)
     private lazy var contentStack = FinalVCContentStackView()
 
-    // MARK: - Presenter
-    let presenter: FinalPresenterProtocol
+    // MARK: - ViewModel
+    private let viewModel: FinalViewModelProtocol
+    private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(presenter: FinalPresenterProtocol) {
-        self.presenter = presenter
+    init(viewModel: FinalViewModelProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -28,7 +26,9 @@ final class FinalVC: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        presenter.viewDidLoad()
+        dataBinding()
+
+        viewModel.initialize()
     }
 }
 
@@ -56,14 +56,31 @@ private extension FinalVC {
     func setupActions() {
         dismissButton.onButtonTapped = { [weak self] in
             guard let self else { return }
-            presenter.dismissVC()
+            viewModel.dismissVC()
         }
     }
 }
 
 // MARK: - FinalViewProtocol
 extension FinalVC: FinalViewProtocol {
+    func getViewModel() -> FinalViewModelProtocol {
+        viewModel
+    }
+
     func updateUI(_ seconds: Int) {
         contentStack.updateTitle(seconds)
+    }
+}
+
+// MARK: - Data binding
+private extension FinalVC {
+    func dataBinding() {
+        viewModel.timerPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] seconds in
+                guard let self else { return }
+                updateUI(seconds)
+            }
+            .store(in: &cancellables)
     }
 }
