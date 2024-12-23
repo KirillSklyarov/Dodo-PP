@@ -1,9 +1,10 @@
 import UIKit
+import Combine
 
 protocol StoriesViewProtocol: AnyObject {
-    func updateStoryImage(_ imageName: String)
+    func updateStoryImage(_ imageName: String?)
     func setupProgressViews(_ countOfSubStories: Int)
-    func updateProgressViewProgress(_ index: Int, progress: Float)
+    func updateProgressViewProgress(_ index: Int?, progress: Float?)
     func resetProgressView(_ index: Int)
     func fillProgressView(_ index: Int)
     func fillAllProgressViewsExceptLast()
@@ -20,11 +21,12 @@ final class StoriesVC: UIViewController {
     // MARK: - Other properties
     private lazy var progressViews: [UIProgressView] = []
 
-    let presenter: StoriesPresenterProtocol
+    private let viewModel: StoriesViewModelProtocol
+    private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(presenter: StoriesPresenterProtocol) {
-        self.presenter = presenter
+    init(viewModel: StoriesViewModelProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -37,12 +39,19 @@ final class StoriesVC: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        presenter.viewDidLoad()
+        dataBinding()
+//        presenter.viewDidLoad()
+
+        viewModel.initialize()
     }
 }
 
 // MARK: - StoriesViewProtocol
 extension StoriesVC: StoriesViewProtocol {
+    func getViewModel() -> StoriesViewModelProtocol {
+        viewModel
+    }
+
     // Метод позволяет для каждого экрана сформировать ряд одинаковых панелей (сверху) для таймера
     func setupProgressViews(_ countOfSubStories: Int) {
         clearOldProgressViews()
@@ -50,7 +59,9 @@ extension StoriesVC: StoriesViewProtocol {
     }
 
     // Устанавливает значение прогресса у бара (то есть делает движение прогресс бара)
-    func updateProgressViewProgress(_ index: Int, progress: Float) {
+    func updateProgressViewProgress(_ index: Int?, progress: Float?) {
+        guard let progress, let index else { return }
+//        print(index, progress)
         progressViews[index].setProgress(progress, animated: true)
     }
 
@@ -65,7 +76,8 @@ extension StoriesVC: StoriesViewProtocol {
     }
 
     // Устанавливаем картинку
-    func updateStoryImage(_ imageName: String) {
+    func updateStoryImage(_ imageName: String?) {
+        guard let imageName else { print("We have no image"); return }
         storiesImageView.image = UIImage(named: imageName)
     }
 
@@ -103,7 +115,7 @@ private extension StoriesVC {
     func dismissButtonAction() {
         dismissButton.onButtonTapped = { [weak self] in
             guard let self else { return }
-            presenter.dismissButtonTapped()
+            viewModel.dismissButtonTapped()
         }
     }
 }
@@ -136,6 +148,38 @@ private extension StoriesVC {
     // Отправляет в презентер точку касания экрана и границы экрана
     @objc func onTap(_ sender: UITapGestureRecognizer) {
         let location = sender.location(in: view)
-        presenter.storyTapped(location, view.bounds)
+        viewModel.storyTapped(location, view.bounds)
+    }
+}
+
+// MARK: - Data Binding
+private extension StoriesVC {
+    func dataBinding() {
+        viewModel.progressSubStoriesIndexPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] progress, subStoryIndex in
+                guard let self else { return }
+                updateProgressViewProgress(subStoryIndex, progress: progress)
+            }
+            .store(in: &cancellables)
+
+        viewModel.subStoriesCountPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] countOfSubStories in
+                guard let self else { return }
+                setupProgressViews(countOfSubStories)
+            }
+            .store(in: &cancellables)
+
+        viewModel.storyImagePublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] image in
+                guard let self else { return }
+                updateStoryImage(image)
+            }
+            .store(in: &cancellables)
     }
 }

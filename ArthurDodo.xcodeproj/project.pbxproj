@@ -129,6 +129,7 @@
 		734CC73A2D0C655000E902ED /* DeliveryScreenFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734CC7382D0C655000E902ED /* DeliveryScreenFactory.swift */; };
 		7350E26E2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7350E26D2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift */; };
 		7352D58D2CD91CA900F3357E /* ScreenEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7352D58C2CD91CA900F3357E /* ScreenEnum.swift */; };
+		735C61492D19DC8F0074E00F /* StoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735C61482D19DC8F0074E00F /* StoriesViewModel.swift */; };
 		736389E02D06CB8700A80964 /* ProfileScreenFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736389DE2D06CB8700A80964 /* ProfileScreenFactory.swift */; };
 		73638F692CE4B474008F1E90 /* SelectedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73638F682CE4B474008F1E90 /* SelectedItem.swift */; };
 		736B0D2A2CCFE5C500975195 /* Array+BoolSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736B0D292CCFE5C500975195 /* Array+BoolSorting.swift */; };
@@ -369,6 +370,7 @@
 		734CC7382D0C655000E902ED /* DeliveryScreenFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryScreenFactory.swift; sourceTree = "<group>"; };
 		7350E26D2CCD24A8009BA276 /* DeliveryTimeIntervalHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryTimeIntervalHelper.swift; sourceTree = "<group>"; };
 		7352D58C2CD91CA900F3357E /* ScreenEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEnum.swift; sourceTree = "<group>"; };
+		735C61482D19DC8F0074E00F /* StoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesViewModel.swift; sourceTree = "<group>"; };
 		736389DE2D06CB8700A80964 /* ProfileScreenFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenFactory.swift; sourceTree = "<group>"; };
 		73638F682CE4B474008F1E90 /* SelectedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedItem.swift; sourceTree = "<group>"; };
 		736B0D292CCFE5C500975195 /* Array+BoolSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+BoolSorting.swift"; sourceTree = "<group>"; };
@@ -1298,6 +1300,38 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		735C61412D19DC3B0074E00F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				735C61452D19DC790074E00F /* MainViewModel */,
+				735C61472D19DC790074E00F /* ProductDetailsViewModel */,
+				735C61462D19DC790074E00F /* StoriesViewModel */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		735C61452D19DC790074E00F /* MainViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MainViewModel;
+			sourceTree = "<group>";
+		};
+		735C61462D19DC790074E00F /* StoriesViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				735C61482D19DC8F0074E00F /* StoriesViewModel.swift */,
+			);
+			path = StoriesViewModel;
+			sourceTree = "<group>";
+		};
+		735C61472D19DC790074E00F /* ProductDetailsViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ProductDetailsViewModel;
+			sourceTree = "<group>";
+		};
 		7362805A2CE607CD00DD6FD7 /* Elements */ = {
 			isa = PBXGroup;
 			children = (
@@ -1777,6 +1811,7 @@
 			children = (
 				7321AC092D06265F00380085 /* Model */,
 				7321ABE72D06265000380085 /* Views */,
+				735C61412D19DC3B0074E00F /* ViewModel */,
 				7321AC0A2D06266100380085 /* Presenter */,
 				7321AB652D06263D00380085 /* Services */,
 			);
@@ -2045,6 +2080,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				735C61492D19DC8F0074E00F /* StoriesViewModel.swift in Sources */,
 				73B969592CC7C78700A2415A /* Address.swift in Sources */,
 				73AF74AE2D01C2A900F1A40F /* FeatureType.swift in Sources */,
 				73D370492D19AE750080BA6E /* ChoosePaymentMethodVM.swift in Sources */,

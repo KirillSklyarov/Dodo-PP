@@ -84,10 +84,10 @@ private extension MainCoordinator {
 private extension MainCoordinator {
     func showStories(_ indexPath: IndexPath) {
         let vc = screenFactory.makeStoriesScreen(indexPath: indexPath)
-        let presenter = vc.presenter
+        var viewModel = vc.getViewModel()
 
         // Когда экран сторис закрыт, то обновляем сторисы на главном экране и закрываем окно
-        presenter.onDismissed = { [weak self] in
+        viewModel.onDismissed = { [weak self] in
             self?.mainVCUpdateStories() // Обновляем сторисы на главном экране
             self?.router.dismiss() // Закрываем окно
         }

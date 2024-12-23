@@ -36,9 +36,8 @@ extension MainScreenFactory: MainScreenFactoryProtocol {
     }
 
     func makeStoriesScreen(indexPath: IndexPath) -> StoriesVC {
-        let presenter = StoriesPresenter(storage: storage, indexPath: indexPath)
-        let view = StoriesVC(presenter: presenter)
-        presenter.view = view
+        let viewModel = StoriesViewModel(storage: storage, indexPath: indexPath)
+        let view = StoriesVC(viewModel: viewModel)
         return view
     }
 
