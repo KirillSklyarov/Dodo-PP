@@ -62,7 +62,9 @@ extension StoriesVC: StoriesViewProtocol {
     func updateProgressViewProgress(_ index: Int?, progress: Float?) {
         guard let progress, let index else { return }
 //        print(index, progress)
-        progressViews[index].setProgress(progress, animated: true)
+        let animation = progress != 0.0 && progress != 1.0 // Если прогресс != 0 тогда делай с анимацией
+
+        progressViews[index].setProgress(progress, animated: animation)
     }
 
     // Обнуляет прогресс у конкретной progressView
@@ -73,6 +75,7 @@ extension StoriesVC: StoriesViewProtocol {
     // Обнуляет прогресс у конкретной progressView
     func fillProgressView(_ index: Int) {
         progressViews[index].setProgress(1.0, animated: false)
+        print(#function, index)
     }
 
     // Устанавливаем картинку
@@ -179,6 +182,24 @@ private extension StoriesVC {
             .sink { [weak self] image in
                 guard let self else { return }
                 updateStoryImage(image)
+            }
+            .store(in: &cancellables)
+
+//        viewModel.fillProgressViewIndexPublisher
+//            .compactMap { $0 }
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] index in
+//                guard let self else { return }
+//                fillProgressView(index)
+//            }
+//            .store(in: &cancellables)
+
+        viewModel.resetProgressViewIndexPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] index in
+                guard let self else { return }
+                resetProgressView(index)
             }
             .store(in: &cancellables)
     }
