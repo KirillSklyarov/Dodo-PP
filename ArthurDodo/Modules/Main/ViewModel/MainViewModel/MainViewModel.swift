@@ -1,35 +1,43 @@
 import Foundation
+import Combine
 
-protocol MainPresenterProtocol: AnyObject {
-    func viewDidLoad()
-    func updateCart()
-    func itemSelected(at indexPath: IndexPath)
-    func promoItemSelected(at indexPath: IndexPath)
-    func profileButtonTapped()
-    func addressButtonTapped()
-    func storyTapped(at indexPath: IndexPath)
-    func cartButtonTapped()
+final class MainViewModel: MainViewModelProtocol {
+    // MARK: - Published properties
+    @Published private var cartPrice: Int?
+    @Published private var stories: [Story]?
+    @Published private var categories: [Category]?
+    @Published private var promoItems: [Item]?
+    @Published private var catalog: [Item]?
+    @Published private var addressName: String?
+    @Published private var userDodoCoins: Int?
+    @Published private var state: ScreenState = .loading
+    @Published private var orderPrice: Int?
+    @Published private var orderStatus: String?
+    @Published private var isShowOrderView: Bool?
 
-    var onProfileButtonTapped: (() -> Void)? { get set }
-    var onAddressButtonTapped: (() -> Void)? { get set }
-    var onStoryTapped: ((IndexPath) -> Void)? { get set }
-    var onProductDetailsTapped: (() -> Void)? { get set }
-    var onCartButtonTapped: (() -> Void)? { get set }
-}
+    var cartPricePublisher: Published<Int?>.Publisher { $cartPrice }
+    var storiesPublisher: Published<[Story]?>.Publisher { $stories }
+    var categoriesPublisher: Published<[Category]?>.Publisher { $categories }
+    var promoItemsPublisher: Published<[Item]?>.Publisher { $promoItems }
+    var catalogPublisher: Published<[Item]?>.Publisher { $catalog }
+    var addressNamePublisher: Published<String?>.Publisher { $addressName }
+    var userDodoCoinsPublisher: Published<Int?>.Publisher { $userDodoCoins }
+    var statePublisher: Published<ScreenState>.Publisher { $state }
+    var orderPricePublisher: Published<Int?>.Publisher { $orderPrice }
+    var orderStatusPublisher: Published<String?>.Publisher { $orderStatus }
+    var isShowOrderViewPublisher: Published<Bool?>.Publisher { $isShowOrderView }
 
-final class MainPresenter {
-    weak var view: MainViewControllerProtocol?
+    lazy var addressDodoCoins = Publishers.CombineLatest(addressNamePublisher, userDodoCoinsPublisher)
+    lazy var orderPublisher = Publishers.CombineLatest(orderStatusPublisher, orderPricePublisher)
 
     // MARK: - Other properties
-    private var state: ScreenState = .loading
-
-    private let storage: MainStorage
-
     var onProfileButtonTapped: (() -> Void)?
     var onAddressButtonTapped: (() -> Void)?
     var onStoryTapped: ((IndexPath) -> Void)?
     var onProductDetailsTapped: (() -> Void)?
     var onCartButtonTapped: (() -> Void)?
+
+    private let storage: MainStorage
 
     // MARK: - Init
     init(storage: MainStorage) {
@@ -37,18 +45,17 @@ final class MainPresenter {
     }
 }
 
-// MARK: - MainPresenterProtocol
-extension MainPresenter: MainPresenterProtocol {
-    // Основной загрузочный метод презентера
-    func viewDidLoad() {
+// MARK: - MainViewModelProtocol
+extension MainViewModel {
+    // Основной загрузочный метод viewModel
+    func initialize() {
         fetchData()
         isNeedToShowOrderView()
     }
 
     // Запрашиваем данные о стоимости заказа из хранилища и обновляем view
     func updateCart() {
-        let totalPrice = storage.getTotalOrderPrice()
-        view?.updateCart(with: totalPrice)
+        cartPrice = storage.getTotalOrderPrice()
     }
 
     // Запрашиваем данные о каталоге из хранилища, получаем конкретный товар, отмечаем его в хранилище как выбранный и открываем экран Product Details
@@ -87,7 +94,7 @@ extension MainPresenter: MainPresenterProtocol {
 }
 
 // MARK: - Fetch data from server
-private extension MainPresenter {
+private extension MainViewModel {
     // Обращаемся к хранилищу за необходимыми данными
     func fetchData() {
         getMainAddressFromStorage()
@@ -98,15 +105,13 @@ private extension MainPresenter {
     // Забираем основной адрес из хранилища и обновляем view
     func getMainAddressFromStorage() {
         guard let mainAddress = storage.getMainAddress() else { print("Error: mainAddress is nil"); return }
-        let addressName = mainAddress.name
-        let userDodoCoins = storage.getDodoCoins()
-        view?.updateHeaderView(addressName, userDodoCoins)
+        addressName = mainAddress.name
+        userDodoCoins = storage.getDodoCoins()
     }
 
     // Забираем сторисы из хранилища и передаем их на view
     func getStoriesFromStorage() {
-        let stories = storage.getFetchedStories()
-        view?.passStoriesToContentCollectionView(stories)
+        stories = storage.getFetchedStories()
     }
 
     // Мы обращаемся к хранилищу за каталогом, инициируем сетевой запрос и забираем результаты. Так как спецпредложения это рандомная выборка из каталога, то можно делать это тут же.
@@ -122,47 +127,46 @@ private extension MainPresenter {
 
     // Получаем категории и передаем в коллекцию
     func getCategories() {
-        let categories = storage.getCategories()
-        view?.passCategoriesToContentCollectionView(categories)
+        categories = storage.getCategories()
     }
 
     // Получаем спецпредложения и передаем в коллекцию
     func getSpecialOffers() {
-        let specialOffersArray = storage.getSpecialOffersArray()
-        view?.passPromoToContentCollectionView(specialOffersArray)
+        promoItems = storage.getSpecialOffersArray()
     }
 
     // Получаем каталог и передаем в коллекцию
     func getCatalog() {
-        let catalog = storage.getCatalog()
-        view?.passCatalogToContentCollectionView(catalog)
+        catalog = storage.getCatalog()
     }
 
     // Получаем состояние и передаем в коллекцию
     func setState(_ state: ScreenState) {
         self.state = state
-        view?.setStateOnContentCollectionView(state)
     }
 }
 
 
 // MARK: - Supporting methods
-private extension MainPresenter {
+private extension MainViewModel {
     // Показать или не показать вью с заказом
     func isNeedToShowOrderView() {
         let isActiveOrder = UserDefaults.standard.isActiveOrder() // Проверяет у UserDefaults есть ли активный заказ
 
-        // Только если заказ есть, то пересылаем данные во вью
-        if isActiveOrder { passOrderToView() }
+        // Только если заказ есть, то пересылаем данные во вью, если нет - то прячем поле с заказом
+        isActiveOrder ? passOrderToView() : hideOrderView()
+    }
 
-        view?.isShowOrderView(isActiveOrder)
+    // Скрываем поле с заказом
+    func hideOrderView() {
+        isShowOrderView = false
     }
 
     // Забираем заказ из хранилища и отправляем его на вью
     func passOrderToView() {
         guard let order = storage.getOrder() else { print("We have no order in storage"); return }
-        let totalPrice = storage.getTotalOrderPrice()
-        view?.updateOrder(order, totalPrice)
+        orderPrice = storage.getTotalOrderPrice()
+        orderStatus = order.status.rawValue
     }
 
     // Отправляем выбранный товар в хранилище

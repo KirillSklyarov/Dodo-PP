@@ -5,8 +5,6 @@ protocol StoriesViewProtocol: AnyObject {
     func updateStoryImage(_ imageName: String?)
     func setupProgressViews(_ countOfSubStories: Int)
     func updateProgressViewProgress(_ index: Int?, progress: Float?)
-    func resetProgressView(_ index: Int)
-    func fillProgressView(_ index: Int)
     func fillAllProgressViewsExceptLast()
 }
 
@@ -40,7 +38,6 @@ final class StoriesVC: UIViewController {
         setupUI()
         setupActions()
         dataBinding()
-//        presenter.viewDidLoad()
 
         viewModel.initialize()
     }
@@ -61,21 +58,15 @@ extension StoriesVC: StoriesViewProtocol {
     // Устанавливает значение прогресса у бара (то есть делает движение прогресс бара)
     func updateProgressViewProgress(_ index: Int?, progress: Float?) {
         guard let progress, let index else { return }
-//        print(index, progress)
-        let animation = progress != 0.0 && progress != 1.0 // Если прогресс != 0 тогда делай с анимацией
+
+        // Если прогресс != 0, 1 тогда делай с анимацией (то есть когда нужно обнулить или полностью зарисовать прогресс - это нужно делать без анимации)
+        let animation =
+                switch progress {
+                case 0.0, 1.0: false
+                default : true
+                }
 
         progressViews[index].setProgress(progress, animated: animation)
-    }
-
-    // Обнуляет прогресс у конкретной progressView
-    func resetProgressView(_ index: Int) {
-        progressViews[index].setProgress(0.0, animated: false)
-    }
-
-    // Обнуляет прогресс у конкретной progressView
-    func fillProgressView(_ index: Int) {
-        progressViews[index].setProgress(1.0, animated: false)
-        print(#function, index)
     }
 
     // Устанавливаем картинку
@@ -143,6 +134,7 @@ private extension StoriesVC {
 
 // MARK: - Setup TapGesture
 private extension StoriesVC {
+    // Устанавливаем жест (тап слева предыдущая сторис, тап справа - следующая)
     func setupTapGesture() {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
         view.addGestureRecognizer(gesture)
@@ -158,15 +150,7 @@ private extension StoriesVC {
 // MARK: - Data Binding
 private extension StoriesVC {
     func dataBinding() {
-        viewModel.progressSubStoriesIndexPublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] progress, subStoryIndex in
-                guard let self else { return }
-                updateProgressViewProgress(subStoryIndex, progress: progress)
-            }
-            .store(in: &cancellables)
-
+        // Устанавливаем правильно значение баров (один, или два или три ...)
         viewModel.subStoriesCountPublisher
             .compactMap { $0 }
             .receive(on: DispatchQueue.main)
@@ -176,6 +160,17 @@ private extension StoriesVC {
             }
             .store(in: &cancellables)
 
+        // Обновляем прогресс на баре
+        viewModel.progressSubStoriesIndexPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] progress, subStoryIndex in
+                guard let self else { return }
+                updateProgressViewProgress(subStoryIndex, progress: progress)
+            }
+            .store(in: &cancellables)
+
+        // Устанавливаем изображение
         viewModel.storyImagePublisher
             .compactMap { $0 }
             .receive(on: DispatchQueue.main)
@@ -185,21 +180,13 @@ private extension StoriesVC {
             }
             .store(in: &cancellables)
 
-//        viewModel.fillProgressViewIndexPublisher
-//            .compactMap { $0 }
-//            .receive(on: DispatchQueue.main)
-//            .sink { [weak self] index in
-//                guard let self else { return }
-//                fillProgressView(index)
-//            }
-//            .store(in: &cancellables)
-
-        viewModel.resetProgressViewIndexPublisher
+        // Заполняем все прогресс бары, кроме последнего (нужно при левом клике, чтобы показывалась последняя сабСторис предыдущей сторис)
+        viewModel.fillProgressViewIndexPublisher
             .compactMap { $0 }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] index in
                 guard let self else { return }
-                resetProgressView(index)
+                fillAllProgressViewsExceptLast()
             }
             .store(in: &cancellables)
     }

@@ -1,4 +1,9 @@
 import UIKit
+import Combine
+
+protocol ProductDetailsViewControllerProtocol {
+    func getViewModel() -> ProductDetailsViewModelProtocol
+}
 
 // Класс, который отвечает за показ экрана с товаром (где фотка, описание, ингредиенты, состав и проч.)
 final class ProductDetailsViewController: UIViewController {
@@ -9,17 +14,18 @@ final class ProductDetailsViewController: UIViewController {
     private lazy var infoAndToppingsContainer = InfoAndToppingsView()
     private lazy var cartButtonView = AppCartButtonView(type: .itemDetail)
     private lazy var contentStack = AppStackView( [itemDetailsView, infoAndToppingsContainer], axis: .vertical, spacing: 5)
-   
+
     private lazy var scrollView = configScrollView()
 
     // MARK: - Presenter
-    let presenter: ProductDetailsPresenter
+    private let viewModel: ProductDetailsViewModelProtocol
+    private var cancellables: Set<AnyCancellable> = []
 
     var onShowPopupVC: ( (CpfcPopupView) -> Void)?
 
     // MARK: - Init
-    init(presenter: ProductDetailsPresenter) {
-        self.presenter = presenter
+    init(viewModel: ProductDetailsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -32,21 +38,18 @@ final class ProductDetailsViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        presenter.viewDidLoad()
+        dataBinding()
+
+        viewModel.initialize()
+
         setupSwipe()
     }
+}
 
-    func getChosenSize() -> Size {
-        itemDetailsView.getChosenSize()
-    }
-
-    func getChosenDough() -> Dough {
-        itemDetailsView.getChosenDough()
-    }
-
-    func updateInfoAndCart(_ productDetails: WeightPrice) {
-        infoAndToppingsContainer.updateUI(with: productDetails)
-        cartButtonView.updatePrice(productDetails.price)
+// MARK: - ProductDetailsViewControllerProtocol
+extension ProductDetailsViewController: ProductDetailsViewControllerProtocol {
+    func getViewModel() -> ProductDetailsViewModelProtocol {
+        viewModel
     }
 }
 
@@ -107,7 +110,7 @@ private extension ProductDetailsViewController {
 
     func setupHeaderAction() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.presenter.onDismissButtonTapped?()
+            self?.viewModel.onDismissButtonTapped?()
         }
     }
 
@@ -119,39 +122,32 @@ private extension ProductDetailsViewController {
     func setupCartViewAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
-            presenter.cartButtonTapped()
+            let chosenSize = getChosenSize()
+            let chosenDough = getChosenDough()
+            viewModel.cartButtonTapped(chosenSize, chosenDough)
         }
     }
 
     func setupSizeSegmentAction() {
         itemDetailsView.onSegmentValueChanged = { [weak self] index in
             guard let self else { return }
-            presenter.itemSegmentValueChanged(index)
+            viewModel.itemSegmentValueChanged(index)
         }
     }
-
-//    func updateUIWithChosenSize(_ index: Int) {
-//        guard let productDetails = item?.itemSize.getWeightAndPriceViaIndex(index) else { print("We have some problems here"); return }
-//        infoAndToppingsContainer.updateUI(productDetails: productDetails)
-//        let price = productDetails.price
-//        cartButtonView.updatePrice(price)
-//    }
 
     func setupInfoButtonAction() {
         infoAndToppingsContainer.onShowPopupVC = { [weak self] popupVC in
             guard let self else { print("Self is nil"); return }
-//            guard let popupVC = popupVC as? CpfcPopupView else {
-//                print("No popupVC"); return }
-            presenter.showPopupVC(popupVC)
+            viewModel.showPopupVC(popupVC)
         }
     }
 }
 
 // MARK: - Update UI for The Item (настраиваем экран для конкретного товара)
-extension ProductDetailsViewController {
-
+private extension ProductDetailsViewController {
     // Обновляем все поля
-    func updateUIWithSelectedItem(_ item: Item) {
+    func updateUIWithSelectedItem(_ item: Item?) {
+        guard let item else { print("Item is nil"); return }
         headerView.updateTitle(item.name)
         itemDetailsView.updatePizzaImage(item.imageName)
 
@@ -160,22 +156,30 @@ extension ProductDetailsViewController {
     }
 
     // Если это не пицца, то не нужно показывать поле с тестом
-    func hideDoughSegmentView() {
-        itemDetailsView.hideDoughSegment()
+    func isHideDoughSegmentView(_ isDoughOption: Bool?) {
+        guard let isDoughOption else { return }
+        if !isDoughOption {
+            itemDetailsView.hideDoughSegment()
+        }
     }
 
     // Если размер один, то не нужно показывать поле с размерами
-    func hideSizeSegmentView() {
-        itemDetailsView.hideSizeSegment()
+    func isHideSizeSegmentView(_ isOneSize: Bool?) {
+        guard let isOneSize else { return }
+        if isOneSize {
+            itemDetailsView.hideSizeSegment()
+        }
     }
 
     // Если размер один, то обновляем вес и цену товара
-    func updateWeightAndPriceUI(_ weight: Int, _ price: Int) {
+    func updateWeightAndPriceUI(_ weight: Int?, _ price: Int?) {
+        guard let weight, let price else { return }
         infoAndToppingsContainer.updateWeight(weight)
         cartButtonView.updatePrice(price)
     }
 
-    func passSelectedItemToView(_ item: Item) {
+    func passSelectedItemToView(_ item: Item?) {
+        guard let item else { return }
         infoAndToppingsContainer.getSelectedItem(item)
     }
 
@@ -193,6 +197,82 @@ private extension ProductDetailsViewController {
     }
 
     @objc private func vcSwiped() {
-        presenter.onDismissButtonTapped?()
+        viewModel.onDismissButtonTapped?()
+    }
+}
+
+// MARK: - Data binding
+private extension ProductDetailsViewController {
+    func dataBinding() {
+        viewModel.itemPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] item in
+                guard let self else { return }
+                passSelectedItemToView(item)
+                updateUIWithSelectedItem(item)
+            }
+            .store(in: &cancellables)
+
+        viewModel.isOneSizePublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isOneSize in
+                guard let self else { return }
+                isHideSizeSegmentView(isOneSize)
+            }
+            .store(in: &cancellables)
+
+        viewModel.isDoughOptionPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isDoughOption in
+                guard let self else { return }
+                isHideDoughSegmentView(isDoughOption)
+            }
+            .store(in: &cancellables)
+
+        viewModel.weightPricePublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] weight, price in
+                guard let self else { return }
+                updateWeightAndPriceUI(weight, price)
+            }
+            .store(in: &cancellables)
+
+        viewModel.toppingsPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] toppings in
+                guard let self else { return }
+                passToppingsToView(toppings)
+            }
+            .store(in: &cancellables)
+
+        viewModel.productDetailsPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] productDetails in
+                guard let self else { return }
+                updateInfoAndCart(productDetails)
+            }
+            .store(in: &cancellables)
+    }
+}
+
+// MARK: - Supporting methods
+private extension ProductDetailsViewController {
+    func getChosenSize() -> Size {
+        itemDetailsView.getChosenSize()
+    }
+
+    func getChosenDough() -> Dough {
+        itemDetailsView.getChosenDough()
+    }
+
+    func updateInfoAndCart(_ productDetails: WeightPrice) {
+        infoAndToppingsContainer.updateUI(with: productDetails)
+        cartButtonView.updatePrice(productDetails.price)
     }
 }

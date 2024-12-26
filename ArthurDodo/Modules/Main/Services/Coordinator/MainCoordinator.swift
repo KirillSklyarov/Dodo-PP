@@ -26,26 +26,26 @@ final class MainCoordinator: Coordinator {
 extension MainCoordinator {
     func start() {
         let mainVC = screenFactory.makeMainScreen() // Создаем экран
-        let presenter = mainVC.presenter
+        var viewModel = mainVC.getViewModel()
 
         // Настраиваем замыкания
-        presenter.onProfileButtonTapped = { [weak self] in
+        viewModel.onProfileButtonTapped = { [weak self] in
             self?.checkFeatureToggleAndShowFlow(.profile)
         }
 
-        presenter.onAddressButtonTapped = { [weak self] in
+        viewModel.onAddressButtonTapped = { [weak self] in
             self?.onShowAddress?()
         }
 
-        presenter.onStoryTapped = { [weak self] indexPath in
+        viewModel.onStoryTapped = { [weak self] indexPath in
             self?.showStories(indexPath)
         }
 
-        presenter.onProductDetailsTapped = { [weak self] in
+        viewModel.onProductDetailsTapped = { [weak self] in
             self?.checkFeatureToggleAndShowFlow(.productDetails)
         }
 
-        presenter.onCartButtonTapped = { [weak self] in
+        viewModel.onCartButtonTapped = { [weak self] in
             self?.checkFeatureToggleAndShowFlow(.cart)
         }
 
@@ -55,7 +55,9 @@ extension MainCoordinator {
     // Вызываем обновление корзины на главном экране
     func mainVCUpdateCart() {
         if let vc = router.getMainViewController() {
-            vc.presenter.updateCart()
+            let viewModel = vc.getViewModel()
+            viewModel.updateCart()
+//            vc.presenter.updateCart()
         }
     }
 }
@@ -65,14 +67,14 @@ private extension MainCoordinator {
     // Показ экрана деталей товара и связанные с ним операции
     func showProductDetails() {
         let vc = screenFactory.makeProductDetailsScreen() // Создаем экран
-        let presenter = vc.presenter
+        var viewModel = vc.getViewModel()
 
         // Настраиваем замыкания
-        presenter.onDismissButtonTapped = { [weak self] in
+        viewModel.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss()
         }
 
-        presenter.onShowPopupVC = { [weak self] popUpView in
+        viewModel.onShowPopupVC = { [weak self] popUpView in
             self?.router.present(popUpView, isParent: true, modalPresentation: .popover)
         }
 

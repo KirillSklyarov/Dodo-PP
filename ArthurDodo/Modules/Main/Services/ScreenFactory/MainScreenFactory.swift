@@ -22,16 +22,14 @@ final class MainScreenFactory {
 // MARK: - Methods
 extension MainScreenFactory: MainScreenFactoryProtocol {
     func makeMainScreen() -> MainViewController {
-        let presenter = MainPresenter(storage: storage)
-        let view = MainViewController(presenter: presenter)
-        presenter.view = view
+        let viewModel = MainViewModel(storage: storage)
+        let view = MainViewController(viewModel: viewModel)
         return view
     }
 
     func makeProductDetailsScreen() -> ProductDetailsViewController {
-        let presenter = ProductDetailsPresenter(storage: storage)
-        let view = ProductDetailsViewController(presenter: presenter)
-        presenter.view = view
+        let viewModel = ProductDetailsViewModel(storage: storage)
+        let view = ProductDetailsViewController(viewModel: viewModel)
         return view
     }
 

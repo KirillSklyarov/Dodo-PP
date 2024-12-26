@@ -7,43 +7,32 @@ protocol StoriesViewModelProtocol {
     func dismissButtonTapped()
     func storyTapped(_ tapPoint: CGPoint, _ bounds: CGRect)
 
-    var storiesPublisher: Published<[Story]?>.Publisher { get }
-    var progressSubStoriesIndexPublisher: Publishers.CombineLatest<Published<Float?>.Publisher,  Published<Int?>.Publisher> { get }
     var subStoriesCountPublisher: Published<Int?>.Publisher { get }
+    var progressSubStoriesIndexPublisher: Publishers.CombineLatest<Published<Float?>.Publisher,  Published<Int?>.Publisher> { get }
     var storyImagePublisher: Published<String?>.Publisher { get }
-    var fillProgressViewIndexPublisher: Published<Int?>.Publisher { get }
-    var resetProgressViewIndexPublisher: Published<Int?>.Publisher { get }
+    var fillProgressViewIndexPublisher: Published<Bool?>.Publisher { get }
 
     var onDismissed: (() -> Void)? { get set }
-
-
-//    var progressPublisher: Published<Float?>.Publisher { get }
 }
 
 final class StoriesViewModel {
-    // MARK: - Properties
-//    weak var view: StoriesViewProtocol?
-    @Published private var stories: [Story]? // Это полный список сторисов
+    // MARK: - Published properties
     @Published private var progress: Float?
     @Published private var subStoryIndex: Int?
     @Published private var subStoriesCount: Int?
-
-    @Published private var fillProgressViewIndex: Int?
-    @Published private var resetProgressViewIndex: Int?
-
-    var storiesPublisher: Published<[Story]?>.Publisher { $stories }
-    var progressPublisher: Published<Float?>.Publisher { $progress }
-    var subStoriesIndexPublisher: Published<Int?>.Publisher { $subStoryIndex }
-    var fillProgressViewIndexPublisher: Published<Int?>.Publisher { $fillProgressViewIndex }
-    var resetProgressViewIndexPublisher: Published<Int?>.Publisher { $resetProgressViewIndex }
-
-    lazy var progressSubStoriesIndexPublisher = Publishers.CombineLatest(progressPublisher, subStoriesIndexPublisher)
-    var subStoriesCountPublisher: Published<Int?>.Publisher { $subStoriesCount }
-
-    private var storyIndex: Int
-
+    @Published private var fillProgressViews: Bool?
     @Published private var storyImageName: String?
+
+    var subStoriesCountPublisher: Published<Int?>.Publisher { $subStoriesCount }
+    lazy var progressSubStoriesIndexPublisher = Publishers.CombineLatest(progressPublisher, subStoriesIndexPublisher)
+    var fillProgressViewIndexPublisher: Published<Bool?>.Publisher { $fillProgressViews }
     var storyImagePublisher: Published<String?>.Publisher { $storyImageName }
+    private var subStoriesIndexPublisher: Published<Int?>.Publisher { $subStoryIndex }
+    private var progressPublisher: Published<Float?>.Publisher { $progress }
+
+    // MARK: - Other properties
+    private var stories: [Story]? // Это полный список сторисов
+    private var storyIndex: Int
 
     var onDismissed: (() -> Void)?
 
@@ -85,7 +74,6 @@ extension StoriesViewModel: StoriesViewModelProtocol {
             storiesLeftTapped()
         } else {
             showNextSubStoryOrNextStory()
-//            showNextSubStory()
         }
     }
 }
@@ -106,10 +94,6 @@ private extension StoriesViewModel {
 
     // Отслеживает прогресс показа сториса
     @objc func updateProgress() {
-        guard let subStoriesCount else { print("SubStoriesCount is nil"); return }
-        guard let subStoryIndex else { print("SubStoryIndex is nil"); return }
-        guard subStoryIndex < subStoriesCount else { print("SubStoryIndex out of range"); return }
-
         updateProgressView()
         isNeedToShowNewStory()
     }
@@ -118,16 +102,14 @@ private extension StoriesViewModel {
     func updateProgressView() {
         elapsedTime += displayLink?.duration ?? 0
         progress = Float(elapsedTime / durationOfStory)
-//        view?.updateProgressViewProgress(subStoryIndex, progress: progress)
     }
 
     // Когда заканчивается время показа сториса, то мы должны показать новый сторис
     func isNeedToShowNewStory() {
         if elapsedTime >= durationOfStory {
             stopTimer() // Останавливает таймер
-            markStoryAsViewed(storyIndex) // Отмечает сторис как просмотренную
-//            showNextSubStory() // Показывает новую сабСторис
-            showNextSubStoryOrNextStory()
+            markStoryAsViewed() // Отмечает сторис как просмотренную
+            showNextSubStoryOrNextStory() // Показываем новый сабСторис или новый Сторис
         }
     }
 }
@@ -140,7 +122,7 @@ private extension StoriesViewModel {
 
     // Обновляем кол-во сабСторисов, показываем первый сабСторис этой сторис
     func showStory() {
-        updateSubStoriesCount()
+        updateSubStoriesCount() // Обновляем кол-во сабСторисов конкретной Сторис и начинаем с первой сабСторис
         showSubStory()
     }
 
@@ -153,31 +135,37 @@ private extension StoriesViewModel {
 
     // Cбрасываем таймер и прогресс, показываем картинку и начинаем таймер
     func showSubStory() {
-        resetTimerAndProgress()
-        setStoryImage()
-        startTimer()
+        resetTimerAndProgress() // Сбрасываем таймер и прогресс
+        setStoryImage() // Устанавливаем картинку сториса
+        startTimer() // Запускаем таймер
     }
 
     // Если можно показать новую сабСторис (индекс сабСториса меньше кол-ва сабСторисов), то показываем следующую сабсторис, если нет - то показываем новую историю.
     func showNextSubStoryOrNextStory() {
         guard let subStoriesCount else { print("SubStoriesCount is nil"); return }
-        guard let subStoryIndex else { print("SubStoryIndex is nil"); return }
 
-        if (subStoryIndex + 1) < subStoriesCount {
-            showNextSubStory()
-//            showSubStory()
-        } else {
-            showNextStoryOrDismiss()
-        }
+        // Является ли текущая сабСтори последней в этой Сторис
+        let isCurrentSubStoryLast = subStoryIndex == (subStoriesCount - 1)
+
+        // Если последняя, то покажи следующую Сторис, если нет - следующую сабСторис
+        isCurrentSubStoryLast ? showNextStoryOrDismiss() : showNextSubStory()
     }
 
     // Сначала закрашиваем progressView у предыдущей сабСторис и показываем следующий сабСторис
     func showNextSubStory() {
-        fillProgressView() // Закрашиваем бар у предыдущей сабСторис
-        subStoryIndex! += 1 // Увеличиваем счетчик сабСторис
+        stopTimer() // Останавливаем таймер
+        fillProgressView() // Закрашиваем бар у предыдущей сабСторис (без этого подглючивает прогресс бар)
+        increaseSubStoryIndex() // Увеличиваем счетчик сабСторис
         showSubStory() // Показываем сабСторис
     }
 
+    // Безопасно увеличиваем счетчик сабСторис
+    func increaseSubStoryIndex() {
+        if var subStoryIndex {
+            subStoryIndex += 1 // Увеличиваем счетчик сабСторис
+            self.subStoryIndex = subStoryIndex
+        }
+    }
 
     // Если сторис последняя, то закрываем окно, если нет - показываем следующую сторис
     func showNextStoryOrDismiss() {
@@ -188,16 +176,17 @@ private extension StoriesViewModel {
 
     // Показывает новую сторис: увеличиваем счетчик сторисов на 1, обновляем кол-во сабСторисов и показываем сторис
     func showNextStory() {
-        fillProgressView()
-        storyIndex += 1
-        resetTimerAndProgress()
+        stopTimer() // Останавливаем таймер
+        fillProgressView() // Закрашиваем бар у предыдущей сабСторис (без этого подглючивает прогресс бар)
+        resetTimerAndProgress() // Сбрасываем прогресс
+        storyIndex += 1 // Увеличиваем счетчик сторисов
         showStory()
     }
 
     // Сбрасываем таймер и прогресс-бар
     func resetTimerAndProgress() {
-        elapsedTime = 0.0
-        progress = 0.0
+        elapsedTime = 0.0 // Сбрасываем таймер
+        progress = 0.0 // Сбрасываем прогресс
     }
 
     // Либо показываем предыдущую Мини-Историю, либо последнюю Мини-историю предыдущей истории, либо предыдущую историю
@@ -215,14 +204,33 @@ private extension StoriesViewModel {
     func showPreviousSubStory() {
         stopTimer() // Останавливаем таймер
         resetTimerAndProgress() // Сбрасываем таймер и прогресс (так обнуляется бар)
-        subStoryIndex! -= 1 // Уменьшаем счетчик сабСторисов
-        showSubStory() // Показываем сторис
+        if var subStoryIndex {
+            subStoryIndex -= 1 // Уменьшаем счетчик сабСторисов
+            self.subStoryIndex = subStoryIndex
+            showSubStory() // Показываем сторис
+        }
     }
 
     // Показываем последнюю сабСторис предыдущей сторис
-     func showLastSubStoryPreviousStory() {
-        storyIndex -= 1
-        showLastSubStory()
+    func showLastSubStoryPreviousStory() {
+        stopTimer() // Останавливаем таймер
+        resetTimerAndProgress() // Сбрасываем таймер и прогресс (так обнуляется бар)
+        storyIndex -= 1 // Устанавливаем предыдущую сторис
+        updateDataForTheLastSubStory() // Устанавливаем последнюю сабСторис (а не первую как в стандартном методе)
+        fillAllProgressViewsExceptLast() // Заполняем все прогрессы, кроме последнего
+        showSubStory() // Показываем установленную сабСторис
+    }
+
+    // Устанавливаем последнюю сабСторис (а не первую как в стандартном методе)
+    func updateDataForTheLastSubStory() {
+        subStoriesCount = stories?[storyIndex].subStories.count
+        guard let subStoriesCount else { print("SubStoriesCount is nil"); return }
+        subStoryIndex = subStoriesCount - 1
+    }
+
+    // Заполняем все прогрессы, кроме последнего
+    func fillAllProgressViewsExceptLast() {
+        fillProgressViews = true
     }
 
     // Показываем первую сторис заново
@@ -232,53 +240,31 @@ private extension StoriesViewModel {
         showStory() // Показываем эту же историю заново
     }
 
-    // Когда мы возвращаемся на предыдущую сторис, но тут делаем чтобы мы вернулись на последнюю Мини-Историю предыдущей истории
-    func showLastSubStory() {
-        guard let subStoriesCount else { print("SubStoriesCount is nil"); return }
-        stopTimer()
-        resetTimerAndProgress()
-        updateSubStoriesCount() // Обновляем кол-во сабСторисов
-        subStoryIndex = subStoriesCount - 1
-//        updateUIWithFilledProgressViews() // Отрисовываем правильные progress views и закрашиваем все, кроме последнего
-        showSubStory()
-//        showNextSubStoryOrNextStory()
-    }
-
     // Мы принимаем индекс сториса и индекс сабСториса и устанавливаем картинку сториса
     func setStoryImage() {
-        print(#function)
         guard let stories else { print("Stories are not fetched yet"); return }
         guard let subStoryIndex else { print("SubStoryIndex is nil"); return }
+        guard let subStoriesCount else { print("SubStoriesCount is nil"); return }
 
-        let storyToShow = stories[storyIndex]
-        guard subStoryIndex < storyToShow.subStories.count else { print("Oooops"); return }
-        storyImageName = storyToShow.subStories[subStoryIndex]
-//        print("storyImageName \(storyImageName)")
-//        view?.updateStoryImage(imageName)
+        if subStoryIndex < subStoriesCount {
+            let storyToShow = stories[storyIndex]
+            storyImageName = storyToShow.subStories[subStoryIndex]
+        }
     }
 
     // Мгновенно закрашиваем прогресс по индексу (subStoryIndex) и потом сразу сбрасываем индекс
     func fillProgressView() {
         progress = 1.0
-        stopTimer()
     }
 
-    // Отмечаем историю как просмотренную
-    func markStoryAsViewed(_ index: Int) {
+    // Отмечаем историю как просмотренную (только в том случае, если просмотрены все сабСторисы)
+    func markStoryAsViewed() {
         guard let stories else { print("Stories are not fetched yet"); return }
-        let storyID = stories[index].id
-        UserDefaults.standard.markStoryAsViewed(storyID)
+        guard let subStoriesCount else { print("SubStoriesCount is nil"); return }
+
+        if subStoryIndex == subStoriesCount - 1 {
+            let storyID = stories[storyIndex].id
+            UserDefaults.standard.markStoryAsViewed(storyID)
+        }
     }
 }
-
-
-// Обновляем UI: устанавливаем правильный прогресс бар, то есть кол-во отрезков по кол-ву сабСторисов
-//    func updateUI() {
-//        view?.setupProgressViews(subStoriesCount)
-//    }
-
-// Отрисовываем правильные Progress Views и закрашиваем все, кроме последнего (нужно когда мы показываем последнюю сабСторис при переключении назад)
-//    func updateUIWithFilledProgressViews() {
-//        updateUI()
-//        view?.fillAllProgressViewsExceptLast()
-//    }

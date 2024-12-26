@@ -1,15 +1,9 @@
 import UIKit
+import Combine
 
 protocol MainViewControllerProtocol: AnyObject {
-    func updateCart(with totalPrice: Int)
-    func updateOrder(_ order: Order, _ totalPrice: Int)
-    func updateHeaderView(_ addressName: String, _ userDodoCoins: Int)
-    func passStoriesToContentCollectionView(_ stories: [Story])
-    func passCategoriesToContentCollectionView(_ categories: [Category])
-    func passPromoToContentCollectionView(_ specialOffers: [Item])
-    func passCatalogToContentCollectionView(_ catalogue: [Item])
-    func setStateOnContentCollectionView(_ state: ScreenState)
-    func isShowOrderView(_ isActiveOrder: Bool)
+    func getViewModel() -> MainViewModelProtocol
+    func updateStories()
 }
 
 final class MainViewController: UIViewController {
@@ -23,11 +17,12 @@ final class MainViewController: UIViewController {
     private lazy var contentStackView = AppStackView([headerView, orderView, contentCollectionView], axis: .vertical, spacing: 5)
 
     // MARK: - Presenter
-    let presenter: MainPresenterProtocol
+    private let viewModel: MainViewModelProtocol
+    private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(presenter: MainPresenterProtocol) {
-        self.presenter = presenter
+    init(viewModel: MainViewModelProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -40,29 +35,37 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
-        presenter.viewDidLoad()
+        dataBinding()
+
+        viewModel.initialize()
     }
 
     // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        presenter.updateCart()
+        viewModel.updateCart()
     }
 }
 
 // MARK: - MainViewControllerProtocol
 extension MainViewController: MainViewControllerProtocol {
-    // Обновление коллекции
-    func updateUI() {
-        DispatchQueue.main.async { [weak self] in
-            self?.contentCollectionView.reloadData()
-        }
+    func getViewModel() -> MainViewModelProtocol {
+        viewModel
     }
 
     // Обновляем сторисы
     func updateStories() {
         DispatchQueue.main.async { [weak self] in
             self?.contentCollectionView.reloadSections(IndexSet(integer: 0))
+        }
+    }
+}
+
+private extension MainViewController {
+    // Обновление коллекции
+    func updateUI() {
+        DispatchQueue.main.async { [weak self] in
+            self?.contentCollectionView.reloadData()
         }
     }
 
@@ -72,27 +75,32 @@ extension MainViewController: MainViewControllerProtocol {
     }
 
     // Обновляем orderView (передаем заказ и сумму заказа)
-    func updateOrder(_ order: Order, _ totalPrice: Int) {
-        orderView.getOrder(order, totalPrice)
+    func updateOrder(_ orderStatus: String?, _ totalPrice: Int?) {
+        guard let orderStatus, let totalPrice else { return }
+        orderView.getOrder(orderStatus, totalPrice)
     }
 
     // Обновляем адрес и кол-во додоКоинов в хэдере
-    func updateHeaderView(_ addressName: String, _ userDodoCoins: Int) {
+    func updateHeaderView(_ addressName: String?, _ userDodoCoins: Int?) {
+        guard let addressName, let userDodoCoins else { return }
         headerView.updateUI(addressName, userDodoCoins)
     }
 
     // Передаем сторисы в contentCollectionView
-    func passStoriesToContentCollectionView(_ stories: [Story]) {
+    func passStoriesToContentCollectionView(_ stories: [Story]?) {
+        guard let stories else { return }
         contentCollectionView.getStories(stories)
     }
 
     // Передаем категории в contentCollectionView
-    func passCategoriesToContentCollectionView(_ categories: [Category]) {
+    func passCategoriesToContentCollectionView(_ categories: [Category]?) {
+        guard let categories else { return }
         contentCollectionView.getCategories(categories)
     }
 
     // Передает спецпредложения в contentCollectionView
-    func passPromoToContentCollectionView(_ specialOffers: [Item]) {
+    func passPromoToContentCollectionView(_ specialOffers: [Item]?) {
+        guard let specialOffers else { return }
         contentCollectionView.getSpecialOffers(specialOffers)
     }
 
@@ -148,12 +156,12 @@ private extension MainViewController {
     func setupHeaderView() {
         headerView.onProfileButtonTapped = { [weak self] in
             guard let self else { print("Error: self is nil"); return }
-            presenter.profileButtonTapped()
+            viewModel.profileButtonTapped()
         }
 
         headerView.onAddressTapped = { [weak self] in
             guard let self else { print("Error: self is nil"); return }
-            presenter.addressButtonTapped()
+            viewModel.addressButtonTapped()
         }
     }
 
@@ -161,17 +169,17 @@ private extension MainViewController {
     func setupCollectionView() {
         contentCollectionView.onItemCellTapped = { [weak self] indexPath in
             guard let self else { print("Error: self is nil"); return }
-            presenter.itemSelected(at: indexPath)
+            viewModel.itemSelected(at: indexPath)
         }
 
         contentCollectionView.onStoriesCellTapped = { [weak self] indexPath in
             guard let self else { print("Error: self is nil"); return }
-            presenter.storyTapped(at: indexPath)
+            viewModel.storyTapped(at: indexPath)
         }
 
         contentCollectionView.onSpecialOfferCellTapped = { [weak self] IndexPath in
             guard let self else { print("Error: self is nil"); return }
-            presenter.promoItemSelected(at: IndexPath)
+            viewModel.promoItemSelected(at: IndexPath)
         }
     }
 
@@ -179,7 +187,116 @@ private extension MainViewController {
     func setupCartButtonActions() {
         cartButton.onButtonTapped = { [weak self] in
             guard let self else { print("Error: self is nil"); return }
-            presenter.cartButtonTapped()
+            viewModel.cartButtonTapped()
         }
+    }
+}
+
+// MARK: - Data binding
+private extension MainViewController {
+    func dataBinding() {
+        headerViewDataBinding()
+        orderViewDataBinding()
+        contentCollectionViewDataBinding()
+        cartDataBinding()
+    }
+
+    func headerViewDataBinding() {
+        // Показывает данные для HeaderView - адрес и додоКоины
+        viewModel.addressDodoCoins
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] address, dodoCoins in
+                guard let self else { print("Error: self is nil"); return }
+                updateHeaderView(address, dodoCoins)
+            }
+            .store(in: &cancellables)
+    }
+
+    func orderViewDataBinding() {
+        // Показывает или скрывает OrderView
+        viewModel.isShowOrderViewPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isNeedToShowOrder in
+                guard let self else { print("Error: self is nil"); return }
+                isShowOrderView(isNeedToShowOrder)
+            }
+            .store(in: &cancellables)
+
+        // Показывает данные для OrderView (статус заказа и стоимость заказа)
+        viewModel.orderPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] orderStatus, orderPrice in
+                guard let self else { print("Error: self is nil"); return }
+                updateOrder(orderStatus, orderPrice)
+                isShowOrderView(true)
+            }
+            .store(in: &cancellables)
+    }
+
+    func cartDataBinding() {
+        // Показывает данные для корзины
+        viewModel.cartPricePublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] cartPrice in
+                guard let self else { print("Error: self is nil"); return }
+                updateCart(with: cartPrice)
+            }
+            .store(in: &cancellables)
+    }
+
+    func contentCollectionViewDataBinding() {
+        // Показывает данные для сторисов
+        viewModel.storiesPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] stories in
+                guard let self else { print("Error: self is nil"); return }
+                passStoriesToContentCollectionView(stories)
+            }
+            .store(in: &cancellables)
+
+        // Показывает данные для спецпредложения
+        viewModel.promoItemsPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] promoItems in
+                guard let self else { print("Error: self is nil"); return }
+                passPromoToContentCollectionView(promoItems)
+            }
+            .store(in: &cancellables)
+
+        // Показывает данные для категорий
+        viewModel.categoriesPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] categories in
+                guard let self else { print("Error: self is nil"); return }
+                passCategoriesToContentCollectionView(categories)
+            }
+            .store(in: &cancellables)
+
+        // Показывает каталог
+        viewModel.catalogPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] catalog in
+                guard let self else { print("Error: self is nil"); return }
+                passCatalogToContentCollectionView(catalog)
+            }
+            .store(in: &cancellables)
+
+        // Выставляет статус для экрана
+        viewModel.statePublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                guard let self else { print("Error: self is nil"); return }
+                setStateOnContentCollectionView(state)
+            }
+            .store(in: &cancellables)
     }
 }

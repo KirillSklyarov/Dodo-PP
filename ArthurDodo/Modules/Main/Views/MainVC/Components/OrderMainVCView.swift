@@ -34,17 +34,17 @@ extension OrderMainVCView {
         viewHeightConstraint?.constant = isOrder ? viewHeight : 0
     }
 
-    func getOrder(_ order: Order, _ totalPrice: Int) {
-        updateUI(with: order, totalPrice)
+    func getOrder(_ orderStatus: String, _ totalPrice: Int) {
+        updateUI(with: orderStatus, totalPrice)
     }
 }
 
 // MARK: - Supporting methods
 private extension OrderMainVCView {
     // Обновляем все лейблы
-    func updateUI(with order: Order, _ totalPrice: Int) {
+    func updateUI(with orderStatus: String, _ totalPrice: Int) {
         orderLabel.text = "Заказ № \(totalPrice)"
-        statusLabel.text = order.status.rawValue
+        statusLabel.text = orderStatus
     }
 }
 
