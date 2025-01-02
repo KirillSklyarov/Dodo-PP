@@ -3,7 +3,7 @@ import Foundation
 protocol CartScreenFactoryProtocol: AnyObject {
     func makeCartScreen() -> CartViewController
     func makeEditProductScreen() -> EditProductViewController
-    func makePromoScreen(_ offer: Promo) -> PromoViewController
+    func makePromoScreen() -> PromoViewController
 }
 
 // Фабрика экранов модуля корзины
@@ -32,7 +32,7 @@ extension CartScreenFactory: CartScreenFactoryProtocol {
         return view
     }
 
-    func makePromoScreen(_ offer: Promo) -> PromoViewController {
-        return PromoViewController(with: offer)
+    func makePromoScreen() -> PromoViewController {
+        return PromoViewController(storage: storage)
     }
 }

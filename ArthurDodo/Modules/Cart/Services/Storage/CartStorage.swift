@@ -5,6 +5,7 @@ final class CartStorage {
     private var specialOfferArray: [Item] = []
     private var cart: Cart?
     private var changingItem: CartItem?
+    private var selectedPromo: Promo?
 }
 
 // MARK: - Methods
@@ -93,7 +94,7 @@ extension CartStorage {
 }
 
 // MARK: - Promo
-extension CartStorage {
+extension CartStorage: PromoStorageProtocol {
     // Получаем промо (коллекция "Акции" в корзине и в профиле)
     func setPromo(_ promo: [Promo]) {
         fetchedPromo = promo
@@ -102,6 +103,14 @@ extension CartStorage {
     // Возвращает загруженные акции
     func getPromo() -> [Promo] {
         fetchedPromo
+    }
+
+    func setSelectedPromo(_ promo: Promo) {
+        selectedPromo = promo
+    }
+
+    func getSelectedPromo() -> Promo? {
+        selectedPromo
     }
 }
 

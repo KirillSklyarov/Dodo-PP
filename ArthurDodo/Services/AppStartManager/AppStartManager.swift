@@ -45,59 +45,65 @@ private extension AppStartManager {
     // В зависимости от схемы либо запускаем showFeatureToggles (в режиме Debug), либо запускаем standardUserAppStart (в режиме релиза)
     func startAppBasedOnScheme() {
 #if DEBUG
-        showFeatureToggles()
+        debugStartFlow()
 #else
-        standardUserAppStart()
+        commonStartApp()
 #endif
+    }
+
+    // В режиме дебага мы включаем featureToggle и только после этого мы делаем стандартный запуск приложения
+    func debugStartFlow() {
+        showFeatureToggles()
+    }
+
+    // В режиме релиза мы делаем стандартный запуск приложения
+    func releaseStartFlow() {
+        commonStartApp()
     }
 }
 
 // MARK: - Debug mode app start
 private extension AppStartManager {
-    // В debug mode мы сначала у featureToggleService запрашиваем фичи, потом показываем экран с фичами
+    // Мы сначала запрашиваем фичи, потом показываем экран с фичами
     func showFeatureToggles() {
         Task {
             await featureToggleService.fetchAllFeatures()
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                showFeatureTogglesVC()
-            }
+            showFeatureTogglesVC()
         }
     }
 
     //  Показываем экран с фичам, при нажатии на кнопку на экране фичей стартуем стандартный режим приложения
     func showFeatureTogglesVC() {
-        let featureToggleVC = screenFactory.makeFeatureTogglesScreen()
-
-        featureToggleVC.onStartButtonTapped = { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            standardUserAppStart()
+            showScreen(screenType: .featureToggle)
         }
-
-        window?.rootViewController = featureToggleVC
-        window?.makeKeyAndVisible()
     }
 }
 
 // MARK: - Release mode app start
 private extension AppStartManager {
-    // В release mode запускаем устанавливаем навигацию как root, и стартуем приложение в стандартном режиме
-    func standardUserAppStart() {
-        window?.rootViewController = router.setRootNavigation()
-        window?.makeKeyAndVisible()
-        standardStartApp()
+    // Сначала запрашиваем все данные у сервера, потом показываем стартовый экран и начинаем стандартный показ приложения
+    func commonStartApp() {
+        fetchData()
+        showAppStartVC()
     }
 
-    // Сначала запрашиваем все данные у сервера, потом на главном потоке делаем appCoordinator и стартуем приложение
-    func standardStartApp() {
-        Task {
-            await fetchAllData()
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                appCoordinator = coordinatorFactory.makeAppCoordinator()
-                appCoordinator?.start()
-            }
-        }
+    // Показываем стартовый экран и после всей анимации переходим в обычный старт приложения
+    func showAppStartVC() {
+        showScreen(screenType: .appStart)
+        startAppCoordinator()
+    }
+
+    // Запрашиваем все данные у сервера
+    func fetchData() {
+        Task { await fetchAllData() }
+    }
+
+    // Создаем appCoordinator и стартуем приложение (тут идет создание главного экрана, но не показывает его)
+    func startAppCoordinator() {
+        appCoordinator = coordinatorFactory.makeAppCoordinator()
+        appCoordinator?.start()
     }
 }
 
@@ -187,5 +193,39 @@ private extension AppStartManager {
         } catch {
             print("Toppings fetch error: \(error)")
         }
+    }
+}
+
+// MARK: - Show Screen
+private extension AppStartManager {
+    func showScreen(screenType: AppStartScreenType) {
+        switch screenType {
+        case .featureToggle:
+            let featureToggleVC = screenFactory.makeFeatureTogglesScreen()
+
+            featureToggleVC.onStartButtonTapped = { [weak self] in
+                self?.commonStartApp()
+            }
+
+            window?.rootViewController = featureToggleVC
+            window?.makeKeyAndVisible()
+        case .appStart:
+            let appStartVC = screenFactory.makeAppStartScreen()
+            window?.rootViewController = appStartVC
+            window?.makeKeyAndVisible()
+
+            appStartVC.onStartAppScreenFinished = { [weak self] in
+                self?.showMainScreenAppCoordinator()
+            }
+        case .appCoordinator:
+            window?.rootViewController = router.setRootNavigation()
+            window?.makeKeyAndVisible()
+        }
+    }
+
+    // Говорим appCoordinator показать главный экран
+    func showMainScreenAppCoordinator() {
+        showScreen(screenType: .appCoordinator)
+        appCoordinator?.showMainScreen()
     }
 }

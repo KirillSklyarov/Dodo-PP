@@ -4,12 +4,7 @@ import Combine
 protocol MainViewModelProtocol {
     func initialize()
     func updateCart()
-    func profileButtonTapped()
-    func addressButtonTapped()
-    func itemSelected(at indexPath: IndexPath)
-    func storyTapped(at indexPath: IndexPath)
-    func promoItemSelected(at indexPath: IndexPath)
-    func cartButtonTapped()
+    func sendAction(_ action: Action)
 
     var cartPricePublisher: Published<Int?>.Publisher { get }
     var storiesPublisher: Published<[Story]?>.Publisher { get }
@@ -18,6 +13,9 @@ protocol MainViewModelProtocol {
     var catalogPublisher: Published<[Item]?>.Publisher { get }
     var statePublisher: Published<ScreenState>.Publisher { get }
     var isShowOrderViewPublisher: Published<Bool?>.Publisher { get }
+    var isShowProfileButtonPublisher: Published<Bool?>.Publisher { get }
+
+    var headerStatePublisher: Published<ScreenState?>.Publisher { get }
 
     var addressDodoCoins: Publishers.CombineLatest<Published<String?>.Publisher, Published<Int?>.Publisher> { get }
     var orderPublisher: Publishers.CombineLatest<Published<String?>.Publisher, Published<Int?>.Publisher> { get }

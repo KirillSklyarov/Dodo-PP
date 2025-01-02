@@ -17,7 +17,7 @@ final class PersonalViewController: UIViewController {
     private lazy var contentStackView = AppStackView([headerView, personalTableView], axis: .vertical, spacing: 10)
 
     // MARK: - Properties
-    let viewModel: PersonalViewModelProtocol
+    private let viewModel: PersonalViewModelProtocol
 
     private var cancellables: Set<AnyCancellable> = []
 

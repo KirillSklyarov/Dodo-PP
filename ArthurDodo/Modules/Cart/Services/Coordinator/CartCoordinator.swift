@@ -79,7 +79,7 @@ private extension CartCoordinator {
 
     // Показываем всплывающий экран для акций
     func showPromoScreen(_ offer: Promo) {
-        let vc = screenFactory.makePromoScreen(offer)
+        let vc = screenFactory.makePromoScreen()
         vc.sheetPresentationController?.detents = [.medium()]
         vc.sheetPresentationController?.prefersGrabberVisible = true
         router.present(vc, isParent: true)

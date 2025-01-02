@@ -132,6 +132,8 @@
 		735C61492D19DC8F0074E00F /* StoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735C61482D19DC8F0074E00F /* StoriesViewModel.swift */; };
 		736389E02D06CB8700A80964 /* ProfileScreenFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736389DE2D06CB8700A80964 /* ProfileScreenFactory.swift */; };
 		73638F692CE4B474008F1E90 /* SelectedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73638F682CE4B474008F1E90 /* SelectedItem.swift */; };
+		7365A5D82D1EB1F800F1FF24 /* AppStartScreenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7365A5D62D1EB1F800F1FF24 /* AppStartScreenType.swift */; };
+		7365A5DC2D1EB25200F1FF24 /* AppStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7365A5DA2D1EB25200F1FF24 /* AppStartViewController.swift */; };
 		736B0D2A2CCFE5C500975195 /* Array+BoolSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736B0D292CCFE5C500975195 /* Array+BoolSorting.swift */; };
 		737537D82D15C00A00D6E056 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737537D52D15C00A00D6E056 /* ProfileViewModel.swift */; };
 		737537D92D15C00A00D6E056 /* ProfileViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737537D62D15C00A00D6E056 /* ProfileViewModelProtocol.swift */; };
@@ -373,6 +375,8 @@
 		735C61482D19DC8F0074E00F /* StoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesViewModel.swift; sourceTree = "<group>"; };
 		736389DE2D06CB8700A80964 /* ProfileScreenFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenFactory.swift; sourceTree = "<group>"; };
 		73638F682CE4B474008F1E90 /* SelectedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedItem.swift; sourceTree = "<group>"; };
+		7365A5D62D1EB1F800F1FF24 /* AppStartScreenType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartScreenType.swift; sourceTree = "<group>"; };
+		7365A5DA2D1EB25200F1FF24 /* AppStartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartViewController.swift; sourceTree = "<group>"; };
 		736B0D292CCFE5C500975195 /* Array+BoolSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+BoolSorting.swift"; sourceTree = "<group>"; };
 		737537D52D15C00A00D6E056 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		737537D62D15C00A00D6E056 /* ProfileViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -1109,6 +1113,8 @@
 		734B01562CFCBB4C00DDD282 /* AppStartManager */ = {
 			isa = PBXGroup;
 			children = (
+				7365A5D72D1EB1F800F1FF24 /* Model */,
+				7365A5DB2D1EB25200F1FF24 /* View */,
 				734B01552CFCBB4C00DDD282 /* AppStartManager.swift */,
 			);
 			path = AppStartManager;
@@ -1345,6 +1351,22 @@
 				736389DE2D06CB8700A80964 /* ProfileScreenFactory.swift */,
 			);
 			path = ScreenFactory;
+			sourceTree = "<group>";
+		};
+		7365A5D72D1EB1F800F1FF24 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7365A5D62D1EB1F800F1FF24 /* AppStartScreenType.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		7365A5DB2D1EB25200F1FF24 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7365A5DA2D1EB25200F1FF24 /* AppStartViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		737537D72D15C00A00D6E056 /* ProfileVM */ = {
@@ -1599,10 +1621,10 @@
 		73B1EA3D2CFEF3A6004CFE17 /* FeatureToggle */ = {
 			isa = PBXGroup;
 			children = (
-				7315FE882D11CBB700EE6E74 /* Services */,
 				73AF74AC2D01C29500F1A40F /* Model */,
-				73B1EA4B2CFF03EE004CFE17 /* FeatureToggleVC */,
+				73B1EA4B2CFF03EE004CFE17 /* FeatureToggleViewController */,
 				73B1EA392CFEF3A6004CFE17 /* FeatureToggleService.swift */,
+				7315FE882D11CBB700EE6E74 /* Services */,
 			);
 			path = FeatureToggle;
 			sourceTree = "<group>";
@@ -1615,13 +1637,13 @@
 			path = FeaturesJSON;
 			sourceTree = "<group>";
 		};
-		73B1EA4B2CFF03EE004CFE17 /* FeatureToggleVC */ = {
+		73B1EA4B2CFF03EE004CFE17 /* FeatureToggleViewController */ = {
 			isa = PBXGroup;
 			children = (
 				73B1EA4A2CFF03EE004CFE17 /* FeatureToggleVC.swift */,
 				73B1EA592CFF0A93004CFE17 /* Components */,
 			);
-			path = FeatureToggleVC;
+			path = FeatureToggleViewController;
 			sourceTree = "<group>";
 		};
 		73B1EA592CFF0A93004CFE17 /* Components */ = {
@@ -2079,6 +2101,7 @@
 				7352D58D2CD91CA900F3357E /* ScreenEnum.swift in Sources */,
 				73D370432D19ADE80080BA6E /* ChooseAddressViewModelProtocol.swift in Sources */,
 				73031AF22CDE3ABD005928D2 /* SkeletonTableViewCell.swift in Sources */,
+				7365A5D82D1EB1F800F1FF24 /* AppStartScreenType.swift in Sources */,
 				73CBABC22CEF3DB40018936C /* CPFC.swift in Sources */,
 				73A738A42CDFBDEF003BA211 /* UICollection+Reload.swift in Sources */,
 				73B969602CC7C78700A2415A /* Item.swift in Sources */,
@@ -2218,6 +2241,7 @@
 				73031AF42CDE6D88005928D2 /* ScreenState.swift in Sources */,
 				73E72F4C2CF8723900CDF390 /* AppButtons.swift in Sources */,
 				7321AB662D06263D00380085 /* MainCoordinator.swift in Sources */,
+				7365A5DC2D1EB25200F1FF24 /* AppStartViewController.swift in Sources */,
 				73638F692CE4B474008F1E90 /* SelectedItem.swift in Sources */,
 				733A01D42CDBBF000013D3EB /* DependencyContainer.swift in Sources */,
 				73B969A02CC7C78700A2415A /* CustomSegmentControl.swift in Sources */,

@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-protocol PersonalViewModelProtocol {
+protocol PersonalViewModelProtocol: AnyObject {
     func initialize()
     func showURL()
 

@@ -1,4 +1,5 @@
 import UIKit
+import SkeletonView
 
 final class MainHeaderView: UIView {
 
@@ -16,7 +17,8 @@ final class MainHeaderView: UIView {
         super.init(frame: frame)
         setupUI()
         setupActions()
-        isUIVisible(false)
+
+        setState(.initial)
     }
 
     required init?(coder: NSCoder) {
@@ -32,15 +34,19 @@ extension MainHeaderView {
         updateProfileCoins(coins)
     }
 
-    // Обновляем название адреса (Дом, офис и тп)
-    private func updateAddress(_ address: String) {
-        addressStackView.updateAddress(address)
-        isUIVisible(true)
+    // Показываем или скрываем фичу с профилем (зависит от featureToggle)
+    func showProfileFeature(_ isVisible: Bool) {
+        profileContainerView.isHidden = !isVisible
     }
 
-    // Обновляем кол-во монет на профиле
-    private func updateProfileCoins(_ coins: Int) {
-        profileContainerView.updateCoinsLabel(with: coins)
+    // Управление состояниями
+    func setState(_ state: ScreenState) {
+        switch state {
+        case .initial: isUIVisible(false)
+        case .loading: showSkeleton()
+        case .success: hideSkeletonView()
+        case .error: break
+        }
     }
 }
 
@@ -69,6 +75,8 @@ private extension MainHeaderView {
     func setupUI() {
         addSubviews(contentStackView)
         setupLayout()
+
+        setupSkeleton()
     }
 
     func setupLayout() {
@@ -80,10 +88,39 @@ private extension MainHeaderView {
     }
 }
 
+// MARK: - Setup skeleton
+private extension MainHeaderView {
+    func setupSkeleton() {
+        isSkeletonable = true
+        skeletonCornerRadius = 10
+    }
+
+    func showSkeleton() {
+        showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .darkClouds))
+    }
+
+    func hideSkeletonView() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
+            self?.hideSkeleton()
+            self?.isUIVisible(true)
+        }
+    }
+}
+
 // MARK: - Supporting methods
 private extension MainHeaderView {
     // Показываем или скрываем все UI элементы на вьюхе (нужно в процессе загрузки экрана)
     func isUIVisible(_ isVisible: Bool) {
-        [addressStackView, profileContainerView].forEach { $0.isHidden = !isVisible }
+        contentStackView.alpha = isVisible ? 1 : 0
+    }
+
+    // Обновляем название адреса (Дом, офис и тп)
+    func updateAddress(_ address: String) {
+        addressStackView.updateAddress(address)
+    }
+
+    // Обновляем кол-во монет на профиле
+    func updateProfileCoins(_ coins: Int) {
+        profileContainerView.updateCoinsLabel(with: coins)
     }
 }

@@ -12,17 +12,19 @@ final class MainScreenFactory {
 
     // MARK: - Properties
     private let storage: MainStorage
+    private let featureToggleService: FeatureToggleService
 
     // MARK: - Init
-    init(storage: MainStorage) {
+    init(storage: MainStorage, featureToggleService: FeatureToggleService) {
         self.storage = storage
+        self.featureToggleService = featureToggleService
     }
 }
 
 // MARK: - Methods
 extension MainScreenFactory: MainScreenFactoryProtocol {
     func makeMainScreen() -> MainViewController {
-        let viewModel = MainViewModel(storage: storage)
+        let viewModel = MainViewModel(storage: storage, featureTogglesService: featureToggleService)
         let view = MainViewController(viewModel: viewModel)
         return view
     }

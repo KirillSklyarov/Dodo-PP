@@ -87,15 +87,8 @@ private extension ProfileViewController {
 private extension ProfileViewController {
     func setupActions() {
         setupHeaderViewActions()
-        setupSpecialOfferActions()
-    }
-
-    // Настройка действий секции Акции
-    func setupSpecialOfferActions() {
-        promoStackView.onPromoSelected = { [weak self] promo in
-            guard let self else { return }
-            viewModel.onShowPromoVC?(promo)
-        }
+        setupPersonalDataActions()
+        setupPromoActions()
     }
 
     // Настройка действий header view (где 3 кнопки)
@@ -110,6 +103,21 @@ private extension ProfileViewController {
 
         headerView.onProfileButtonTapped = { [weak self] in
             self?.viewModel.onShowPersonalData?()
+        }
+    }
+
+    func setupPersonalDataActions() {
+        personalDataCollectionView.onAddressCellTapped = { [weak self] in
+            guard let self else { return }
+            viewModel.addressCellTapped()
+        }
+    }
+
+    // Настройка действий секции Акции
+    func setupPromoActions() {
+        promoStackView.onPromoSelected = { [weak self] promo in
+            guard let self else { return }
+            viewModel.promoTapped(promo)
         }
     }
 }

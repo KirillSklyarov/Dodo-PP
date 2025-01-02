@@ -16,7 +16,7 @@ final class DataStorageService {
     }
 }
 
-    // MARK: - Common methods (методы, которые будут использоваться из разных модулей)
+// MARK: - Common methods (методы, которые будут использоваться из разных модулей)
 extension DataStorageService {
     // Устанавливает новый главный адрес и обновляет соответствующее хранилище
     func setNewMainAddress(_ newMainAddressName: String) {

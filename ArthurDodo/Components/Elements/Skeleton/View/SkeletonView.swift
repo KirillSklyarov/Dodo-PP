@@ -28,6 +28,7 @@ private extension SkeletonView {
         isSkeletonable = true
 
         let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .topBottom)
+
         showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .darkClouds), animation: animation)
     }
 }

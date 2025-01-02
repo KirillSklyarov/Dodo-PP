@@ -10,6 +10,7 @@ final class CoinsOrdersCollectionView: UICollectionView {
     private let countOfItems = 3
 
     var onToppingSelected: ( (Int) -> Void )?
+    var onAddressCellTapped: ( () -> Void )?
 
     private var personalData: User?
     private var state: ScreenState = .loading
@@ -74,6 +75,7 @@ extension CoinsOrdersCollectionView: UICollectionViewDataSource, UICollectionVie
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch state {
+        case .initial: return 1
         case .loading: return 1
         case .success: return countOfItems
         case .error: return 1
@@ -82,6 +84,9 @@ extension CoinsOrdersCollectionView: UICollectionViewDataSource, UICollectionVie
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch state {
+        case .initial:
+            let cell = collectionView.dequeueCell(indexPath) as SkeletonCollectionViewCell
+            return cell
         case .loading:
             let cell = collectionView.dequeueCell(indexPath) as SkeletonCollectionViewCell
             return cell
@@ -96,8 +101,13 @@ extension CoinsOrdersCollectionView: UICollectionViewDataSource, UICollectionVie
         }
     }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        isAddressCellTapped(indexPath)
+    }
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch state {
+        case .initial: return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
         case .loading: return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
         case .success: return CGSize(width: cellWidth, height: cellHeight)
         case .error: return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
@@ -107,5 +117,10 @@ extension CoinsOrdersCollectionView: UICollectionViewDataSource, UICollectionVie
 
 // MARK: - Supporting methods
 private extension CoinsOrdersCollectionView {
-
+    func isAddressCellTapped(_ indexPath: IndexPath) {
+        let lastRow = countOfItems - 1
+        if indexPath.row == lastRow {
+            onAddressCellTapped?()
+        }
+    }
 }

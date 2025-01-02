@@ -73,6 +73,7 @@ private extension AddToCartCollectionView {
 extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch state {
+        case .initial: return 1
         case .loading: return 1
         case .success: return numberOfElements
         case .error: return 1
@@ -81,6 +82,7 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch state {
+        case .initial: return UICollectionViewCell()
         case .loading:
             let cell = collectionView.dequeueCell(indexPath) as SkeletonCollectionViewCell2
             return cell
@@ -95,10 +97,10 @@ extension AddToCartCollectionView: UICollectionViewDataSource, UICollectionViewD
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch state {
+        case .initial: return CGSize(width: collectionView.frame.width, height: cellHeight)
         case .loading: return CGSize(width: collectionView.frame.width, height: cellHeight)
         case .success: return CGSize(width: correctWidth, height: cellHeight)
         case .error: return CGSize(width: collectionView.frame.width, height: cellHeight)
-
         }
     }
 

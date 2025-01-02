@@ -74,6 +74,7 @@ private extension PromoStackView {
     // Метод определяет что показывать в зависимости от состояния стека
     func showScreenWithState() {
         switch state {
+        case .initial: break
         case .loading: showSkeleton()
         case .success: showSuccessScreen()
         case .error: break

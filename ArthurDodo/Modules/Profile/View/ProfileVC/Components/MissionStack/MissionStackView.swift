@@ -46,6 +46,7 @@ private extension MissionStackView {
 private extension MissionStackView {
     func showScreenWithState() {
         switch state {
+        case .initial: break
         case .loading: showSkeleton()
         case .success: showSuccessScreen()
         case .error: break

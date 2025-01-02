@@ -31,7 +31,6 @@ extension FeatureToggleStorage {
     func updateLocalFeatures(_ indexPath: IndexPath, _ status: Bool) {
         localFeatures[indexPath.row].isEnabled = status
         onLocalFeaturesChanged?()
-        //        print(localFeatures)
     }
 
     //  Формируем итоговый словарь, где значение enable будет только в том случае, если у обоих массивов будет значение true

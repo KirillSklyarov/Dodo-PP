@@ -4,6 +4,13 @@ import Combine
 protocol MainViewControllerProtocol: AnyObject {
     func getViewModel() -> MainViewModelProtocol
     func updateStories()
+    func setState(view: MainVCViews, screenState: ScreenState)
+}
+
+enum MainVCViews {
+    case headerView
+    case contentCollectionView
+    case orderView
 }
 
 final class MainViewController: UIViewController {
@@ -59,39 +66,18 @@ extension MainViewController: MainViewControllerProtocol {
             self?.contentCollectionView.reloadSections(IndexSet(integer: 0))
         }
     }
+
+    func setState(view: MainVCViews, screenState: ScreenState) {
+        switch view {
+        case .headerView: headerView.setState(screenState)
+        case .contentCollectionView:
+            contentCollectionView.setState(screenState)
+        case .orderView: break
+        }
+    }
 }
 
 private extension MainViewController {
-    // Обновление коллекции
-    func updateUI() {
-        DispatchQueue.main.async { [weak self] in
-            self?.contentCollectionView.reloadData()
-        }
-    }
-
-    // При каждом показе экрана мы запрашиваем актуальную корзину и если там есть позиции, то обновляем сумму на кнопке
-    func updateCart(with totalPrice: Int) {
-        cartButton.updateCart(with: totalPrice)
-    }
-
-    // Обновляем orderView (передаем заказ и сумму заказа)
-    func updateOrder(_ orderStatus: String?, _ totalPrice: Int?) {
-        guard let orderStatus, let totalPrice else { return }
-        orderView.getOrder(orderStatus, totalPrice)
-    }
-
-    // Обновляем адрес и кол-во додоКоинов в хэдере
-    func updateHeaderView(_ addressName: String?, _ userDodoCoins: Int?) {
-        guard let addressName, let userDodoCoins else { return }
-        headerView.updateUI(addressName, userDodoCoins)
-    }
-
-    // Передаем сторисы в contentCollectionView
-    func passStoriesToContentCollectionView(_ stories: [Story]?) {
-        guard let stories else { return }
-        contentCollectionView.getStories(stories)
-    }
-
     // Передаем категории в contentCollectionView
     func passCategoriesToContentCollectionView(_ categories: [Category]?) {
         guard let categories else { return }
@@ -112,11 +98,6 @@ private extension MainViewController {
     // Передает состояние в contentCollectionView
     func setStateOnContentCollectionView(_ state: ScreenState) {
         contentCollectionView.setState(state)
-    }
-
-    // Либо показывает orderView, либо не показывает (выставляет высоту 0)
-    func isShowOrderView(_ isActiveOrder: Bool) {
-        orderView.calculateHeight(isActiveOrder)
     }
 }
 
@@ -156,30 +137,30 @@ private extension MainViewController {
     func setupHeaderView() {
         headerView.onProfileButtonTapped = { [weak self] in
             guard let self else { print("Error: self is nil"); return }
-            viewModel.profileButtonTapped()
+            viewModel.sendAction(.profileButtonTapped)
         }
 
         headerView.onAddressTapped = { [weak self] in
             guard let self else { print("Error: self is nil"); return }
-            viewModel.addressButtonTapped()
+            viewModel.sendAction(.addressButtonTapped)
         }
     }
 
     // Настройка замыканий ContentCollectionView
     func setupCollectionView() {
-        contentCollectionView.onItemCellTapped = { [weak self] indexPath in
-            guard let self else { print("Error: self is nil"); return }
-            viewModel.itemSelected(at: indexPath)
-        }
-
         contentCollectionView.onStoriesCellTapped = { [weak self] indexPath in
             guard let self else { print("Error: self is nil"); return }
-            viewModel.storyTapped(at: indexPath)
+            viewModel.sendAction(.storyTapped(at: indexPath))
         }
 
         contentCollectionView.onSpecialOfferCellTapped = { [weak self] IndexPath in
             guard let self else { print("Error: self is nil"); return }
-            viewModel.promoItemSelected(at: IndexPath)
+            viewModel.sendAction(.promoItemSelected(at: IndexPath))
+        }
+
+        contentCollectionView.onItemCellTapped = { [weak self] indexPath in
+            guard let self else { print("Error: self is nil"); return }
+            viewModel.sendAction(.itemSelected(at: indexPath))
         }
     }
 
@@ -187,7 +168,7 @@ private extension MainViewController {
     func setupCartButtonActions() {
         cartButton.onButtonTapped = { [weak self] in
             guard let self else { print("Error: self is nil"); return }
-            viewModel.cartButtonTapped()
+            viewModel.sendAction(.cartButtonTapped)
         }
     }
 }
@@ -199,8 +180,13 @@ private extension MainViewController {
         orderViewDataBinding()
         contentCollectionViewDataBinding()
         cartDataBinding()
-    }
 
+        featureToggleDataBinding()
+    }
+}
+
+// MARK: - Header Binding
+private extension MainViewController {
     func headerViewDataBinding() {
         // Показывает данные для HeaderView - адрес и додоКоины
         viewModel.addressDodoCoins
@@ -213,6 +199,15 @@ private extension MainViewController {
             .store(in: &cancellables)
     }
 
+    // Обновляем адрес и кол-во додоКоинов в хэдере
+    func updateHeaderView(_ addressName: String?, _ userDodoCoins: Int?) {
+        guard let addressName, let userDodoCoins else { return }
+        headerView.updateUI(addressName, userDodoCoins)
+    }
+}
+
+// MARK: - Order Data Binding
+private extension MainViewController {
     func orderViewDataBinding() {
         // Показывает или скрывает OrderView
         viewModel.isShowOrderViewPublisher
@@ -236,6 +231,20 @@ private extension MainViewController {
             .store(in: &cancellables)
     }
 
+    // Либо показывает orderView, либо не показывает (выставляет высоту 0)
+    func isShowOrderView(_ isActiveOrder: Bool) {
+        orderView.calculateHeight(isActiveOrder)
+    }
+
+    // Обновляем orderView (передаем заказ и сумму заказа)
+    func updateOrder(_ orderStatus: String?, _ totalPrice: Int?) {
+        guard let orderStatus, let totalPrice else { return }
+        orderView.getOrder(orderStatus, totalPrice)
+    }
+}
+
+// MARK: - Cart data binding
+private extension MainViewController {
     func cartDataBinding() {
         // Показывает данные для корзины
         viewModel.cartPricePublisher
@@ -248,6 +257,13 @@ private extension MainViewController {
             .store(in: &cancellables)
     }
 
+    // При каждом показе экрана мы запрашиваем актуальную корзину и если там есть позиции, то обновляем сумму на кнопке
+    func updateCart(with totalPrice: Int) {
+        cartButton.updateCart(with: totalPrice)
+    }
+}
+
+private extension MainViewController {
     func contentCollectionViewDataBinding() {
         // Показывает данные для сторисов
         viewModel.storiesPublisher
@@ -256,6 +272,7 @@ private extension MainViewController {
             .sink { [weak self] stories in
                 guard let self else { print("Error: self is nil"); return }
                 passStoriesToContentCollectionView(stories)
+                setState(view: .contentCollectionView, screenState: .success)
             }
             .store(in: &cancellables)
 
@@ -298,5 +315,41 @@ private extension MainViewController {
                 setStateOnContentCollectionView(state)
             }
             .store(in: &cancellables)
+    }
+
+    // Передаем сторисы в contentCollectionView
+    func passStoriesToContentCollectionView(_ stories: [Story]?) {
+        guard let stories else { return }
+        contentCollectionView.getStories(stories)
+    }
+
+    func featureToggleDataBinding() {
+        viewModel.isShowProfileButtonPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isVisible in
+                guard let self else { print("Error: self is nil"); return }
+                showProfileFeature(isVisible)
+            }
+            .store(in: &cancellables)
+
+        viewModel.headerStatePublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                guard let self else { print("Error: self is nil"); return }
+                headerView.setState(state)
+            }
+            .store(in: &cancellables)
+    }
+}
+
+// MARK: - Disable profile feature
+private extension MainViewController {
+    // Показываем или скрываем фичу профиля
+    func showProfileFeature(_ isVisible: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.headerView.showProfileFeature(isVisible)
+        }
     }
 }

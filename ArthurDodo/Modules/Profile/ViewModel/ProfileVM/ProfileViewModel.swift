@@ -12,7 +12,8 @@ final class ProfileViewModel: ProfileViewModelProtocol {
     var onShowChatAlert: (() -> Void)?
     var onDismissButtonTapped: (() -> Void)?
     var onShowPersonalData: (() -> Void)?
-    var onShowPromoVC: ((Promo) -> Void)?
+    var onShowPromoVC: (() -> Void)?
+    var onAddressCellTapped: (() -> Void)?
 
     private let storage: ProfileStorage
     
@@ -26,6 +27,15 @@ final class ProfileViewModel: ProfileViewModelProtocol {
 extension ProfileViewModel {
     func initialize() {
         fetchData()
+    }
+
+    func addressCellTapped() {
+        onAddressCellTapped?()
+    }
+
+    func promoTapped(_ promo: Promo) {
+        storage.setSelectedPromo(promo)
+        onShowPromoVC?()
     }
 }
 

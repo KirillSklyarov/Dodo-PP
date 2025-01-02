@@ -11,6 +11,8 @@ final class AppCoordinator: Coordinator {
     private let coordinatorFactory: CoordinatorFactory
     private var childCoordinators: [Coordinator] = []
 
+    private var mainCoordinator: MainCoordinator?
+
     // MARK: - Init
     init(coordinatorFactory: CoordinatorFactory) {
         self.coordinatorFactory = coordinatorFactory
@@ -24,12 +26,19 @@ final class AppCoordinator: Coordinator {
     func start() {
         startMainFlow()
     }
+
+    func showMainScreen() {
+        guard let mainCoordinator else { print("MainCoordinator is nil"); return }
+        mainCoordinator.showMainScreen()
+    }
 }
 
 // MARK: - Main Flow
 private extension AppCoordinator {
     func startMainFlow() {
         let mainCoordinator = coordinatorFactory.makeMainCoordinator() // Создаем координатор
+
+        self.mainCoordinator = mainCoordinator
 
         // Настраиваем замыкания
         mainCoordinator.onShowCart = { [weak self] in
@@ -52,7 +61,7 @@ private extension AppCoordinator {
         }
 
         addChild(mainCoordinator) // Добавляем координатор в массив
-        mainCoordinator.start() // Стартуем координатор
+        mainCoordinator.start() // Подготавливаем все данные, но еще не показываем главный экран
     }
 }
 

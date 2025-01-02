@@ -13,10 +13,12 @@ final class PromoViewController: UIViewController {
 
     private lazy var contentStack = setupContentStack()
 
+    private let storage: PromoStorageProtocol
+
     // MARK: - Init
-    init(with offer: Promo) {
+    init(storage: PromoStorageProtocol) {
+        self.storage = storage
         super.init(nibName: nil, bundle: nil)
-        configureViewController(offer)
     }
     
     required init?(coder: NSCoder) {
@@ -27,11 +29,13 @@ final class PromoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        configureViewController()
         setupActions()
     }
 
     // MARK: - Public methods
-    func configureViewController(_ offer: Promo) {
+    func configureViewController() {
+        guard let offer = storage.getSelectedPromo() else { return }
         let image = UIImage(named: offer.imageName)
         promoImageView.image = image
 

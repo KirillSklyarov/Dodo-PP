@@ -26,7 +26,7 @@ final class MainStorage {
 
 // MARK: - Public methods
 extension MainStorage {
-    func getTotalOrderPrice() -> Int {
+    func getCartPrice() -> Int {
         guard let storageService else { return 0 }
         return storageService.getTotalOrderPrice()
     }

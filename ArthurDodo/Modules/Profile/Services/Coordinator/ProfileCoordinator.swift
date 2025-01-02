@@ -20,7 +20,7 @@ final class ProfileCoordinator: Coordinator {
 
 extension ProfileCoordinator {
     func start() {
-        let profileVC = screenFactory.makeProfileScreen()
+        let profileVC: ProfileViewController = screenFactory.makeScreen(for: .profile)
         let viewModel = profileVC.getViewModel()
 
         // Отрабатываем замыкания
@@ -37,8 +37,12 @@ extension ProfileCoordinator {
             self?.showPersonalData()
         }
 
-        viewModel.onShowPromoVC = { [weak self] promo in
-            self?.showPromo(promo)
+        viewModel.onShowPromoVC = { [weak self] in
+            self?.showPromo()
+        }
+
+        viewModel.onAddressCellTapped = { [weak self] in
+            self?.showAddressVC()
         }
 
         router.present(profileVC) // Показываем экран
@@ -47,8 +51,8 @@ extension ProfileCoordinator {
 
 // MARK: - Supporting methods
 private extension ProfileCoordinator {
-    func showPromo(_ offer: Promo) {
-        let vc = screenFactory.makePromoScreen(offer)
+    func showPromo() {
+        let vc: PromoViewController = screenFactory.makeScreen(for: .promo)
         guard let configureSheet = vc.sheetPresentationController else { return }
         configureSheet.detents = [.medium()]
         configureSheet.prefersGrabberVisible = true
@@ -56,7 +60,7 @@ private extension ProfileCoordinator {
     }
 
     func showChatAlert() {
-        let vc = screenFactory.makeChatAlertScreen()
+        let vc: AppActionSheet = screenFactory.makeScreen(for: .chatAlert)
         vc.modalTransitionStyle = .crossDissolve
         router.present(vc, isParent: true, animated: false, modalPresentation: .overFullScreen)
 
@@ -66,8 +70,19 @@ private extension ProfileCoordinator {
     }
 
     func showPersonalData() {
-        let vc = screenFactory.makePersonalDataScreen()
-        var viewModel = vc.getViewModel()
+        let vc: PersonalViewController = screenFactory.makeScreen(for: .personalData)
+        let viewModel = vc.getViewModel()
+        router.present(vc, isParent: true, modalPresentation: .automatic)
+
+        viewModel.onDismissButtonTapped = { [weak self] in
+            self?.router.dismiss(isParent: true)
+        }
+    }
+
+    // Показываем экран с адресами
+    func showAddressVC() {
+        let vc: ChooseAddressVC = screenFactory.makeScreen(for: .delivery)
+        let viewModel = vc.getViewModel()
         router.present(vc, isParent: true, modalPresentation: .automatic)
 
         viewModel.onDismissButtonTapped = { [weak self] in

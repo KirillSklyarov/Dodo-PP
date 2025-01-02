@@ -6,6 +6,8 @@ final class MainCoordinator: Coordinator {
     private let screenFactory: MainScreenFactoryProtocol
     private var features: [FeatureType: Bool] = [:]
 
+    private var mainVC: UIViewController?
+
     var onShowCart: (() -> Void)?
     var onShowProfile: (() -> Void)?
     var onShowAddress: (() -> Void)?
@@ -25,12 +27,36 @@ final class MainCoordinator: Coordinator {
 // MARK: - Start
 extension MainCoordinator {
     func start() {
+        prepareForShow()
+    }
+
+    // Показывает главный экран
+    func showMainScreen() {
+        guard let mainVC else { print("MainVC is nil"); return }
+        router.setRootModule(mainVC) // Устанавливаем как главный и показываем его
+    }
+
+    // Вызываем обновление корзины на главном экране
+    func mainVCUpdateCart() {
+        if let vc = router.getMainViewController() {
+            let viewModel = vc.getViewModel()
+            viewModel.updateCart()
+        }
+    }
+}
+
+// MARK: - Show Main Screen
+private extension MainCoordinator {
+    // Подготавливает экран для показа (но не показывает его - нужно чтобы обновились все данные)
+    func prepareForShow() {
         let mainVC = screenFactory.makeMainScreen() // Создаем экран
         var viewModel = mainVC.getViewModel()
 
+        self.mainVC = mainVC
+
         // Настраиваем замыкания
         viewModel.onProfileButtonTapped = { [weak self] in
-            self?.checkFeatureToggleAndShowFlow(.profile)
+            self?.onShowProfile?()
         }
 
         viewModel.onAddressButtonTapped = { [weak self] in
@@ -42,22 +68,11 @@ extension MainCoordinator {
         }
 
         viewModel.onProductDetailsTapped = { [weak self] in
-            self?.checkFeatureToggleAndShowFlow(.productDetails)
+            self?.checkFeatureToggleAndShowFlow(.productDetails, viewModel: viewModel)
         }
 
         viewModel.onCartButtonTapped = { [weak self] in
-            self?.checkFeatureToggleAndShowFlow(.cart)
-        }
-
-        router.setRootModule(mainVC) // Устанавливаем как главный и показываем его
-    }
-
-    // Вызываем обновление корзины на главном экране
-    func mainVCUpdateCart() {
-        if let vc = router.getMainViewController() {
-            let viewModel = vc.getViewModel()
-            viewModel.updateCart()
-//            vc.presenter.updateCart()
+            self?.checkFeatureToggleAndShowFlow(.cart, viewModel: viewModel)
         }
     }
 }
@@ -134,11 +149,11 @@ private extension MainCoordinator {
 
 // MARK: - FeatureToggles
 private extension MainCoordinator {
-    func checkFeatureToggleAndShowFlow(_ type: FeatureType) {
+    func checkFeatureToggleAndShowFlow(_ type: FeatureType, viewModel: MainViewModelProtocol) {
 
 #if DEBUG
         switch type {
-        case .profile: checkFeatureToggleAndShowProfileFlow()
+        case .profile: checkFeatureToggleAndShowProfileFlow(viewModel)
         case .cart: checkFeatureToggleAndShowCartFlow()
         case .productDetails: checkFeatureToggleAndShowProductDetailsScreen()
         }
@@ -152,13 +167,12 @@ private extension MainCoordinator {
     }
 
     // Проверяем (на всякий случай) есть ли в словаре фичей такая позиция. Если есть и у нее статус false (запретить фичу), то показываем алерт, если true (разрешить фичу) - то вызываем замыкание onShowProfile (это стандартная дорога приложения). Если же в словаре такой фичи нет (чего не должно быть, но лучше проверить), то тогда просто вызываем замыкание onShowProfile.
-    func checkFeatureToggleAndShowProfileFlow() {
-        if let feature = features[.profile] {
-            feature ? onShowProfile?() : showProfileAlert()
-        } else {
-            print("No feature toggle for profile")
-            onShowProfile?()
-        }
+    func checkFeatureToggleAndShowProfileFlow(_ viewModel: MainViewModelProtocol) {
+//        if let feature = features[.profile] {
+//            hideProfileFeature(!feature, viewModel)
+//        } else {
+//            print("No feature toggle for profile")
+//        }
     }
 
     // Проверяем (на всякий случай) есть ли в словаре фичей такая позиция. Если есть и у нее статус false (запретить фичу), то показываем алерт, если true (разрешить фичу) - то вызываем замыкание onShowCart. Если же в словаре такой фичи нет (чего не должно быть, но лучше проверить), то тогда просто вызываем замыкание onShowCart (это стандартная дорога приложения)

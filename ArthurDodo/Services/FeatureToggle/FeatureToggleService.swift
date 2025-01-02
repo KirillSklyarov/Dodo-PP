@@ -47,6 +47,11 @@ extension FeatureToggleService {
         remoteFeatures
     }
 
+    // Проверяем включена ли фича
+    func isFeatureEnabled(featureType: FeatureType) -> Bool {
+        storage.getFeatures()[featureType] ?? false
+    }
+
     private func setupAction() {
         storage.onLocalFeaturesChanged = { [weak self] in
             guard let self else { return }

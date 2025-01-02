@@ -33,7 +33,7 @@ final class DependencyContainer {
         //        AppStartManager(networkService: networkService, storage: storage)
 
         // Создаем фабрику экранов
-        screenFactory = ScreenFactory(storageService: storage)
+        screenFactory = ScreenFactory(storageService: storage, featureToggleService: featureToggleService)
 
         // Создаем роутер
         router = Router()

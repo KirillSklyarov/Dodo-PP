@@ -57,6 +57,7 @@ private extension CartProductTableView {
 extension CartProductTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch state {
+        case .initial: return 1
         case .loading: return 1
         case .success: return cart?.items.count ?? 0
         case .error: return 1
@@ -65,6 +66,7 @@ extension CartProductTableView: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch state {
+        case .initial: return UITableViewCell()
         case .loading:
             let cell = tableView.dequeueCell(indexPath) as SkeletonTableViewCell
             return cell
