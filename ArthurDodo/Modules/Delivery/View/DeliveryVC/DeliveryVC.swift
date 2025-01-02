@@ -5,7 +5,7 @@ protocol DeliveryViewProtocol: AnyObject {
     func updateAddressUI(_ mainAddressName: String)
     func updatePaymentMethodUI(_ paymentMethod: PaymentMethod)
     func updateCartPriceView(_ totalPrice: Int)
-    func getViewModel() -> DeliveryViewModelProtocol
+    func getViewModel() -> any DeliveryViewModelProtocol
 }
 
 final class DeliveryVC: UIViewController {
@@ -25,11 +25,11 @@ final class DeliveryVC: UIViewController {
     private lazy var contentStackView = configureStackView()
 
     // MARK: - Other Properties
-    private let viewModel: DeliveryViewModelProtocol
+    private let viewModel: any DeliveryViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: DeliveryViewModelProtocol) {
+    init(viewModel: any DeliveryViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -51,7 +51,7 @@ final class DeliveryVC: UIViewController {
 
 // MARK: - DeliveryViewProtocol
 extension DeliveryVC: DeliveryViewProtocol {
-    func getViewModel() -> DeliveryViewModelProtocol {
+    func getViewModel() -> any DeliveryViewModelProtocol {
         viewModel
     }
 

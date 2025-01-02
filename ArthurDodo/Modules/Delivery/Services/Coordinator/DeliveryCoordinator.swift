@@ -109,7 +109,7 @@ private extension DeliveryCoordinator {
 
     func showChoosePaymentMethod(_ parentVC: UIViewController) {
         let vc = screenFactory.deliveryScreenFactory.makeChoosePaymentMethodScreen()
-        var viewModel = vc.getViewModel()
+        let viewModel = vc.getViewModel()
         router.present(parentVC, vcToShow: vc)
 
         viewModel.onDismissButtonTapped = { [weak self] in
@@ -125,7 +125,7 @@ private extension DeliveryCoordinator {
     // Показываем финальный экран
     func showFinalVC(parentVC: UIViewController) {
         let vc = screenFactory.deliveryScreenFactory.makeFinalVCScreen()
-        var viewModel = vc.getViewModel()
+        let viewModel = vc.getViewModel()
 
         viewModel.onFinalVCDismissed = { [weak self] in
             self?.router.dismiss()

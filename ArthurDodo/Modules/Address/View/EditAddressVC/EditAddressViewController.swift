@@ -2,9 +2,8 @@ import UIKit
 import Combine
 
 protocol EditAddressViewProtocol: AnyObject {
-    func getViewModel() -> EditAddressViewModelProtocol
+    func getViewModel() -> any EditAddressViewModelProtocol
     func updateAddress(_ addressToEdit: Address?)
-//    func updateShortAddress(_ shortAddress: String)
 }
 
 final class EditAddressViewController: UIViewController {
@@ -16,11 +15,11 @@ final class EditAddressViewController: UIViewController {
     private lazy var dismissButton = AppDismissButtonView(type: .chevron)
 
     // MARK: - ViewModel
-    private let viewModel: EditAddressViewModelProtocol
+    private let viewModel: any EditAddressViewModelProtocol
     private var cancellations = Set<AnyCancellable>()
 
     // MARK: - Init
-    init(viewModel: EditAddressViewModelProtocol) {
+    init(viewModel: any EditAddressViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -45,7 +44,7 @@ final class EditAddressViewController: UIViewController {
 
 // MARK: - EditAddressViewProtocol
 extension EditAddressViewController: EditAddressViewProtocol {
-    func getViewModel() -> EditAddressViewModelProtocol {
+    func getViewModel() -> any EditAddressViewModelProtocol {
         viewModel
     }
 

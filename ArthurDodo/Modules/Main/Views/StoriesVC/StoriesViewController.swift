@@ -19,11 +19,11 @@ final class StoriesVC: UIViewController {
     // MARK: - Other properties
     private lazy var progressViews: [UIProgressView] = []
 
-    private let viewModel: StoriesViewModelProtocol
+    private let viewModel: any StoriesViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: StoriesViewModelProtocol) {
+    init(viewModel: any StoriesViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -45,7 +45,7 @@ final class StoriesVC: UIViewController {
 
 // MARK: - StoriesViewProtocol
 extension StoriesVC: StoriesViewProtocol {
-    func getViewModel() -> StoriesViewModelProtocol {
+    func getViewModel() -> any StoriesViewModelProtocol {
         viewModel
     }
 

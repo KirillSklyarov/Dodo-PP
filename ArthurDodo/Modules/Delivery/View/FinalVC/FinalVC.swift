@@ -8,11 +8,11 @@ final class FinalVC: UIViewController {
     private lazy var contentStack = FinalVCContentStackView()
 
     // MARK: - ViewModel
-    private let viewModel: FinalViewModelProtocol
+    private let viewModel: any FinalViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: FinalViewModelProtocol) {
+    init(viewModel: any FinalViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -63,7 +63,7 @@ private extension FinalVC {
 
 // MARK: - FinalViewProtocol
 extension FinalVC: FinalViewProtocol {
-    func getViewModel() -> FinalViewModelProtocol {
+    func getViewModel() -> any FinalViewModelProtocol {
         viewModel
     }
 

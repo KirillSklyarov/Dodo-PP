@@ -2,7 +2,7 @@ import UIKit
 import Combine
 
 protocol ProfileViewProtocol: AnyObject {
-    func getViewModel() -> ProfileViewModelProtocol
+    func getViewModel() -> any ProfileViewModelProtocol
     func updatePersonalData(_ personalData: User?)
     func updatePromo(_ promo: [Promo]?)
 }
@@ -18,11 +18,11 @@ final class ProfileViewController: UIViewController {
     private lazy var scrollView = setupScrollView()
 
     // MARK: - Other Properties
-    private let viewModel: ProfileViewModelProtocol
+    private let viewModel: any ProfileViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: ProfileViewModelProtocol) {
+    init(viewModel: any ProfileViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -140,7 +140,7 @@ extension ProfileViewController: ProfileViewProtocol {
     }
 
     // Отдаем viewModel
-    func getViewModel() -> ProfileViewModelProtocol {
+    func getViewModel() -> any ProfileViewModelProtocol {
         viewModel
     }
 }

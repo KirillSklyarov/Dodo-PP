@@ -1,10 +1,7 @@
 import Foundation
 import Combine
 
-protocol MainViewModelProtocol {
-    func initialize()
-    func updateCart()
-    func sendAction(_ action: Action)
+protocol MainViewModelProtocol: BaseViewModelProtocol where ActionType == MainAction  {
 
     var cartPricePublisher: Published<Int?>.Publisher { get }
     var storiesPublisher: Published<[Story]?>.Publisher { get }

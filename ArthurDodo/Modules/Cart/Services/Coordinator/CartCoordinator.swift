@@ -55,7 +55,7 @@ extension CartCoordinator {
 private extension CartCoordinator {
     func showEditProduct(completion: @escaping (() -> Void)) {
         let vc = screenFactory.makeEditProductScreen() // Создаем экран
-        var viewModel = vc.getViewModel()
+        let viewModel = vc.getViewModel()
 
         // Настраиваем замыкания
         viewModel.onCartButtonTapped = { [weak self] in

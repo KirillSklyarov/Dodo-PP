@@ -1,8 +1,6 @@
 import Combine
 
-protocol AddressViewModelProtocol {
-    func initialize()
-    func sendAction(_ action: AddressAction)
+protocol AddressViewModelProtocol: BaseViewModelProtocol where ActionType == AddressAction {
 
     var addressesPublisher: Published<[Address]>.Publisher { get }
     var mainAddressPublisher: Published<Address?>.Publisher { get }

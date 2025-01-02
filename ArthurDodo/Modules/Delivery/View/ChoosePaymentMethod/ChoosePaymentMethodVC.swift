@@ -10,11 +10,11 @@ final class ChoosePaymentMethodVC: UIViewController {
     private lazy var contentStack = AppStackView([headerView, paymentMethodsTableView], axis: .vertical, spacing: 10)
 
     // MARK: - ViewModel
-    private let viewModel: ChoosePaymentMethodVMProtocol
+    private let viewModel: any ChoosePaymentMethodVMProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: ChoosePaymentMethodVMProtocol) {
+    init(viewModel: any ChoosePaymentMethodVMProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -35,7 +35,7 @@ final class ChoosePaymentMethodVC: UIViewController {
 
 // MARK: - ChoosePaymentMethodVCProtocol
 extension ChoosePaymentMethodVC: ChoosePaymentMethodVCProtocol {
-    func getViewModel() -> ChoosePaymentMethodVMProtocol {
+    func getViewModel() -> any ChoosePaymentMethodVMProtocol {
         viewModel
     }
 

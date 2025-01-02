@@ -1,9 +1,7 @@
 import Foundation
 import Combine
 
-protocol ChoosePaymentMethodVMProtocol {
-    func initialize()
-    func sendAction(_ action: PaymentMethodViewModelAction)
+protocol ChoosePaymentMethodVMProtocol: BaseViewModelProtocol where ActionType == PaymentMethodViewModelAction {
 
     var paymentMethodPublisher: Published<PaymentMethod?>.Publisher { get }
 

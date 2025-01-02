@@ -2,9 +2,7 @@ import Foundation
 import Combine
 
 // MARK: - Protocol
-protocol ProductDetailsViewModelProtocol {
-    func initialize()
-    func sendAction(_ action: ProductDetailsViewModelAction)
+protocol ProductDetailsViewModelProtocol: BaseViewModelProtocol where ActionType == ProductDetailsViewModelAction {
 
     var itemPublisher: Published<Item?>.Publisher { get }
     var isOneSizePublisher: Published<Bool?>.Publisher { get }

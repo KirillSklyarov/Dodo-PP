@@ -1,9 +1,7 @@
 import Combine
 
-protocol DeliveryViewModelProtocol: AnyObject {
-    func initialize()
-    func sendAction(_ action: DeliveryViewModelAction)
-
+protocol DeliveryViewModelProtocol: BaseViewModelProtocol where ActionType == DeliveryViewModelAction {
+   
     var mainAddressPublisher: Published<String?>.Publisher { get }
     var preferredPaymentMethodPublisher: Published<PaymentMethod>.Publisher { get }
     var cartPricePublisher: Published<Int>.Publisher { get }

@@ -14,11 +14,11 @@ final class EditProductViewController: UIViewController {
     private lazy var scrollView = configScrollView()
 
     // MARK: - Presenter
-    private let viewModel: EditItemViewModelProtocol
+    private let viewModel: any EditItemViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: EditItemViewModelProtocol) {
+    init(viewModel: any EditItemViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -149,7 +149,7 @@ private extension EditProductViewController {
 
 // MARK: - Protocol
 extension EditProductViewController {
-    func getViewModel() -> EditItemViewModelProtocol {
+    func getViewModel() -> any EditItemViewModelProtocol {
         viewModel
     }
 

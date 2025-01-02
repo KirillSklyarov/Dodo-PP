@@ -229,6 +229,7 @@
 		73CBABC22CEF3DB40018936C /* CPFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABC02CEF3DB40018936C /* CPFC.swift */; };
 		73CEF56D2D26F1E30013D086 /* AddressAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CEF56C2D26F1E30013D086 /* AddressAction.swift */; };
 		73CEF56F2D2703A40013D086 /* CartViewModelAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CEF56E2D2703A40013D086 /* CartViewModelAction.swift */; };
+		73CEF5732D2716710013D086 /* BaseViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CEF5722D2716710013D086 /* BaseViewModelProtocol.swift */; };
 		73D0FAAD2CCA3FA90009AEE5 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D0FAAC2CCA3FA90009AEE5 /* AppCoordinator.swift */; };
 		73D370402D19AD150080BA6E /* ChooseAddressVCProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D3703F2D19AD150080BA6E /* ChooseAddressVCProtocol.swift */; };
 		73D370432D19ADE80080BA6E /* ChooseAddressViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D370422D19ADE80080BA6E /* ChooseAddressViewModelProtocol.swift */; };
@@ -475,6 +476,7 @@
 		73CBABC02CEF3DB40018936C /* CPFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPFC.swift; sourceTree = "<group>"; };
 		73CEF56C2D26F1E30013D086 /* AddressAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressAction.swift; sourceTree = "<group>"; };
 		73CEF56E2D2703A40013D086 /* CartViewModelAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModelAction.swift; sourceTree = "<group>"; };
+		73CEF5722D2716710013D086 /* BaseViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModelProtocol.swift; sourceTree = "<group>"; };
 		73D0FAAC2CCA3FA90009AEE5 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		73D3703F2D19AD150080BA6E /* ChooseAddressVCProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressVCProtocol.swift; sourceTree = "<group>"; };
 		73D370422D19ADE80080BA6E /* ChooseAddressViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -1852,6 +1854,7 @@
 		73B969572CC7C78700A2415A /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				73CEF5712D2716640013D086 /* Base */,
 				73B969262CC7C78700A2415A /* Main */,
 				73B969512CC7C78700A2415A /* Profile */,
 				73B968EF2CC7C78700A2415A /* Address */,
@@ -1954,6 +1957,14 @@
 				73CBABC02CEF3DB40018936C /* CPFC.swift */,
 			);
 			path = CPFC;
+			sourceTree = "<group>";
+		};
+		73CEF5712D2716640013D086 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				73CEF5722D2716710013D086 /* BaseViewModelProtocol.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 		73D0FAAB2CCA3F960009AEE5 /* Coordinator */ = {
@@ -2125,6 +2136,7 @@
 				734CC71C2D0C588800E902ED /* AddressTableViewCell.swift in Sources */,
 				734CC71D2D0C588800E902ED /* PaymentMethodTableView.swift in Sources */,
 				7344CCE22D0F1AC700CF2011 /* NavigationBar.swift in Sources */,
+				73CEF5732D2716710013D086 /* BaseViewModelProtocol.swift in Sources */,
 				734CC71E2D0C588800E902ED /* PaymentMethodTableViewCell.swift in Sources */,
 				734CC71F2D0C588800E902ED /* TimeCollectionView.swift in Sources */,
 				734CC7202D0C588800E902ED /* TimeCollectionViewCell.swift in Sources */,

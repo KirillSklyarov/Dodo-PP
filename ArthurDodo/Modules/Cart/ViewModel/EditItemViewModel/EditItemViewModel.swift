@@ -1,9 +1,7 @@
 import UIKit
 import Combine
 
-protocol EditItemViewModelProtocol {
-    func initialize()
-    func sendAction(_ action: EditItemAction)
+protocol EditItemViewModelProtocol: BaseViewModelProtocol where ActionType == EditItemAction {
 
     var cartItemPublisher: Published<CartItem?>.Publisher { get }
     var toppingsPublisher: Published<[Topping]?>.Publisher { get }

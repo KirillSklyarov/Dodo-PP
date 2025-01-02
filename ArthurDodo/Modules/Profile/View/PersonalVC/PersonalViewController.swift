@@ -5,7 +5,7 @@ import Combine
 protocol PersonalViewProtocol: AnyObject {
     func updateUserData(_ personalData: User?)
     func showURL(url: URL?)
-    func getViewModel() -> PersonalViewModelProtocol
+    func getViewModel() -> any PersonalViewModelProtocol
 }
 
 // Экран с личными данными юзера (имя, почта, телефон и проч.)
@@ -17,11 +17,11 @@ final class PersonalViewController: UIViewController {
     private lazy var contentStackView = AppStackView([headerView, personalTableView], axis: .vertical, spacing: 10)
 
     // MARK: - Properties
-    private let viewModel: PersonalViewModelProtocol
+    private let viewModel: any PersonalViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: PersonalViewModelProtocol) {
+    init(viewModel: any PersonalViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -86,7 +86,7 @@ private extension PersonalViewController {
 // MARK: - PersonalViewProtocol
 extension PersonalViewController: PersonalViewProtocol {
     // Отдаем viewModel
-    func getViewModel() -> PersonalViewModelProtocol {
+    func getViewModel() -> any PersonalViewModelProtocol {
         viewModel
     }
 

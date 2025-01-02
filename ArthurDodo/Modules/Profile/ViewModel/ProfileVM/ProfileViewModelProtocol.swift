@@ -1,9 +1,6 @@
 import Combine
-import Foundation
 
-protocol ProfileViewModelProtocol: AnyObject {
-    func initialize()
-    func sendAction(_ action: ProfileAction)
+protocol ProfileViewModelProtocol: BaseViewModelProtocol where ActionType == ProfileAction {
 
     var userDataPublisher: Published<User?>.Publisher { get }
     var promoPublisher: Published<[Promo]?>.Publisher { get }

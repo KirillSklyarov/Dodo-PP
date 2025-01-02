@@ -1,13 +1,14 @@
 import Foundation
 import Combine
 
-enum Action {
+enum MainAction {
     case profileButtonTapped
     case addressButtonTapped
     case itemSelected(at: IndexPath)
     case storyTapped(at: IndexPath)
     case promoItemSelected(at: IndexPath)
     case cartButtonTapped
+    case updateCart
 }
 
 final class MainViewModel: MainViewModelProtocol {
@@ -77,7 +78,7 @@ extension MainViewModel {
     }
 
     // Отрабатывает action
-    func sendAction(_ action: Action) {
+    func sendAction(_ action: MainAction) {
         switch action {
         case .profileButtonTapped: onProfileButtonTapped?()
         case .addressButtonTapped: onAddressButtonTapped?()
@@ -85,6 +86,7 @@ extension MainViewModel {
         case .storyTapped(let indexPath): onStoryTapped?(indexPath)
         case .promoItemSelected(let indexPath): promoItemSelected(at: indexPath)
         case .cartButtonTapped: onCartButtonTapped?()
+        case .updateCart: updateCart()
         }
     }
 }

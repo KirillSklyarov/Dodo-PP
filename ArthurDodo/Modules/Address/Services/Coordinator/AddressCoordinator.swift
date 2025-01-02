@@ -19,7 +19,7 @@ final class AddressCoordinator: Coordinator {
 
     func start() {
         let addressVC = screenFactory.makeAddressScreen()
-        var viewModel = addressVC.getViewModel()
+        let viewModel = addressVC.getViewModel()
 
         viewModel.onDismissButtonTapped = { [weak self] in
             guard let self else { return }

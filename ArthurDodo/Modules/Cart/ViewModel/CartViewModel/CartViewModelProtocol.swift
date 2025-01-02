@@ -1,9 +1,7 @@
 import Foundation
 import Combine
 
-protocol CartViewModelProtocol: AnyObject {
-    func initialize()
-    func sendAction(_ action: CartViewModelAction)
+protocol CartViewModelProtocol: BaseViewModelProtocol where ActionType == CartViewModelAction {
 
     var promoPublisher: Published<[Promo]?>.Publisher { get }
     var itemsToAddPublisher: Published<[Item]?>.Publisher { get }

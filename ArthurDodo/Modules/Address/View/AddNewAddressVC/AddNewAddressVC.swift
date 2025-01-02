@@ -11,11 +11,11 @@ final class AddNewAddressViewController: UIViewController {
     private lazy var contentStackView = AppStackView([mapView, addressView], axis: .vertical, spacing: -5, distribution: .fill)
 
     // MARK: - Presenter
-    private let viewModel: AddNewAddressVMProtocol
+    private let viewModel: any AddNewAddressVMProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: AddNewAddressVMProtocol) {
+    init(viewModel: any AddNewAddressVMProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -103,7 +103,7 @@ private extension AddNewAddressViewController {
 
 // MARK: - AddNewAddressViewProtocol
 extension AddNewAddressViewController: AddNewAddressViewProtocol {
-    func getViewModel() -> AddNewAddressVMProtocol {
+    func getViewModel() -> any AddNewAddressVMProtocol {
         viewModel
     }
 

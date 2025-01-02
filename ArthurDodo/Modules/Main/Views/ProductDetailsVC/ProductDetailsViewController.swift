@@ -2,7 +2,7 @@ import UIKit
 import Combine
 
 protocol ProductDetailsViewControllerProtocol {
-    func getViewModel() -> ProductDetailsViewModelProtocol
+    func getViewModel() -> any ProductDetailsViewModelProtocol
 }
 
 // Класс, который отвечает за показ экрана с товаром (где фотка, описание, ингредиенты, состав и проч.)
@@ -18,7 +18,7 @@ final class ProductDetailsViewController: UIViewController {
     private lazy var scrollView = configScrollView()
 
     // MARK: - Presenter
-    private let viewModel: ProductDetailsViewModelProtocol
+    private let viewModel: any ProductDetailsViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
@@ -46,7 +46,7 @@ final class ProductDetailsViewController: UIViewController {
 
 // MARK: - ProductDetailsViewControllerProtocol
 extension ProductDetailsViewController: ProductDetailsViewControllerProtocol {
-    func getViewModel() -> ProductDetailsViewModelProtocol {
+    func getViewModel() -> any ProductDetailsViewModelProtocol {
         viewModel
     }
 }

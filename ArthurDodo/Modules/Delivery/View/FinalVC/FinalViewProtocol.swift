@@ -1,6 +1,6 @@
 import Foundation
 
 protocol FinalViewProtocol: AnyObject {
-    func getViewModel() -> FinalViewModelProtocol
+    func getViewModel() -> any FinalViewModelProtocol
     func updateUI(_ seconds: Int)
 }

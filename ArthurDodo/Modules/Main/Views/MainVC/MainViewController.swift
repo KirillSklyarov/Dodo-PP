@@ -2,7 +2,7 @@ import UIKit
 import Combine
 
 protocol MainViewControllerProtocol: AnyObject {
-    func getViewModel() -> MainViewModelProtocol
+    func getViewModel() -> any MainViewModelProtocol
     func updateStories()
     func setState(view: MainVCViews, screenState: ScreenState)
 }
@@ -23,12 +23,12 @@ final class MainViewController: UIViewController {
 
     private lazy var contentStackView = AppStackView([headerView, orderView, contentCollectionView], axis: .vertical, spacing: 5)
 
-    // MARK: - Presenter
-    private let viewModel: MainViewModelProtocol
+    // MARK: - ViewModel
+    private let viewModel: any MainViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: MainViewModelProtocol) {
+    init(viewModel: any MainViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -50,13 +50,13 @@ final class MainViewController: UIViewController {
     // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.updateCart()
+        viewModel.sendAction(.updateCart)
     }
 }
 
 // MARK: - MainViewControllerProtocol
 extension MainViewController: MainViewControllerProtocol {
-    func getViewModel() -> MainViewModelProtocol {
+    func getViewModel() -> any MainViewModelProtocol {
         viewModel
     }
 

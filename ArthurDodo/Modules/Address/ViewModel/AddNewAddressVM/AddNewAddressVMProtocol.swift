@@ -1,8 +1,6 @@
 import Combine
 
-protocol AddNewAddressVMProtocol: AnyObject {
-    func initialize()
-    func sendAction(_ action: AddNewAddressAction)
+protocol AddNewAddressVMProtocol: BaseViewModelProtocol where ActionType == AddNewAddressAction {
 
     var mainAddressPublisher: Published<Address?>.Publisher { get }
 

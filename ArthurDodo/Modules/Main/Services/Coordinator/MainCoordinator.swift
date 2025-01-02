@@ -40,7 +40,7 @@ extension MainCoordinator {
     func mainVCUpdateCart() {
         if let vc = router.getMainViewController() {
             let viewModel = vc.getViewModel()
-            viewModel.updateCart()
+            viewModel.sendAction(.updateCart)
         }
     }
 }
@@ -50,10 +50,12 @@ private extension MainCoordinator {
     // Подготавливает экран для показа (но не показывает его - нужно чтобы обновились все данные)
     func prepareForShow() {
         let mainVC = screenFactory.makeMainScreen() // Создаем экран
-        var viewModel = mainVC.getViewModel()
-
         self.mainVC = mainVC
+        let viewModel = mainVC.getViewModel()
+        setupActions(viewModel)
+    }
 
+    func setupActions(_ viewModel: any MainViewModelProtocol) {
         // Настраиваем замыкания
         viewModel.onProfileButtonTapped = { [weak self] in
             self?.onShowProfile?()
@@ -82,7 +84,7 @@ private extension MainCoordinator {
     // Показ экрана деталей товара и связанные с ним операции
     func showProductDetails() {
         let vc = screenFactory.makeProductDetailsScreen() // Создаем экран
-        var viewModel = vc.getViewModel()
+        let viewModel = vc.getViewModel()
 
         // Настраиваем замыкания
         viewModel.onDismissButtonTapped = { [weak self] in
@@ -101,7 +103,7 @@ private extension MainCoordinator {
 private extension MainCoordinator {
     func showStories(_ indexPath: IndexPath) {
         let vc = screenFactory.makeStoriesScreen(indexPath: indexPath)
-        var viewModel = vc.getViewModel()
+        let viewModel = vc.getViewModel()
 
         // Когда экран сторис закрыт, то обновляем сторисы на главном экране и закрываем окно
         viewModel.onDismissed = { [weak self] in
@@ -149,30 +151,21 @@ private extension MainCoordinator {
 
 // MARK: - FeatureToggles
 private extension MainCoordinator {
-    func checkFeatureToggleAndShowFlow(_ type: FeatureType, viewModel: MainViewModelProtocol) {
+    func checkFeatureToggleAndShowFlow(_ type: FeatureType, viewModel: any MainViewModelProtocol) {
 
 #if DEBUG
         switch type {
-        case .profile: checkFeatureToggleAndShowProfileFlow(viewModel)
         case .cart: checkFeatureToggleAndShowCartFlow()
         case .productDetails: checkFeatureToggleAndShowProductDetailsScreen()
+        case .profile: break
         }
 #else
         switch type {
         case .profile: onShowProfile?()
         case .cart: onShowCart?()
-        case .productDetails:  showProductDetails()
+        case .productDetails: showProductDetails()
         }
 #endif
-    }
-
-    // Проверяем (на всякий случай) есть ли в словаре фичей такая позиция. Если есть и у нее статус false (запретить фичу), то показываем алерт, если true (разрешить фичу) - то вызываем замыкание onShowProfile (это стандартная дорога приложения). Если же в словаре такой фичи нет (чего не должно быть, но лучше проверить), то тогда просто вызываем замыкание onShowProfile.
-    func checkFeatureToggleAndShowProfileFlow(_ viewModel: MainViewModelProtocol) {
-//        if let feature = features[.profile] {
-//            hideProfileFeature(!feature, viewModel)
-//        } else {
-//            print("No feature toggle for profile")
-//        }
     }
 
     // Проверяем (на всякий случай) есть ли в словаре фичей такая позиция. Если есть и у нее статус false (запретить фичу), то показываем алерт, если true (разрешить фичу) - то вызываем замыкание onShowCart. Если же в словаре такой фичи нет (чего не должно быть, но лучше проверить), то тогда просто вызываем замыкание onShowCart (это стандартная дорога приложения)

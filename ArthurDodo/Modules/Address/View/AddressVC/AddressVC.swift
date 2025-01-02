@@ -4,7 +4,7 @@ import Combine
 protocol AddressViewProtocol: AnyObject {
     func showAddressOnMap(_ address: Address?)
     func updateAddress(_ addresses: [Address])
-    func getViewModel() -> AddressViewModelProtocol 
+    func getViewModel() -> any AddressViewModelProtocol 
 }
 
 final class AddressViewController: UIViewController {
@@ -16,11 +16,11 @@ final class AddressViewController: UIViewController {
     private lazy var contentStack = AppStackView([mapView, addressView], axis: .vertical, spacing: -10)
 
     // MARK: - Properties
-    private let viewModel: AddressViewModelProtocol
+    private let viewModel: any AddressViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: AddressViewModelProtocol) {
+    init(viewModel: any AddressViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -110,7 +110,7 @@ private extension AddressViewController {
 // MARK: - AddressViewProtocol
 extension AddressViewController: AddressViewProtocol {
     // Отдаем viewModel
-    func getViewModel() -> AddressViewModelProtocol {
+    func getViewModel() -> any AddressViewModelProtocol {
         viewModel
     }
 

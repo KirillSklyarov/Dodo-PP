@@ -1,8 +1,6 @@
 import Foundation
 
-protocol ChooseAddressViewModelProtocol: AnyObject {
-    func initialize()
-    func sendAction(_ action: ChooseAddressViewModelAction)
+protocol ChooseAddressViewModelProtocol: BaseViewModelProtocol where ActionType == ChooseAddressViewModelAction {
 
     var addressesPublisher: Published<[Address]?>.Publisher { get }
 

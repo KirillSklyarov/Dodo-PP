@@ -18,11 +18,11 @@ final class CartViewController: UIViewController {
     private lazy var contentStack = AppStackView([headerView, scrollView, cartButtonView], axis: .vertical)
 
     // MARK: - Presenter
-    private let viewModel: CartViewModelProtocol
+    private let viewModel: any CartViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: CartViewModelProtocol) {
+    init(viewModel: any CartViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -185,7 +185,7 @@ extension CartViewController: UIScrollViewDelegate {
 
 // MARK: - CartViewProtocol
 extension CartViewController {
-    func getViewModel() -> CartViewModelProtocol {
+    func getViewModel() -> any CartViewModelProtocol {
         viewModel
     }
 
