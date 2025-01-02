@@ -1,6 +1,11 @@
 import Foundation
 import Combine
 
+enum PaymentMethodViewModelAction {
+    case dismissButtonTapped
+    case paymentMethodSelected(PaymentMethod)
+}
+
 final class ChoosePaymentMethodVM {
 
     // MARK: - Properties
@@ -26,6 +31,21 @@ extension ChoosePaymentMethodVM: ChoosePaymentMethodVMProtocol {
         fetchData()
     }
 
+    func sendAction(_ action: PaymentMethodViewModelAction) {
+        switch action {
+        case .dismissButtonTapped: dismissButtonTapped()
+        case .paymentMethodSelected(let paymentMethod): paymentMethodSelected(paymentMethod)
+        }
+    }
+}
+
+// MARK: - Supporting methods
+private extension ChoosePaymentMethodVM {
+    // Забираем предпочитаемый метод оплаты из хранилища
+    func fetchData() {
+        preferredPaymentMethod = storage.getPreferredPaymentMethodFromStorage()
+    }
+
     func dismissButtonTapped() {
         onDismissButtonTapped?()
     }
@@ -35,18 +55,7 @@ extension ChoosePaymentMethodVM: ChoosePaymentMethodVMProtocol {
         setPreferredPaymentMethodToUserDefaults(paymentMethod)
         onPaymentMethodSelected?(paymentMethod)
     }
-}
 
-// MARK: - Fetch data
-private extension ChoosePaymentMethodVM {
-    // Забираем предпочитаемый метод оплаты из хранилища
-    func fetchData() {
-        preferredPaymentMethod = storage.getPreferredPaymentMethodFromStorage()
-    }
-}
-
-// MARK: - Supporting methods
-private extension ChoosePaymentMethodVM {
     // Сохраняем выбранный способ оплаты в UserDefaults
     func setPreferredPaymentMethodToUserDefaults(_ paymentMethod: PaymentMethod) {
         userDefaults.setPreferredPaymentMethod(paymentMethod)

@@ -43,7 +43,7 @@ final class CartViewController: UIViewController {
     // Мы обновляем кнопку корзины на mainVC всегда, когда закрывается это окно (либо по свайпу, либо по нажатию на кнопку dismiss, либо по причине пустой корзины)
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        viewModel.cartVCDismissed()
+        viewModel.sendAction(.dismissButtonTapped)
     }
 }
 
@@ -61,29 +61,29 @@ private extension CartViewController {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.cartVCDismissed()
+            viewModel.sendAction(.dismissButtonTapped)
         }
     }
 
     func setupCartProductTableViewAction() {
         orderStackView.onEmptyCart = { [weak self] in
             guard let self else { return }
-            viewModel.cartIsEmpty()
+            viewModel.sendAction(.emptyCartAction)
         }
 
         // Удаляем позицию из заказа и опять фетчим заказы
         orderStackView.onItemDeletedFromCart = { [weak self] indexPath in
-            self?.viewModel.deleteItemFromCart(indexPath)
+            self?.viewModel.sendAction(.deleteItemTapped(indexPath))
         }
 
         // Изменяем кол-во единиц товара в корзине
         orderStackView.onCountChanged = { [weak self] indexPath, count in
-            self?.viewModel.changeCountOfItem(indexPath, count)
+            self?.viewModel.sendAction(.changeCountOfItemsTapped(indexPath, count))
         }
 
         // Нажали на ячейку в таблице с товаром, отправили редактируемый товар в хранилище и открыли экран с этим товаром, при закрытии этого экрана срабатывает комплишн и мы заново загружаем корзину
         orderStackView.onItemCellSelected = { [weak self] item in
-            self?.viewModel.selectItem(item)
+            self?.viewModel.sendAction(.itemSelected(item))
         }
     }
 
@@ -99,7 +99,7 @@ private extension CartViewController {
     func setupPromoActions() {
         promoStackView.onPromoSelected = { [weak self] promo in
             guard let self else { print("We can't show promoVC"); return }
-            viewModel.promoSelected(promo)
+            viewModel.sendAction(.promoSelected(promo))
         }
     }
 
@@ -107,14 +107,13 @@ private extension CartViewController {
     func setupToppingsCollectionView() {
         itemsToAddStackView.onNewItemToAddToCart = { [weak self] itemToAddToOrder in
             guard let self else { return }
-            viewModel.addNewItemToCartTapped(itemToAddToOrder)
-
+            viewModel.sendAction(.addNewItemToCartTapped(itemToAddToOrder))
         }
     }
 
     func setupCartButtonAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
-            self?.viewModel.cartButtonTapped()
+            self?.viewModel.sendAction(.cartButtonTapped)
         }
     }
 }

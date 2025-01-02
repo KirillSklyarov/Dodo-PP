@@ -10,7 +10,6 @@ enum Action {
     case cartButtonTapped
 }
 
-
 final class MainViewModel: MainViewModelProtocol {
     // MARK: - Published properties
     @Published private var cartPrice: Int?

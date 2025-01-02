@@ -1,14 +1,8 @@
-import Foundation
 import Combine
 
 protocol DeliveryViewModelProtocol: AnyObject {
     func initialize()
-    func sendNewAddressToStorage(_ addressName: String)
-    func dismissButtonTapped()
-    func addressCellTapped()
-    func deliveryTimeSelected(_ time: String)
-    func paymentMethodCellTapped()
-    func payButtonTapped()
+    func sendAction(_ action: DeliveryViewModelAction)
 
     var mainAddressPublisher: Published<String?>.Publisher { get }
     var preferredPaymentMethodPublisher: Published<PaymentMethod>.Publisher { get }

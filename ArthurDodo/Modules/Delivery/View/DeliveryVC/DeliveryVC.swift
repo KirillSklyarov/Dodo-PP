@@ -57,7 +57,7 @@ extension DeliveryVC: DeliveryViewProtocol {
 
     func updateAddress(_ addressName: String) {
         addressTableView.updateUI(with: addressName)
-        viewModel.sendNewAddressToStorage(addressName)
+        viewModel.sendAction(.newAddressChosen(addressName))
     }
 
     func updatePaymentMethodUI(_ paymentMethod: PaymentMethod) {
@@ -120,35 +120,35 @@ private extension DeliveryVC {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.dismissButtonTapped()
+            viewModel.sendAction(.dismissButtonTapped)
         }
     }
 
     func setupAddressTableViewAction() {
         addressTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            viewModel.addressCellTapped()
+            viewModel.sendAction(.addressCellTapped)
         }
     }
 
     func setupTimeCollectionAction() {
         timeCollection.onDeliveryTimeSelected = { [weak self] time in
             guard let self else { return }
-            viewModel.deliveryTimeSelected(time)
+            viewModel.sendAction(.deliveryTimeSelected(time))
         }
     }
 
     func setupPaymentTableView() {
         paymentTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            viewModel.paymentMethodCellTapped()
+            viewModel.sendAction(.paymentMethodCellTapped)
         }
     }
 
     func setupPayButtonActions() {
         payButton.onPayButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.payButtonTapped()
+            viewModel.sendAction(.payButtonTapped)
         }
     }
 }

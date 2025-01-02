@@ -1,6 +1,13 @@
 import Foundation
 import Combine
 
+enum ChooseAddressViewModelAction {
+    case dismissButtonTapped
+    case addressCellTapped(String)
+    case editAddressCellTapped(IndexPath)
+    case addNewAddressButtonTapped
+}
+
 final class ChooseAddressVM {
 
     // MARK: - Properties
@@ -29,6 +36,31 @@ extension ChooseAddressVM: ChooseAddressViewModelProtocol {
         fetchData()
     }
 
+    func sendAction(_ action: ChooseAddressViewModelAction) {
+        switch action {
+        case .dismissButtonTapped: dismissButtonTapped()
+        case .addressCellTapped(let addressName): addressCellTapped(addressName)
+        case .editAddressCellTapped(let indexPath): editAddressCellTapped(indexPath)
+        case .addNewAddressButtonTapped: addNewAddressButtonTapped()
+        }
+    }
+}
+
+// MARK: - Fetch Data
+private extension ChooseAddressVM {
+    // Получаем данные об адресе
+    func fetchData() {
+        getAddressesFromStorage()
+    }
+
+    // Получаем данные об адресе из хранилища и обновляем таблицу
+    func getAddressesFromStorage() {
+        addresses = storageService.getAllAddresses()
+    }
+}
+
+// MARK: - Supporting methods
+private extension ChooseAddressVM {
     func addressCellTapped(_ addressName: String) {
         onAddressCellTapped?(addressName)
         onDismissButtonTapped?()
@@ -45,18 +77,5 @@ extension ChooseAddressVM: ChooseAddressViewModelProtocol {
 
     func dismissButtonTapped() {
         onDismissButtonTapped?()
-    }
-}
-
-// MARK: - Fetch Data
-private extension ChooseAddressVM {
-    // Получаем данные об адресе
-    func fetchData() {
-        getAddressesFromStorage()
-    }
-
-    // Получаем данные об адресе из хранилища и обновляем таблицу
-    func getAddressesFromStorage() {
-        addresses = storageService.getAllAddresses()
     }
 }

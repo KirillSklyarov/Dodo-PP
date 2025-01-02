@@ -4,9 +4,7 @@ import Combine
 // MARK: - Protocol
 protocol ProductDetailsViewModelProtocol {
     func initialize()
-    func cartButtonTapped(_ size: Size, _ dough: Dough)
-    func itemSegmentValueChanged(_ index: Int)
-    func showPopupVC(_ popupVC: CpfcPopupView)
+    func sendAction(_ action: ProductDetailsViewModelAction)
 
     var itemPublisher: Published<Item?>.Publisher { get }
     var isOneSizePublisher: Published<Bool?>.Publisher { get }
@@ -20,7 +18,14 @@ protocol ProductDetailsViewModelProtocol {
     var onShowPopupVC: ( (CpfcPopupView) -> Void)? { get set }
 }
 
-final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
+enum ProductDetailsViewModelAction {
+    case dismissButtonTapped
+    case cartButtonTapped(Size, Dough)
+    case itemSegmentValueChanged(Int)
+    case showPopupVC(CpfcPopupView)
+}
+
+final class ProductDetailsViewModel {
     // MARK: - Published properties
     @Published private var item: Item?
     @Published private var isOneSize: Bool?
@@ -53,10 +58,19 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     }
 }
 
-// MARK: - Methods
-extension ProductDetailsViewModel {
+// MARK: - ProductDetailsViewModelProtocol
+extension ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     func initialize() {
         fetchData()
+    }
+
+    func sendAction(_ action: ProductDetailsViewModelAction) {
+        switch action {
+        case .dismissButtonTapped: onDismissButtonTapped?()
+        case .cartButtonTapped(let size, let dough): cartButtonTapped(size, dough)
+        case .itemSegmentValueChanged(let index): itemSegmentValueChanged(index)
+        case .showPopupVC(let popupVC): showPopupVC(popupVC)
+        }
     }
 
     // При нажатии на кнопку корзины мы формируем заказ, добавляем позицию в заказ и отрабатываем замыкания

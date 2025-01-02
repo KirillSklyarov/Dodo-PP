@@ -228,6 +228,7 @@
 		73CBABBC2CEF3D8C0018936C /* WeightPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABBB2CEF3D8C0018936C /* WeightPrice.swift */; };
 		73CBABC22CEF3DB40018936C /* CPFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABC02CEF3DB40018936C /* CPFC.swift */; };
 		73CEF56D2D26F1E30013D086 /* AddressAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CEF56C2D26F1E30013D086 /* AddressAction.swift */; };
+		73CEF56F2D2703A40013D086 /* CartViewModelAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CEF56E2D2703A40013D086 /* CartViewModelAction.swift */; };
 		73D0FAAD2CCA3FA90009AEE5 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D0FAAC2CCA3FA90009AEE5 /* AppCoordinator.swift */; };
 		73D370402D19AD150080BA6E /* ChooseAddressVCProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D3703F2D19AD150080BA6E /* ChooseAddressVCProtocol.swift */; };
 		73D370432D19ADE80080BA6E /* ChooseAddressViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D370422D19ADE80080BA6E /* ChooseAddressViewModelProtocol.swift */; };
@@ -473,6 +474,7 @@
 		73CBABBB2CEF3D8C0018936C /* WeightPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightPrice.swift; sourceTree = "<group>"; };
 		73CBABC02CEF3DB40018936C /* CPFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPFC.swift; sourceTree = "<group>"; };
 		73CEF56C2D26F1E30013D086 /* AddressAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressAction.swift; sourceTree = "<group>"; };
+		73CEF56E2D2703A40013D086 /* CartViewModelAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModelAction.swift; sourceTree = "<group>"; };
 		73D0FAAC2CCA3FA90009AEE5 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		73D3703F2D19AD150080BA6E /* ChooseAddressVCProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressVCProtocol.swift; sourceTree = "<group>"; };
 		73D370422D19ADE80080BA6E /* ChooseAddressViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -1468,6 +1470,7 @@
 			children = (
 				730452EA2CE3865D00FC6B17 /* Cart */,
 				73FC09902D172C7000D6F644 /* CartVCViews.swift */,
+				73CEF56E2D2703A40013D086 /* CartViewModelAction.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2174,6 +2177,7 @@
 				734CC73A2D0C655000E902ED /* DeliveryScreenFactory.swift in Sources */,
 				7321AC5E2D06269400380085 /* ProfileViewController.swift in Sources */,
 				73D3704B2D19D7700080BA6E /* ChoosePaymentMethodVMProtocol.swift in Sources */,
+				73CEF56F2D2703A40013D086 /* CartViewModelAction.swift in Sources */,
 				7321ABEB2D06265000380085 /* ItemsHeaderCell.swift in Sources */,
 				7321ABEC2D06265000380085 /* SkeletonPlaceholderCell.swift in Sources */,
 				7321ABED2D06265000380085 /* SpecialOfferCollectionCell.swift in Sources */,

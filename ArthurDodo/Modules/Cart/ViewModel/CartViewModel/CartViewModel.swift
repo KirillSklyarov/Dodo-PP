@@ -1,9 +1,9 @@
 import Foundation
 import Combine
 
-final class CartViewModel: CartViewModelProtocol {
+final class CartViewModel {
 
-    // MARK: - Other Properties
+    // MARK: - Published Properties
     @Published var promo: [Promo]?
     @Published var itemsToAdd: [Item]?
     @Published var cart: Cart?
@@ -18,6 +18,7 @@ final class CartViewModel: CartViewModelProtocol {
 
     lazy var countAndTotalPublishers = Publishers.CombineLatest(countOfItemsInCartPublisher, totalCartPricePublisher)
 
+    // MARK: - Other properties
     var onCartVCDismissed: (() -> Void)?
     var onShowEditProductVC: (() -> Void)?
     var onShowPromoVC: (() -> Void)?
@@ -31,13 +32,26 @@ final class CartViewModel: CartViewModelProtocol {
         self.storage = storage
         self.storageService = storageService
     }
+}
 
+// MARK: - CartViewModelProtocol
+extension CartViewModel: CartViewModelProtocol {
     func initialize() {
         fetchData()
     }
 
-    func updateCart() {
-        getCartFromStorage()
+    func sendAction(_ action: CartViewModelAction) {
+        switch action {
+        case .dismissButtonTapped: cartVCDismissed()
+        case .emptyCartAction: cartIsEmpty()
+        case .deleteItemTapped(let indexPath): deleteItemFromCart(indexPath)
+        case .changeCountOfItemsTapped(let indexPath, let count): changeCountOfItem(indexPath, count)
+        case .itemSelected(let item): selectItem(item)
+        case .promoSelected(let promo): promoSelected(promo)
+        case .addNewItemToCartTapped(let newItem): addNewItemToCart(newItem)
+        case .cartButtonTapped: cartButtonTapped()
+        case .updateCart: updateCart()
+        }
     }
 }
 
@@ -67,8 +81,9 @@ private extension CartViewModel {
     }
 }
 
-// MARK: - CartPresenterProtocol
-extension CartViewModel {
+
+// MARK: - Supporting methods
+private extension CartViewModel {
     func deleteItemFromCart(_ indexPath: IndexPath) {
         storage.removeItemFromCart(indexPath)
         getCartFromStorage()
@@ -100,13 +115,17 @@ extension CartViewModel {
     }
 
     // Добавляем новую позицию в заказ
-    func addNewItemToCartTapped(_ item: CartItem) {
+    func addNewItemToCart(_ item: CartItem) {
         storage.addItemToCart(item: item)
         getCartFromStorage()
     }
 
     func cartButtonTapped() {
         onShowDeliveryVC?()
+    }
+
+    func updateCart() {
+        getCartFromStorage()
     }
 }
 

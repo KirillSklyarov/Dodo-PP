@@ -35,7 +35,7 @@ extension CartCoordinator {
 
         viewModel.onShowEditProductVC = { [weak self, weak viewModel] in
             self?.showEditProduct {
-                viewModel?.updateCart() // При вызове комплишена мы обновляем корзину на экране
+                viewModel?.sendAction(.updateCart) // При вызове комплишена мы обновляем корзину на экране
             }
         }
 

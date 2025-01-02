@@ -3,10 +3,7 @@ import Combine
 
 protocol EditItemViewModelProtocol {
     func initialize()
-    func cartButtonTapped()
-    func itemSizeChanged(_ size: Size?)
-    func itemDoughChanged(_ dough: Dough?)
-    func showPopUP(_ popupVC: UIViewController)
+    func sendAction(_ action: EditItemAction)
 
     var cartItemPublisher: Published<CartItem?>.Publisher { get }
     var toppingsPublisher: Published<[Topping]?>.Publisher { get }
@@ -17,9 +14,18 @@ protocol EditItemViewModelProtocol {
     var onShowPopupVC: ( (CpfcPopupView) -> Void )? { get set }
 }
 
-final class EditItemViewModel: EditItemViewModelProtocol {
+// Enum который перечисляет действия viewModel
+enum EditItemAction {
+    case dismissButtonTapped
+    case cartButtonTapped
+    case itemSizeChanged(Size?)
+    case itemDoughChanged(Dough?)
+    case showPopupViewTapped(UIViewController)
+}
 
-    // MARK: - Properties
+final class EditItemViewModel {
+
+    // MARK: - Published properties
     @Published private var cartItem: CartItem?
     @Published private var toppings: [Topping]?
     @Published private var productDetails: WeightPrice?
@@ -28,6 +34,7 @@ final class EditItemViewModel: EditItemViewModelProtocol {
     var toppingsPublisher: Published<[Topping]?>.Publisher { $toppings }
     var productDetailsPublisher: Published<WeightPrice?>.Publisher { $productDetails }
 
+    // MARK: - Other properties
     var onCartButtonTapped: ( () -> Void )?
     var onDismissButtonTapped: ( () -> Void )?
     var onShowPopupVC: ( (CpfcPopupView) -> Void )?
@@ -38,38 +45,27 @@ final class EditItemViewModel: EditItemViewModelProtocol {
     init(storage: CartStorage) {
         self.storage = storage
     }
+}
 
+// MARK: - EditItemViewModelProtocol
+extension EditItemViewModel: EditItemViewModelProtocol {
     func initialize() {
         fetchData()
     }
+
+    func sendAction(_ action: EditItemAction) {
+        switch action {
+        case .dismissButtonTapped: onDismissButtonTapped?()
+        case .cartButtonTapped: cartButtonTapped()
+        case .itemSizeChanged(let size): itemSizeChanged(size)
+        case .itemDoughChanged(let dough): itemDoughChanged(dough)
+        case .showPopupViewTapped(let popupVC): showPopUP(popupVC)
+        }
+    }
 }
 
-// MARK: - Fetch Data
+// MARK: - Supporting methods
 private extension EditItemViewModel {
-    func fetchData() {
-        fetchSelectedItem()
-        fetchToppings()
-    }
-
-    func fetchSelectedItem() {
-        cartItem = storage.getChangingCartItem()
-//        updateUI()
-    }
-
-    // Загружаем ВСЕ начинки
-    func fetchToppings() {
-        filterToppings()
-    }
-
-    // Отбираем только нужные нам начинки
-    func filterToppings() {
-        guard let cartItem else { return }
-        toppings = storage.getFetchedToppings(for: cartItem)
-//        passToppingsToView(toppings)
-    }
-}
-
-extension EditItemViewModel {
     func cartButtonTapped() {
         guard let cartItem else { return }
         storage.changeItemInCart(cartItem)
@@ -97,6 +93,29 @@ extension EditItemViewModel {
         guard let cartItem else { print("CartItem is nil"); return }
         let size = cartItem.chosenSize
         productDetails = storage.getProductDetails(cartItem, size: size)
+    }
+}
+
+// MARK: - Fetch Data
+private extension EditItemViewModel {
+    func fetchData() {
+        fetchSelectedItem()
+        fetchToppings()
+    }
+
+    func fetchSelectedItem() {
+        cartItem = storage.getChangingCartItem()
+    }
+
+    // Загружаем ВСЕ начинки
+    func fetchToppings() {
+        filterToppings()
+    }
+
+    // Отбираем только нужные нам начинки
+    func filterToppings() {
+        guard let cartItem else { return }
+        toppings = storage.getFetchedToppings(for: cartItem)
     }
 }
 

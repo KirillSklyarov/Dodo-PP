@@ -95,7 +95,7 @@ private extension EditProductViewController {
     // Отрабатываем коллбэк для закрытия окна
     func setupHeaderAction() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.viewModel.onDismissButtonTapped?()
+            self?.viewModel.sendAction(.dismissButtonTapped)
         }
     }
 
@@ -103,26 +103,26 @@ private extension EditProductViewController {
     func setupCartViewAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.cartButtonTapped()
+            viewModel.sendAction(.cartButtonTapped)
         }
     }
 
     func setupSizeSegmentAction() {
         itemDetailsView.onSizeValueChanged = { [weak self] size in
             guard let self else { return }
-            viewModel.itemSizeChanged(size)
+            viewModel.sendAction(.itemSizeChanged(size))
         }
 
         itemDetailsView.onDoughValueChanged = { [weak self] dough in
             guard let self else { return }
-            viewModel.itemDoughChanged(dough)
+            viewModel.sendAction(.itemDoughChanged(dough))
         }
     }
 
     func setupInfoButtonAction() {
         infoAndToppingsContainer.onShowPopupVC = { [weak self] popupVC in
             guard let self else { print("Self is nil"); return }
-            viewModel.showPopUP(popupVC)
+            viewModel.sendAction(.showPopupViewTapped(popupVC))
         }
     }
 }

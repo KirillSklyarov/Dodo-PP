@@ -3,15 +3,7 @@ import Combine
 
 protocol CartViewModelProtocol: AnyObject {
     func initialize()
-    func updateCart() 
-    func cartVCDismissed()
-    func cartIsEmpty()
-    func deleteItemFromCart(_ indexPath: IndexPath)
-    func changeCountOfItem(_ indexPath: IndexPath, _ count: Int)
-    func selectItem(_ item: CartItem)
-    func promoSelected(_ promo: Promo)
-    func addNewItemToCartTapped(_ item: CartItem)
-    func cartButtonTapped()
+    func sendAction(_ action: CartViewModelAction)
 
     var promoPublisher: Published<[Promo]?>.Publisher { get }
     var itemsToAddPublisher: Published<[Item]?>.Publisher { get }

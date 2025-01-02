@@ -109,7 +109,7 @@ private extension StoriesVC {
     func dismissButtonAction() {
         dismissButton.onButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.dismissButtonTapped()
+            viewModel.sendAction(.dismissButtonTapped)
         }
     }
 }
@@ -143,7 +143,7 @@ private extension StoriesVC {
     // Отправляет в презентер точку касания экрана и границы экрана
     @objc func onTap(_ sender: UITapGestureRecognizer) {
         let location = sender.location(in: view)
-        viewModel.storyTapped(location, view.bounds)
+        viewModel.sendAction(.storyTapped(location, view.bounds))
     }
 }
 

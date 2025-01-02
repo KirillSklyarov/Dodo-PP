@@ -21,8 +21,6 @@ final class ProductDetailsViewController: UIViewController {
     private let viewModel: ProductDetailsViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
-    var onShowPopupVC: ( (CpfcPopupView) -> Void)?
-
     // MARK: - Init
     init(viewModel: ProductDetailsViewModel) {
         self.viewModel = viewModel
@@ -110,7 +108,7 @@ private extension ProductDetailsViewController {
 
     func setupHeaderAction() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.viewModel.onDismissButtonTapped?()
+            self?.viewModel.sendAction(.dismissButtonTapped)
         }
     }
 
@@ -124,21 +122,21 @@ private extension ProductDetailsViewController {
             guard let self else { return }
             let chosenSize = getChosenSize()
             let chosenDough = getChosenDough()
-            viewModel.cartButtonTapped(chosenSize, chosenDough)
+            viewModel.sendAction(.cartButtonTapped(chosenSize, chosenDough))
         }
     }
 
     func setupSizeSegmentAction() {
         itemDetailsView.onSegmentValueChanged = { [weak self] index in
             guard let self else { return }
-            viewModel.itemSegmentValueChanged(index)
+            viewModel.sendAction(.itemSegmentValueChanged(index))
         }
     }
 
     func setupInfoButtonAction() {
         infoAndToppingsContainer.onShowPopupVC = { [weak self] popupVC in
             guard let self else { print("Self is nil"); return }
-            viewModel.showPopupVC(popupVC)
+            viewModel.sendAction(.showPopupVC(popupVC))
         }
     }
 }
@@ -197,7 +195,7 @@ private extension ProductDetailsViewController {
     }
 
     @objc private func vcSwiped() {
-        viewModel.onDismissButtonTapped?()
+        viewModel.sendAction(.dismissButtonTapped)
     }
 }
 

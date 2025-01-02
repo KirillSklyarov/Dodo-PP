@@ -83,7 +83,7 @@ private extension ChooseAddressVC {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.dismissButtonTapped()
+            viewModel.sendAction(.dismissButtonTapped)
         }
     }
 
@@ -91,19 +91,19 @@ private extension ChooseAddressVC {
     func setupAddressTableViewActions() {
         addressTableView.onAddressCellTapped = { [weak self] addressName in
             guard let self else { return }
-            viewModel.addressCellTapped(addressName)
+            viewModel.sendAction(.addressCellTapped(addressName))
         }
 
         // Настраиваем action: нажатие на редактирование адреса
         addressTableView.onEditAddressButtonTapped = { [weak self] indexPath in
             guard let self else { return }
-            viewModel.editAddressCellTapped(indexPath)
+            viewModel.sendAction(.editAddressCellTapped(indexPath))
         }
 
         // Настраиваем action: переход на экран добавления нового адреса
         addressTableView.onAddNewAddressCellTapped = { [weak self] in
             guard let self else { return }
-            viewModel.addNewAddressButtonTapped()
+            viewModel.sendAction(.addNewAddressButtonTapped)
         }
     }
 }

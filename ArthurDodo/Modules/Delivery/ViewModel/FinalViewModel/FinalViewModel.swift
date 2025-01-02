@@ -1,6 +1,10 @@
 import Foundation
 import Combine
 
+enum FinalViewModelAction {
+    case dismissButtonTapped
+}
+
 final class FinalViewModel {
     // MARK: - Properties
     private var countDownTimer: Timer?
@@ -25,11 +29,10 @@ extension FinalViewModel: FinalViewModelProtocol {
         setupTimer()
     }
 
-    // Выключаем таймер, обнуляем корзину и закрываем все окна
-    func dismissVC() {
-        countDownTimer?.invalidate()
-        storageService.eraseCart()
-        onFinalVCDismissed?()
+    func sendAction(_ action: FinalViewModelAction) {
+        switch action {
+        case .dismissButtonTapped: dismissVC()
+        }
     }
 }
 
@@ -45,5 +48,15 @@ private extension FinalViewModel {
 
         if dismissTimer <= 0 { dismissVC() }
 
+    }
+}
+
+// MARK: - Supporting methods
+private extension FinalViewModel {
+    // Выключаем таймер, обнуляем корзину и закрываем все окна
+    func dismissVC() {
+        countDownTimer?.invalidate()
+        storageService.eraseCart()
+        onFinalVCDismissed?()
     }
 }

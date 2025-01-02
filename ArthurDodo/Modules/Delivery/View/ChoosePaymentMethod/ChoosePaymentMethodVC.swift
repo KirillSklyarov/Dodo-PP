@@ -74,7 +74,7 @@ private extension ChoosePaymentMethodVC {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.dismissButtonTapped()
+            viewModel.sendAction(.dismissButtonTapped)
         }
     }
 
@@ -83,7 +83,7 @@ private extension ChoosePaymentMethodVC {
         paymentMethodsTableView.onPaymentMethodTapped = { [weak self]
             paymentMethod in
             guard let self else { return }
-            viewModel.paymentMethodSelected(paymentMethod)
+            viewModel.sendAction(.paymentMethodSelected(paymentMethod))
         }
     }
 }

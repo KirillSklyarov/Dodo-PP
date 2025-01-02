@@ -56,7 +56,7 @@ private extension FinalVC {
     func setupActions() {
         dismissButton.onButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.dismissVC()
+            viewModel.sendAction(.dismissButtonTapped)
         }
     }
 }

@@ -4,8 +4,7 @@ import QuartzCore
 
 protocol StoriesViewModelProtocol {
     func initialize()
-    func dismissButtonTapped()
-    func storyTapped(_ tapPoint: CGPoint, _ bounds: CGRect)
+    func sendAction(_ action: StoriesViewModelAction)
 
     var subStoriesCountPublisher: Published<Int?>.Publisher { get }
     var progressSubStoriesIndexPublisher: Publishers.CombineLatest<Published<Float?>.Publisher,  Published<Int?>.Publisher> { get }
@@ -13,6 +12,11 @@ protocol StoriesViewModelProtocol {
     var fillProgressViewIndexPublisher: Published<Bool?>.Publisher { get }
 
     var onDismissed: (() -> Void)? { get set }
+}
+
+enum StoriesViewModelAction {
+    case dismissButtonTapped
+    case storyTapped(CGPoint, CGRect)
 }
 
 final class StoriesViewModel {
@@ -62,18 +66,10 @@ extension StoriesViewModel: StoriesViewModelProtocol {
         showStory()
     }
 
-    // Срабатывает когда мы закрываем окно со сторисами
-    func dismissButtonTapped() {
-        stopTimer()
-        onDismissed?()
-    }
-
-    // Отрабатываем касание на сторисах. Если было касание в левой части экрана, то показываем предыдущую сторис, если в правой части экрана - показываем следующую сторис
-    func storyTapped(_ tapPoint: CGPoint, _ bounds: CGRect) {
-        if tapPoint.x < bounds.width / 2 {
-            storiesLeftTapped()
-        } else {
-            showNextSubStoryOrNextStory()
+    func sendAction(_ action: StoriesViewModelAction) {
+        switch action {
+        case .dismissButtonTapped: dismissButtonTapped()
+        case .storyTapped(let tapPoint, let bounds): storyTapped(tapPoint, bounds)
         }
     }
 }
@@ -265,6 +261,21 @@ private extension StoriesViewModel {
         if subStoryIndex == subStoriesCount - 1 {
             let storyID = stories[storyIndex].id
             UserDefaults.standard.markStoryAsViewed(storyID)
+        }
+    }
+
+    // Срабатывает когда мы закрываем окно со сторисами
+    func dismissButtonTapped() {
+        stopTimer()
+        onDismissed?()
+    }
+
+    // Отрабатываем касание на сторисах. Если было касание в левой части экрана, то показываем предыдущую сторис, если в правой части экрана - показываем следующую сторис
+    func storyTapped(_ tapPoint: CGPoint, _ bounds: CGRect) {
+        if tapPoint.x < bounds.width / 2 {
+            storiesLeftTapped()
+        } else {
+            showNextSubStoryOrNextStory()
         }
     }
 }

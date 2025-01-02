@@ -1,8 +1,19 @@
 import Foundation
 import Combine
 
+// Enum, который перечисляет действия viewModel
+enum DeliveryViewModelAction {
+    case dismissButtonTapped
+    case addressCellTapped
+    case deliveryTimeSelected(String)
+    case paymentMethodCellTapped
+    case payButtonTapped
+    case newAddressChosen(String)
+}
+
 final class DeliveryViewModel: DeliveryViewModelProtocol {
 
+    // MARK: - Published properties
     @Published private var preferredPaymentMethod: PaymentMethod = .cbp
     @Published private var mainAddressName: String?
     @Published private var cartPrice: Int = 0
@@ -11,6 +22,7 @@ final class DeliveryViewModel: DeliveryViewModelProtocol {
     var preferredPaymentMethodPublisher: Published<PaymentMethod>.Publisher { $preferredPaymentMethod }
     var cartPricePublisher: Published<Int>.Publisher { $cartPrice }
 
+    // MARK: - Other properties
     var onDismissButtonTapped: (() -> Void)?
     var onShowChooseAddress: (() -> Void)?
     var onShowChoosePaymentMethod: (() -> Void)?
@@ -33,6 +45,20 @@ extension DeliveryViewModel  {
         fetchData()
     }
 
+    func sendAction(_ action: DeliveryViewModelAction) {
+        switch action {
+        case .dismissButtonTapped: dismissButtonTapped()
+        case .addressCellTapped: addressCellTapped()
+        case .deliveryTimeSelected(let time): deliveryTimeSelected(time)
+        case .paymentMethodCellTapped: paymentMethodCellTapped()
+        case .payButtonTapped: payButtonTapped()
+        case .newAddressChosen(let addressName): sendNewAddressToStorage(addressName)
+        }
+    }
+}
+
+// MARK: - Supporting methods
+private extension DeliveryViewModel {
     // Отправляем новый главный адрес в хранилище
     func sendNewAddressToStorage(_ addressName: String) {
         storageService.setNewMainAddress(addressName)
@@ -65,6 +91,11 @@ extension DeliveryViewModel  {
         setActiveOrderToUserDefaults(order)
         onShowFinalVC?()
     }
+
+    // Отправляет в UserDefaults инфу, что есть активный заказ
+    func setActiveOrderToUserDefaults(_ order: Order) {
+        UserDefaults.standard.sendOrder(order)
+    }
 }
 
 // MARK: - Fetch Data
@@ -88,13 +119,5 @@ private extension DeliveryViewModel {
     // Получаем общую сумму заказа и обновляем кнопку
     func fetchOrderDetails() {
         cartPrice = storageService.getTotalOrderPrice()
-    }
-}
-
-// MARK: - Supporting methods
-private extension DeliveryViewModel {
-    // Отправляет в UserDefaults инфу, что есть активный заказ
-    func setActiveOrderToUserDefaults(_ order: Order) {
-        UserDefaults.standard.sendOrder(order)
     }
 }

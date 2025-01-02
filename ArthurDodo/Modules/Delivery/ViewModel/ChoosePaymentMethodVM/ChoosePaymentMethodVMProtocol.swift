@@ -3,8 +3,7 @@ import Combine
 
 protocol ChoosePaymentMethodVMProtocol {
     func initialize()
-    func dismissButtonTapped()
-    func paymentMethodSelected(_ paymentMethod: PaymentMethod)
+    func sendAction(_ action: PaymentMethodViewModelAction)
 
     var paymentMethodPublisher: Published<PaymentMethod?>.Publisher { get }
 
