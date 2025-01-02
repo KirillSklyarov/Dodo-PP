@@ -39,8 +39,8 @@ extension CartCoordinator {
             }
         }
 
-        viewModel.onShowPromoVC = { [weak self] promo in
-            self?.showPromoScreen(promo)
+        viewModel.onShowPromoVC = { [weak self] in
+            self?.showPromoScreen()
         }
 
         viewModel.onShowDeliveryVC = { [weak self] in
@@ -78,7 +78,7 @@ private extension CartCoordinator {
     }
 
     // Показываем всплывающий экран для акций
-    func showPromoScreen(_ offer: Promo) {
+    func showPromoScreen() {
         let vc = screenFactory.makePromoScreen()
         vc.sheetPresentationController?.detents = [.medium()]
         vc.sheetPresentationController?.prefersGrabberVisible = true

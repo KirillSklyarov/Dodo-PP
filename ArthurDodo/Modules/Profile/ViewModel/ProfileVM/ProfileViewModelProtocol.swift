@@ -3,8 +3,7 @@ import Foundation
 
 protocol ProfileViewModelProtocol: AnyObject {
     func initialize()
-    func addressCellTapped()
-    func promoTapped(_ promo: Promo)
+    func sendAction(_ action: ProfileAction)
 
     var userDataPublisher: Published<User?>.Publisher { get }
     var promoPublisher: Published<[Promo]?>.Publisher { get }

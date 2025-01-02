@@ -20,6 +20,6 @@ protocol CartViewModelProtocol: AnyObject {
 
     var onCartVCDismissed: (() -> Void)? { get set }
     var onShowEditProductVC: (() -> Void)? { get set }
-    var onShowPromoVC: ((Promo) -> Void)? { get set }
+    var onShowPromoVC: (() -> Void)? { get set }
     var onShowDeliveryVC: (() -> Void)? { get set }
 }

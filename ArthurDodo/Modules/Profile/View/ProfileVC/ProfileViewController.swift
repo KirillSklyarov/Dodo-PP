@@ -2,9 +2,9 @@ import UIKit
 import Combine
 
 protocol ProfileViewProtocol: AnyObject {
+    func getViewModel() -> ProfileViewModelProtocol
     func updatePersonalData(_ personalData: User?)
     func updatePromo(_ promo: [Promo]?)
-    func getViewModel() -> ProfileViewModelProtocol
 }
 
 final class ProfileViewController: UIViewController {
@@ -22,7 +22,7 @@ final class ProfileViewController: UIViewController {
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
-    init(viewModel: ProfileViewModel) {
+    init(viewModel: ProfileViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -94,22 +94,22 @@ private extension ProfileViewController {
     // Настройка действий header view (где 3 кнопки)
     func setupHeaderViewActions() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.viewModel.onDismissButtonTapped?()
+            self?.viewModel.sendAction(.dismissButtonTapped)
         }
 
         headerView.onChatButtonTapped = { [weak self] in
-            self?.viewModel.onShowChatAlert?()
+            self?.viewModel.sendAction(.chatAlertButtonTapped)
         }
 
         headerView.onProfileButtonTapped = { [weak self] in
-            self?.viewModel.onShowPersonalData?()
+            self?.viewModel.sendAction(.personalDataButtonTapped)
         }
     }
 
     func setupPersonalDataActions() {
         personalDataCollectionView.onAddressCellTapped = { [weak self] in
             guard let self else { return }
-            viewModel.addressCellTapped()
+            viewModel.sendAction(.addressCellTapped)
         }
     }
 
@@ -117,7 +117,7 @@ private extension ProfileViewController {
     func setupPromoActions() {
         promoStackView.onPromoSelected = { [weak self] promo in
             guard let self else { return }
-            viewModel.promoTapped(promo)
+            viewModel.sendAction(.promoTapped(promo))
         }
     }
 }

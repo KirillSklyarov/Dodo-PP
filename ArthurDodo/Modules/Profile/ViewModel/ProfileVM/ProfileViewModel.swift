@@ -1,6 +1,13 @@
 import Foundation
 import Combine
 
+enum ProfileAction {
+    case chatAlertButtonTapped
+    case dismissButtonTapped
+    case personalDataButtonTapped
+    case promoTapped(Promo)
+    case addressCellTapped
+}
 
 final class ProfileViewModel: ProfileViewModelProtocol {
     // MARK: - Properties
@@ -23,14 +30,23 @@ final class ProfileViewModel: ProfileViewModelProtocol {
     }
 }
 
+// MARK: - Event handling
+extension ProfileViewModel {
+    func sendAction(_ action: ProfileAction) {
+        switch action {
+        case .chatAlertButtonTapped: onShowChatAlert?()
+        case .dismissButtonTapped: onDismissButtonTapped?()
+        case .personalDataButtonTapped: onShowPersonalData?()
+        case .promoTapped: onShowPromoVC?()
+        case .addressCellTapped: onAddressCellTapped?()
+        }
+    }
+}
+
 // MARK: - ProfileViewModelProtocol
 extension ProfileViewModel {
     func initialize() {
         fetchData()
-    }
-
-    func addressCellTapped() {
-        onAddressCellTapped?()
     }
 
     func promoTapped(_ promo: Promo) {

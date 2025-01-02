@@ -20,7 +20,7 @@ final class CartViewModel: CartViewModelProtocol {
 
     var onCartVCDismissed: (() -> Void)?
     var onShowEditProductVC: (() -> Void)?
-    var onShowPromoVC: ((Promo) -> Void)?
+    var onShowPromoVC: (() -> Void)?
     var onShowDeliveryVC: (() -> Void)?
 
     private let storage: CartStorage
@@ -95,7 +95,8 @@ extension CartViewModel {
 
     // Срабатываем на нажатие на акцию (показывает окно с промоакцией)
     func promoSelected(_ promo: Promo) {
-        onShowPromoVC?(promo)
+        storage.setSelectedPromo(promo)
+        onShowPromoVC?()
     }
 
     // Добавляем новую позицию в заказ

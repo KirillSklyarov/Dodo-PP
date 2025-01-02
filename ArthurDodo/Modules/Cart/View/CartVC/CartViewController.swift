@@ -53,7 +53,7 @@ private extension CartViewController {
         setupHeaderViewAction()
         setupCartProductTableViewAction()
         setupToppingsCollectionView()
-        setupSpecialViewActions()
+        setupPromoActions()
         setupScrollUpButtonAction()
         setupCartButtonAction()
     }
@@ -96,7 +96,7 @@ private extension CartViewController {
         }
     }
 
-    func setupSpecialViewActions() {
+    func setupPromoActions() {
         promoStackView.onPromoSelected = { [weak self] promo in
             guard let self else { print("We can't show promoVC"); return }
             viewModel.promoSelected(promo)
