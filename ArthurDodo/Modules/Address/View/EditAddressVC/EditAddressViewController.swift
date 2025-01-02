@@ -2,6 +2,7 @@ import UIKit
 import Combine
 
 protocol EditAddressViewProtocol: AnyObject {
+    func getViewModel() -> EditAddressViewModelProtocol
     func updateAddress(_ addressToEdit: Address?)
 //    func updateShortAddress(_ shortAddress: String)
 }
@@ -15,11 +16,11 @@ final class EditAddressViewController: UIViewController {
     private lazy var dismissButton = AppDismissButtonView(type: .chevron)
 
     // MARK: - ViewModel
-    let viewModel: EditAddressVMProtocol
+    private let viewModel: EditAddressViewModelProtocol
     private var cancellations = Set<AnyCancellable>()
 
     // MARK: - Init
-    init(viewModel: EditAddressVMProtocol) {
+    init(viewModel: EditAddressViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -40,16 +41,14 @@ final class EditAddressViewController: UIViewController {
         dataBinding()
         viewModelSetup()
     }
-
-    func viewModelSetup() {
-        mapView.onMapLoaded = { [weak self] in
-            self?.viewModel.initialize()
-        }
-    }
 }
 
 // MARK: - EditAddressViewProtocol
 extension EditAddressViewController: EditAddressViewProtocol {
+    func getViewModel() -> EditAddressViewModelProtocol {
+        viewModel
+    }
+
     // Обновляет адрес на вью
     func updateAddress(_ addressToEdit: Address?) {
         guard let addressToEdit else { print("We have no address"); return }
@@ -91,21 +90,21 @@ private extension EditAddressViewController {
     func setupAddressContainerViewAction() {
         addressContainerView.onSaveAddressTapped = { [weak self] in
             guard let self else { print("We have no self"); return }
-            viewModel.saveButtonTapped()
+            viewModel.sendAction(.saveButtonTapped)
         }
     }
 
     // Настраиваем когда двигается карта, то двигается и адрес в таблице
     func setupMapViewAction() {
         mapView.onChangeAddress = { [weak self] shortAddress in
-            self?.viewModel.changeAddressWhileMovingMap(shortAddress)
+            self?.viewModel.sendAction(.mapIsMoving(shortAddress))
         }
     }
 
     // Настраиваем кнопку Закрыть
     func setupDismissButtonAction() {
         dismissButton.onButtonTapped = { [weak self] in
-            self?.viewModel.dismissButtonTapped()
+            self?.viewModel.sendAction(.dismissButtonTapped)
         }
     }
 }
@@ -126,6 +125,13 @@ private extension EditAddressViewController {
 
 // MARK: - Supporting methods
 private extension EditAddressViewController {
+    // Загружаем viewModel после того как карта загрузилась вся
+    func viewModelSetup() {
+        mapView.onMapLoaded = { [weak self] in
+            self?.viewModel.initialize()
+        }
+    }
+
     // Обновляет адрес на вью
     func updateAddressDetailsView(_ addressToEdit: Address) {
         addressContainerView.updateUIWithAddress(addressToEdit)

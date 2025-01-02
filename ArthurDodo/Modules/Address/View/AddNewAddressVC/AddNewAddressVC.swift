@@ -11,7 +11,7 @@ final class AddNewAddressViewController: UIViewController {
     private lazy var contentStackView = AppStackView([mapView, addressView], axis: .vertical, spacing: -5, distribution: .fill)
 
     // MARK: - Presenter
-    let viewModel: AddNewAddressVMProtocol
+    private let viewModel: AddNewAddressVMProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
@@ -37,13 +37,6 @@ final class AddNewAddressViewController: UIViewController {
         viewModelSetup()
 
         setupGestureToDissmissKeyboard()
-    }
-
-    // Мы начинаем флоу вью модели только после того как закончилась загрузка карты (чтобы не допустить ошибок и опережения)
-    func viewModelSetup() {
-        mapView.onMapLoaded = { [weak self] in
-            self?.viewModel.initialize()
-        }
     }
 }
 
@@ -73,7 +66,7 @@ private extension AddNewAddressViewController {
     // Настраиваем кнопку Закрыть
     func setupDismissButtonAction() {
         dismissButton.onButtonTapped = { [weak self] in
-            self?.viewModel.onDismissButtonTapped?()
+            self?.viewModel.sendAction(.dismissButtonTapped)
         }
     }
 
@@ -88,7 +81,7 @@ private extension AddNewAddressViewController {
     func setupSaveButtonAction() {
         addressView.onSaveButtonTapped = { [weak self] newAddress in
             guard let self else { return }
-            viewModel.saveNewAddressButtonTapped(newAddress)
+            viewModel.sendAction(.saveNewAddressButtonTapped(newAddress))
         }
     }
 }
@@ -110,6 +103,10 @@ private extension AddNewAddressViewController {
 
 // MARK: - AddNewAddressViewProtocol
 extension AddNewAddressViewController: AddNewAddressViewProtocol {
+    func getViewModel() -> AddNewAddressVMProtocol {
+        viewModel
+    }
+
     // Метод находит координаты по адресу и центрирует карту по ним
     func showMainAddressOnMap(_ mainAddress: Address?) {
         guard let mainAddress else { print("No main address"); return }
@@ -131,5 +128,15 @@ private extension AddNewAddressViewController {
 
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+// MARK: - Supporting methods
+private extension AddNewAddressViewController {
+    // Мы начинаем флоу вью модели только после того как закончилась загрузка карты (чтобы не допустить ошибок и опережения)
+    func viewModelSetup() {
+        mapView.onMapLoaded = { [weak self] in
+            self?.viewModel.initialize()
+        }
     }
 }

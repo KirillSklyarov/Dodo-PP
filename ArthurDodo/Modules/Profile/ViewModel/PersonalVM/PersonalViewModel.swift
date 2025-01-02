@@ -1,6 +1,10 @@
 import Foundation
 import Combine
 
+enum PersonalDataAction {
+    case dismissButtonTapped
+    case showURLTapped
+}
 
 final class PersonalViewModel {
 
@@ -26,6 +30,13 @@ extension PersonalViewModel: PersonalViewModelProtocol {
     // Стартовый метод
     func initialize() {
         fetchData()
+    }
+
+    func sendAction(_ action: PersonalDataAction) {
+        switch action {
+        case .dismissButtonTapped: onDismissButtonTapped?()
+        case .showURLTapped: showURL()
+        }
     }
 
     func showURL() {

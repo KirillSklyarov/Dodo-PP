@@ -49,7 +49,7 @@ final class AddressCoordinator: Coordinator {
 private extension AddressCoordinator {
     func showEditAddressVC() {
         let editAddressVC = screenFactory.makeEditAddressScreen()
-        let viewModel = editAddressVC.viewModel
+        let viewModel = editAddressVC.getViewModel()
         router.present(editAddressVC, isParent: true, modalPresentation: .fullScreen)
 
         viewModel.onDismissButtonTapped = { [weak self] in
@@ -63,7 +63,7 @@ private extension AddressCoordinator {
 
     func showAddNewAddressVC() {
         let vc = screenFactory.makeAddNewAddressScreen()
-        let viewModel = vc.viewModel
+        let viewModel = vc.getViewModel()
         router.present(vc, isParent: true, modalPresentation: .fullScreen)
 
         viewModel.onDismissButtonTapped = { [weak self] in

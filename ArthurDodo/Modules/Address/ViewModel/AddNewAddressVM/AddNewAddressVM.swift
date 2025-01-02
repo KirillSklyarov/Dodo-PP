@@ -1,7 +1,12 @@
 import Foundation
 import Combine
 
-final class AddNewAddressVM: AddNewAddressVMProtocol {
+enum AddNewAddressAction {
+    case dismissButtonTapped
+    case saveNewAddressButtonTapped(Address)
+}
+
+final class AddNewAddressVM {
 
     // MARK: - Properties
     @Published private var mainAddress: Address?
@@ -19,9 +24,16 @@ final class AddNewAddressVM: AddNewAddressVMProtocol {
 }
 
 // MARK: - AddNewAddressVMProtocol
-extension AddNewAddressVM {
+extension AddNewAddressVM: AddNewAddressVMProtocol {
     func initialize() {
         fetchData()
+    }
+
+    func sendAction(_ action: AddNewAddressAction) {
+        switch action {
+        case .dismissButtonTapped: onDismissButtonTapped?()
+        case .saveNewAddressButtonTapped(let newAddress): saveNewAddressButtonTapped(newAddress)
+        }
     }
 
     // Отрабатываем нажатие на кнопку "Доставить сюда" (добавляем адрес в список адресов)

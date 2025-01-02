@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-final class AddressViewModel: AddressViewModelProtocol {
+final class AddressViewModel {
 
     // MARK: - Properties
     @Published var addresses: [Address] = []
@@ -21,10 +21,6 @@ final class AddressViewModel: AddressViewModelProtocol {
     init(storage: AddressStorage) {
         self.storage = storage
     }
-
-    func initialize() {
-        fetchData()
-    }
 }
 
 // MARK: - Fetch data from Network
@@ -37,7 +33,22 @@ private extension AddressViewModel {
 }
 
 // MARK: - AddressViewModelProtocol
-extension AddressViewModel {
+extension AddressViewModel: AddressViewModelProtocol {
+    // Стартовый метод
+    func initialize() {
+        fetchData()
+    }
+
+    func sendAction(_ action: AddressAction) {
+        switch action {
+        case .dismissButtonTapped: onDismissButtonTapped?()
+        case .editAddressTapped: onShowEditAddressVC?()
+        case .addNewAddressTapped: onShowAddNewAddressVC?()
+        case .deliveryButtonTapped: onDeliveryButtonTapped?()
+        case .addressSelected(let address): addressTapped(address)
+        }
+    }
+
     // Когда юзер нажал на новый адрес мы показываем его на карте и ставим этот адрес как main
     func addressTapped(_ address: Address) {
         mainAddress = address // Обновляем адрес здесь

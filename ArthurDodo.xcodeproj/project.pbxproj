@@ -144,7 +144,7 @@
 		737537EF2D15D4EA00D6E056 /* AddNewAddressVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737537EE2D15D4EA00D6E056 /* AddNewAddressVM.swift */; };
 		737537F12D15F4EA00D6E056 /* AddNewAddressVMProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737537F02D15F4EA00D6E056 /* AddNewAddressVMProtocol.swift */; };
 		7385524E2D16FB8C00270BF4 /* AddNewAddressViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7385524D2D16FB8C00270BF4 /* AddNewAddressViewProtocol.swift */; };
-		738552522D16FBE800270BF4 /* EditAddressVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738552512D16FBE800270BF4 /* EditAddressVM.swift */; };
+		738552522D16FBE800270BF4 /* EditAddressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738552512D16FBE800270BF4 /* EditAddressViewModel.swift */; };
 		7389E1C62CFB3AC00043E4A8 /* MoyaStyleNetworkLayerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389E1C42CFB3AC00043E4A8 /* MoyaStyleNetworkLayerHelper.swift */; };
 		7389E1C82CFB3AC50043E4A8 /* MoyaStyleNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389E1C72CFB3AC50043E4A8 /* MoyaStyleNetworkLayer.swift */; };
 		7389E1CE2CFB4A710043E4A8 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389E1CD2CFB4A710043E4A8 /* NetworkService.swift */; };
@@ -227,6 +227,7 @@
 		73CBABB82CEF37C90018936C /* AppStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABB72CEF37C90018936C /* AppStackView.swift */; };
 		73CBABBC2CEF3D8C0018936C /* WeightPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABBB2CEF3D8C0018936C /* WeightPrice.swift */; };
 		73CBABC22CEF3DB40018936C /* CPFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CBABC02CEF3DB40018936C /* CPFC.swift */; };
+		73CEF56D2D26F1E30013D086 /* AddressAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CEF56C2D26F1E30013D086 /* AddressAction.swift */; };
 		73D0FAAD2CCA3FA90009AEE5 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D0FAAC2CCA3FA90009AEE5 /* AppCoordinator.swift */; };
 		73D370402D19AD150080BA6E /* ChooseAddressVCProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D3703F2D19AD150080BA6E /* ChooseAddressVCProtocol.swift */; };
 		73D370432D19ADE80080BA6E /* ChooseAddressViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D370422D19ADE80080BA6E /* ChooseAddressViewModelProtocol.swift */; };
@@ -387,7 +388,7 @@
 		737537EE2D15D4EA00D6E056 /* AddNewAddressVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewAddressVM.swift; sourceTree = "<group>"; };
 		737537F02D15F4EA00D6E056 /* AddNewAddressVMProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewAddressVMProtocol.swift; sourceTree = "<group>"; };
 		7385524D2D16FB8C00270BF4 /* AddNewAddressViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewAddressViewProtocol.swift; sourceTree = "<group>"; };
-		738552512D16FBE800270BF4 /* EditAddressVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressVM.swift; sourceTree = "<group>"; };
+		738552512D16FBE800270BF4 /* EditAddressViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressViewModel.swift; sourceTree = "<group>"; };
 		7389E1C42CFB3AC00043E4A8 /* MoyaStyleNetworkLayerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoyaStyleNetworkLayerHelper.swift; sourceTree = "<group>"; };
 		7389E1C72CFB3AC50043E4A8 /* MoyaStyleNetworkLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoyaStyleNetworkLayer.swift; sourceTree = "<group>"; };
 		7389E1CD2CFB4A710043E4A8 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -471,6 +472,7 @@
 		73CBABB72CEF37C90018936C /* AppStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStackView.swift; sourceTree = "<group>"; };
 		73CBABBB2CEF3D8C0018936C /* WeightPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightPrice.swift; sourceTree = "<group>"; };
 		73CBABC02CEF3DB40018936C /* CPFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPFC.swift; sourceTree = "<group>"; };
+		73CEF56C2D26F1E30013D086 /* AddressAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressAction.swift; sourceTree = "<group>"; };
 		73D0FAAC2CCA3FA90009AEE5 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		73D3703F2D19AD150080BA6E /* ChooseAddressVCProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressVCProtocol.swift; sourceTree = "<group>"; };
 		73D370422D19ADE80080BA6E /* ChooseAddressViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -1072,6 +1074,7 @@
 			isa = PBXGroup;
 			children = (
 				73B968B82CC7C78700A2415A /* Address */,
+				73CEF56C2D26F1E30013D086 /* AddressAction.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1390,9 +1393,9 @@
 		737537E02D15C57E00D6E056 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				738552502D16FBE200270BF4 /* EditAdderessVM */,
-				737537ED2D15D4D200D6E056 /* AddNewAddressVM */,
 				737537E82D15D4B500D6E056 /* AddressVM */,
+				737537ED2D15D4D200D6E056 /* AddNewAddressVM */,
+				738552502D16FBE200270BF4 /* EditAdderessVM */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1436,7 +1439,7 @@
 		738552502D16FBE200270BF4 /* EditAdderessVM */ = {
 			isa = PBXGroup;
 			children = (
-				738552512D16FBE800270BF4 /* EditAddressVM.swift */,
+				738552512D16FBE800270BF4 /* EditAddressViewModel.swift */,
 			);
 			path = EditAdderessVM;
 			sourceTree = "<group>";
@@ -2104,6 +2107,7 @@
 				7365A5D82D1EB1F800F1FF24 /* AppStartScreenType.swift in Sources */,
 				73CBABC22CEF3DB40018936C /* CPFC.swift in Sources */,
 				73A738A42CDFBDEF003BA211 /* UICollection+Reload.swift in Sources */,
+				73CEF56D2D26F1E30013D086 /* AddressAction.swift in Sources */,
 				73B969602CC7C78700A2415A /* Item.swift in Sources */,
 				73EA17352CCBE21E0079A16C /* String+Plural.swift in Sources */,
 				733023332CD80A5B003E9818 /* Int+Seconds.swift in Sources */,
@@ -2189,7 +2193,7 @@
 				7321ABF72D06265000380085 /* OrderMainVCView.swift in Sources */,
 				7321ABF82D06265000380085 /* MainViewController.swift in Sources */,
 				7321ABF92D06265000380085 /* AddToppingsCollectionView.swift in Sources */,
-				738552522D16FBE800270BF4 /* EditAddressVM.swift in Sources */,
+				738552522D16FBE800270BF4 /* EditAddressViewModel.swift in Sources */,
 				7321ABFA2D06265000380085 /* AddToppingsCollectionViewCell.swift in Sources */,
 				7344CCCC2D0C834500CF2011 /* DeliveryCoordinator.swift in Sources */,
 				7321ABFB2D06265000380085 /* СpfcTableView.swift in Sources */,

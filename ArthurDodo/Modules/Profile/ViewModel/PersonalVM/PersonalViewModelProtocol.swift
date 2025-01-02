@@ -3,7 +3,7 @@ import Combine
 
 protocol PersonalViewModelProtocol: AnyObject {
     func initialize()
-    func showURL()
+    func sendAction(_ action: PersonalDataAction)
 
     var personalDataPublisher: Published<User?>.Publisher { get }
     var urlPublisher: Published<URL?>.Publisher { get }

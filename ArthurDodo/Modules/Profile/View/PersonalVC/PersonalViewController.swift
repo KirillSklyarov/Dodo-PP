@@ -18,7 +18,6 @@ final class PersonalViewController: UIViewController {
 
     // MARK: - Properties
     private let viewModel: PersonalViewModelProtocol
-
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
@@ -73,19 +72,24 @@ private extension PersonalViewController {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.onDismissButtonTapped?()
+            viewModel.sendAction(.dismissButtonTapped)
         }
     }
 
     func setupPersonalTableViewAction() {
         personalTableView.onShowURL = { [weak self] in
-            self?.viewModel.showURL()
+            self?.viewModel.sendAction(.showURLTapped)
         }
     }
 }
 
 // MARK: - PersonalViewProtocol
 extension PersonalViewController: PersonalViewProtocol {
+    // Отдаем viewModel
+    func getViewModel() -> PersonalViewModelProtocol {
+        viewModel
+    }
+
     // Обновляем UI c персональными данными
     func updateUserData(_ personalData: User?) {
         guard let personalData else { return }
@@ -98,11 +102,6 @@ extension PersonalViewController: PersonalViewProtocol {
         guard UIApplication.shared.canOpenURL(url) else { print("Can't open URL"); return }
         let safariVC = SFSafariViewController(url: url)
         present(safariVC, animated: true)
-    }
-
-    // Отдаем viewModel
-    func getViewModel() -> PersonalViewModelProtocol {
-        viewModel
     }
 }
 

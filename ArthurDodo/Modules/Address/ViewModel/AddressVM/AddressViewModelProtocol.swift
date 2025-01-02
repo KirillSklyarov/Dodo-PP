@@ -1,7 +1,9 @@
-import Foundation
 import Combine
 
 protocol AddressViewModelProtocol {
+    func initialize()
+    func sendAction(_ action: AddressAction)
+
     var addressesPublisher: Published<[Address]>.Publisher { get }
     var mainAddressPublisher: Published<Address?>.Publisher { get }
 
@@ -9,10 +11,4 @@ protocol AddressViewModelProtocol {
     var onShowEditAddressVC: (() -> Void)? { get set }
     var onShowAddNewAddressVC: (() -> Void)? { get set }
     var onDeliveryButtonTapped: (() -> Void)? { get set }
-
-    func initialize()
-    func editAddressTapped(_ address: Address)
-    func addressTapped(_ address: Address)
-    func showAddNewAddressVC()
-    func deliveryButtonTapped()
 }

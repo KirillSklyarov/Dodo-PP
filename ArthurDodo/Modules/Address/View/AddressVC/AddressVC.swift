@@ -16,7 +16,7 @@ final class AddressViewController: UIViewController {
     private lazy var contentStack = AppStackView([mapView, addressView], axis: .vertical, spacing: -10)
 
     // MARK: - Properties
-    let viewModel: AddressViewModelProtocol
+    private let viewModel: AddressViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Init
@@ -33,23 +33,19 @@ final class AddressViewController: UIViewController {
         print("AddressViewController deinit")
     }
 
-    func getViewModel() -> AddressViewModelProtocol {
-        viewModel
-    }
-
     // MARK: - Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
         dataBinding()
-        viewModel.initialize()
     }
 
     // Когда экран опять появляется (после закрытия предыдущих, то мы обновляем данные из хранилища)
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.initialize()
+        print(#function)
     }
 }
 
@@ -83,36 +79,41 @@ private extension AddressViewController {
 
     func setupAddressHeaderAction() {
         addressHeaderView.onDismissButtonTapped = { [weak self] in
-            self?.viewModel.onDismissButtonTapped?()
+            self?.viewModel.sendAction(.dismissButtonTapped)
         }
     }
 
     func setupAddressViewAction() {
         // Нажатие на кнопку редактирования адреса
         addressView.onEditAddressCellTapped = { [weak self] address in
-            self?.viewModel.editAddressTapped(address)
+            self?.viewModel.sendAction(.editAddressTapped(address))
         }
 
         // Отрабатываем нажатие на адрес
         addressView.onAddressCellTapped = { [weak self] address in
             guard let self else { return }
-            viewModel.addressTapped(address)
+            viewModel.sendAction(.addressSelected(address))
         }
 
         // Нажатие на кнопку "+Новый адрес"
         addressView.onAddNewAddressButtonTapped = { [weak self] in
-            self?.viewModel.showAddNewAddressVC()
+            self?.viewModel.sendAction(.addNewAddressTapped)
         }
 
         // Нажатие на кнопку "Доставить сюда"
         addressView.onDeliveryButtonTapped = { [weak self] in
-            self?.viewModel.deliveryButtonTapped()
+            self?.viewModel.sendAction(.deliveryButtonTapped)
         }
     }
 }
 
 // MARK: - AddressViewProtocol
 extension AddressViewController: AddressViewProtocol {
+    // Отдаем viewModel
+    func getViewModel() -> AddressViewModelProtocol {
+        viewModel
+    }
+
     // Двигаем карту на главный адрес
     func showAddressOnMap(_ address: Address?) {
         guard let address else { return }
@@ -126,7 +127,7 @@ extension AddressViewController: AddressViewProtocol {
 }
 
 // MARK: - Data binging
-extension AddressViewController {
+private extension AddressViewController {
     func dataBinding() {
         viewModel.addressesPublisher
             .receive(on: DispatchQueue.main)

@@ -1,19 +1,22 @@
 import Foundation
 import Combine
 
-protocol EditAddressVMProtocol: AnyObject {
-    func changeAddressWhileMovingMap(_ newShortAddress: String)
-
+protocol EditAddressViewModelProtocol: AnyObject {
     func initialize()
-    func saveButtonTapped()
-    func dismissButtonTapped() 
+    func sendAction(_ action: EditAddressAction)
 
     var addressToEditPublisher: Published<Address?>.Publisher { get }
     var onDismissButtonTapped: (() -> Void)? { get set }
     var onSaveButtonTapped: (() -> Void)? { get set }
 }
 
-final class EditAddressVM: EditAddressVMProtocol {
+enum EditAddressAction {
+    case saveButtonTapped
+    case dismissButtonTapped
+    case mapIsMoving(String)
+}
+
+final class EditAddressViewModel {
 
     // MARK: - Other properties
     @Published var addressToEdit: Address?
@@ -25,19 +28,27 @@ final class EditAddressVM: EditAddressVMProtocol {
 
     private let storage: AddressStorage
 
-
     // MARK: - Init
     init(storage: AddressStorage) {
         self.storage = storage
     }
+}
 
+// MARK: - EditAddressViewModelProtocol
+extension EditAddressViewModel: EditAddressViewModelProtocol {
     func initialize() {
         fetchData()
     }
-}
 
-// MARK: - EditAddressPresenterProtocol
-extension EditAddressVM {
+    func sendAction(_ action: EditAddressAction) {
+        switch action {
+        case .saveButtonTapped: saveButtonTapped()
+        case .dismissButtonTapped: dismissButtonTapped()
+        case .mapIsMoving(let newShortAddress): changeAddressWhileMovingMap(newShortAddress)
+
+        }
+    }
+
     func changeAddressWhileMovingMap(_ newShortAddress: String) {
         addressToEdit?.cityStreetHouse = newShortAddress
     }
@@ -54,7 +65,7 @@ extension EditAddressVM {
 }
 
 // MARK: - Supporting methods
-private extension EditAddressVM {
+private extension EditAddressViewModel {
     // Забираем редактируемый адрес из хранилища
     func fetchData() {
         addressToEdit = storage.getEditingAddress()

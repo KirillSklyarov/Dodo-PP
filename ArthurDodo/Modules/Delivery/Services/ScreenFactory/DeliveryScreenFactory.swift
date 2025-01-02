@@ -46,7 +46,7 @@ extension DeliveryScreenFactory: DeliveryScreenFactoryProtocol {
     }
 
     func makeEditAddressScreen() -> EditAddressViewController {
-        let viewModel = EditAddressVM(storage: addressStorage)
+        let viewModel = EditAddressViewModel(storage: addressStorage)
         let view = EditAddressViewController(viewModel: viewModel)
         return view
     }

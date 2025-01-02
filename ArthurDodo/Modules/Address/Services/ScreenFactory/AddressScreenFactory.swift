@@ -32,7 +32,7 @@ extension AddressScreenFactory: AddressScreenFactoryProtocol {
     }
 
     func makeEditAddressScreen() -> EditAddressViewController {
-        let viewModel = EditAddressVM(storage: storage)
+        let viewModel = EditAddressViewModel(storage: storage)
         let view = EditAddressViewController(viewModel: viewModel)
         return view
     }
