@@ -45,6 +45,10 @@ extension ProfileCoordinator {
             self?.showAddressVC()
         }
 
+        viewModel.onShowErrorAlert = { [weak self] in
+            self?.showProfileErrorAlert()
+        }
+
         router.present(profileVC) // Показываем экран
     }
 }
@@ -67,6 +71,16 @@ private extension ProfileCoordinator {
         vc.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
         }
+    }
+
+    // Показываем экран с ошибкой, через комплишн вызываем закрытие окна и флоу, при нажатии на кнопку на алерте
+    func showProfileErrorAlert() {
+        let vc = screenFactory.makeScreen(for: .error) { [weak self] in
+            self?.router.dismiss() // Закрываем экран
+            self?.onFlowFinished?() // Говорим что флоу закончен
+        }
+
+        router.present(vc, isParent: true)
     }
 
     func showPersonalData() {

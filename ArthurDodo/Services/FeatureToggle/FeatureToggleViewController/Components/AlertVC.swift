@@ -7,19 +7,21 @@ enum AlertType {
 }
 
 final class AppAlert {
-    static func create(_ type: AlertType) -> UIAlertController {
+    static func create(_ type: AlertType, completion: (() -> Void)? = nil) -> UIAlertController {
         let alert = UIAlertController(title: "Ошибка доступа", message: "", preferredStyle: .alert)
 
         switch type {
         case .profile:
-            alert.message = "Профиль временно недоступен, но очень скоро заработает!"
+            alert.message = "Ошибка загрузки профиля, попробуйте позже!"
         case .cart:
             alert.message = "Корзина временно недоступна, но очень скоро заработает!"
         case .productDetails:
             alert.message = "Детали продукта временно недоступны, но очень скоро заработают!"
         }
 
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+            completion?()
+        })
         return alert
     }
 }

@@ -3,7 +3,13 @@ import UIKit
 
 // Протокол фабрики, в котором метод создания всех экранов
 protocol ProfileScreenFactoryProtocol: AnyObject {
-    func makeScreen<T: UIViewController>(for profileScreen: ProfileScreens) -> T
+    func makeScreen<T: UIViewController>(for profileScreen: ProfileScreens, completion: (() -> Void)?) -> T
+}
+
+extension ProfileScreenFactoryProtocol {
+    func makeScreen<T: UIViewController>(for profileScreen: ProfileScreens) -> T {
+        return makeScreen(for: profileScreen, completion: nil)
+    }
 }
 
 // Enum который указывает список экранов
@@ -13,6 +19,7 @@ enum ProfileScreens {
     case delivery
     case chatAlert
     case promo
+    case error
 }
 
 // Класс фабрика экранов отвечает за создание экранов
@@ -32,7 +39,7 @@ final class ProfileScreenFactory {
 
 // MARK: - ProfileScreenFactoryProtocol
 extension ProfileScreenFactory: ProfileScreenFactoryProtocol {
-    func makeScreen<T: UIViewController>(for profileScreen: ProfileScreens) -> T {
+    func makeScreen<T: UIViewController>(for profileScreen: ProfileScreens, completion: (() -> Void)? = nil) -> T {
         let vc: UIViewController =
             switch profileScreen {
             case .profile: makeProfileScreen()
@@ -40,6 +47,7 @@ extension ProfileScreenFactory: ProfileScreenFactoryProtocol {
             case .delivery: makeAddressScreen()
             case .chatAlert: makeChatAlertScreen()
             case .promo: makePromoScreen()
+            case .error: makeErrorAlertScreen(.profile) { completion?() }
             }
 
         guard let typedVC = vc as? T else { fatalError("Can't create screen") }
@@ -77,5 +85,11 @@ private extension ProfileScreenFactory {
 
     func makePromoScreen() -> PromoViewController {
         return PromoViewController(storage: storage)
+    }
+
+    func makeErrorAlertScreen(_ type: AlertType, completion: (() -> Void)? = nil) -> UIAlertController {
+        return AppAlert.create(type) {
+            completion?()
+        }
     }
 }
