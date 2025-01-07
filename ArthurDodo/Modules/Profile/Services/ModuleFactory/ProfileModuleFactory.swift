@@ -2,19 +2,19 @@ import Foundation
 import UIKit
 
 // Протокол фабрики, в котором метод создания всех экранов
-protocol ProfileScreenFactoryProtocol: AnyObject {
-    func makeScreen<T: UIViewController>(for profileScreen: ProfileScreens, completion: (() -> Void)?) -> T
+protocol ProfileModuleFactory: AnyObject {
+    func makeModule<T: UIViewController>(for profileScreen: ProfileModule, completion: (() -> Void)?) -> T
 }
 
-extension ProfileScreenFactoryProtocol {
+extension ProfileModuleFactory {
     // Метод создания экрана без комплишена (нужен в большинстве случаев)
-    func makeScreen<T: UIViewController>(for profileScreen: ProfileScreens) -> T {
-        return makeScreen(for: profileScreen, completion: nil)
+    func makeModule<T: UIViewController>(for profileScreen: ProfileModule) -> T {
+        return makeModule(for: profileScreen, completion: nil)
     }
 }
 
 // Enum который указывает список экранов
-enum ProfileScreens {
+enum ProfileModule {
     case profile
     case personalData
     case delivery
@@ -39,8 +39,8 @@ final class ProfileScreenFactory {
 }
 
 // MARK: - ProfileScreenFactoryProtocol
-extension ProfileScreenFactory: ProfileScreenFactoryProtocol {
-    func makeScreen<T: UIViewController>(for profileScreen: ProfileScreens, completion: (() -> Void)? = nil) -> T {
+extension ProfileScreenFactory: ProfileModuleFactory {
+    func makeModule<T: UIViewController>(for profileScreen: ProfileModule, completion: (() -> Void)? = nil) -> T {
         let vc: UIViewController =
             switch profileScreen {
             case .profile: makeProfileScreen()
@@ -61,9 +61,8 @@ extension ProfileScreenFactory: ProfileScreenFactoryProtocol {
 private extension ProfileScreenFactory {
     // Создаем экран с персональными данными
     func makeProfileScreen() -> ProfileViewController {
-        let viewModel = ProfileViewModel(storage: storage)
-        let view = ProfileViewController(viewModel: viewModel)
-        return view
+        let profileConfigurator = ProfileConfigurator(moduleFactory: self, storage: storage)
+        return profileConfigurator.configure()
     }
 
     // Создаем экран с персональными данными

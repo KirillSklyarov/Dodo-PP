@@ -30,8 +30,6 @@ final class DependencyContainer {
         featureToggleService = FeatureToggleService(networkService: networkService, storage: storage.featureToggleStorage, decoder: decoder, encoder: encoder, session: session)
 
 
-        //        AppStartManager(networkService: networkService, storage: storage)
-
         // Создаем фабрику экранов
         screenFactory = ScreenFactory(storageService: storage, featureToggleService: featureToggleService)
 

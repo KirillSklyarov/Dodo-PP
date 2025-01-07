@@ -36,7 +36,6 @@ final class PromoViewController: UIViewController {
     // MARK: - Public methods
     func configureViewController() {
         guard let offer = storage.getSelectedPromo() else { print("No promo selected"); return }
-        print(offer)
         let image = UIImage(named: offer.imageName)
         promoImageView.image = image
 

@@ -95,7 +95,7 @@ private extension PersonalViewController {
         case .initial: setupInitialState()
         case .loading: setupLoadingState()
         case .success(let personalData): setupSuccessState(personalData)
-        case .error: print(screenState)
+        case .error: setupErrorState()
         }
     }
 
@@ -121,5 +121,10 @@ private extension PersonalViewController {
     // Обновляем UI c персональными данными
     func updateUI(with personalData: User) {
         personalTableView.getUserData(personalData)
+    }
+
+    // Настраиваем экран с ошибкой
+    func setupErrorState() {
+        activityIndicator.stopAnimating()
     }
 }

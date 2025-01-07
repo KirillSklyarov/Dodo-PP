@@ -49,7 +49,7 @@ extension Router {
     }
 
     //  Метод present, когда у нас каскад модальных экранов и нам нужен вызывать новый экран именно на последнем экране (в этом случае visibleViewController не будет работать)
-    func present(_ parent: UIViewController, vcToShow: UIViewController, animated: Bool = true, modalPresentation: UIModalPresentationStyle = .automatic) {
+    func present(from parent: UIViewController, vcToShow: UIViewController, animated: Bool = true, modalPresentation: UIModalPresentationStyle = .automatic) {
         vcToShow.modalPresentationStyle = modalPresentation
         parent.present(vcToShow, animated: animated)
     }
@@ -71,5 +71,12 @@ extension Router {
     // Метод закрывает экран с указанного экрана: работает с каскадом модальных экранов
     func dismiss(from parentVC: UIViewController, animated: Bool = true) {
         parentVC.dismiss(animated: animated)
+    }
+}
+
+// MARK: - Supporting methods
+extension Router {
+    func getNavigationController() -> UINavigationController {
+        navigationController
     }
 }

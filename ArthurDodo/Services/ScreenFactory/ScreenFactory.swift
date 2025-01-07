@@ -8,7 +8,7 @@ final class ScreenFactory {
     private let featureToggleService: FeatureToggleService
 
     let mainScreenFactory: MainScreenFactoryProtocol
-    let profileScreenFactory: ProfileScreenFactoryProtocol
+    let profileScreenFactory: ProfileModuleFactory
     let addressScreenFactory: AddressScreenFactoryProtocol
     let cartScreenFactory: CartScreenFactoryProtocol
     let deliveryScreenFactory: DeliveryScreenFactoryProtocol

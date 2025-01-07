@@ -26,7 +26,7 @@ extension CoordinatorFactory {
     }
 
     func makeProfileCoordinator() -> ProfileCoordinator {
-        return ProfileCoordinator(router: router, screenFactory: screenFactory.profileScreenFactory)
+        return ProfileCoordinator(moduleFactory: screenFactory.profileScreenFactory, router: router)
     }
 
     func makeAddressCoordinator() -> AddressCoordinator {

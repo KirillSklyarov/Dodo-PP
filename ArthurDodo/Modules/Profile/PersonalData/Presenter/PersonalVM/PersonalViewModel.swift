@@ -1,5 +1,15 @@
 import Foundation
 
+protocol PersonalViewModelProtocol: BaseViewModelProtocol where ActionType == PersonalDataAction {
+
+    func setInitialState()
+
+    var onScreenStateChanged: ((PersonalDataScreenState) -> Void)? { get set }
+    var onShowURL: ((URL) -> Void)? { get set }
+    var onDismissButtonTapped: (() -> Void)? { get set }
+    var onShowErrorAlert: (() -> Void)? { get set }
+}
+
 enum PersonalDataAction {
     case dismissButtonTapped
     case showURLTapped
@@ -23,6 +33,7 @@ final class PersonalViewModel {
     var onShowURL: ((URL) -> Void)?
     var onScreenStateChanged: ((PersonalDataScreenState) -> Void)?
     var onDismissButtonTapped: (() -> Void)?
+    var onShowErrorAlert: (() -> Void)?
 
     private let storage: ProfileStorage
 
@@ -61,14 +72,19 @@ extension PersonalViewModel: PersonalViewModelProtocol {
 
 // MARK: - Supporting methods
 private extension PersonalViewModel {
-    // Забираем данные с сервера и передаем их для отображения
+    // Забираем данные с сервера
     func fetchData() {
         personalData = storage.getUserData()
     }
 
+    // Выставляем состояние экрана (либо успешно, либо ошибка)
     func setSuccessState() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            guard let self, let personalData else { self?.state = .error; return }
+            guard let self, let personalData else {
+                self?.onShowErrorAlert?()
+                self?.state = .error;
+                return
+            }
             state = .success(personalData)
         }
     }
