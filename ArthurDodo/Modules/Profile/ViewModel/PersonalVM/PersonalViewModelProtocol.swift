@@ -1,10 +1,10 @@
 import Foundation
-import Combine
 
 protocol PersonalViewModelProtocol: BaseViewModelProtocol where ActionType == PersonalDataAction {
 
-    var personalDataPublisher: Published<User?>.Publisher { get }
-    var urlPublisher: Published<URL?>.Publisher { get }
+    func setInitialState()
 
+    var onScreenStateChanged: ((PersonalDataScreenState) -> Void)? { get set }
+    var onShowURL: ((URL) -> Void)? { get set }
     var onDismissButtonTapped: (() -> Void)? { get set }
 }

@@ -7,6 +7,7 @@ protocol ProfileScreenFactoryProtocol: AnyObject {
 }
 
 extension ProfileScreenFactoryProtocol {
+    // Метод создания экрана без комплишена (нужен в большинстве случаев)
     func makeScreen<T: UIViewController>(for profileScreen: ProfileScreens) -> T {
         return makeScreen(for: profileScreen, completion: nil)
     }

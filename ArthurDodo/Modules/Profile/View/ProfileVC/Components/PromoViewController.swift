@@ -5,8 +5,8 @@ final class PromoViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var promoImageView = AppImageView(type: .promoImage)
-    private lazy var promoDateLabel = AppLabel(type: .basicTitle, text: "до 13 октября", textColor: AppColors.grayFont)
-    private lazy var promoDetailsLabel = AppLabel(type: .smallHeader, text: "Скидка 30% при заказе от 649 ₽")
+    private lazy var promoDateLabel = AppLabel(type: .basicTitle, textColor: AppColors.grayFont)
+    private lazy var promoDetailsLabel = AppLabel(type: .smallHeader)
     private lazy var legalTextLabel = AppLabel(type: .basicTitle, text: "Акция работает только в пиццерии при заказе в приложении. Не действует с другими акциями и при заказе с комбо. Примените до 13.10 включительно", textColor: AppColors.grayFont)
 
     private lazy var applyButton = AppButtons(type: .cartOrange, text: "Применить")
@@ -35,7 +35,8 @@ final class PromoViewController: UIViewController {
 
     // MARK: - Public methods
     func configureViewController() {
-        guard let offer = storage.getSelectedPromo() else { return }
+        guard let offer = storage.getSelectedPromo() else { print("No promo selected"); return }
+        print(offer)
         let image = UIImage(named: offer.imageName)
         promoImageView.image = image
 

@@ -8,12 +8,7 @@ enum ProfileAction {
     case addressCellTapped
 }
 
-enum ProfileScreenState {
-    case initial
-    case loading
-    case success(User, [Promo])
-    case error
-}
+typealias ProfileScreenState = BaseScreenState<(User, [Promo])>
 
 final class ProfileViewModel: ProfileViewModelProtocol {
     // MARK: - Properties
@@ -37,6 +32,7 @@ final class ProfileViewModel: ProfileViewModelProtocol {
 
     var onStateChanged: ((ProfileScreenState) -> Void)?
 
+    // MARK: - Other properties
     private let storage: ProfileStorage
 
     // MARK: - Init
@@ -52,7 +48,7 @@ extension ProfileViewModel {
         case .chatAlertButtonTapped: onShowChatAlert?()
         case .dismissButtonTapped: onDismissButtonTapped?()
         case .personalDataButtonTapped: onShowPersonalData?()
-        case .promoTapped: onShowPromoVC?()
+        case .promoTapped(let promo): promoTapped(promo)
         case .addressCellTapped: onAddressCellTapped?()
         }
     }
@@ -60,15 +56,15 @@ extension ProfileViewModel {
 
 // MARK: - ProfileViewModelProtocol
 extension ProfileViewModel {
-    func initialize() {
+    // Устанавливаем первоначальное состояние экрана
+    func setInitialState() {
         state = .initial
-        state = .loading
-        fetchData()
     }
 
-    func promoTapped(_ promo: Promo) {
-        storage.setSelectedPromo(promo)
-        onShowPromoVC?()
+    // Инитим загрузку данных
+    func initialize() {
+        state = .loading
+        fetchData()
     }
 }
 
@@ -83,18 +79,27 @@ private extension ProfileViewModel {
 
     // Запрашиваем персональные данные с сервера: додокоины, кол-во заказов, адреса
     func fetchUserDataFromStorage() {
-//        userData = storage.getUserData()
+        userData = storage.getUserData()
     }
 
     func fetchPromoFromStorage() {
         promo = storage.getPromo()
     }
 
+    // Если какие-то данные не получили, то показывает алерт с ошибкой, если все ок, то выставляем статус success
     func setSuccessState() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             guard let self, let userData, let promo else {
                 self?.onShowErrorAlert?(); return }
-            state = .success(userData, promo)
+            state = .success((userData, promo))
         }
+    }
+}
+
+// MARK: - Supporting methods
+private extension ProfileViewModel {
+    func promoTapped(_ promo: Promo) {
+        storage.setSelectedPromo(promo)
+        onShowPromoVC?()
     }
 }

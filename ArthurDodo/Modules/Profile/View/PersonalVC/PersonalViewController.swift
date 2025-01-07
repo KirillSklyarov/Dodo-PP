@@ -1,12 +1,4 @@
 import UIKit
-import SafariServices
-import Combine
-
-protocol PersonalViewProtocol: AnyObject {
-    func updateUserData(_ personalData: User?)
-    func showURL(url: URL?)
-    func getViewModel() -> any PersonalViewModelProtocol
-}
 
 // Экран с личными данными юзера (имя, почта, телефон и проч.)
 final class PersonalViewController: UIViewController {
@@ -16,9 +8,10 @@ final class PersonalViewController: UIViewController {
     private lazy var personalTableView = PersonalTableView()
     private lazy var contentStackView = AppStackView([headerView, personalTableView], axis: .vertical, spacing: 10)
 
+    private lazy var activityIndicator = AppActivityIndicator()
+
     // MARK: - Properties
-    private let viewModel: any PersonalViewModelProtocol
-    private var cancellables: Set<AnyCancellable> = []
+    let viewModel: any PersonalViewModelProtocol
 
     // MARK: - Init
     init(viewModel: any PersonalViewModelProtocol) {
@@ -30,16 +23,12 @@ final class PersonalViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        cancellables.removeAll()
-    }
-
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        setupActions()
         dataBinding()
+
+        viewModel.setInitialState()
         viewModel.initialize()
     }
 }
@@ -48,17 +37,23 @@ final class PersonalViewController: UIViewController {
 private extension PersonalViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundGray
-        view.addSubviews(contentStackView)
+        view.addSubviews(contentStackView, activityIndicator)
 
         setupLayout()
     }
 
     func setupLayout() {
         setupContentStackViewLayout()
+        setupActivityIndicatorLayout()
     }
 
     func setupContentStackViewLayout() {
         contentStackView.setConstraints(isSafeArea: true, allInsets: 10)
+    }
+
+    func setupActivityIndicatorLayout() {
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 }
 
@@ -83,43 +78,48 @@ private extension PersonalViewController {
     }
 }
 
-// MARK: - PersonalViewProtocol
-extension PersonalViewController: PersonalViewProtocol {
-    // Отдаем viewModel
-    func getViewModel() -> any PersonalViewModelProtocol {
-        viewModel
-    }
-
-    // Обновляем UI c персональными данными
-    func updateUserData(_ personalData: User?) {
-        guard let personalData else { return }
-        personalTableView.getUserData(personalData)
-    }
-
-    // Показываем ссылку
-    func showURL(url: URL?) {
-        guard let url else { return }
-        guard UIApplication.shared.canOpenURL(url) else { print("Can't open URL"); return }
-        let safariVC = SFSafariViewController(url: url)
-        present(safariVC, animated: true)
-    }
-}
-
 // MARK: - Data Binding
 private extension PersonalViewController {
     func dataBinding() {
-        viewModel.personalDataPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] personalData in
-                self?.updateUserData(personalData)
-            }
-            .store(in: &cancellables)
+        viewModel.onScreenStateChanged = { [weak self] screenState in
+            self?.setupScreenState(screenState)
+        }
+    }
+}
 
-        viewModel.urlPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] url in
-                self?.showURL(url: url)
-            }
-            .store(in: &cancellables)
+// MARK: - State management
+private extension PersonalViewController {
+    // Вызываем настройку, соответствующую состоянию экрана
+    func setupScreenState(_ screenState: PersonalDataScreenState) {
+        switch screenState {
+        case .initial: setupInitialState()
+        case .loading: setupLoadingState()
+        case .success(let personalData): setupSuccessState(personalData)
+        case .error: print(screenState)
+        }
+    }
+
+    // Настраиваем первоначальный экран
+    func setupInitialState() {
+        setupUI()
+        setupActions()
+    }
+
+    // Настраиваем экран загрузки (убираем контент и показываем индикатор)
+    func setupLoadingState() {
+        contentStackView.alpha = 0
+        activityIndicator.startAnimating()
+    }
+
+    // Настраиваем экран полученных данных (показываем контент и обновляем его с учетом полученных данных)
+    func setupSuccessState(_ personalData: User) {
+        contentStackView.alpha = 1
+        updateUI(with: personalData)
+        activityIndicator.stopAnimating()
+    }
+
+    // Обновляем UI c персональными данными
+    func updateUI(with personalData: User) {
+        personalTableView.getUserData(personalData)
     }
 }

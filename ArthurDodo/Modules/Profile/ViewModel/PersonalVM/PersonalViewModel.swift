@@ -1,20 +1,27 @@
 import Foundation
-import Combine
 
 enum PersonalDataAction {
     case dismissButtonTapped
     case showURLTapped
 }
 
+typealias PersonalDataScreenState = BaseScreenState<User>
+
 final class PersonalViewModel {
 
     // MARK: - Properties
-    @Published private var personalData: User?
-    @Published private var url: URL?
+    private var personalData: User?
 
-    var personalDataPublisher: Published<User?>.Publisher { $personalData }
-    var urlPublisher: Published<URL?>.Publisher { $url }
+    private var state: PersonalDataScreenState? {
+        didSet {
+            guard let state else { return }
+            onScreenStateChanged?(state)
+        }
+    }
 
+    // MARK: - Callbacks
+    var onShowURL: ((URL) -> Void)?
+    var onScreenStateChanged: ((PersonalDataScreenState) -> Void)?
     var onDismissButtonTapped: (() -> Void)?
 
     private let storage: ProfileStorage
@@ -27,9 +34,16 @@ final class PersonalViewModel {
 
 // MARK: - PersonalViewModelProtocol
 extension PersonalViewModel: PersonalViewModelProtocol {
+    // Устанавливаем первоначальное состояние
+    func setInitialState() {
+        state = .initial
+    }
+
     // Стартовый метод
     func initialize() {
+        state = .loading
         fetchData()
+        setSuccessState()
     }
 
     func sendAction(_ action: PersonalDataAction) {
@@ -40,7 +54,8 @@ extension PersonalViewModel: PersonalViewModelProtocol {
     }
 
     func showURL() {
-        url = URL(string: "https://www.dodopizza.ru")
+        guard let url = URL(string: "https://www.dodopizza.ru") else { return }
+        onShowURL?(url)
     }
 }
 
@@ -48,6 +63,13 @@ extension PersonalViewModel: PersonalViewModelProtocol {
 private extension PersonalViewModel {
     // Забираем данные с сервера и передаем их для отображения
     func fetchData() {
-        self.personalData = storage.getUserData()
+        personalData = storage.getUserData()
+    }
+
+    func setSuccessState() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            guard let self, let personalData else { self?.state = .error; return }
+            state = .success(personalData)
+        }
     }
 }

@@ -1,4 +1,5 @@
 import UIKit
+import SafariServices
 
 final class ProfileCoordinator: Coordinator {
     // MARK: - Properties
@@ -21,7 +22,7 @@ final class ProfileCoordinator: Coordinator {
 extension ProfileCoordinator {
     func start() {
         let profileVC: ProfileViewController = screenFactory.makeScreen(for: .profile)
-        let viewModel = profileVC.getViewModel()
+        let viewModel = profileVC.viewModel
 
         // Отрабатываем замыкания
         viewModel.onDismissButtonTapped = { [weak self] in
@@ -85,11 +86,15 @@ private extension ProfileCoordinator {
 
     func showPersonalData() {
         let vc: PersonalViewController = screenFactory.makeScreen(for: .personalData)
-        let viewModel = vc.getViewModel()
+        let viewModel = vc.viewModel
         router.present(vc, isParent: true, modalPresentation: .automatic)
 
         viewModel.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
+        }
+
+        viewModel.onShowURL = { [weak self] url in
+            self?.showURL(personalVC: vc, url: url)
         }
     }
 
@@ -102,5 +107,12 @@ private extension ProfileCoordinator {
         viewModel.onDismissButtonTapped = { [weak self] in
             self?.router.dismiss(isParent: true)
         }
+    }
+
+    // Показываем экран браузера по ссылке
+    func showURL(personalVC: PersonalViewController, url: URL) {
+        guard UIApplication.shared.canOpenURL(url) else { print("Can't open URL"); return }
+        let safariVC = SFSafariViewController(url: url)
+        router.present(personalVC, vcToShow: safariVC)
     }
 }

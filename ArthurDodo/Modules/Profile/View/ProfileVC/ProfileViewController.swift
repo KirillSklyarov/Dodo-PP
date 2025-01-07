@@ -1,9 +1,5 @@
 import UIKit
 
-protocol ProfileViewProtocol: AnyObject {
-    func getViewModel() -> any ProfileViewModelProtocol
-}
-
 final class ProfileViewController: UIViewController {
 
     // MARK: - UI Properties
@@ -14,14 +10,8 @@ final class ProfileViewController: UIViewController {
     private lazy var contentStackView = AppStackView([personalDataCollectionView, promoStackView, missionStackView], axis: .vertical, spacing: 10)
     private lazy var scrollView = setupScrollView()
 
-    private lazy var activityIndicator: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView(style: .large)
-        activityIndicator.color = AppColors.buttonOrange
-        return activityIndicator
-    }()
-
     // MARK: - Other Properties
-    private let viewModel: any ProfileViewModelProtocol
+    let viewModel: any ProfileViewModelProtocol
 
     // MARK: - Init
     init(viewModel: any ProfileViewModelProtocol) {
@@ -37,6 +27,8 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         dataBinding()
+
+        viewModel.setInitialState()
         viewModel.initialize()
     }
 }
@@ -45,7 +37,7 @@ final class ProfileViewController: UIViewController {
 private extension ProfileViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(headerView, scrollView, activityIndicator)
+        view.addSubviews(headerView, scrollView)
         setupLayout()
     }
 
@@ -54,7 +46,6 @@ private extension ProfileViewController {
         setupHeaderViewLayout()
         setupScrollViewLayout()
         setupContentStackViewLayout()
-        setupActivityIndicatorLayout()
     }
 
     func setupHeaderViewLayout() {
@@ -77,12 +68,6 @@ private extension ProfileViewController {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.addSubviews(contentStackView)
         return scrollView
-    }
-
-    // Настраиваем activityIndicator
-    func setupActivityIndicatorLayout() {
-        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 }
 
@@ -125,14 +110,6 @@ private extension ProfileViewController {
     }
 }
 
-// MARK: - ProfileViewProtocol
-extension ProfileViewController: ProfileViewProtocol {
-    // Отдаем viewModel
-    func getViewModel() -> any ProfileViewModelProtocol {
-        viewModel
-    }
-}
-
 // MARK: - DataBinding
 private extension ProfileViewController {
     func dataBinding() {
@@ -155,7 +132,7 @@ private extension ProfileViewController {
             setState(view: .personalData, state: .loading)
             setState(view: .mission, state: .loading)
             setState(view: .promo, state: .loading)
-        case .success(let user, let promo):
+        case .success((let user, let promo)):
             updatePersonalData(user)
             updatePromo(promo)
         case .error: print(state)
