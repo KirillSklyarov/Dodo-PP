@@ -1,7 +1,11 @@
 import UIKit
 
+protocol PersonalViewInput: BaseViewControllerInput {
+    func configure(with profile: User)
+}
+
 // Экран с личными данными юзера (имя, почта, телефон и проч.)
-final class PersonalViewController: UIViewController {
+final class PersonalViewController: UIViewController, ModuleTransitionable {
 
     // MARK: - UI Properties
     private lazy var headerView = AppNavigationBarView(type: .personal) // Заголовок с кнопкой
@@ -11,25 +15,26 @@ final class PersonalViewController: UIViewController {
     private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Properties
-    let viewModel: any PersonalViewModelProtocol
+    let output: PersonalViewOutput
 
     // MARK: - Init
-    init(viewModel: any PersonalViewModelProtocol) {
-        self.viewModel = viewModel
+    init(output: PersonalViewOutput) {
+        self.output = output
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        print("PersonalViewController deinit")
+    }
 
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        dataBinding()
-
-        viewModel.setInitialState()
-        viewModel.initialize()
+        output.viewLoaded()
     }
 }
 
@@ -67,64 +72,71 @@ private extension PersonalViewController {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.sendAction(.dismissButtonTapped)
+            output.sendAction(.dismissButtonTapped)
         }
     }
 
     func setupPersonalTableViewAction() {
         personalTableView.onShowURL = { [weak self] in
-            self?.viewModel.sendAction(.showURLTapped)
+            self?.output.sendAction(.showURLTapped)
         }
     }
 }
 
-// MARK: - Data Binding
-private extension PersonalViewController {
-    func dataBinding() {
-        viewModel.onScreenStateChanged = { [weak self] screenState in
-            self?.setupScreenState(screenState)
-        }
-    }
-}
-
-// MARK: - State management
-private extension PersonalViewController {
-    // Вызываем настройку, соответствующую состоянию экрана
-    func setupScreenState(_ screenState: PersonalDataScreenState) {
-        switch screenState {
-        case .initial: setupInitialState()
-        case .loading: setupLoadingState()
-        case .success(let personalData): setupSuccessState(personalData)
-        case .error: setupErrorState()
-        }
-    }
-
-    // Настраиваем первоначальный экран
+// MARK: - PersonalViewInput
+extension PersonalViewController: PersonalViewInput {
+    // Настраиваем первоначальный экран (делаем настройку всех UI)
     func setupInitialState() {
         setupUI()
         setupActions()
     }
 
-    // Настраиваем экран загрузки (убираем контент и показываем индикатор)
-    func setupLoadingState() {
-        contentStackView.alpha = 0
+    // Прячем контент и показываем спиннер
+    func showLoading() {
+        isShowContent(false)
         activityIndicator.startAnimating()
     }
 
-    // Настраиваем экран полученных данных (показываем контент и обновляем его с учетом полученных данных)
-    func setupSuccessState(_ personalData: User) {
-        contentStackView.alpha = 1
-        updateUI(with: personalData)
+    // Показываем контент, обновляем UI c данными и прячем спиннер
+    func configure(with profile: User) {
+        isShowContent(true)
+        updateUI(with: profile)
         activityIndicator.stopAnimating()
+    }
+
+    // В режиме ошибки прячем спиннер
+    func showError() {
+        activityIndicator.stopAnimating()
+    }
+}
+
+// MARK: - Supporting methods
+private extension PersonalViewController {
+    func isShowContent(_ bool: Bool) {
+        contentStackView.alpha = bool ? 1 : 0
     }
 
     // Обновляем UI c персональными данными
     func updateUI(with personalData: User) {
         personalTableView.getUserData(personalData)
     }
-
-    // Настраиваем экран с ошибкой
-    func setupErrorState() {
-        activityIndicator.stopAnimating()
-    }
 }
+
+
+// Настраиваем экран полученных данных (показываем контент и обновляем его с учетом полученных данных)
+//    func setupSuccessState(_ personalData: User) {
+//        contentStackView.alpha = 1
+//        updateUI(with: personalData)
+//        activityIndicator.stopAnimating()
+//    }
+//
+//// Настраиваем экран загрузки (убираем контент и показываем индикатор)
+//func setupLoadingState() {
+//    contentStackView.alpha = 0
+//    activityIndicator.startAnimating()
+//
+
+// Настраиваем экран с ошибкой
+//    func setupErrorState() {
+//        activityIndicator.stopAnimating()
+//    }

@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-protocol EditAddressViewModelProtocol: BaseViewModelProtocol where ActionType == EditAddressAction {
+protocol EditAddressViewModelProtocol: BasePresenterOutput where ActionType == EditAddressAction {
 
     var addressToEditPublisher: Published<Address?>.Publisher { get }
     var onDismissButtonTapped: (() -> Void)? { get set }

@@ -63,6 +63,7 @@ private extension DeliveryAddressListTableView {
         separatorInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         tableHeaderView = UIView(frame: .zero)
         rowHeight = tableRowHeight
+        isScrollEnabled = false
     }
 }
 

@@ -50,28 +50,28 @@ private extension AddressCoordinator {
     func showEditAddressVC() {
         let editAddressVC = screenFactory.makeEditAddressScreen()
         let viewModel = editAddressVC.getViewModel()
-        router.present(editAddressVC, isParent: true, modalPresentation: .fullScreen)
+        router.present(editAddressVC, modalPresentation: .fullScreen)
 
         viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss(isParent: true)
+            self?.router.dismiss()
         }
 
         viewModel.onSaveButtonTapped = { [weak self] in
-            self?.router.dismiss(isParent: true)
+            self?.router.dismiss()
         }
     }
 
     func showAddNewAddressVC() {
         let vc = screenFactory.makeAddNewAddressScreen()
         let viewModel = vc.getViewModel()
-        router.present(vc, isParent: true, modalPresentation: .fullScreen)
+        router.present(vc, modalPresentation: .fullScreen)
 
         viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss(isParent: true)
+            self?.router.dismiss()
         }
 
         viewModel.onSaveNewAddressButtonTapped = { [weak self] in
-            self?.router.dismiss(isParent: true)
+            self?.router.dismiss()
         }
     }
 }

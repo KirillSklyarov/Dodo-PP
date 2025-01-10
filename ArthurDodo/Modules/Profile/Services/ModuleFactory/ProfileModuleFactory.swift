@@ -1,30 +1,22 @@
-import Foundation
 import UIKit
 
 // Протокол фабрики, в котором метод создания всех экранов
-protocol ProfileModuleFactory: AnyObject {
-    func makeModule<T: UIViewController>(for profileScreen: ProfileModule, completion: (() -> Void)?) -> T
-}
-
-extension ProfileModuleFactory {
-    // Метод создания экрана без комплишена (нужен в большинстве случаев)
-    func makeModule<T: UIViewController>(for profileScreen: ProfileModule) -> T {
-        return makeModule(for: profileScreen, completion: nil)
-    }
+protocol ProfileModuleFactoryProtocol: AnyObject {
+    func makeModule(for profileScreen: ProfileModule) -> UIViewController
+    func makeErrorAlert(for errorAlert: AlertType, completion: (() -> Void)?) -> UIAlertController
 }
 
 // Enum который указывает список экранов
 enum ProfileModule {
     case profile
     case personalData
-    case delivery
+    case chooseAddress
     case chatAlert
     case promo
-    case error
 }
 
 // Класс фабрика экранов отвечает за создание экранов
-final class ProfileScreenFactory {
+final class ProfileModuleFactory {
     // MARK: - Properties
     private let storage: ProfileStorage
     private let deliveryStorage: DeliveryStorage
@@ -39,52 +31,59 @@ final class ProfileScreenFactory {
 }
 
 // MARK: - ProfileScreenFactoryProtocol
-extension ProfileScreenFactory: ProfileModuleFactory {
-    func makeModule<T: UIViewController>(for profileScreen: ProfileModule, completion: (() -> Void)? = nil) -> T {
-        let vc: UIViewController =
-            switch profileScreen {
-            case .profile: makeProfileScreen()
-            case .personalData: makePersonalDataScreen()
-            case .delivery: makeAddressScreen()
-            case .chatAlert: makeChatAlertScreen()
-            case .promo: makePromoScreen()
-            case .error: makeErrorAlertScreen(.profile) { completion?() }
-            }
+extension ProfileModuleFactory: ProfileModuleFactoryProtocol {
+    func makeModule(for profileScreen: ProfileModule) -> UIViewController {
+        switch profileScreen {
+        case .profile: makeProfileModule()
+        case .personalData: makePersonalDataModule()
+        case .chooseAddress: makeAddressModule()
+        case .chatAlert: makeSupportModule()
+        case .promo: makePromoModule()
+        }
+    }
 
-        guard let typedVC = vc as? T else { fatalError("Can't create screen") }
+    func makeErrorAlert(for errorAlert: AlertType, completion: (() -> Void)?) -> UIAlertController {
+        switch errorAlert {
+        case .profile: makeErrorAlertScreen(.profile) { completion?() }
+        case .cart: makeErrorAlertScreen(.cart) { completion?() }
+        case .productDetails: makeErrorAlertScreen(.productDetails) { completion?() }
+        case .chooseAddress: makeErrorAlertScreen(.chooseAddress) { completion?() }
+        case .personalData: makeErrorAlertScreen(.personalData) { completion?() }
 
-        return typedVC
+        }
     }
 }
 
 // MARK: - Supporting methods (Здесь создаем конкретные экраны)
-private extension ProfileScreenFactory {
+private extension ProfileModuleFactory {
     // Создаем экран с персональными данными
-    func makeProfileScreen() -> ProfileViewController {
+    func makeProfileModule() -> ProfileViewController {
         let profileConfigurator = ProfileConfigurator(moduleFactory: self, storage: storage)
         return profileConfigurator.configure()
     }
 
     // Создаем экран с персональными данными
-    func makePersonalDataScreen() -> PersonalViewController {
-        let viewModel = PersonalViewModel(storage: storage)
-        let view = PersonalViewController(viewModel: viewModel)
-        return view
+    func makePersonalDataModule() -> PersonalViewController {
+        let personalConfigurator = PersonalConfigurator(moduleFactory: self, storage: storage)
+        return personalConfigurator.configure()
+    }
+
+    // Создаем модуль с контактами поддержки (написать, позвонить)
+    func makeSupportModule() -> SupportViewController {
+        let configurator = SupportConfigurator()
+        return configurator.configure()
+    }
+
+    // Создаем модуль с акциями
+    func makePromoModule() -> PromoViewController {
+        let configurator = PromoConfigurator(storage: storage)
+        return configurator.configure()
     }
 
     // Создаем экран с выбором адреса
-    func makeAddressScreen() -> ChooseAddressVC {
-        let viewModel = ChooseAddressVM(storage: deliveryStorage, storageService: storageService)
-        let view = ChooseAddressVC(viewModel: viewModel)
-        return view
-    }
-
-    func makeChatAlertScreen() -> AppActionSheet {
-        return AppActionSheet()
-    }
-
-    func makePromoScreen() -> PromoViewController {
-        return PromoViewController(storage: storage)
+    func makeAddressModule() -> ChooseAddressViewController {
+        let configurator = ChooseAddressConfigurator(moduleFactory: self, storageService: storageService)
+        return configurator.configure()
     }
 
     func makeErrorAlertScreen(_ type: AlertType, completion: (() -> Void)? = nil) -> UIAlertController {

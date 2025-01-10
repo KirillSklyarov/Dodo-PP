@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-protocol ChoosePaymentMethodVMProtocol: BaseViewModelProtocol where ActionType == PaymentMethodViewModelAction {
+protocol ChoosePaymentMethodVMProtocol: BasePresenterOutput where ActionType == PaymentMethodViewModelAction {
 
     var paymentMethodPublisher: Published<PaymentMethod?>.Publisher { get }
 

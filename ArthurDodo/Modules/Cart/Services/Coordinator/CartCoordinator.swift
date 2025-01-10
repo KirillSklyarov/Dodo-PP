@@ -61,27 +61,27 @@ private extension CartCoordinator {
         viewModel.onCartButtonTapped = { [weak self] in
             guard let self else { print("Error: self is nil: showEditProduct vc.onCartButtonTapped"); return }
             completion() // Вызываем комплишн
-            router.dismiss(isParent: true) // Закрываем текущий экран
+            router.dismiss() // Закрываем текущий экран
         }
 
         viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss(isParent: true) // Закрываем текущий экран
+            self?.router.dismiss() // Закрываем текущий экран
         }
 
         // Показываем всплывающий экран с КБЖУ
         viewModel.onShowPopupVC = { [weak self] popUpView in
-            self?.router.present(from: vc, vcToShow: popUpView, modalPresentation: .popover)
+            self?.router.present(popUpView, modalPresentation: .popover)
         }
 
         // Показываем экран
-        router.present(vc, isParent: true)
+        router.present(vc)
     }
 
     // Показываем всплывающий экран для акций
     func showPromoScreen() {
-        let vc = screenFactory.makePromoScreen()
+        let vc = screenFactory.makePromoModule()
         vc.sheetPresentationController?.detents = [.medium()]
         vc.sheetPresentationController?.prefersGrabberVisible = true
-        router.present(vc, isParent: true)
+        router.present(vc)
     }
 }

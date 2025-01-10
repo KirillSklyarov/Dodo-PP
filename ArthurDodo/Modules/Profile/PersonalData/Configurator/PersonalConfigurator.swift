@@ -1,5 +1,5 @@
 
-final class ProfileConfigurator {
+final class PersonalConfigurator {
     // MARK: - Properties
     private let moduleFactory: ProfileModuleFactory
     private let storage: ProfileStorage
@@ -11,13 +11,13 @@ final class ProfileConfigurator {
     }
 
     // MARK: - Methods
-    func configure() -> ProfileViewController {
-//        let router = ProfileRouter(moduleFactory: moduleFactory)
-        let presenter = ProfilePresenter(storage: storage)
-        let view = ProfileViewController(output: presenter)
+    func configure() -> PersonalViewController {
+        let router = PersonalRouter(moduleFactory: moduleFactory)
+        let presenter = PersonalPresenter(storage: storage, router: router)
+        let view = PersonalViewController(output: presenter)
 
         presenter.view = view
-//        router.view = view
+        router.view = view
 
         return view
     }

@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-protocol CartViewModelProtocol: BaseViewModelProtocol where ActionType == CartViewModelAction {
+protocol CartViewModelProtocol: BasePresenterOutput where ActionType == CartViewModelAction {
 
     var promoPublisher: Published<[Promo]?>.Publisher { get }
     var itemsToAddPublisher: Published<[Item]?>.Publisher { get }

@@ -1,5 +1,6 @@
 import Foundation
 
+// Это перечисление действий от view для presenter
 enum ProfileAction {
     case chatAlertButtonTapped
     case dismissButtonTapped
@@ -12,7 +13,17 @@ protocol ProfileViewOutput: AnyObject {
     func viewLoaded()
     func sendAction(_ action: ProfileAction)
 
-    var router: ProfileRouterInput { get }
+    var coordinatorEventHandler: ((ProfileCoordinatorEvent) -> Void)? { get set }
+}
+
+// Это перечисление действий для координатора
+enum ProfileCoordinatorEvent {
+    case dismissModule
+    case showSupportModule
+    case showPersonalDataModule
+    case showPromoModule
+    case showChooseAddressModule
+    case showProfileErrorAlertModule
 }
 
 final class ProfilePresenter {
@@ -22,14 +33,13 @@ final class ProfilePresenter {
 
     // MARK: - Other properties
     private let storage: ProfileStorage
-    private(set) var router: ProfileRouterInput
-    private let view: ProfileViewInput
+    weak var view: ProfileViewInput?
+
+    var coordinatorEventHandler: ((ProfileCoordinatorEvent) -> Void)?
 
     // MARK: - Init
-    init(storage: ProfileStorage, router: ProfileRouterInput, view: ProfileViewInput) {
+    init(storage: ProfileStorage) {
         self.storage = storage
-        self.router = router
-        self.view = view
     }
 }
 
@@ -37,17 +47,18 @@ final class ProfilePresenter {
 extension ProfilePresenter: ProfileViewOutput {
     // Когда мы получаем информацию, что view загрузилась мы для него устанавливаем начальное значение
     func viewLoaded() {
-        view.setupInitialState()
+        view?.setupInitialState()
         loadData()
     }
 
     func sendAction(_ action: ProfileAction) {
         switch action {
-        case .chatAlertButtonTapped: router.showChatAlert()
-        case .dismissButtonTapped: router.dismiss()
-        case .personalDataButtonTapped: router.showPersonalData()
+        case .chatAlertButtonTapped: coordinatorEventHandler?(.showSupportModule)
+        case .dismissButtonTapped: coordinatorEventHandler?(.dismissModule)
+        case .personalDataButtonTapped: coordinatorEventHandler?(.showPersonalDataModule)
+
         case .promoTapped(let promo): promoTapped(promo)
-        case .addressCellTapped: router.showAddressVC()
+        case .addressCellTapped: coordinatorEventHandler?(.showChooseAddressModule)
         }
     }
 }
@@ -56,7 +67,7 @@ extension ProfilePresenter: ProfileViewOutput {
 private extension ProfilePresenter {
     // Инитим загрузку данных
     func loadData() {
-        view.showLoading()
+        view?.showLoading()
         fetchData()
         updateViewWithData()
     }
@@ -66,7 +77,7 @@ private extension ProfilePresenter {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             guard let self, let userData, let promo else {
                 self?.setErrorState(); return }
-            view.configure(with: userData, promo)
+            view?.configure(with: userData, promo)
         }
     }
 }
@@ -93,12 +104,12 @@ private extension ProfilePresenter {
 private extension ProfilePresenter {
     func promoTapped(_ promo: Promo) {
         storage.setSelectedPromo(promo)
-        router.showPromoVC()
+        coordinatorEventHandler?(.showPromoModule)
     }
 
     // Когда получаем ошибку, то роутеру говорим показать алерт и вью показывает UI для ошибки
     func setErrorState() {
-        router.showProfileErrorAlert()
-        view.showError()
+        coordinatorEventHandler?(.showProfileErrorAlertModule)
+        view?.showError()
     }
 }

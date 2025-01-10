@@ -1,7 +1,13 @@
 import UIKit
 
+protocol PromoViewInput: AnyObject {
+    func setInitialState()
+    func updateUIWithAppliedPromo()
+    func configureUI(with promo: Promo)
+}
+
 // Вылезающий снизу экран "Акции"
-final class PromoViewController: UIViewController {
+final class PromoViewController: UIViewController, ModuleTransitionable {
 
     // MARK: - UI Properties
     private lazy var promoImageView = AppImageView(type: .promoImage)
@@ -13,11 +19,11 @@ final class PromoViewController: UIViewController {
 
     private lazy var contentStack = setupContentStack()
 
-    private let storage: PromoStorageProtocol
+    private let output: PromoViewOutput
 
     // MARK: - Init
-    init(storage: PromoStorageProtocol) {
-        self.storage = storage
+    init(output: PromoViewOutput) {
+        self.output = output
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -28,19 +34,29 @@ final class PromoViewController: UIViewController {
     // MARK: - Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        output.viewLoaded()
+    }
+}
+
+// MARK: - PromoViewInput
+extension PromoViewController: PromoViewInput {
+    // Делаем первоначальное состояние экрана
+    func setInitialState() {
         setupUI()
-        configureViewController()
         setupActions()
     }
 
-    // MARK: - Public methods
-    func configureViewController() {
-        guard let offer = storage.getSelectedPromo() else { print("No promo selected"); return }
-        let image = UIImage(named: offer.imageName)
+    func updateUIWithAppliedPromo() {
+        applyButton.setNewTitle("Акция применена")
+        applyButton.setNewBackgroundColor(AppColors.buttonGray)
+    }
+
+    func configureUI(with promo: Promo) {
+        let image = UIImage(named: promo.imageName)
         promoImageView.image = image
 
-        promoDateLabel.text = offer.date
-        promoDetailsLabel.text = offer.details
+        promoDateLabel.text = promo.date
+        promoDetailsLabel.text = promo.details
     }
 }
 
@@ -52,9 +68,7 @@ extension PromoViewController {
 
     func setupButtonActions() {
         applyButton.onButtonTapped = { [weak self] in
-            guard let self else { return }
-            applyButton.setNewTitle("Акция применена")
-            applyButton.setNewBackgroundColor(AppColors.buttonGray)
+            self?.output.sendAction(.applyPromo)
         }
     }
 }

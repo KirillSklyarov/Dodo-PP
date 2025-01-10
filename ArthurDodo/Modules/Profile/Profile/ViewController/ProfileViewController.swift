@@ -1,9 +1,6 @@
 import UIKit
 
-protocol ProfileViewInput: AnyObject {
-    func setupInitialState()
-    func showLoading()
-    func showError()
+protocol ProfileViewInput: BaseViewControllerInput {
     func configure(with profile: User, _ promo: [Promo])
 }
 
@@ -20,12 +17,21 @@ final class ProfileViewController: UIViewController, ModuleTransitionable {
     private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Other Properties
-    var output: ProfileViewOutput?
+    let output: ProfileViewOutput
 
+    init(output: ProfileViewOutput) {
+        self.output = output
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        output?.viewLoaded() // Первый метод, который говорит, что view загружена
+        output.viewLoaded() // Первый метод, который говорит, что view загружена
     }
 }
 
@@ -84,22 +90,22 @@ private extension ProfileViewController {
     // Настройка действий header view (где 3 кнопки)
     func setupHeaderViewActions() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.output?.sendAction(.dismissButtonTapped)
+            self?.output.sendAction(.dismissButtonTapped)
         }
 
         headerView.onChatButtonTapped = { [weak self] in
-            self?.output?.sendAction(.chatAlertButtonTapped)
+            self?.output.sendAction(.chatAlertButtonTapped)
         }
 
         headerView.onProfileButtonTapped = { [weak self] in
-            self?.output?.sendAction(.personalDataButtonTapped)
+            self?.output.sendAction(.personalDataButtonTapped)
         }
     }
 
     func setupPersonalDataActions() {
         personalDataCollectionView.onAddressCellTapped = { [weak self] in
             guard let self else { return }
-            output?.sendAction(.addressCellTapped)
+            output.sendAction(.addressCellTapped)
         }
     }
 
@@ -107,7 +113,7 @@ private extension ProfileViewController {
     func setupPromoActions() {
         promoStackView.onPromoSelected = { [weak self] promo in
             guard let self else { return }
-            output?.sendAction(.promoTapped(promo))
+            output.sendAction(.promoTapped(promo))
         }
     }
 }
@@ -164,6 +170,8 @@ private extension ProfileViewController {
         [headerView, contentStackView].forEach { $0.alpha = alpha }
     }
 }
+
+
 
 
 //

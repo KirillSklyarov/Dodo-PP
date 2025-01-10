@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import QuartzCore
 
-protocol StoriesViewModelProtocol: BaseViewModelProtocol where ActionType == StoriesViewModelAction {
+protocol StoriesViewModelProtocol: BasePresenterOutput where ActionType == StoriesViewModelAction {
 
     var subStoriesCountPublisher: Published<Int?>.Publisher { get }
     var progressSubStoriesIndexPublisher: Publishers.CombineLatest<Published<Float?>.Publisher,  Published<Int?>.Publisher> { get }

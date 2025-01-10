@@ -8,7 +8,7 @@ final class ScreenFactory {
     private let featureToggleService: FeatureToggleService
 
     let mainScreenFactory: MainScreenFactoryProtocol
-    let profileScreenFactory: ProfileModuleFactory
+    let profileModuleFactory: ProfileModuleFactory
     let addressScreenFactory: AddressScreenFactoryProtocol
     let cartScreenFactory: CartScreenFactoryProtocol
     let deliveryScreenFactory: DeliveryScreenFactoryProtocol
@@ -18,7 +18,7 @@ final class ScreenFactory {
         self.storageService = storageService
         self.featureToggleService = featureToggleService
         mainScreenFactory = MainScreenFactory(storage: storageService.mainStorage, featureToggleService: featureToggleService)
-        profileScreenFactory = ProfileScreenFactory(storage: storageService.profileStorage, deliveryStorage: storageService.deliveryStorage, storageService: storageService.dataStorageService)
+        profileModuleFactory = ProfileModuleFactory(storage: storageService.profileStorage, deliveryStorage: storageService.deliveryStorage, storageService: storageService.dataStorageService)
         addressScreenFactory = AddressScreenFactory(storage: storageService.addressStorage)
         cartScreenFactory = CartScreenFactory(dataManager: storageService)
         deliveryScreenFactory = DeliveryScreenFactory(storageService: storageService)

@@ -92,10 +92,10 @@ private extension MainCoordinator {
         }
 
         viewModel.onShowPopupVC = { [weak self] popUpView in
-            self?.router.present(popUpView, isParent: true, modalPresentation: .popover)
+            self?.router.present(popUpView, modalPresentation: .popover)
         }
 
-        router.present(vc, isParent: true , modalPresentation: .fullScreen) // Показываем экран
+        router.present(vc, modalPresentation: .fullScreen) // Показываем экран
     }
 }
 
@@ -120,17 +120,17 @@ private extension MainCoordinator {
     // Создаем экран алерта (нужен когда фича выключена) и показываем его
     func showProfileAlert() {
         let vc = screenFactory.makeAlertScreen(.profile)
-        router.present(vc, isParent: true)
+        router.present(vc)
     }
 
     func showCartAlert() {
         let vc = screenFactory.makeAlertScreen(.cart)
-        router.present(vc, isParent: true)
+        router.present(vc)
     }
 
     func showProductDetailsAlert() {
         let vc = screenFactory.makeAlertScreen(.productDetails)
-        router.present(vc, isParent: true)
+        router.present(vc)
     }
 }
 

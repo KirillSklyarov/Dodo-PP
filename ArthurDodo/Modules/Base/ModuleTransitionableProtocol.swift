@@ -1,7 +1,7 @@
 import UIKit
 
 // Базовая версия протокола
-protocol ModuleTransitionable: AnyObject {
+protocol ModuleTransitionable: UIViewController {
     func showModule(_ module: UIViewController)
     func dismissModule()
     func pop()
@@ -10,7 +10,7 @@ protocol ModuleTransitionable: AnyObject {
 }
 
 // Базовая реализация для UIViewController
-extension ModuleTransitionable where Self: UIViewController {
+extension ModuleTransitionable {
     func showModule(_ module: UIViewController) {
         if let navigationController = navigationController {
             navigationController.pushViewController(module, animated: true)

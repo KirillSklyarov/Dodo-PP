@@ -2,7 +2,7 @@ import Foundation
 import Combine
 
 // MARK: - Protocol
-protocol ProductDetailsViewModelProtocol: BaseViewModelProtocol where ActionType == ProductDetailsViewModelAction {
+protocol ProductDetailsViewModelProtocol: BasePresenterOutput where ActionType == ProductDetailsViewModelAction {
 
     var itemPublisher: Published<Item?>.Publisher { get }
     var isOneSizePublisher: Published<Bool?>.Publisher { get }

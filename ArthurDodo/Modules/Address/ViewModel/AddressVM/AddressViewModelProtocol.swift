@@ -1,6 +1,6 @@
 import Combine
 
-protocol AddressViewModelProtocol: BaseViewModelProtocol where ActionType == AddressAction {
+protocol AddressViewModelProtocol: BasePresenterOutput where ActionType == AddressAction {
 
     var addressesPublisher: Published<[Address]>.Publisher { get }
     var mainAddressPublisher: Published<Address?>.Publisher { get }

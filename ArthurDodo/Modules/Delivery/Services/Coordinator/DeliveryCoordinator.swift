@@ -29,7 +29,7 @@ extension DeliveryCoordinator {
         self.deliveryVC = vc
 
         viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss(isParent: true)
+            self?.router.dismiss()
             self?.onDismissed?()
         }
 
@@ -45,7 +45,7 @@ extension DeliveryCoordinator {
             self?.showFinalVC(parentVC: vc)
         }
 
-        router.present(vc, isParent: true)
+        router.present(vc)
     }
 }
 
@@ -54,11 +54,11 @@ private extension DeliveryCoordinator {
     func showChooseAddress(_ parentVC: UIViewController) {
         let vc = screenFactory.deliveryScreenFactory.makeChooseAddressScreen()
         let viewModel = vc.getViewModel()
-        router.present(from: parentVC, vcToShow: vc)
+        router.present(vc)
 
         // Нажали на закрыть окно
         viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss(from: parentVC)
+            self?.router.dismiss()
         }
 
         // Выбрали ячейку
@@ -82,14 +82,14 @@ private extension DeliveryCoordinator {
         let viewModel = vc.getViewModel()
 
         viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss(from: parentVC)
+            self?.router.dismiss()
         }
 
         viewModel.onSaveButtonTapped = { [weak self] in
-            self?.router.dismiss(from: parentVC)
+            self?.router.dismiss()
         }
 
-        router.present(from: parentVC, vcToShow: vc, modalPresentation: .fullScreen)
+        router.present(vc, modalPresentation: .fullScreen)
     }
 
     func showAddNewAddressVC(_ parentVC: UIViewController) {
@@ -97,28 +97,28 @@ private extension DeliveryCoordinator {
         let viewModel = vc.getViewModel()
 
         viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss(from: parentVC)
+            self?.router.dismiss()
         }
 
         viewModel.onSaveNewAddressButtonTapped = { [weak self] in
-            self?.router.dismiss(from: parentVC)
+            self?.router.dismiss()
         }
-
-        router.present(from: parentVC, vcToShow: vc, modalPresentation: .fullScreen)
+        
+        router.present(vc, modalPresentation: .fullScreen)
     }
 
     func showChoosePaymentMethod(_ parentVC: UIViewController) {
         let vc = screenFactory.deliveryScreenFactory.makeChoosePaymentMethodScreen()
         let viewModel = vc.getViewModel()
-        router.present(from: parentVC, vcToShow: vc)
+        router.present(vc)
 
         viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss(from: parentVC)
+            self?.router.dismiss()
         }
 
         viewModel.onPaymentMethodSelected = { [weak self] paymentMethod in
             self?.updateUI(paymentMethod: paymentMethod)
-            self?.router.dismiss(from: parentVC)
+            self?.router.dismiss()
         }
     }
 
@@ -132,7 +132,7 @@ private extension DeliveryCoordinator {
             self?.onFinishFlow?()
         }
 
-        router.present(from: parentVC, vcToShow: vc)
+        router.present(vc)
     }
 }
 
