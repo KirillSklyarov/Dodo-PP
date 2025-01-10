@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-protocol MainViewModelProtocol: BasePresenterOutput where ActionType == MainAction  {
+protocol MainViewModelProtocol: BaseViewControllerOutputOLD where ActionType == MainAction  {
 
     var cartPricePublisher: Published<Int?>.Publisher { get }
     var storiesPublisher: Published<[Story]?>.Publisher { get }

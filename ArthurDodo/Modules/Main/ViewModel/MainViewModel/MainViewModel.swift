@@ -12,6 +12,7 @@ enum MainAction {
 }
 
 final class MainViewModel: MainViewModelProtocol {
+    
     // MARK: - Published properties
     @Published private var cartPrice: Int?
     @Published private var stories: [Story]?

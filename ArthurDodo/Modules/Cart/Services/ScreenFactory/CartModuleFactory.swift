@@ -1,13 +1,13 @@
 import Foundation
 
-protocol CartScreenFactoryProtocol: AnyObject {
-    func makeCartScreen() -> CartViewController
-    func makeEditProductScreen() -> EditProductViewController
+protocol CartModuleFactoryProtocol: AnyObject {
+    func makeCartModule() -> CartViewController
+    func makeEditItemModule() -> EditProductViewController
     func makePromoModule() -> PromoViewController
 }
 
 // Фабрика экранов модуля корзины
-final class CartScreenFactory {
+final class CartModuleFactory {
 
     let storage: CartStorage
     let storageService: DataStorageService
@@ -19,14 +19,13 @@ final class CartScreenFactory {
 }
 
 // MARK: - Methods
-extension CartScreenFactory: CartScreenFactoryProtocol {
-    func makeCartScreen() -> CartViewController {
-        let viewModel = CartViewModel(storage: storage, storageService: storageService)
-        let view = CartViewController(viewModel: viewModel)
-        return view
+extension CartModuleFactory: CartModuleFactoryProtocol {
+    func makeCartModule() -> CartViewController {
+        let configurator = CartConfigurator(storage: storage, storageService: storageService)
+        return configurator.configure()
     }
 
-    func makeEditProductScreen() -> EditProductViewController {
+    func makeEditItemModule() -> EditProductViewController {
         let viewModel = EditItemViewModel(storage: storage)
         let view = EditProductViewController(viewModel: viewModel)
         return view

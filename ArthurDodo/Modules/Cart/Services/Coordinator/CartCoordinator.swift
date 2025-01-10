@@ -1,18 +1,26 @@
 import UIKit
 
+enum CartCoordinatorEvent {
+    case dismissModule
+    case showEditProductModule
+    case showPromoModule
+    case showDeliveryModule
+    case showCartErrorAlertModule
+}
+
 final class CartCoordinator: Coordinator {
 
     // MARK: - Properties
     private let router: Router
-    private let screenFactory: CartScreenFactoryProtocol
+    private let moduleFactory: CartModuleFactoryProtocol
 
     var onFinishFlow: (() -> Void)?
     var onCartDismissed: (() -> Void)?
 
     // MARK: - Init
-    init(router: Router, screenFactory: CartScreenFactoryProtocol) {
+    init(router: Router, screenFactory: CartModuleFactoryProtocol) {
         self.router = router
-        self.screenFactory = screenFactory
+        self.moduleFactory = screenFactory
     }
 
     deinit {
@@ -23,38 +31,61 @@ final class CartCoordinator: Coordinator {
 // MARK: - Start
 extension CartCoordinator {
     func start() {
-        let cartVC = screenFactory.makeCartScreen() // Создаем экран
-        let viewModel = cartVC.getViewModel()
+        let cartVC = moduleFactory.makeCartModule() // Создаем экран
+        let presenter = cartVC.output
 
-        // Отрабатываем замыкания
-        viewModel.onCartVCDismissed = { [weak self] in
-            guard let self else { return }
-            router.dismiss()
-            onCartDismissed?()
-        }
-
-        viewModel.onShowEditProductVC = { [weak self, weak viewModel] in
-            self?.showEditProduct {
-                viewModel?.sendAction(.updateCart) // При вызове комплишена мы обновляем корзину на экране
+        presenter.coordinatorEventHandler = { [weak self] coordinatorEvent in
+            switch coordinatorEvent {
+            case .dismissModule: self?.dismissModule()
+            case .showEditProductModule: self?.showEditProductVC()
+            case .showPromoModule: self?.showPromoScreen()
+            case .showDeliveryModule: self?.onFinishFlow?()
+            case .showCartErrorAlertModule: self?.showCartErrorAlertModule()
             }
         }
-
-        viewModel.onShowPromoVC = { [weak self] in
-            self?.showPromoScreen()
-        }
-
-        viewModel.onShowDeliveryVC = { [weak self] in
-            self?.onFinishFlow?()
-        }
-
         router.present(cartVC) // Показываем экран модально
     }
 }
 
 // MARK: - Supporting methods
 private extension CartCoordinator {
+        // Отрабатываем замыкания
+    func dismissModule() {
+        router.dismiss()
+        onCartDismissed?()
+    }
+
+    // FIXME: НУЖНО ДОБИТЬ ЭТУ ЧАСТЬ
+    func showEditProductVC() {
+        //        presenter.onShowEditProductVC = { [weak self, weak viewModel] in
+        //            self?.showEditProduct {
+        //                viewModel?.sendAction(.updateCart) // При вызове комплишена мы обновляем корзину на экране
+        //            }
+        //        }
+    }
+
+    // Показываем всплывающий экран для акций
+    func showPromoScreen() {
+        let vc = moduleFactory.makePromoModule()
+        vc.sheetPresentationController?.detents = [.medium()]
+        vc.sheetPresentationController?.prefersGrabberVisible = true
+        router.present(vc)
+    }
+
+    // Показываем экран с ошибкой, через комплишн вызываем закрытие окна и флоу, при нажатии на кнопку на алерте
+    func showCartErrorAlertModule() {
+        let vc = moduleFactory.makeErrorAlert(for: .profile) { [weak self] in
+            self?.dismissModule()
+        }
+
+        router.present(vc)
+    }
+}
+
+// MARK: - Supporting methods
+private extension CartCoordinator {
     func showEditProduct(completion: @escaping (() -> Void)) {
-        let vc = screenFactory.makeEditProductScreen() // Создаем экран
+        let vc = moduleFactory.makeEditItemModule() // Создаем экран
         let viewModel = vc.getViewModel()
 
         // Настраиваем замыкания
@@ -74,14 +105,6 @@ private extension CartCoordinator {
         }
 
         // Показываем экран
-        router.present(vc)
-    }
-
-    // Показываем всплывающий экран для акций
-    func showPromoScreen() {
-        let vc = screenFactory.makePromoModule()
-        vc.sheetPresentationController?.detents = [.medium()]
-        vc.sheetPresentationController?.prefersGrabberVisible = true
         router.present(vc)
     }
 }

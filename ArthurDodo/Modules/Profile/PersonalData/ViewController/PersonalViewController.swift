@@ -71,8 +71,7 @@ private extension PersonalViewController {
 
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
-            guard let self else { return }
-            output.sendAction(.dismissButtonTapped)
+            self?.output.sendAction(.dismissButtonTapped)
         }
     }
 
@@ -121,22 +120,3 @@ private extension PersonalViewController {
         personalTableView.getUserData(personalData)
     }
 }
-
-
-// Настраиваем экран полученных данных (показываем контент и обновляем его с учетом полученных данных)
-//    func setupSuccessState(_ personalData: User) {
-//        contentStackView.alpha = 1
-//        updateUI(with: personalData)
-//        activityIndicator.stopAnimating()
-//    }
-//
-//// Настраиваем экран загрузки (убираем контент и показываем индикатор)
-//func setupLoadingState() {
-//    contentStackView.alpha = 0
-//    activityIndicator.startAnimating()
-//
-
-// Настраиваем экран с ошибкой
-//    func setupErrorState() {
-//        activityIndicator.stopAnimating()
-//    }

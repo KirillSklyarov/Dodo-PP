@@ -1,6 +1,6 @@
 import Combine
 
-protocol AddNewAddressVMProtocol: BasePresenterOutput where ActionType == AddNewAddressAction {
+protocol AddNewAddressVMProtocol: BaseViewControllerOutputOLD where ActionType == AddNewAddressAction {
 
     var mainAddressPublisher: Published<Address?>.Publisher { get }
 

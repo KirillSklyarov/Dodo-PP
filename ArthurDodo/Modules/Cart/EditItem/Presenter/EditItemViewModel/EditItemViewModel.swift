@@ -1,7 +1,7 @@
 import UIKit
 import Combine
 
-protocol EditItemViewModelProtocol: BasePresenterOutput where ActionType == EditItemAction {
+protocol EditItemViewModelProtocol: BaseViewControllerOutputOLD where ActionType == EditItemAction {
 
     var cartItemPublisher: Published<CartItem?>.Publisher { get }
     var toppingsPublisher: Published<[Topping]?>.Publisher { get }

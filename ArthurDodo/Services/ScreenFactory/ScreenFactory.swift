@@ -10,7 +10,7 @@ final class ScreenFactory {
     let mainScreenFactory: MainScreenFactoryProtocol
     let profileModuleFactory: ProfileModuleFactory
     let addressScreenFactory: AddressScreenFactoryProtocol
-    let cartScreenFactory: CartScreenFactoryProtocol
+    let cartScreenFactory: CartModuleFactoryProtocol
     let deliveryScreenFactory: DeliveryScreenFactoryProtocol
 
     // MARK: - Init
@@ -20,7 +20,7 @@ final class ScreenFactory {
         mainScreenFactory = MainScreenFactory(storage: storageService.mainStorage, featureToggleService: featureToggleService)
         profileModuleFactory = ProfileModuleFactory(storage: storageService.profileStorage, deliveryStorage: storageService.deliveryStorage, storageService: storageService.dataStorageService)
         addressScreenFactory = AddressScreenFactory(storage: storageService.addressStorage)
-        cartScreenFactory = CartScreenFactory(dataManager: storageService)
+        cartScreenFactory = CartModuleFactory(dataManager: storageService)
         deliveryScreenFactory = DeliveryScreenFactory(storageService: storageService)
     }
 }

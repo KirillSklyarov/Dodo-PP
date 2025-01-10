@@ -1,5 +1,14 @@
 import UIKit
-import Combine
+
+protocol CartViewControllerInput: BaseViewControllerInput {
+    func configure(with data: CartData)
+
+}
+
+protocol CartViewControllerOutput: BaseViewControllerOutput where ActionType == CartViewModelAction {
+
+    var coordinatorEventHandler: ((CartCoordinatorEvent) -> Void)? { get set }
+}
 
 final class CartViewController: UIViewController {
 
@@ -17,13 +26,17 @@ final class CartViewController: UIViewController {
 
     private lazy var contentStack = AppStackView([headerView, scrollView, cartButtonView], axis: .vertical)
 
+    private lazy var activityIndicator = AppActivityIndicator()
+
     // MARK: - Presenter
-    private let viewModel: any CartViewModelProtocol
-    private var cancellables: Set<AnyCancellable> = []
+//    private let viewModel: any CartViewModelProtocol
+//    private var cancellables: Set<AnyCancellable> = []
+
+    let output: any CartViewControllerOutput
 
     // MARK: - Init
-    init(viewModel: any CartViewModelProtocol) {
-        self.viewModel = viewModel
+    init(output: any CartViewControllerOutput) {
+        self.output = output
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,16 +47,39 @@ final class CartViewController: UIViewController {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        setupActions()
-        dataBinding()
-        viewModel.initialize()
+        output.viewLoaded()
+
+
+//        dataBinding()
+//        viewModel.initialize()
     }
 
     // Мы обновляем кнопку корзины на mainVC всегда, когда закрывается это окно (либо по свайпу, либо по нажатию на кнопку dismiss, либо по причине пустой корзины)
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        viewModel.sendAction(.dismissButtonTapped)
+        output.sendAction(.dismissButtonTapped)
+    }
+}
+
+// MARK: - CartViewControllerInput
+extension CartViewController: CartViewControllerInput {
+    func setupInitialState() {
+        setupUI()
+        setupActions()
+    }
+
+    func showLoading() {
+        isShowContent(false)
+        activityIndicator.startAnimating()
+    }
+
+    func configure(with data: CartData) {
+        updateUIWithData(with: data)
+        isShowContent(true)
+    }
+
+    func showError() {
+        activityIndicator.stopAnimating()
     }
 }
 
@@ -61,29 +97,29 @@ private extension CartViewController {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.sendAction(.dismissButtonTapped)
+            output.sendAction(.dismissButtonTapped)
         }
     }
 
     func setupCartProductTableViewAction() {
         orderStackView.onEmptyCart = { [weak self] in
             guard let self else { return }
-            viewModel.sendAction(.emptyCartAction)
+            output.sendAction(.emptyCartAction)
         }
 
         // Удаляем позицию из заказа и опять фетчим заказы
         orderStackView.onItemDeletedFromCart = { [weak self] indexPath in
-            self?.viewModel.sendAction(.deleteItemTapped(indexPath))
+            self?.output.sendAction(.deleteItemTapped(indexPath))
         }
 
         // Изменяем кол-во единиц товара в корзине
         orderStackView.onCountChanged = { [weak self] indexPath, count in
-            self?.viewModel.sendAction(.changeCountOfItemsTapped(indexPath, count))
+            self?.output.sendAction(.changeCountOfItemsTapped(indexPath, count))
         }
 
         // Нажали на ячейку в таблице с товаром, отправили редактируемый товар в хранилище и открыли экран с этим товаром, при закрытии этого экрана срабатывает комплишн и мы заново загружаем корзину
         orderStackView.onItemCellSelected = { [weak self] item in
-            self?.viewModel.sendAction(.itemSelected(item))
+            self?.output.sendAction(.itemSelected(item))
         }
     }
 
@@ -99,7 +135,7 @@ private extension CartViewController {
     func setupPromoActions() {
         promoStackView.onPromoSelected = { [weak self] promo in
             guard let self else { print("We can't show promoVC"); return }
-            viewModel.sendAction(.promoSelected(promo))
+            output.sendAction(.promoSelected(promo))
         }
     }
 
@@ -107,13 +143,13 @@ private extension CartViewController {
     func setupToppingsCollectionView() {
         itemsToAddStackView.onNewItemToAddToCart = { [weak self] itemToAddToOrder in
             guard let self else { return }
-            viewModel.sendAction(.addNewItemToCartTapped(itemToAddToOrder))
+            output.sendAction(.addNewItemToCartTapped(itemToAddToOrder))
         }
     }
 
     func setupCartButtonAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
-            self?.viewModel.sendAction(.cartButtonTapped)
+            self?.output.sendAction(.cartButtonTapped)
         }
     }
 }
@@ -122,7 +158,7 @@ private extension CartViewController {
 private extension CartViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(contentStack)
+        view.addSubviews(contentStack, activityIndicator)
         setupLayout()
     }
 
@@ -131,6 +167,7 @@ private extension CartViewController {
         setupContentStackLayout()
         setupContentStackViewLayout()
         setupScrollUpButtonLayout()
+        setupActivityIndicator()
     }
 
     func setupContentStackLayout() {
@@ -154,6 +191,12 @@ private extension CartViewController {
         scrollView.addSubviews(contentStackView, scrollUpButton)
         scrollView.delegate = self
         return scrollView
+    }
+
+    func setupActivityIndicator() {
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+
     }
 }
 
@@ -183,21 +226,21 @@ extension CartViewController: UIScrollViewDelegate {
     }
 }
 
-// MARK: - CartViewProtocol
+// MARK: - Update UI
 extension CartViewController {
-    func getViewModel() -> any CartViewModelProtocol {
-        viewModel
-    }
+//    func getViewModel() -> any CartViewModelProtocol {
+//        viewModel
+//    }
 
     func setState(_ state: ScreenState) {
         promoStackView.setState(state)
     }
 
-    func updateUI(_ countOfItems: Int?, _ totalPrice: Int?) {
-        guard let countOfItems, let totalPrice else { return }
-        updateOrderData(countOfItems, totalPrice)
-        updateDodoCoinsView(countOfItems, totalPrice)
-        updateCartButtonPrice(totalPrice)
+    func updateUIWithData(with data: CartData) {
+        promoCollectionUpdateUI(data.promo)
+        updateItemsToAdd(data.itemsToAdd)
+        updateCart(data.cart)
+        updateUI(data.countOfItemsInCart, data.countOfItemsInCart)
     }
 
     // Передаем данные в коллекцию и обновляем ее
@@ -219,10 +262,22 @@ extension CartViewController {
         guard let cart else { return }
         orderStackView.getCart(cart)
     }
+
+    func updateUI(_ countOfItems: Int?, _ totalPrice: Int?) {
+        guard let countOfItems, let totalPrice else { return }
+        updateOrderData(countOfItems, totalPrice)
+        updateDodoCoinsView(countOfItems, totalPrice)
+        updateCartButtonPrice(totalPrice)
+    }
 }
 
 // MARK: - Supporting methods
 private extension CartViewController {
+    func isShowContent(_ bool: Bool) {
+        contentStackView.alpha = bool ? 1 : 0
+    }
+
+
     func updateDodoCoinsView(_ countOfItems: Int, _ totalPrice: Int) {
         let dodoCoins = totalPrice / 10
         dodoCoinsView.setCountOfItems(countOfItems)
@@ -245,34 +300,34 @@ private extension CartViewController {
 }
 
 // MARK: - Data Binding
-private extension CartViewController {
-    func dataBinding() {
-        viewModel.promoPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] promo in
-                self?.promoCollectionUpdateUI(promo)
-            }
-            .store(in: &cancellables)
-
-        viewModel.itemsToAddPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] items in
-                self?.updateItemsToAdd(items)
-            }
-            .store(in: &cancellables)
-
-        viewModel.cartPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] cart in
-                self?.updateCart(cart)
-            }
-            .store(in: &cancellables)
-
-        viewModel.countAndTotalPublishers
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] countOfItems, totalPrice in
-                self?.updateUI(countOfItems, totalPrice)
-            }
-            .store(in: &cancellables)
-    }
-}
+//private extension CartViewController {
+//    func dataBinding() {
+//        viewModel.promoPublisher
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] promo in
+//                self?.promoCollectionUpdateUI(promo)
+//            }
+//            .store(in: &cancellables)
+//
+//        viewModel.itemsToAddPublisher
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] items in
+//                self?.updateItemsToAdd(items)
+//            }
+//            .store(in: &cancellables)
+//
+//        viewModel.cartPublisher
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] cart in
+//                self?.updateCart(cart)
+//            }
+//            .store(in: &cancellables)
+//
+//        viewModel.countAndTotalPublishers
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] countOfItems, totalPrice in
+//                self?.updateUI(countOfItems, totalPrice)
+//            }
+//            .store(in: &cancellables)
+//    }
+//}

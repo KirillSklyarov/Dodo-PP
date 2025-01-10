@@ -1,6 +1,6 @@
 import Foundation
 
-protocol ChooseAddressViewModelProtocol: BasePresenterOutput where ActionType == ChooseAddressViewModelAction {
+protocol ChooseAddressViewModelProtocol: BaseViewControllerOutputOLD where ActionType == ChooseAddressViewModelAction {
 
     var addressesPublisher: Published<[Address]?>.Publisher { get }
 

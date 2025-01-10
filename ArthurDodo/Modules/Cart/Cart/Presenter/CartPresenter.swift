@@ -1,22 +1,22 @@
 import Foundation
-import Combine
 
-final class CartViewModel {
+final class CartPresenter {
 
     // MARK: - Published Properties
-    @Published var promo: [Promo]?
-    @Published var itemsToAdd: [Item]?
-    @Published var cart: Cart?
-    @Published var countOfItemsInCart: Int?
-    @Published var totalCartPrice: Int?
+//    private var cartData: CartData?
+    var promo: [Promo]?
+    var itemsToAdd: [Item]?
+    var cart: Cart?
+    var countOfItemsInCart: Int?
+    var totalCartPrice: Int?
 
-    var promoPublisher: Published<[Promo]?>.Publisher { $promo }
-    var itemsToAddPublisher: Published<[Item]?>.Publisher { $itemsToAdd }
-    var cartPublisher: Published<Cart?>.Publisher { $cart }
-    var countOfItemsInCartPublisher: Published<Int?>.Publisher { $countOfItemsInCart }
-    var totalCartPricePublisher: Published<Int?>.Publisher { $totalCartPrice }
-
-    lazy var countAndTotalPublishers = Publishers.CombineLatest(countOfItemsInCartPublisher, totalCartPricePublisher)
+//    var promoPublisher: Published<[Promo]?>.Publisher { $promo }
+//    var itemsToAddPublisher: Published<[Item]?>.Publisher { $itemsToAdd }
+//    var cartPublisher: Published<Cart?>.Publisher { $cart }
+//    var countOfItemsInCartPublisher: Published<Int?>.Publisher { $countOfItemsInCart }
+//    var totalCartPricePublisher: Published<Int?>.Publisher { $totalCartPrice }
+//
+//    lazy var countAndTotalPublishers = Publishers.CombineLatest(countOfItemsInCartPublisher, totalCartPricePublisher)
 
     // MARK: - Other properties
     var onCartVCDismissed: (() -> Void)?
@@ -24,8 +24,12 @@ final class CartViewModel {
     var onShowPromoVC: (() -> Void)?
     var onShowDeliveryVC: (() -> Void)?
 
+    var coordinatorEventHandler: ((CartCoordinatorEvent) -> Void)?
+
     private let storage: CartStorage
     private let storageService: DataStorageService
+
+    weak var view: CartViewControllerInput?
 
     // MARK: - Init
     init(storage: CartStorage, storageService: DataStorageService) {
@@ -34,10 +38,11 @@ final class CartViewModel {
     }
 }
 
-// MARK: - CartViewModelProtocol
-extension CartViewModel: CartViewModelProtocol {
-    func initialize() {
-        fetchData()
+// MARK: - CartViewControllerOutput
+extension CartPresenter: CartViewControllerOutput {
+    func viewLoaded() {
+        view?.setupInitialState()
+        loadData()
     }
 
     func sendAction(_ action: CartViewModelAction) {
@@ -56,7 +61,13 @@ extension CartViewModel: CartViewModelProtocol {
 }
 
 // MARK: - Fetch Data
-private extension CartViewModel {
+private extension CartPresenter {
+    func loadData() {
+        view?.showLoading()
+        fetchData()
+        updateViewWithData()
+    }
+
     func fetchData() {
         getPromoFromStorage()
         getItemsToAddFromStorage()
@@ -79,11 +90,33 @@ private extension CartViewModel {
         countOfItemsInCart = storage.getCountOfItemsInCart()
         totalCartPrice = storage.getTotalCartPrice()
     }
+
+    // Если какие-то данные не получили, то показывает алерт с ошибкой, если все ок, то выставляем статус success
+    func updateViewWithData() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            guard let self,
+                  let promo,
+                  let itemsToAdd,
+                  let cart,
+                  let countOfItemsInCart,
+                  let totalCartPrice else {
+                self?.setErrorState(); return
+            }
+            let cartData = CartData(promo: promo, itemsToAdd: itemsToAdd, cart: cart, countOfItemsInCart: countOfItemsInCart, totalCartPrice: totalCartPrice)
+            view?.configure(with: cartData)
+        }
+    }
+
+    // Когда получаем ошибку, то роутеру говорим показать алерт и вью показывает UI для ошибки
+    func setErrorState() {
+        coordinatorEventHandler?(.showProfileErrorAlertModule)
+        view?.showError()
+    }
 }
 
 
 // MARK: - Supporting methods
-private extension CartViewModel {
+private extension CartPresenter {
     func deleteItemFromCart(_ indexPath: IndexPath) {
         storage.removeItemFromCart(indexPath)
         getCartFromStorage()
