@@ -1,13 +1,7 @@
 import UIKit
 
-protocol CartViewControllerInput: BaseViewControllerInput {
-    func configure(with data: CartData)
+protocol CartViewControllerInput: BaseViewControllerInput where inputData == CartData {
 
-}
-
-protocol CartViewControllerOutput: BaseViewControllerOutput where ActionType == CartViewModelAction {
-
-    var coordinatorEventHandler: ((CartCoordinatorEvent) -> Void)? { get set }
 }
 
 final class CartViewController: UIViewController {
@@ -29,9 +23,6 @@ final class CartViewController: UIViewController {
     private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Presenter
-//    private let viewModel: any CartViewModelProtocol
-//    private var cancellables: Set<AnyCancellable> = []
-
     let output: any CartViewControllerOutput
 
     // MARK: - Init
@@ -48,10 +39,6 @@ final class CartViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         output.viewLoaded()
-
-
-//        dataBinding()
-//        viewModel.initialize()
     }
 
     // Мы обновляем кнопку корзины на mainVC всегда, когда закрывается это окно (либо по свайпу, либо по нажатию на кнопку dismiss, либо по причине пустой корзины)
@@ -74,83 +61,13 @@ extension CartViewController: CartViewControllerInput {
     }
 
     func configure(with data: CartData) {
+        activityIndicator.stopAnimating()
         updateUIWithData(with: data)
         isShowContent(true)
     }
 
     func showError() {
         activityIndicator.stopAnimating()
-    }
-}
-
-// MARK: - Setup Actions
-private extension CartViewController {
-    func setupActions() {
-        setupHeaderViewAction()
-        setupCartProductTableViewAction()
-        setupToppingsCollectionView()
-        setupPromoActions()
-        setupScrollUpButtonAction()
-        setupCartButtonAction()
-    }
-
-    func setupHeaderViewAction() {
-        headerView.onDismissButtonTapped = { [weak self] in
-            guard let self else { return }
-            output.sendAction(.dismissButtonTapped)
-        }
-    }
-
-    func setupCartProductTableViewAction() {
-        orderStackView.onEmptyCart = { [weak self] in
-            guard let self else { return }
-            output.sendAction(.emptyCartAction)
-        }
-
-        // Удаляем позицию из заказа и опять фетчим заказы
-        orderStackView.onItemDeletedFromCart = { [weak self] indexPath in
-            self?.output.sendAction(.deleteItemTapped(indexPath))
-        }
-
-        // Изменяем кол-во единиц товара в корзине
-        orderStackView.onCountChanged = { [weak self] indexPath, count in
-            self?.output.sendAction(.changeCountOfItemsTapped(indexPath, count))
-        }
-
-        // Нажали на ячейку в таблице с товаром, отправили редактируемый товар в хранилище и открыли экран с этим товаром, при закрытии этого экрана срабатывает комплишн и мы заново загружаем корзину
-        orderStackView.onItemCellSelected = { [weak self] item in
-            self?.output.sendAction(.itemSelected(item))
-        }
-    }
-
-    // При нажатии на кнопку двигает скролл на самый верх
-    func setupScrollUpButtonAction() {
-        scrollUpButton.onButtonTapped = { [weak self] in
-            guard let self else { return }
-            scrollToTop()
-
-        }
-    }
-
-    func setupPromoActions() {
-        promoStackView.onPromoSelected = { [weak self] promo in
-            guard let self else { print("We can't show promoVC"); return }
-            output.sendAction(.promoSelected(promo))
-        }
-    }
-
-    // Добавляем новую позицию в заказ
-    func setupToppingsCollectionView() {
-        itemsToAddStackView.onNewItemToAddToCart = { [weak self] itemToAddToOrder in
-            guard let self else { return }
-            output.sendAction(.addNewItemToCartTapped(itemToAddToOrder))
-        }
-    }
-
-    func setupCartButtonAction() {
-        cartButtonView.onCartButtonTapped = { [weak self] in
-            self?.output.sendAction(.cartButtonTapped)
-        }
     }
 }
 
@@ -196,7 +113,77 @@ private extension CartViewController {
     func setupActivityIndicator() {
         activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
+}
 
+// MARK: - Setup Actions
+private extension CartViewController {
+    func setupActions() {
+        setupHeaderViewAction()
+        setupCartProductTableViewAction()
+        setupToppingsCollectionView()
+        setupPromoActions()
+        setupScrollUpButtonAction()
+        setupCartButtonAction()
+    }
+
+    func setupHeaderViewAction() {
+        headerView.onDismissButtonTapped = { [weak self] in
+            guard let self else { return }
+            output.sendAction(.dismissButtonTapped)
+        }
+    }
+
+    func setupCartProductTableViewAction() {
+        orderStackView.onEmptyCart = { [weak self] in
+            guard let self else { return }
+            output.sendAction(.emptyCartAction)
+        }
+
+        // Удаляем позицию из заказа и опять фетчим заказы
+        orderStackView.onItemDeletedFromCart = { [weak self] indexPath in
+            self?.output.sendAction(.deleteItemTapped(indexPath))
+        }
+
+        // Изменяем кол-во единиц товара в корзине
+        orderStackView.onCountChanged = { [weak self] indexPath, count in
+            print(#function)
+            self?.output.sendAction(.changeCountOfItemsTapped(indexPath, count))
+        }
+
+        // Нажали на ячейку в таблице с товаром, отправили редактируемый товар в хранилище и открыли экран с этим товаром, при закрытии этого экрана срабатывает комплишн и мы заново загружаем корзину
+        orderStackView.onItemCellSelected = { [weak self] item in
+            self?.output.sendAction(.itemSelected(item))
+        }
+    }
+
+    // При нажатии на кнопку двигает скролл на самый верх
+    func setupScrollUpButtonAction() {
+        scrollUpButton.onButtonTapped = { [weak self] in
+            guard let self else { return }
+            scrollToTop()
+        }
+    }
+
+    func setupPromoActions() {
+        promoStackView.onPromoSelected = { [weak self] promo in
+            guard let self else { print("We can't show promoVC"); return }
+            output.sendAction(.promoSelected(promo))
+        }
+    }
+
+    // Добавляем новую позицию в заказ
+    func setupToppingsCollectionView() {
+        itemsToAddStackView.onNewItemToAddToCart = { [weak self] itemToAddToOrder in
+            guard let self else { return }
+            output.sendAction(.addNewItemToCartTapped(itemToAddToOrder))
+        }
+    }
+
+    func setupCartButtonAction() {
+        cartButtonView.onCartButtonTapped = { [weak self] in
+            self?.output.sendAction(.cartButtonTapped)
+        }
     }
 }
 
@@ -227,27 +214,18 @@ extension CartViewController: UIScrollViewDelegate {
 }
 
 // MARK: - Update UI
-extension CartViewController {
-//    func getViewModel() -> any CartViewModelProtocol {
-//        viewModel
-//    }
-
-    func setState(_ state: ScreenState) {
-        promoStackView.setState(state)
-    }
-
+private extension CartViewController {
     func updateUIWithData(with data: CartData) {
         promoCollectionUpdateUI(data.promo)
         updateItemsToAdd(data.itemsToAdd)
         updateCart(data.cart)
-        updateUI(data.countOfItemsInCart, data.countOfItemsInCart)
+        updateUI(data.countOfItemsInCart, data.totalCartPrice)
     }
 
     // Передаем данные в коллекцию и обновляем ее
     func promoCollectionUpdateUI(_ promo: [Promo]?) {
         guard let promo else { return }
         promoStackView.updateUI(promo)
-        setState(.success)
     }
 
     // Передаем данные в коллекцию (товары для отражения в категории "Добавить к заказу")
@@ -274,9 +252,8 @@ extension CartViewController {
 // MARK: - Supporting methods
 private extension CartViewController {
     func isShowContent(_ bool: Bool) {
-        contentStackView.alpha = bool ? 1 : 0
+        contentStack.alpha = bool ? 1 : 0
     }
-
 
     func updateDodoCoinsView(_ countOfItems: Int, _ totalPrice: Int) {
         let dodoCoins = totalPrice / 10
@@ -331,3 +308,7 @@ private extension CartViewController {
 //            .store(in: &cancellables)
 //    }
 //}
+
+//    func setState(_ state: ScreenState) {
+//        promoStackView.setState(state)
+//    }

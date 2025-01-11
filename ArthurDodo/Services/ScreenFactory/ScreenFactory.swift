@@ -10,7 +10,7 @@ final class ScreenFactory {
     let mainScreenFactory: MainScreenFactoryProtocol
     let profileModuleFactory: ProfileModuleFactory
     let addressScreenFactory: AddressScreenFactoryProtocol
-    let cartScreenFactory: CartModuleFactoryProtocol
+    let cartScreenFactory: any CartModuleFactoryProtocol
     let deliveryScreenFactory: DeliveryScreenFactoryProtocol
 
     // MARK: - Init

@@ -35,6 +35,7 @@ extension PromoStackView {
     // Передаем коллекции полученные акции (нам незачем себе их оставлять) и обновляем UI
     func updateUI(_ promo: [Promo]) {
         promoCollectionView.updateUI(promo)
+        setState(.success)
     }
 
     // Позволяет установить состояние стека и показывать тот или иной вид в зависимости от экрана

@@ -1,8 +1,11 @@
 import UIKit
-import Combine
+
+protocol EditItemViewControllerInput: BaseViewControllerInput where inputData == ( CartItem, [Topping], WeightPrice) {
+
+}
 
 // Класс, который отвечает за показ экрана с редактированием товара
-final class EditProductViewController: UIViewController {
+final class EditItemViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = ProductHeaderView() // Заголовок с названием
@@ -13,13 +16,14 @@ final class EditProductViewController: UIViewController {
     private lazy var contentStack = AppStackView([itemDetailsView, infoAndToppingsContainer], axis: .vertical, spacing: 5)
     private lazy var scrollView = configScrollView()
 
+    private lazy var activityIndicator = AppActivityIndicator()
+
     // MARK: - Presenter
-    private let viewModel: any EditItemViewModelProtocol
-    private var cancellables: Set<AnyCancellable> = []
+    let output: any EditItemViewControllerOutput
 
     // MARK: - Init
-    init(viewModel: any EditItemViewModelProtocol) {
-        self.viewModel = viewModel
+    init(output: any EditItemViewControllerOutput) {
+        self.output = output
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -30,19 +34,40 @@ final class EditProductViewController: UIViewController {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        output.viewLoaded()
+    }
+}
+
+// MARK: - EditProductViewControllerInput
+extension EditItemViewController: EditItemViewControllerInput {
+    func setupInitialState() {
         setupUI()
         setupActions()
-        dataBinding()
+    }
+    
+    func showLoading() {
+        isShowContent(false)
+        activityIndicator.startAnimating()
+    }
 
-        viewModel.initialize()
+    func configure(with data: (CartItem, [Topping], WeightPrice)) {
+        activityIndicator.stopAnimating()
+        updateUI(with: data.0)
+        updateToppings(data.1)
+        updateUIWithChosenSize(data.2)
+        isShowContent(true)
+    }
+
+    func showError() {
+        activityIndicator.stopAnimating()
     }
 }
 
 // MARK: - Setup UI
-private extension EditProductViewController {
+private extension EditItemViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundGray
-        view.addSubviews(scrollView, headerView, cartButtonView)
+        view.addSubviews(scrollView, headerView, cartButtonView, activityIndicator)
         setupLayout()
     }
 
@@ -51,6 +76,7 @@ private extension EditProductViewController {
         setupContentViewLayout()
         setupProductHeaderViewLayout()
         setupCartButtonLayout()
+        setupActivityIndicatorLayout()
     }
 
     func setupScrollViewLayout() {
@@ -81,10 +107,15 @@ private extension EditProductViewController {
         scrollView.addSubviews(contentStack)
         return scrollView
     }
+
+    func setupActivityIndicatorLayout() {
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
 }
 
 // MARK: - Setup Actions
-private extension EditProductViewController {
+private extension EditItemViewController {
     func setupActions() {
         setupHeaderAction()
         setupCartViewAction()
@@ -95,40 +126,37 @@ private extension EditProductViewController {
     // Отрабатываем коллбэк для закрытия окна
     func setupHeaderAction() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.viewModel.sendAction(.dismissButtonTapped)
+            self?.output.sendAction(.dismissButtonTapped)
         }
     }
 
     // Когда нажимаем на кнопку корзины на экране, то формируем позицию (кастим Item -> CartItem) для корзины, и добавляем позицию для заказа в хранилище
     func setupCartViewAction() {
         cartButtonView.onCartButtonTapped = { [weak self] in
-            guard let self else { return }
-            viewModel.sendAction(.cartButtonTapped)
+            self?.output.sendAction(.cartButtonTapped)
         }
     }
 
     func setupSizeSegmentAction() {
         itemDetailsView.onSizeValueChanged = { [weak self] size in
-            guard let self else { return }
-            viewModel.sendAction(.itemSizeChanged(size))
+            self?.output.sendAction(.itemSizeChanged(size))
         }
 
         itemDetailsView.onDoughValueChanged = { [weak self] dough in
-            guard let self else { return }
-            viewModel.sendAction(.itemDoughChanged(dough))
+            self?.output.sendAction(.itemDoughChanged(dough))
         }
     }
 
     func setupInfoButtonAction() {
         infoAndToppingsContainer.onShowPopupVC = { [weak self] popupVC in
             guard let self else { print("Self is nil"); return }
-            viewModel.sendAction(.showPopupViewTapped(popupVC))
+            output.sendAction(.showPopupViewTapped(popupVC))
         }
     }
 }
 
-// MARK: - Update UI for The Item (настраиваем экран для конкретного товара)
-private extension EditProductViewController {
+// MARK: - Update UI
+private extension EditItemViewController {
     // Обновляем все view (название, картинку, вес, состав и цену)
     func updateUIWithItem(_ cartItem: CartItem) {
         let item = cartItem.item
@@ -145,12 +173,11 @@ private extension EditProductViewController {
             itemDetailsView.hideDoughSegment()
         }
     }
-}
 
-// MARK: - Protocol
-extension EditProductViewController {
-    func getViewModel() -> any EditItemViewModelProtocol {
-        viewModel
+    func updateUI(with item: CartItem) {
+        updateUIWithSelectedItem(item)
+        updateSizeAndDough(item.chosenSize, item.chosenDough)
+        updateInfo(item)
     }
 
     func updateUIWithChosenSize(_ productDetails: WeightPrice?) {
@@ -176,8 +203,7 @@ extension EditProductViewController {
         infoAndToppingsContainer.getSelectedItem(item)
     }
 
-    func updateInfo(_ item: CartItem?) {
-        guard let item else { return }
+    func updateInfo(_ item: CartItem) {
         infoAndToppingsContainer.getSelectedItem(item)
     }
 
@@ -187,31 +213,11 @@ extension EditProductViewController {
     }
 }
 
-// MARK: - Data Binding
-private extension EditProductViewController {
-    func dataBinding() {
-        viewModel.cartItemPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] cartItem in
-                self?.updateUIWithSelectedItem(cartItem)
-                self?.updateSizeAndDough(cartItem?.chosenSize, cartItem?.chosenDough)
-                self?.updateInfo(cartItem)
-            }
-            .store(in: &cancellables)
-
-        viewModel.toppingsPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] toppings in
-                self?.updateToppings(toppings)
-            }
-            .store(in: &cancellables)
-
-        viewModel.productDetailsPublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] productDetails in
-                self?.updateUIWithChosenSize(productDetails)
-            }
-            .store(in: &cancellables)
+// MARK: - Supporting methods
+private extension EditItemViewController {
+    // Скрывает и показывает контент в зависимости от вводной переменной
+    func isShowContent(_ bool: Bool) {
+        let uiComponents = [headerView, contentStack, cartButtonView]
+        uiComponents.forEach { $0.alpha = bool ? 1 : 0 }
     }
 }

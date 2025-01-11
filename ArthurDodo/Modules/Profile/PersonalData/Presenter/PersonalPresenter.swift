@@ -16,7 +16,7 @@ final class PersonalPresenter {
     private var personalData: User?
 
     private let router: PersonalRouterInput
-    weak var view: PersonalViewInput?
+    weak var view: (any PersonalViewInput)?
 
     private let storage: ProfileStorage
 

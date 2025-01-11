@@ -49,7 +49,7 @@ extension ProfileModuleFactory: ProfileModuleFactoryProtocol {
         case .productDetails: makeErrorAlertScreen(.productDetails) { completion?() }
         case .chooseAddress: makeErrorAlertScreen(.chooseAddress) { completion?() }
         case .personalData: makeErrorAlertScreen(.personalData) { completion?() }
-
+        case .editItem: makeErrorAlertScreen(.editItem) { completion?() }
         }
     }
 }

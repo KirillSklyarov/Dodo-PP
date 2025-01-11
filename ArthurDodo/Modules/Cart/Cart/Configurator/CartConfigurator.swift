@@ -1,12 +1,10 @@
 final class CartConfigurator {
     // MARK: - Properties
-//    private let moduleFactory: ProfileModuleFactory
     private let storageService: DataStorageService
     private let storage: CartStorage
 
     // MARK: - Init
     init(storage: CartStorage, storageService: DataStorageService) {
-//        self.moduleFactory = moduleFactory
         self.storage = storage
         self.storageService = storageService
     }
@@ -21,5 +19,3 @@ final class CartConfigurator {
         return view
     }
 }
-
-

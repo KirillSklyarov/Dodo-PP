@@ -4,6 +4,7 @@ protocol BaseViewControllerOutput: AnyObject {
     associatedtype ActionType
     func viewLoaded()
     func sendAction(_ action: ActionType)
+    func updateViewWithData()
 }
 
 

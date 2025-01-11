@@ -1,7 +1,6 @@
 import UIKit
 
-protocol ProfileViewInput: BaseViewControllerInput {
-    func configure(with profile: User, _ promo: [Promo])
+protocol ProfileViewInput: BaseViewControllerInput where inputData == (profile: User, promo: [Promo]) {
 }
 
 final class ProfileViewController: UIViewController, ModuleTransitionable {
@@ -17,9 +16,9 @@ final class ProfileViewController: UIViewController, ModuleTransitionable {
     private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Other Properties
-    let output: ProfileViewOutput
+    let output: any ProfileViewOutput
 
-    init(output: ProfileViewOutput) {
+    init(output: any ProfileViewOutput) {
         self.output = output
         super.init(nibName: nil, bundle: nil)
     }
@@ -130,11 +129,11 @@ extension ProfileViewController: ProfileViewInput {
         activityIndicator.startAnimating()
     }
 
-    func configure(with profile: User, _ promo: [Promo]) {
+    func configure(with data: (profile: User, promo: [Promo])) {
         isShowContent(true)
         activityIndicator.stopAnimating()
-        updatePersonalData(profile)
-        updatePromo(promo)
+        updatePersonalData(data.profile)
+        updatePromo(data.promo)
     }
 
     func showError() {
