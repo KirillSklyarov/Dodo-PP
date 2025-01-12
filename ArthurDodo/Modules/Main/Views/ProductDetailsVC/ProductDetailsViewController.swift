@@ -38,7 +38,7 @@ final class ProductDetailsViewController: UIViewController {
         setupActions()
         dataBinding()
 
-        viewModel.initialize()
+        viewModel.loadData()
 
         setupSwipe()
     }

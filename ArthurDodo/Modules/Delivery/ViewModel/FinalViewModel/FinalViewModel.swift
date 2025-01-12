@@ -25,7 +25,7 @@ final class FinalViewModel {
 
 // MARK: - FinalPresenterProtocol
 extension FinalViewModel: FinalViewModelProtocol {
-    func initialize() {
+    func loadData() {
         setupTimer()
     }
 

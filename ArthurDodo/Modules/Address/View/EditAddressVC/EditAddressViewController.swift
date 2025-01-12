@@ -127,7 +127,7 @@ private extension EditAddressViewController {
     // Загружаем viewModel после того как карта загрузилась вся
     func viewModelSetup() {
         mapView.onMapLoaded = { [weak self] in
-            self?.viewModel.initialize()
+            self?.viewModel.loadData()
         }
     }
 

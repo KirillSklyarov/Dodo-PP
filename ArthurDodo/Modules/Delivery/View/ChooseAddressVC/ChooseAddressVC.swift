@@ -32,7 +32,7 @@ final class ChooseAddressVC: UIViewController {
         setupActions()
         dataBinding()
         
-        viewModel.initialize()
+        viewModel.loadData()
     }
 }
 

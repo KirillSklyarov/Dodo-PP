@@ -67,7 +67,7 @@ final class MainViewModel: MainViewModelProtocol {
 // MARK: - MainViewModelProtocol
 extension MainViewModel {
     // Основной загрузочный метод viewModel
-    func initialize() {
+    func loadData() {
         checkFeatureToggle(featureType: .profile)
         fetchData()
         isNeedToShowOrderView()

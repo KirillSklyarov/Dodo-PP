@@ -160,6 +160,6 @@ private extension CartPresenter {
     // Проверяем на nil все данные, если где-то будет nil, то это ошибка
     func isErrorState() -> Bool {
         let data: [Any?] = [promo, itemsToAdd, cart, countOfItemsInCart, totalCartPrice]
-        return data.allSatisfy { $0 == nil }
+        return data.contains { $0 == nil }
     }
 }

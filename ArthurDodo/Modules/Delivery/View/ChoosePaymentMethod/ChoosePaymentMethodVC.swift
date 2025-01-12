@@ -29,7 +29,7 @@ final class ChoosePaymentMethodVC: UIViewController {
         setupUI()
         setupActions()
         dataBinding()
-        viewModel.initialize()
+        viewModel.loadData()
     }
 }
 

@@ -39,7 +39,7 @@ final class StoriesVC: UIViewController {
         setupActions()
         dataBinding()
 
-        viewModel.initialize()
+        viewModel.loadData()
     }
 }
 

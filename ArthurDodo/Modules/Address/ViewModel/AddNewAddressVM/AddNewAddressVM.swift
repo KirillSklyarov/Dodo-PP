@@ -25,7 +25,7 @@ final class AddNewAddressVM {
 
 // MARK: - AddNewAddressVMProtocol
 extension AddNewAddressVM: AddNewAddressVMProtocol {
-    func initialize() {
+    func loadData() {
         fetchData()
     }
 

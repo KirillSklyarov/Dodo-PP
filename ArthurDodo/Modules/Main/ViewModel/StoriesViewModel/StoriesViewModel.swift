@@ -60,7 +60,7 @@ final class StoriesViewModel {
 // MARK: - StoriesViewModelProtocol
 extension StoriesViewModel: StoriesViewModelProtocol {
     // Показываем конкретную сторис. Устанавливаем какую историю показывать (storyIndex) и определяем сколько сабСторисов есть у этой сторис, потом показываем сторис
-    func initialize() {
+    func loadData() {
         showStory()
     }
 

@@ -34,7 +34,7 @@ final class EditAddressViewModel {
 
 // MARK: - EditAddressViewModelProtocol
 extension EditAddressViewModel: EditAddressViewModelProtocol {
-    func initialize() {
+    func loadData() {
         fetchData()
     }
 

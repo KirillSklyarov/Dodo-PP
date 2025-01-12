@@ -110,7 +110,7 @@ private extension EditItemPresenter {
     // Проверяем на nil все данные, если где-то будет nil, то это ошибка
     func isErrorState() -> Bool {
         let data: [Any?] = [cartItem, toppings, productDetails]
-        return data.allSatisfy { $0 == nil }
+        return data.contains { $0 == nil }
     }
 
     // Когда получаем ошибку, то роутеру говорим показать алерт и вью показывает UI для ошибки

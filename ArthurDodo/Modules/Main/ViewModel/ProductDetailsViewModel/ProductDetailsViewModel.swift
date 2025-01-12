@@ -58,7 +58,7 @@ final class ProductDetailsViewModel {
 
 // MARK: - ProductDetailsViewModelProtocol
 extension ProductDetailsViewModel: ProductDetailsViewModelProtocol {
-    func initialize() {
+    func loadData() {
         fetchData()
     }
 

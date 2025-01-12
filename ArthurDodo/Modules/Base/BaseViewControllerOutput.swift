@@ -10,6 +10,6 @@ protocol BaseViewControllerOutput: AnyObject {
 
 protocol BaseViewControllerOutputOLD: AnyObject {
     associatedtype ActionType
-    func initialize()
+    func loadData()
     func sendAction(_ action: ActionType)
 }

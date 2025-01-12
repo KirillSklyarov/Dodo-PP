@@ -32,7 +32,7 @@ final class ChooseAddressVM {
 
 // MARK: - ChooseAddressVMProtocol
 extension ChooseAddressVM: ChooseAddressViewModelProtocol {
-    func initialize() {
+    func loadData() {
         fetchData()
     }
 

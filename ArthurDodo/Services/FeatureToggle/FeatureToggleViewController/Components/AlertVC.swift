@@ -7,6 +7,7 @@ enum AlertType {
     case chooseAddress
     case personalData
     case editItem
+    case delivery
 }
 
 final class AppAlert {
@@ -20,6 +21,7 @@ final class AppAlert {
         case .chooseAddress: "Не удалось загрузить адреса, попробуйте позже!"
         case .personalData: "Не удалось загрузить личные данные, попробуйте позже!"
         case .editItem: "Не удалось загрузить позицию для изменения, попробуйте позже!"
+        case .delivery: "Не удалось загрузить модуль доставки, попробуйте позже!"
         }
 
         alert.addAction(UIAlertAction(title: "OK", style: .cancel) { _ in

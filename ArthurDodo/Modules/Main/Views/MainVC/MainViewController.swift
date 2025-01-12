@@ -44,7 +44,7 @@ final class MainViewController: UIViewController {
         setupActions()
         dataBinding()
 
-        viewModel.initialize()
+        viewModel.loadData()
     }
 
     // Каждый раз когда появляется экран мы обновляем статус корзины, чтобы понять показывать ее или нет

@@ -1,14 +1,9 @@
 import UIKit
-import Combine
 
-protocol DeliveryViewProtocol: AnyObject {
-    func updateAddressUI(_ mainAddressName: String)
-    func updatePaymentMethodUI(_ paymentMethod: PaymentMethod)
-    func updateCartPriceView(_ totalPrice: Int)
-    func getViewModel() -> any DeliveryViewModelProtocol
+protocol DeliveryViewControllerInput: BaseViewControllerInput where inputData == DeliveryData {
 }
 
-final class DeliveryVC: UIViewController {
+final class DeliveryViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = AppNavigationBarView(type: .delivery) // Заголовок с кнопкой
@@ -24,13 +19,14 @@ final class DeliveryVC: UIViewController {
 
     private lazy var contentStackView = configureStackView()
 
+    private lazy var activityIndicator = AppActivityIndicator()
+
     // MARK: - Other Properties
-    private let viewModel: any DeliveryViewModelProtocol
-    private var cancellables: Set<AnyCancellable> = []
+    let output: any DeliveryViewControllerOutput
 
     // MARK: - Init
-    init(viewModel: any DeliveryViewModelProtocol) {
-        self.viewModel = viewModel
+    init(output: any DeliveryViewControllerOutput) {
+        self.output = output
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -41,46 +37,64 @@ final class DeliveryVC: UIViewController {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        setupActions()
-        dataBinding()
-
-        viewModel.initialize()
+        output.viewLoaded()
     }
 }
 
-// MARK: - DeliveryViewProtocol
-extension DeliveryVC: DeliveryViewProtocol {
-    func getViewModel() -> any DeliveryViewModelProtocol {
-        viewModel
+// MARK: - DeliveryViewControllerInput
+extension DeliveryViewController: DeliveryViewControllerInput {
+    func setupInitialState() {
+        setupUI()
+        setupActions()
+    }
+
+    func showLoading() {
+        activityIndicator.startAnimating()
+        isShowContent(false)
+    }
+
+    func configure(with data: DeliveryData) {
+        activityIndicator.stopAnimating()
+        updateUI(with: data)
+        isShowContent(true)
+    }
+
+    func showError() {
+        activityIndicator.stopAnimating()
     }
 
     func updateAddress(_ addressName: String) {
         addressTableView.updateUI(with: addressName)
-        viewModel.sendAction(.newAddressChosen(addressName))
+        output.sendAction(.newAddressChosen(addressName))
     }
 
     func updatePaymentMethodUI(_ paymentMethod: PaymentMethod) {
         paymentTableView.updateUI(with: paymentMethod)
         payButton.updateUI(with: paymentMethod)
     }
-
-    func updateAddressUI(_ mainAddressName: String) {
-        addressTableView.updateUI(with: mainAddressName)
-    }
-
-    func updateCartPriceView(_ totalPrice: Int) {
-        totalPriceView.updateUI(with: totalPrice)
-    }
 }
 
 // MARK: - Setup UI
-private extension DeliveryVC {
+private extension DeliveryViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(contentStackView)
+        view.addSubviews(contentStackView, activityIndicator)
 
         setupLayout()
+    }
+
+    func setupLayout() {
+        setupContentStackViewLayout()
+        setupActivityIndicatorLayout()
+    }
+
+    func setupContentStackViewLayout() {
+        contentStackView.setConstraints(isSafeArea: true, insets: UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10))
+    }
+
+    func setupActivityIndicatorLayout() {
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 
     func configureStackView() -> UIStackView {
@@ -97,18 +111,10 @@ private extension DeliveryVC {
 
         return contentStackView
     }
-
-    func setupLayout() {
-        setupContentStackViewLayout()
-    }
-
-    func setupContentStackViewLayout() {
-        contentStackView.setConstraints(isSafeArea: true, insets: UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10))
-    }
 }
 
 // MARK: - Setup Actions
-private extension DeliveryVC {
+private extension DeliveryViewController {
     func setupActions() {
         setupHeaderViewAction()
         setupAddressTableViewAction()
@@ -120,66 +126,58 @@ private extension DeliveryVC {
     func setupHeaderViewAction() {
         headerView.onDismissButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.sendAction(.dismissButtonTapped)
+            output.sendAction(.dismissButtonTapped)
         }
     }
 
     func setupAddressTableViewAction() {
         addressTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            viewModel.sendAction(.addressCellTapped)
+            output.sendAction(.addressCellTapped)
         }
     }
 
     func setupTimeCollectionAction() {
         timeCollection.onDeliveryTimeSelected = { [weak self] time in
             guard let self else { return }
-            viewModel.sendAction(.deliveryTimeSelected(time))
+            output.sendAction(.deliveryTimeSelected(time))
         }
     }
 
     func setupPaymentTableView() {
         paymentTableView.onCellSelected = { [weak self] in
             guard let self else { return }
-            viewModel.sendAction(.paymentMethodCellTapped)
+            output.sendAction(.paymentMethodCellTapped)
         }
     }
 
     func setupPayButtonActions() {
         payButton.onPayButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.sendAction(.payButtonTapped)
+            output.sendAction(.payButtonTapped)
         }
     }
 }
 
-// MARK: - Data Binding
-extension DeliveryVC {
-    // Настраиваем байндинги: адрес, метод оплаты и общую стоимость заказа
-    func dataBinding() {
-        viewModel.mainAddressPublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] address in
-                guard let self else { return }
-                updateAddress(address)
-            }
-            .store(in: &cancellables)
+// MARK: - Supporting methods
+private extension DeliveryViewController {
+    func isShowContent(_ bool: Bool) {
+        contentStackView.alpha = bool ? 1 : 0
+    }
 
-        viewModel.preferredPaymentMethodPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] paymentMethod in
-                guard let self else { return }
-                updatePaymentMethodUI(paymentMethod)
-            }
-            .store(in: &cancellables)
+    func updateUI(with data: DeliveryData) {
+        guard let mainAddressName = data.mainAddressName,
+              let cartPrice = data.cartPrice else { return }
+        updateAddress(mainAddressName)
+        updatePaymentMethodUI(data.preferredPaymentMethod)
+        updateCartPriceView(cartPrice)
+    }
 
-        viewModel.cartPricePublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] price in
-                guard let self else { return }
-                updateCartPriceView(price)
-            }
-            .store(in: &cancellables)
+    func updateAddressUI(_ mainAddressName: String) {
+        addressTableView.updateUI(with: mainAddressName)
+    }
+
+    func updateCartPriceView(_ totalPrice: Int) {
+        totalPriceView.updateUI(with: totalPrice)
     }
 }

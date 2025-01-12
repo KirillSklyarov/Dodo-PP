@@ -35,7 +35,7 @@ private extension AddressViewModel {
 // MARK: - AddressViewModelProtocol
 extension AddressViewModel: AddressViewModelProtocol {
     // Стартовый метод
-    func initialize() {
+    func loadData() {
         fetchData()
     }
 

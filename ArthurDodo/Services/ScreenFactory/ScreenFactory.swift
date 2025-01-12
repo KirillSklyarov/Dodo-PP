@@ -11,7 +11,7 @@ final class ScreenFactory {
     let profileModuleFactory: ProfileModuleFactory
     let addressScreenFactory: AddressScreenFactoryProtocol
     let cartScreenFactory: any CartModuleFactoryProtocol
-    let deliveryScreenFactory: DeliveryScreenFactoryProtocol
+    let deliveryModuleFactory: any DeliveryModuleFactoryProtocol
 
     // MARK: - Init
     init(storageService: DataManager, featureToggleService: FeatureToggleService) {
@@ -21,7 +21,7 @@ final class ScreenFactory {
         profileModuleFactory = ProfileModuleFactory(storage: storageService.profileStorage, deliveryStorage: storageService.deliveryStorage, storageService: storageService.dataStorageService)
         addressScreenFactory = AddressScreenFactory(storage: storageService.addressStorage)
         cartScreenFactory = CartModuleFactory(dataManager: storageService)
-        deliveryScreenFactory = DeliveryScreenFactory(storageService: storageService)
+        deliveryModuleFactory = DeliveryModuleFactory(storageService: storageService)
     }
 }
 

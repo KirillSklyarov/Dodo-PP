@@ -44,7 +44,7 @@ final class AddressViewController: UIViewController {
     // Когда экран опять появляется (после закрытия предыдущих, то мы обновляем данные из хранилища)
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.initialize()
+        viewModel.loadData()
         print(#function)
     }
 }

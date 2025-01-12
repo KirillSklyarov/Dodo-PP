@@ -27,7 +27,7 @@ final class ChoosePaymentMethodVM {
 
 // MARK: - ChoosePaymentMethodPresenterProtocol
 extension ChoosePaymentMethodVM: ChoosePaymentMethodVMProtocol {
-    func initialize() {
+    func loadData() {
         fetchData()
     }
 

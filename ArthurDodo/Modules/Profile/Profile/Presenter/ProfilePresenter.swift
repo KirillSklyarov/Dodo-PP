@@ -99,7 +99,7 @@ private extension ProfilePresenter {
     // Проверяем на nil все данные, если где-то будет nil, то это ошибка
     func isErrorState() -> Bool {
         let data: [Any?] = [userData, promo]
-        return data.allSatisfy { $0 == nil }
+        return data.contains { $0 == nil }
     }
 
     // Прокидываем данные на view и формируем ее

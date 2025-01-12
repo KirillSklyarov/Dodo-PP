@@ -38,6 +38,6 @@ extension CoordinatorFactory {
     }
 
     func makeDeliveryCoordinator() -> DeliveryCoordinator {
-        return DeliveryCoordinator(router: router, screenFactory: screenFactory)
+        return DeliveryCoordinator(moduleFactory: screenFactory.deliveryModuleFactory as! DeliveryModuleFactory, router: router)
     }
 }

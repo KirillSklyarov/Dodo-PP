@@ -1,6 +1,6 @@
 import Combine
 
-protocol DeliveryViewModelProtocol: BaseViewControllerOutputOLD where ActionType == DeliveryViewModelAction {
+protocol DeliveryViewModelProtocol: BaseViewControllerOutputOLD where ActionType == DeliveryPresenterAction {
    
     var mainAddressPublisher: Published<String?>.Publisher { get }
     var preferredPaymentMethodPublisher: Published<PaymentMethod>.Publisher { get }

@@ -136,7 +136,7 @@ private extension AddNewAddressViewController {
     // Мы начинаем флоу вью модели только после того как закончилась загрузка карты (чтобы не допустить ошибок и опережения)
     func viewModelSetup() {
         mapView.onMapLoaded = { [weak self] in
-            self?.viewModel.initialize()
+            self?.viewModel.loadData()
         }
     }
 }
