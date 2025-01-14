@@ -98,5 +98,4 @@ private extension AddressCoordinator {
         }
         router.present(vc)
     }
-
 }

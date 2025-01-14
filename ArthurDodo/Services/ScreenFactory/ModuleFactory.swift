@@ -7,20 +7,20 @@ final class ModuleFactory {
     private let storageService: DataManager
     private let featureToggleService: FeatureToggleService
 
-    let mainScreenFactory: MainScreenFactoryProtocol
+    let mainModuleFactory: any MainModuleFactoryProtocol
     let profileModuleFactory: ProfileModuleFactory
-    let addressScreenFactory: any AddressModuleFactoryProtocol
-    let cartScreenFactory: any CartModuleFactoryProtocol
+    let addressModuleFactory: any AddressModuleFactoryProtocol
+    let cartModuleFactory: any CartModuleFactoryProtocol
     let deliveryModuleFactory: any DeliveryModuleFactoryProtocol
 
     // MARK: - Init
     init(storageService: DataManager, featureToggleService: FeatureToggleService) {
         self.storageService = storageService
         self.featureToggleService = featureToggleService
-        mainScreenFactory = MainScreenFactory(storage: storageService.mainStorage, featureToggleService: featureToggleService)
+        mainModuleFactory = MainModuleFactory(storage: storageService.mainStorage, featureToggleService: featureToggleService)
         profileModuleFactory = ProfileModuleFactory(storage: storageService.profileStorage, deliveryStorage: storageService.deliveryStorage, storageService: storageService.dataStorageService)
-        addressScreenFactory = AddressModuleFactory(storage: storageService.addressStorage)
-        cartScreenFactory = CartModuleFactory(dataManager: storageService)
+        addressModuleFactory = AddressModuleFactory(storage: storageService.addressStorage)
+        cartModuleFactory = CartModuleFactory(dataManager: storageService)
         deliveryModuleFactory = DeliveryModuleFactory(storageService: storageService)
     }
 }

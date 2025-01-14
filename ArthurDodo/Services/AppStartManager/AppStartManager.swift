@@ -102,7 +102,7 @@ private extension AppStartManager {
 
     // Создаем appCoordinator и стартуем приложение (тут идет создание главного экрана, но не показывает его)
     func startAppCoordinator() {
-        appCoordinator = coordinatorFactory.makeAppCoordinator()
+        appCoordinator = coordinatorFactory.makeCoordinator(for: .app)
         appCoordinator?.start()
     }
 }

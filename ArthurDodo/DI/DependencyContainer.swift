@@ -3,7 +3,7 @@ import UIKit
 // Контейнер зависимостей. При его создании мы делаем экземпляр навигационного контроллера, который будет управлять навигацией и его мы назначим рутом в sceneDelegate
 final class DependencyContainer {
     let storage: DataManager
-    let screenFactory: ModuleFactory
+    let moduleFactory: ModuleFactory
     let router: Router
     let coordinatorFactory: CoordinatorFactory
 
@@ -31,16 +31,16 @@ final class DependencyContainer {
 
 
         // Создаем фабрику экранов
-        screenFactory = ModuleFactory(storageService: storage, featureToggleService: featureToggleService)
+        moduleFactory = ModuleFactory(storageService: storage, featureToggleService: featureToggleService)
 
         // Создаем роутер
         router = Router()
 
         // Создаем фабрику координаторов
-        coordinatorFactory = CoordinatorFactory(router: router, screenFactory: screenFactory, storage: storage)
+        coordinatorFactory = CoordinatorFactory(router: router, moduleFactory: moduleFactory, storage: storage)
 
         // В сервисе AppStartManager происходит сборка всех необходимых запросов в сеть и app подготавливается к работе, чтобы в процессе работы загрузка из сети не производилась. Все необходимые для работы данные загружаются здесь.
-        appStartManager = AppStartManager(networkService: networkService, storage: storage, featureToggleService: featureToggleService, screenFactory: screenFactory, router: router, coordinatorFactory: coordinatorFactory)
+        appStartManager = AppStartManager(networkService: networkService, storage: storage, featureToggleService: featureToggleService, screenFactory: moduleFactory, router: router, coordinatorFactory: coordinatorFactory)
     }
 
 }

@@ -15,10 +15,8 @@ enum AddressViewControllerEvent {
     case deliveryButtonTapped
 }
 
-protocol AddressViewControllerOutput: BaseViewControllerOutput where ActionType == AddressAction {
+protocol AddressViewControllerOutput: BaseViewControllerOutput where ActionType == AddressAction, CoordinatorEvent == AddressViewControllerEvent {
     func getMainAddress() -> Address?
-
-    var coordinatorEventHandler: ((AddressViewControllerEvent) -> Void)? { get set }
 }
 
 final class AddressPresenter {

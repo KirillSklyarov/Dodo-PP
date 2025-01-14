@@ -1,12 +1,11 @@
 import UIKit
-import Combine
 
-protocol ProductDetailsViewControllerProtocol {
-    func getViewModel() -> any ProductDetailsViewModelProtocol
+protocol ItemDetailsViewControllerInput: BaseViewControllerInput where inputData == ItemDetailsData {
+    func changeViewWithSelectedSize(_ itemDetails: WeightPrice)
 }
 
 // Класс, который отвечает за показ экрана с товаром (где фотка, описание, ингредиенты, состав и проч.)
-final class ProductDetailsViewController: UIViewController {
+final class ItemDetailsViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = ProductHeaderView()
@@ -17,13 +16,14 @@ final class ProductDetailsViewController: UIViewController {
 
     private lazy var scrollView = configScrollView()
 
+    private lazy var activityIndicator = AppActivityIndicator()
+
     // MARK: - Presenter
-    private let viewModel: any ProductDetailsViewModelProtocol
-    private var cancellables: Set<AnyCancellable> = []
+    let output: any ItemDetailsViewControllerOutput
 
     // MARK: - Init
-    init(viewModel: ProductDetailsViewModel) {
-        self.viewModel = viewModel
+    init(output: any ItemDetailsViewControllerOutput) {
+        self.output = output
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -34,29 +34,45 @@ final class ProductDetailsViewController: UIViewController {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        setupActions()
-        dataBinding()
-
-        viewModel.loadData()
-
-        setupSwipe()
+        output.viewLoaded()
     }
 }
 
-// MARK: - ProductDetailsViewControllerProtocol
-extension ProductDetailsViewController: ProductDetailsViewControllerProtocol {
-    func getViewModel() -> any ProductDetailsViewModelProtocol {
-        viewModel
+// MARK: - ItemDetailsViewControllerInput
+extension ItemDetailsViewController: ItemDetailsViewControllerInput {
+    func setupInitialState() {
+        setupUI()
+        setupActions()
+    }
+    
+    func showLoading() {
+        activityIndicator.startAnimating()
+        isShowContent(false)
+    }
+    
+    func configure(with itemData: ItemDetailsData) {
+        activityIndicator.stopAnimating()
+        updateUI(with: itemData)
+        isShowContent(true)
+    }
+
+    func showError() {
+        activityIndicator.stopAnimating()
+    }
+
+    func changeViewWithSelectedSize(_ itemDetails: WeightPrice) {
+        updateInfoAndCart(itemDetails)
     }
 }
 
 // MARK: - Setup UI
-private extension ProductDetailsViewController {
+private extension ItemDetailsViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundGray
-        view.addSubviews(scrollView, headerView, cartButtonView)
+        view.addSubviews(scrollView, headerView, cartButtonView, activityIndicator)
         setupConstraints()
+
+        setupSwipe()
     }
 
     func configScrollView() -> UIScrollView {
@@ -75,6 +91,7 @@ private extension ProductDetailsViewController {
         setupContentViewConstraints()
         setupProductHeaderViewConstraints()
         setupCartButtonConstraints()
+        setupActivityIndicatorLayout()
     }
 
     func setupScrollViewConstraints() {
@@ -94,10 +111,15 @@ private extension ProductDetailsViewController {
     func setupCartButtonConstraints() {
         cartButtonView.setLocalConstraints(bottom: 0, left: 0, right: 0)
     }
+
+    func setupActivityIndicatorLayout() {
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
 }
 
 // MARK: - Setup Actions
-private extension ProductDetailsViewController {
+private extension ItemDetailsViewController {
     func setupActions() {
         setupHeaderAction()
         sendCartToInfoView()
@@ -108,7 +130,7 @@ private extension ProductDetailsViewController {
 
     func setupHeaderAction() {
         headerView.onDismissButtonTapped = { [weak self] in
-            self?.viewModel.sendAction(.dismissButtonTapped)
+            self?.output.sendAction(.dismissButtonTapped)
         }
     }
 
@@ -122,27 +144,37 @@ private extension ProductDetailsViewController {
             guard let self else { return }
             let chosenSize = getChosenSize()
             let chosenDough = getChosenDough()
-            viewModel.sendAction(.cartButtonTapped(chosenSize, chosenDough))
+            output.sendAction(.cartButtonTapped(chosenSize, chosenDough))
         }
     }
 
     func setupSizeSegmentAction() {
         itemDetailsView.onSegmentValueChanged = { [weak self] index in
             guard let self else { return }
-            viewModel.sendAction(.itemSegmentValueChanged(index))
+            output.sendAction(.itemSegmentValueChanged(index))
         }
     }
 
     func setupInfoButtonAction() {
         infoAndToppingsContainer.onShowPopupVC = { [weak self] popupVC in
             guard let self else { print("Self is nil"); return }
-            viewModel.sendAction(.showPopupVC(popupVC))
+            output.sendAction(.showPopupVC(popupVC))
         }
     }
 }
 
 // MARK: - Update UI for The Item (настраиваем экран для конкретного товара)
-private extension ProductDetailsViewController {
+private extension ItemDetailsViewController {
+    // Метод обновляет все UI элементы 
+    func updateUI(with itemData: ItemDetailsData) {
+        passSelectedItemToView(itemData.item)
+        updateUIWithSelectedItem(itemData.item)
+        isHideSizeSegmentView(itemData.isOneSize)
+        isHideDoughSegmentView(itemData.isDoughOption)
+        updateWeightAndPriceUI(itemData.weight, itemData.price)
+        passToppingsToView(itemData.item?.toppings ?? [])
+    }
+
     // Обновляем все поля
     func updateUIWithSelectedItem(_ item: Item?) {
         guard let item else { print("Item is nil"); return }
@@ -187,7 +219,8 @@ private extension ProductDetailsViewController {
 }
 
 // MARK: - Setup dismiss by swipe
-private extension ProductDetailsViewController {
+private extension ItemDetailsViewController {
+    // Настраиваем закрытие окна по свайпу сниз
     func setupSwipe() {
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(vcSwiped))
         swipe.direction = .down
@@ -195,72 +228,18 @@ private extension ProductDetailsViewController {
     }
 
     @objc private func vcSwiped() {
-        viewModel.sendAction(.dismissButtonTapped)
-    }
-}
-
-// MARK: - Data binding
-private extension ProductDetailsViewController {
-    func dataBinding() {
-        viewModel.itemPublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] item in
-                guard let self else { return }
-                passSelectedItemToView(item)
-                updateUIWithSelectedItem(item)
-            }
-            .store(in: &cancellables)
-
-        viewModel.isOneSizePublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isOneSize in
-                guard let self else { return }
-                isHideSizeSegmentView(isOneSize)
-            }
-            .store(in: &cancellables)
-
-        viewModel.isDoughOptionPublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isDoughOption in
-                guard let self else { return }
-                isHideDoughSegmentView(isDoughOption)
-            }
-            .store(in: &cancellables)
-
-        viewModel.weightPricePublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] weight, price in
-                guard let self else { return }
-                updateWeightAndPriceUI(weight, price)
-            }
-            .store(in: &cancellables)
-
-        viewModel.toppingsPublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] toppings in
-                guard let self else { return }
-                passToppingsToView(toppings)
-            }
-            .store(in: &cancellables)
-
-        viewModel.productDetailsPublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] productDetails in
-                guard let self else { return }
-                updateInfoAndCart(productDetails)
-            }
-            .store(in: &cancellables)
+        output.sendAction(.dismissButtonTapped)
     }
 }
 
 // MARK: - Supporting methods
-private extension ProductDetailsViewController {
+private extension ItemDetailsViewController {
+    // Показываем или скрываем контент
+    func isShowContent(_ show: Bool) {
+        let uiComponents = [headerView, contentStack, cartButtonView]
+        uiComponents.forEach { $0.alpha = show ? 1 : 0 }
+    }
+
     func getChosenSize() -> Size {
         itemDetailsView.getChosenSize()
     }

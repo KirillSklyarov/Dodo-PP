@@ -1,6 +1,8 @@
 import UIKit
 
 enum AlertType {
+    case main
+    case stories
     case profile
     case cart
     case productDetails
@@ -20,6 +22,8 @@ final class AppAlert {
         let alert = UIAlertController(title: "Ошибка загрузки данных", message: "", preferredStyle: .alert)
         alert.message =
         switch type {
+        case .main: "Ошибка загрузки данных, попробуйте позже!"
+        case .stories: "Ошибка загрузки историй, попробуйте позже!"
         case .profile: "Ошибка загрузки профиля, попробуйте позже!"
         case .cart: "Корзина временно недоступна, но очень скоро заработает!"
         case .productDetails: "Детали продукта временно недоступны, но очень скоро заработают!"

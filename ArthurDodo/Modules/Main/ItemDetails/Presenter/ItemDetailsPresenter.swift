@@ -1,19 +1,13 @@
 import Foundation
-import Combine
 
-// MARK: - Protocol
-protocol ProductDetailsViewModelProtocol: BaseViewControllerOutputOLD where ActionType == ProductDetailsViewModelAction {
+protocol ItemDetailsViewControllerOutput: BaseViewControllerOutput where ActionType == ProductDetailsViewModelAction, CoordinatorEvent == ItemDetailsCoordinatorEvent {
 
-    var itemPublisher: Published<Item?>.Publisher { get }
-    var isOneSizePublisher: Published<Bool?>.Publisher { get }
-    var isDoughOptionPublisher: Published<Bool?>.Publisher { get }
-    var weightPricePublisher: Publishers.CombineLatest<Published<Int?>.Publisher, Published<Int?>.Publisher> { get }
-    var toppingsPublisher: Published<[Topping]?>.Publisher { get }
-    var productDetailsPublisher: Published<WeightPrice?>.Publisher { get }
+}
 
-    var onCartButtonTapped: ( () -> Void )? { get }
-    var onDismissButtonTapped: ( () -> Void )? { get set }
-    var onShowPopupVC: ( (CpfcPopupView) -> Void)? { get set }
+enum ItemDetailsCoordinatorEvent {
+    case dismissModule
+    case showError
+    case showPopupVC(CpfcPopupView)
 }
 
 enum ProductDetailsViewModelAction {
@@ -23,32 +17,34 @@ enum ProductDetailsViewModelAction {
     case showPopupVC(CpfcPopupView)
 }
 
-final class ProductDetailsViewModel {
+final class ItemDetailsPresenter {
     // MARK: - Published properties
-    @Published private var item: Item?
-    @Published private var isOneSize: Bool?
-    @Published private var isDoughOption: Bool?
-    @Published private var weight: Int?
-    @Published private var price: Int?
-    @Published private var toppings: [Topping]?
-    @Published private var productDetails: WeightPrice?
+    private var itemDetailsData = ItemDetailsData()
 
-    var itemPublisher: Published<Item?>.Publisher { $item }
-    var isOneSizePublisher: Published<Bool?>.Publisher { $isOneSize }
-    var isDoughOptionPublisher: Published<Bool?>.Publisher { $isDoughOption }
-    var weightPublisher: Published<Int?>.Publisher { $weight }
-    var pricePublisher: Published<Int?>.Publisher { $price }
-    var toppingsPublisher: Published<[Topping]?>.Publisher { $toppings }
-    var productDetailsPublisher: Published<WeightPrice?>.Publisher { $productDetails }
+    private var item: Item?
+    private var isOneSize: Bool?
+    private var isDoughOption: Bool?
+    private var weight: Int?
+    private var price: Int?
+    private var toppings: [Topping]?
+    private var productDetails: WeightPrice?
 
-    lazy var weightPricePublisher = Publishers.CombineLatest(weightPublisher, pricePublisher)
+//    var itemPublisher: Published<Item?>.Publisher { $item }
+//    var isOneSizePublisher: Published<Bool?>.Publisher { $isOneSize }
+//    var isDoughOptionPublisher: Published<Bool?>.Publisher { $isDoughOption }
+//    var weightPublisher: Published<Int?>.Publisher { $weight }
+//    var pricePublisher: Published<Int?>.Publisher { $price }
+//    var toppingsPublisher: Published<[Topping]?>.Publisher { $toppings }
+//    var productDetailsPublisher: Published<WeightPrice?>.Publisher { $productDetails }
+//
+//    lazy var weightPricePublisher = Publishers.CombineLatest(weightPublisher, pricePublisher)
 
     // MARK: - Other properties
-    var onCartButtonTapped: ( () -> Void )?
-    var onDismissButtonTapped: ( () -> Void )?
-    var onShowPopupVC: ( (CpfcPopupView) -> Void)?
+    var coordinatorEventHandler: ((ItemDetailsCoordinatorEvent) -> Void)?
 
     private let storage: MainStorage
+
+    weak var view: (any ItemDetailsViewControllerInput)?
 
     // MARK: - Init
     init(storage: MainStorage) {
@@ -56,42 +52,35 @@ final class ProductDetailsViewModel {
     }
 }
 
-// MARK: - ProductDetailsViewModelProtocol
-extension ProductDetailsViewModel: ProductDetailsViewModelProtocol {
+// MARK: - ItemDetailsViewControllerOutput
+extension ItemDetailsPresenter: ItemDetailsViewControllerOutput {
+    func viewLoaded() {
+        view?.setupInitialState()
+        loadData()
+        checkDataAndUpdateView()
+    }
+
     func loadData() {
+        view?.showLoading()
         fetchData()
+    }
+
+    func checkDataAndUpdateView() {
+        isDataValid() ? updateView() : setErrorState()
     }
 
     func sendAction(_ action: ProductDetailsViewModelAction) {
         switch action {
-        case .dismissButtonTapped: onDismissButtonTapped?()
+        case .dismissButtonTapped: coordinatorEventHandler?(.dismissModule)
         case .cartButtonTapped(let size, let dough): cartButtonTapped(size, dough)
         case .itemSegmentValueChanged(let index): itemSegmentValueChanged(index)
         case .showPopupVC(let popupVC): showPopupVC(popupVC)
         }
     }
-
-    // При нажатии на кнопку корзины мы формируем заказ, добавляем позицию в заказ и отрабатываем замыкания
-    func cartButtonTapped(_ size: Size, _ dough: Dough) {
-        guard let itemToCart = configureCart(size, dough) else { return }
-        storage.addItemToCart(itemToCart)
-        onCartButtonTapped?()
-        onDismissButtonTapped?()
-    }
-
-    // Когда меняются значения на сегментах (вес), то мы обновляем на вью вес товара и цену товара
-    func itemSegmentValueChanged(_ index: Int) {
-        productDetails = item?.itemSize.getWeightAndPriceViaIndex(index)
-    }
-
-    // Показываем экран с КБЖУ
-    func showPopupVC(_ popupVC: CpfcPopupView) {
-        onShowPopupVC?(popupVC)
-    }
 }
 
 // MARK: - Fetch Data
-private extension ProductDetailsViewModel {
+private extension ItemDetailsPresenter {
     func fetchData() {
         fetchSelectedItem()
         fetchToppings()
@@ -99,6 +88,7 @@ private extension ProductDetailsViewModel {
 
     func fetchSelectedItem() {
         item = storage.getSelectedItemFromStorage()
+        itemDetailsData = ItemDetailsData(item: item)
         updateUI()
     }
 
@@ -111,6 +101,7 @@ private extension ProductDetailsViewModel {
     // Решаем показывать или нет сегмент с размерами (если товар имеет только один размер, то показывать сегмент контрол не надо)
     func showOrHideSizeSegment() {
         guard let item else { return }
+        itemDetailsData.isOneSize = item.hasOneSize()
         isOneSize = item.hasOneSize() ? true : false
     }
 
@@ -119,31 +110,58 @@ private extension ProductDetailsViewModel {
         guard let item else { return }
         let isPizza = item.category == .pizza
         isDoughOption = isPizza
+        itemDetailsData.isDoughOption = isPizza
     }
 
     // Обновляем вес и цену товара
     func updateWeightAndPriceUI() {
         guard let item else { return }
         if item.hasOneSize() {
-            weight = item.itemSize.oneSize?.weight
-            price = item.itemSize.oneSize?.price
+            itemDetailsData.weight = item.itemSize.oneSize?.weight
+            itemDetailsData.price = item.itemSize.oneSize?.price
         }
     }
 
-    // Загружаем ВСЕ начинки
+    // Загружаем начинки
     func fetchToppings() {
-        filterToppings()
-    }
-
-    // Отбираем только нужные нам начинки и отправляем данные о топпингах дальше ко вью
-    func filterToppings() {
         guard let fetchedToppings = item?.toppings else { return }
         toppings = fetchedToppings
     }
 }
 
 // MARK: - Supporting methods
-private extension ProductDetailsViewModel {
+private extension ItemDetailsPresenter {
+    func isDataValid() -> Bool {
+        return item != nil
+    }
+
+    func updateView() {
+        view?.configure(with: itemDetailsData)
+    }
+
+    func setErrorState() {
+        view?.showError()
+    }
+
+    // При нажатии на кнопку корзины мы формируем заказ, добавляем позицию в заказ и отрабатываем замыкания
+    func cartButtonTapped(_ size: Size, _ dough: Dough) {
+        guard let itemToCart = configureCart(size, dough) else { return }
+        storage.addItemToCart(itemToCart)
+        coordinatorEventHandler?(.dismissModule)
+    }
+
+    // Когда меняются значения на сегментах (вес), то мы обновляем на вью вес товара и цену товара
+    func itemSegmentValueChanged(_ index: Int) {
+        productDetails = item?.itemSize.getWeightAndPriceViaIndex(index)
+        guard let productDetails else { return }
+        view?.changeViewWithSelectedSize(productDetails)
+    }
+
+    // Показываем экран с КБЖУ
+    func showPopupVC(_ popupVC: CpfcPopupView) {
+        coordinatorEventHandler?(.showPopupVC(popupVC))
+    }
+
     func configureCart(_ size: Size, _ dough: Dough) -> CartItem? {
         guard let item else { return nil}
         let chosenSize = getCorrectSize(size)

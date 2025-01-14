@@ -1,14 +1,13 @@
 import UIKit
-import Combine
 
-protocol StoriesViewProtocol: AnyObject {
-    func updateStoryImage(_ imageName: String?)
+protocol StoriesViewControllerInput: BaseViewControllerInput where inputData == Int {
     func setupProgressViews(_ countOfSubStories: Int)
+    func updateStoryImage(_ imageName: String?)
     func updateProgressViewProgress(_ index: Int?, progress: Float?)
     func fillAllProgressViewsExceptLast()
 }
 
-final class StoriesVC: UIViewController {
+final class StoriesViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var dismissButton = AppDismissButtonView(type: .storiesWhite)
@@ -16,15 +15,16 @@ final class StoriesVC: UIViewController {
     private lazy var progressViewsStack = AppStackView([], axis: .horizontal, spacing: 15, distribution: .fillEqually)
     private lazy var contentStack = AppStackView([progressViewsStack, dismissButton], axis: .horizontal, spacing: 10, alignment: .center)
 
+    private lazy var activityIndicator = AppActivityIndicator()
+
     // MARK: - Other properties
     private lazy var progressViews: [UIProgressView] = []
 
-    private let viewModel: any StoriesViewModelProtocol
-    private var cancellables: Set<AnyCancellable> = []
+    let output: any StoriesViewControllerOutput
 
     // MARK: - Init
-    init(viewModel: any StoriesViewModelProtocol) {
-        self.viewModel = viewModel
+    init(output: any StoriesViewControllerOutput) {
+        self.output = output
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -35,24 +35,43 @@ final class StoriesVC: UIViewController {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        setupActions()
-        dataBinding()
-
-        viewModel.loadData()
+        output.viewLoaded()
     }
 }
 
-// MARK: - StoriesViewProtocol
-extension StoriesVC: StoriesViewProtocol {
-    func getViewModel() -> any StoriesViewModelProtocol {
-        viewModel
+// MARK: - StoriesViewControllerInput
+extension StoriesViewController: StoriesViewControllerInput {
+    func setupInitialState() {
+        setupUI()
+        setupActions()
+    }
+    
+    func showLoading() {
+        activityIndicator.startAnimating()
+        isShowContent(false)
+    }
+
+    func configure(with data: Int) {
+        activityIndicator.stopAnimating()
+        isShowContent(true)
+        setupProgressViews(data)
+    }
+
+    func showError() {
+        activityIndicator.stopAnimating()
     }
 
     // Метод позволяет для каждого экрана сформировать ряд одинаковых панелей (сверху) для таймера
     func setupProgressViews(_ countOfSubStories: Int) {
+        isShowContent(true)
         clearOldProgressViews()
         configureNewProgressViewsStack(countOfSubStories)
+    }
+
+    // Устанавливаем картинку
+    func updateStoryImage(_ imageName: String?) {
+        guard let imageName else { print("We have no image"); return }
+        storiesImageView.image = UIImage(named: imageName)
     }
 
     // Устанавливает значение прогресса у бара (то есть делает движение прогресс бара)
@@ -69,12 +88,6 @@ extension StoriesVC: StoriesViewProtocol {
         progressViews[index].setProgress(progress, animated: animation)
     }
 
-    // Устанавливаем картинку
-    func updateStoryImage(_ imageName: String?) {
-        guard let imageName else { print("We have no image"); return }
-        storiesImageView.image = UIImage(named: imageName)
-    }
-
     // Мгновенно закрашиваем все прогрессы кроме последнего
     func fillAllProgressViewsExceptLast() {
         for view in progressViews {
@@ -85,11 +98,20 @@ extension StoriesVC: StoriesViewProtocol {
     }
 }
 
+// MARK: - Supporting methods
+extension StoriesViewController {
+    // Показываем или скрываем контент
+    func isShowContent(_ show: Bool) {
+        let uiComponents = [storiesImageView, contentStack]
+        uiComponents.forEach { $0.alpha = show ? 1 : 0 }
+    }
+}
+
 // MARK: - Setup UI
-private extension StoriesVC {
+private extension StoriesViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundBlack
-        view.addSubviews(storiesImageView, contentStack)
+        view.addSubviews(storiesImageView, contentStack, activityIndicator)
         setupTapGesture()
         setupConstraints()
     }
@@ -97,11 +119,14 @@ private extension StoriesVC {
     func setupConstraints() {
         storiesImageView.setConstraints(isSafeArea: true)
         contentStack.setLocalConstraints(isSafeArea: true, top: 10, left: 10, right: 10)
+
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 }
 
 // MARK: - Setup Actions
-private extension StoriesVC {
+private extension StoriesViewController {
     func setupActions() {
         dismissButtonAction()
     }
@@ -109,13 +134,13 @@ private extension StoriesVC {
     func dismissButtonAction() {
         dismissButton.onButtonTapped = { [weak self] in
             guard let self else { return }
-            viewModel.sendAction(.dismissButtonTapped)
+            output.sendAction(.dismissButtonTapped)
         }
     }
 }
 
 // MARK: - Setup progressViews
-private extension StoriesVC {
+private extension StoriesViewController {
     // Очищаем стек и views от старых данных
     func clearOldProgressViews() {
         progressViewsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
@@ -133,7 +158,7 @@ private extension StoriesVC {
 }
 
 // MARK: - Setup TapGesture
-private extension StoriesVC {
+private extension StoriesViewController {
     // Устанавливаем жест (тап слева предыдущая сторис, тап справа - следующая)
     func setupTapGesture() {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
@@ -143,51 +168,12 @@ private extension StoriesVC {
     // Отправляет в презентер точку касания экрана и границы экрана
     @objc func onTap(_ sender: UITapGestureRecognizer) {
         let location = sender.location(in: view)
-        viewModel.sendAction(.storyTapped(location, view.bounds))
+        output.sendAction(.storyTapped(location, view.bounds))
     }
-}
 
-// MARK: - Data Binding
-private extension StoriesVC {
-    func dataBinding() {
-        // Устанавливаем правильно значение баров (один, или два или три ...)
-        viewModel.subStoriesCountPublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] countOfSubStories in
-                guard let self else { return }
-                setupProgressViews(countOfSubStories)
-            }
-            .store(in: &cancellables)
-
-        // Обновляем прогресс на баре
-        viewModel.progressSubStoriesIndexPublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] progress, subStoryIndex in
-                guard let self else { return }
-                updateProgressViewProgress(subStoryIndex, progress: progress)
-            }
-            .store(in: &cancellables)
-
-        // Устанавливаем изображение
-        viewModel.storyImagePublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] image in
-                guard let self else { return }
-                updateStoryImage(image)
-            }
-            .store(in: &cancellables)
-
-        // Заполняем все прогресс бары, кроме последнего (нужно при левом клике, чтобы показывалась последняя сабСторис предыдущей сторис)
-        viewModel.fillProgressViewIndexPublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] index in
-                guard let self else { return }
-                fillAllProgressViewsExceptLast()
-            }
-            .store(in: &cancellables)
+    func updateUI(countOfSubStories: Int, storyImage: String) {
+        print(#function)
+        setupProgressViews(countOfSubStories)
+        updateStoryImage(storyImage)
     }
 }

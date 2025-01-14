@@ -36,7 +36,7 @@ final class AppCoordinator: Coordinator {
 // MARK: - Main Flow
 private extension AppCoordinator {
     func startMainFlow() {
-        let mainCoordinator = coordinatorFactory.makeMainCoordinator() // Создаем координатор
+        let mainCoordinator: MainCoordinator = coordinatorFactory.makeCoordinator(for: .main) // Создаем координатор
 
         self.mainCoordinator = mainCoordinator
 
@@ -69,7 +69,7 @@ private extension AppCoordinator {
 // MARK: - Profile Flow
 private extension AppCoordinator {
     func startProfileFlow() {
-        let profileCoordinator = coordinatorFactory.makeProfileCoordinator() // Создаем координатор
+        let profileCoordinator: ProfileCoordinator = coordinatorFactory.makeCoordinator(for: .profile) // Создаем координатор
 
         // Настраиваем замыкания: как только флоу профиля завершен, то начинаем новый главный поток
         profileCoordinator.onFlowFinished = { [weak self, weak profileCoordinator] in
@@ -85,7 +85,7 @@ private extension AppCoordinator {
 // MARK: - Address Flow
 private extension AppCoordinator {
     func startAddressFlow() {
-        let addressCoordinator = coordinatorFactory.makeAddressCoordinator()
+        let addressCoordinator: AddressCoordinator = coordinatorFactory.makeCoordinator(for: .address)
 
         addressCoordinator.onFlowFinished = { [weak self, weak addressCoordinator] in
             guard let self, let addressCoordinator else { return }
@@ -100,7 +100,7 @@ private extension AppCoordinator {
 // MARK: - Cart Flow
 private extension AppCoordinator {
     func startCartFlow(completion: (() -> Void)? = nil) {
-        let cartCoordinator = coordinatorFactory.makeCartCoordinator()
+        let cartCoordinator: CartCoordinator = coordinatorFactory.makeCoordinator(for: .cart)
 
         // Если корзину закрываем, то стартуем главный поток
         cartCoordinator.onCartDismissed = { [weak self, weak cartCoordinator] in
@@ -126,7 +126,7 @@ private extension AppCoordinator {
 // MARK: - Delivery Flow
 private extension AppCoordinator {
     func startDeliveryFlow() {
-        let deliveryCoordinator = coordinatorFactory.makeDeliveryCoordinator()
+        let deliveryCoordinator: DeliveryCoordinator = coordinatorFactory.makeCoordinator(for: .delivery)
 
         // Когда юзер нажал на кнопку закрыть в DeliveryFlow, то мы возвращаемся в корзину
         deliveryCoordinator.onDismissed = { [weak self, weak deliveryCoordinator] in

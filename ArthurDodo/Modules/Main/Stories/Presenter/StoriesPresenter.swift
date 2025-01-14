@@ -1,44 +1,36 @@
 import Foundation
-import Combine
 import QuartzCore
 
-protocol StoriesViewModelProtocol: BaseViewControllerOutputOLD where ActionType == StoriesViewModelAction {
-
-    var subStoriesCountPublisher: Published<Int?>.Publisher { get }
-    var progressSubStoriesIndexPublisher: Publishers.CombineLatest<Published<Float?>.Publisher,  Published<Int?>.Publisher> { get }
-    var storyImagePublisher: Published<String?>.Publisher { get }
-    var fillProgressViewIndexPublisher: Published<Bool?>.Publisher { get }
-
-    var onDismissed: (() -> Void)? { get set }
+protocol StoriesViewControllerOutput: BaseViewControllerOutput where ActionType == StoriesViewControllerOutputAction, CoordinatorEvent == StoriesCoordinatorEvent {
 }
 
-enum StoriesViewModelAction {
+enum StoriesViewControllerOutputAction {
     case dismissButtonTapped
     case storyTapped(CGPoint, CGRect)
 }
 
-final class StoriesViewModel {
-    // MARK: - Published properties
-    @Published private var progress: Float?
-    @Published private var subStoryIndex: Int?
-    @Published private var subStoriesCount: Int?
-    @Published private var fillProgressViews: Bool?
-    @Published private var storyImageName: String?
+enum StoriesCoordinatorEvent {
+    case dismissModule
+    case showErrorAlert
+}
 
-    var subStoriesCountPublisher: Published<Int?>.Publisher { $subStoriesCount }
-    lazy var progressSubStoriesIndexPublisher = Publishers.CombineLatest(progressPublisher, subStoriesIndexPublisher)
-    var fillProgressViewIndexPublisher: Published<Bool?>.Publisher { $fillProgressViews }
-    var storyImagePublisher: Published<String?>.Publisher { $storyImageName }
-    private var subStoriesIndexPublisher: Published<Int?>.Publisher { $subStoryIndex }
-    private var progressPublisher: Published<Float?>.Publisher { $progress }
+final class StoriesPresenter {
+    // MARK: - Published properties
+    private var progress: Float?
+    private var subStoryIndex: Int?
+    private var subStoriesCount: Int?
+    private var fillProgressViews: Bool?
+    private var storyImageName: String?
 
     // MARK: - Other properties
     private var stories: [Story]? // Это полный список сторисов
     private var storyIndex: Int
 
-    var onDismissed: (() -> Void)?
+    var coordinatorEventHandler: ((StoriesCoordinatorEvent) -> Void)? 
 
     private let storage: MainStorage
+
+    weak var view: (any StoriesViewControllerInput)?
 
     // MARK: - Timer properties
     private var displayLink: CADisplayLink?
@@ -49,7 +41,6 @@ final class StoriesViewModel {
     init(storage: MainStorage, indexPath: IndexPath) {
         self.storage = storage
         self.storyIndex = indexPath.row
-        fetchStories()
     }
 
     deinit {
@@ -57,14 +48,25 @@ final class StoriesViewModel {
     }
 }
 
-// MARK: - StoriesViewModelProtocol
-extension StoriesViewModel: StoriesViewModelProtocol {
-    // Показываем конкретную сторис. Устанавливаем какую историю показывать (storyIndex) и определяем сколько сабСторисов есть у этой сторис, потом показываем сторис
-    func loadData() {
-        showStory()
+// MARK: - StoriesViewControllerOutput
+extension StoriesPresenter: StoriesViewControllerOutput {
+    func viewLoaded() {
+        view?.setupInitialState()
+        loadData()
+        checkDataAndUpdateView()
     }
 
-    func sendAction(_ action: StoriesViewModelAction) {
+    // Показываем конкретную сторис. Устанавливаем какую историю показывать (storyIndex) и определяем сколько сабСторисов есть у этой сторис, потом показываем сторис
+    func loadData() {
+        view?.showLoading()
+        fetchStories()
+    }
+
+    func checkDataAndUpdateView() {
+        isDataValid() ? updateView() : setErrorState()
+    }
+
+    func sendAction(_ action: StoriesViewControllerOutputAction) {
         switch action {
         case .dismissButtonTapped: dismissButtonTapped()
         case .storyTapped(let tapPoint, let bounds): storyTapped(tapPoint, bounds)
@@ -73,7 +75,7 @@ extension StoriesViewModel: StoriesViewModelProtocol {
 }
 
 // MARK: - Setup Timer
-private extension StoriesViewModel {
+private extension StoriesPresenter {
     // Устанавливаем таймер
     func startTimer() {
         displayLink = CADisplayLink(target: self, selector: #selector(updateProgress))
@@ -96,6 +98,7 @@ private extension StoriesViewModel {
     func updateProgressView() {
         elapsedTime += displayLink?.duration ?? 0
         progress = Float(elapsedTime / durationOfStory)
+        view?.updateProgressViewProgress(subStoryIndex, progress: progress)
     }
 
     // Когда заканчивается время показа сториса, то мы должны показать новый сторис
@@ -109,9 +112,25 @@ private extension StoriesViewModel {
 }
 
 // MARK: - Supporting methods
-private extension StoriesViewModel {
+private extension StoriesPresenter {
     func fetchStories() {
         stories = storage.getFetchedStories()
+    }
+
+    func isDataValid() -> Bool {
+        return stories != nil
+    }
+
+    func updateView() {
+        showStory()
+    }
+
+    func setErrorState() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            guard let self else { return }
+            view?.showError()
+            coordinatorEventHandler?(.showErrorAlert)
+        }
     }
 
     // Обновляем кол-во сабСторисов, показываем первый сабСторис этой сторис
@@ -125,6 +144,8 @@ private extension StoriesViewModel {
         guard let stories else { print("Stories are not fetched yet"); return }
         subStoriesCount = stories[storyIndex].subStories.count
         subStoryIndex = 0
+        guard let subStoriesCount else { print("SubStoriesCount is nil"); return }
+        view?.configure(with: subStoriesCount)
     }
 
     // Cбрасываем таймер и прогресс, показываем картинку и начинаем таймер
@@ -181,6 +202,7 @@ private extension StoriesViewModel {
     func resetTimerAndProgress() {
         elapsedTime = 0.0 // Сбрасываем таймер
         progress = 0.0 // Сбрасываем прогресс
+        view?.updateProgressViewProgress(subStoryIndex, progress: progress)
     }
 
     // Либо показываем предыдущую Мини-Историю, либо последнюю Мини-историю предыдущей истории, либо предыдущую историю
@@ -220,11 +242,13 @@ private extension StoriesViewModel {
         subStoriesCount = stories?[storyIndex].subStories.count
         guard let subStoriesCount else { print("SubStoriesCount is nil"); return }
         subStoryIndex = subStoriesCount - 1
+        view?.setupProgressViews(subStoriesCount)
     }
 
     // Заполняем все прогрессы, кроме последнего
     func fillAllProgressViewsExceptLast() {
         fillProgressViews = true
+        view?.fillAllProgressViewsExceptLast()
     }
 
     // Показываем первую сторис заново
@@ -243,12 +267,14 @@ private extension StoriesViewModel {
         if subStoryIndex < subStoriesCount {
             let storyToShow = stories[storyIndex]
             storyImageName = storyToShow.subStories[subStoryIndex]
+            view?.updateStoryImage(storyImageName)
         }
     }
 
     // Мгновенно закрашиваем прогресс по индексу (subStoryIndex) и потом сразу сбрасываем индекс
     func fillProgressView() {
         progress = 1.0
+        view?.updateProgressViewProgress(subStoryIndex, progress: progress)
     }
 
     // Отмечаем историю как просмотренную (только в том случае, если просмотрены все сабСторисы)
@@ -265,7 +291,7 @@ private extension StoriesViewModel {
     // Срабатывает когда мы закрываем окно со сторисами
     func dismissButtonTapped() {
         stopTimer()
-        onDismissed?()
+        coordinatorEventHandler?(.dismissModule)
     }
 
     // Отрабатываем касание на сторисах. Если было касание в левой части экрана, то показываем предыдущую сторис, если в правой части экрана - показываем следующую сторис

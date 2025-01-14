@@ -3,7 +3,7 @@ import UIKit
 final class MainCoordinator: Coordinator {
     // MARK: - Properties
     private let router: Router
-    private let screenFactory: MainScreenFactoryProtocol
+    private let moduleFactory: any MainModuleFactoryProtocol
     private var features: [FeatureType: Bool] = [:]
 
     private var mainVC: UIViewController?
@@ -13,9 +13,9 @@ final class MainCoordinator: Coordinator {
     var onShowAddress: (() -> Void)?
 
     // MARK: - Init
-    init(router: Router, screenFactory: MainScreenFactoryProtocol, storage: FeatureToggleStorage) {
+    init(router: Router, moduleFactory: any MainModuleFactoryProtocol, storage: FeatureToggleStorage) {
         self.router = router
-        self.screenFactory = screenFactory
+        self.moduleFactory = moduleFactory
         getFeaturesFromStorage(storage)
     }
 
@@ -49,7 +49,7 @@ extension MainCoordinator {
 private extension MainCoordinator {
     // Подготавливает экран для показа (но не показывает его - нужно чтобы обновились все данные)
     func prepareForShow() {
-        let mainVC = screenFactory.makeMainScreen() // Создаем экран
+        guard let mainVC = moduleFactory.makeModule(for: .main) as? MainViewController else { return } // Создаем экран
         self.mainVC = mainVC
         let viewModel = mainVC.getViewModel()
         setupActions(viewModel)
@@ -83,53 +83,99 @@ private extension MainCoordinator {
 private extension MainCoordinator {
     // Показ экрана деталей товара и связанные с ним операции
     func showProductDetails() {
-        let vc = screenFactory.makeProductDetailsScreen() // Создаем экран
-        let viewModel = vc.getViewModel()
+        guard let vc = moduleFactory.makeModule(for: .itemDetails) as? ItemDetailsViewController else { return }  // Создаем экран
+        let presenter = vc.output
 
-        // Настраиваем замыкания
-        viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
-        }
-
-        viewModel.onShowPopupVC = { [weak self] popUpView in
-            self?.router.present(popUpView, modalPresentation: .popover)
+        presenter.coordinatorEventHandler = { [weak self] event in
+            guard let self = self else { return }
+            switch event {
+            case .dismissModule: router.dismiss()
+            case .showError: showItemDetailsError()
+            case .showPopupVC(let popUpView): showPopupVC(popUpView)
+            }
         }
 
         router.present(vc, modalPresentation: .fullScreen) // Показываем экран
+
+//        // Настраиваем замыкания
+//        presenter.onDismissButtonTapped = { [weak self] in
+//            self?.router.dismiss()
+//        }
+//
+//        presenter.onShowPopupVC = { [weak self] popUpView in
+//            self?.router.present(popUpView, modalPresentation: .popover)
+//        }
+
+    }
+
+    // Показываем экран с КБЖУ
+    func showPopupVC(_ popUpView: CpfcPopupView) {
+        router.present(popUpView, modalPresentation: .popover)
+    }
+
+    // Показываем алёрт с Ошибкой
+    func showItemDetailsError() {
+        let vc = moduleFactory.makeErrorAlert(for: .itemDetails) { [weak self] in
+            self?.router.dismiss()
+        }
+        router.present(vc)
     }
 }
 
 // MARK: - Stories
 private extension MainCoordinator {
     func showStories(_ indexPath: IndexPath) {
-        let vc = screenFactory.makeStoriesScreen(indexPath: indexPath)
-        let viewModel = vc.getViewModel()
+        guard let vc = moduleFactory.makeModule(for: .stories(indexPath)) as? StoriesViewController else { print("Error: couldn't instantiate StoriesViewController"); return }
+        let presenter = vc.output
 
-        // Когда экран сторис закрыт, то обновляем сторисы на главном экране и закрываем окно
-        viewModel.onDismissed = { [weak self] in
-            self?.mainVCUpdateStories() // Обновляем сторисы на главном экране
-            self?.router.dismiss() // Закрываем окно
+        presenter.coordinatorEventHandler = { [weak self] event in
+            guard let self else { return }
+            switch event {
+            case .dismissModule: dismissStories()
+            case .showErrorAlert: showStoriesErrorAlert()
+            }
         }
 
+//        presenter.onDismissed = { [weak self] in
+//            self?.mainVCUpdateStories() // Обновляем сторисы на главном экране
+//            self?.router.dismiss() // Закрываем окно
+//        }
+
         router.present(vc, modalPresentation: .fullScreen) // Показываем экран
+    }
+
+    // Когда экран сторис закрыт, то обновляем сторисы на главном экране и закрываем окно
+    func dismissStories() {
+        mainVCUpdateStories() // Обновляем сторисы на главном экране
+        router.dismiss() // Закрываем окно
+    }
+
+    func showStoriesErrorAlert() {
+        let vc = moduleFactory.makeErrorAlert(for: .stories) { [weak self] in
+            self?.router.dismiss() }
+        router.present(vc)
     }
 }
 
 // MARK: - Alert
 private extension MainCoordinator {
     // Создаем экран алерта (нужен когда фича выключена) и показываем его
-    func showProfileAlert() {
-        let vc = screenFactory.makeAlertScreen(.profile)
-        router.present(vc)
-    }
-
+//    func showProfileAlert() {
+//        let vc = moduleFactory.makeAlertScreen(.profile)
+//        router.present(vc)
+//    }
+//
     func showCartAlert() {
-        let vc = screenFactory.makeAlertScreen(.cart)
+        let vc = moduleFactory.makeErrorAlert(for: .stories) { [weak self] in
+            self?.router.dismiss()
+        }
         router.present(vc)
     }
 
     func showProductDetailsAlert() {
-        let vc = screenFactory.makeAlertScreen(.productDetails)
+        let vc = moduleFactory.makeErrorAlert(for: .itemDetails) { [weak self] in
+            self?.router.dismiss()
+        }
         router.present(vc)
     }
 }
