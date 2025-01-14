@@ -61,6 +61,7 @@ private extension AppCoordinator {
         }
 
         addChild(mainCoordinator) // Добавляем координатор в массив
+        print("childCoordinators \(childCoordinators)")
         mainCoordinator.start() // Подготавливаем все данные, но еще не показываем главный экран
     }
 }
@@ -111,6 +112,7 @@ private extension AppCoordinator {
         // Обрабатываем замыкание когда у нас завершается флоу корзины и мы переходим к флоу доставки и оплаты
         cartCoordinator.onFinishFlow = { [weak self] in
             guard let self else { print("CartCoordinator not found"); return }
+//            removeChild(cartCoordinator)
 
             // Переходим на экран доставки (оплаты)
             startDeliveryFlow()
@@ -132,10 +134,13 @@ private extension AppCoordinator {
             removeChild(deliveryCoordinator) // Удаляем из массива координатор
         }
 
-        deliveryCoordinator.onFinishFlow = { [weak self] in
-            guard let self else { print("DeliveryCoordinator not found"); return }
-            removeAllChildren()
-            startMainFlow()
+        deliveryCoordinator.onFinishFlow = { [weak self, weak deliveryCoordinator] in
+            guard let self, let deliveryCoordinator else { print("DeliveryCoordinator not found"); return }
+            removeChild(deliveryCoordinator)
+
+//            removeAllChildren()
+//            startMainFlow()
+//            showMainScreen()
         }
 
         addChild(deliveryCoordinator)

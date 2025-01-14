@@ -1,77 +1,102 @@
 import UIKit
 
-final class AddressCoordinator: Coordinator {
+final class AddressCoordinator {
     // MARK: - Properties
     private let router: Router
-    private let screenFactory: AddressScreenFactoryProtocol
+    private let moduleFactory: any AddressModuleFactoryProtocol
 
     var onFlowFinished: (() -> Void)?
 
     // MARK: - Init
-    init(router: Router, screenFactory: AddressScreenFactoryProtocol) {
+    init(router: Router, screenFactory: any AddressModuleFactoryProtocol) {
         self.router = router
-        self.screenFactory = screenFactory
+        self.moduleFactory = screenFactory
     }
 
     deinit {
         print("AddressCoordinator deinit")
     }
+}
 
+// MARK: - Coordinator
+extension AddressCoordinator: Coordinator {
     func start() {
-        let addressVC = screenFactory.makeAddressScreen()
-        let viewModel = addressVC.getViewModel()
+        // Создаем модуль
+        guard let addressVC = moduleFactory.makeModule(for: .address) as? AddressViewController else { return }
+        let presenter = addressVC.output
 
-        viewModel.onDismissButtonTapped = { [weak self] in
+        // Делаем Event Handler для координатора (отрабатываем переходы)
+        presenter.coordinatorEventHandler = { [weak self] event in
             guard let self else { return }
-            router.dismiss()
-            onFlowFinished?()
+            switch event {
+            case .dismissModule: dismissModule()
+            case .showEditAddressVC: showEditAddressVC()
+            case .showAddNewAddressVC: showAddNewAddressVC()
+            case .deliveryButtonTapped: dismissModule()
+            }
         }
 
-        viewModel.onShowEditAddressVC = { [weak self] in
-            self?.showEditAddressVC()
-        }
-
-        viewModel.onShowAddNewAddressVC = { [weak self] in
-            self?.showAddNewAddressVC()
-        }
-
-        // Нажали на кнопку "Доставить сюда"
-        viewModel.onDeliveryButtonTapped = { [weak self] in
-            self?.router.dismiss()
-            self?.onFlowFinished?()
-        }
-
+        // Показываем экран
         router.present(addressVC, modalPresentation: .fullScreen)
     }
 }
 
 // MARK: - Supporting methods
 private extension AddressCoordinator {
+    // Закрываем экран и finish flow
+    func dismissModule() {
+        router.dismiss()
+        onFlowFinished?()
+    }
+}
+
+// MARK: - Creating modules
+private extension AddressCoordinator {
     func showEditAddressVC() {
-        let editAddressVC = screenFactory.makeEditAddressScreen()
-        let viewModel = editAddressVC.getViewModel()
+        guard let editAddressVC = moduleFactory.makeModule(for: .editAddress) as? EditAddressViewController else { return }
+        let presenter = editAddressVC.output
+
+        presenter.coordinatorEventHandler = { [weak self] event in
+            guard let self else { return }
+            switch event {
+            case .dismissModule, .addressSaved: router.dismiss()
+            case .showError: showEditAddressError()
+            }
+        }
+
         router.present(editAddressVC, modalPresentation: .fullScreen)
-
-        viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
-        }
-
-        viewModel.onSaveButtonTapped = { [weak self] in
-            self?.router.dismiss()
-        }
     }
 
     func showAddNewAddressVC() {
-        let vc = screenFactory.makeAddNewAddressScreen()
-        let viewModel = vc.getViewModel()
+        guard let vc = moduleFactory.makeModule(for: .addNewAddress) as? AddNewAddressViewController else { return }
+        let presenter = vc.output
+
+        presenter.coordinatorEventHandler = { [weak self] event in
+            guard let self else { return }
+            switch event {
+            case .dismissModule, .addedNewAddress: router.dismiss()
+            case .addNewAddressError: showAddNewAddressError()
+            }
+        }
+
         router.present(vc, modalPresentation: .fullScreen)
-
-        viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
-        }
-
-        viewModel.onSaveNewAddressButtonTapped = { [weak self] in
-            self?.router.dismiss()
-        }
     }
+}
+
+// MARK: - Creating error alerts
+private extension AddressCoordinator {
+    func showEditAddressError() {
+        let vc = moduleFactory.makeErrorAlert(for: .addressToEdit) { [weak self] in
+            self?.router.dismiss()
+        }
+        router.present(vc)
+    }
+
+    func showAddNewAddressError() {
+        let vc = moduleFactory.makeErrorAlert(for: .addNewAddress) { [weak self] in
+            self?.router.dismiss()
+        }
+        router.present(vc)
+    }
+
 }

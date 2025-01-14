@@ -62,7 +62,7 @@ extension ProfileRouter: ProfileRouterInput {
 
     // Показываем экран с ошибкой, через комплишн вызываем закрытие окна и флоу, при нажатии на кнопку на алерте
     func showProfileErrorAlertModule() {
-        let vc = moduleFactory.makeErrorAlert(for: .profile) { [weak self] in
+        let vc = moduleFactory.makeErrorAlert(for: .profileError) { [weak self] in
             self?.dismiss() // Закрываем экран
 //          self?.onFlowFinished?() // Говорим что флоу закончен
         }

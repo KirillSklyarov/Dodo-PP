@@ -8,6 +8,18 @@ enum DeliveryCoordinatorEvent {
     case showFinal
 }
 
+enum PaymentMethodCoordinatorEvent {
+    case dismissModule
+    case showPaymentMethodErrorAlertModule
+    case paymentMethodSelected(PaymentMethod)
+}
+
+enum FinalViewCoordinatorEvent {
+    case dismissModule
+    case showFinalError
+    case finishFlow
+}
+
 final class DeliveryCoordinator: Coordinator {
 
     // MARK: - Properties
@@ -42,7 +54,7 @@ extension DeliveryCoordinator {
             switch coordinatorEvent {
             case .dismissModule: dismissModule()
             case .showDeliveryErrorAlertModule: showDeliveryErrorAlertModule()
-            case .showChooseAddress: showChooseAddress()
+            case .showChooseAddress: showChooseAddressModule()
             case .showChoosePaymentMethod: showChoosePaymentMethod()
             case .showFinal: showFinalVC()
             }
@@ -50,61 +62,64 @@ extension DeliveryCoordinator {
 
         router.present(vc)
     }
-
-    // Закрываем экран и говорим предыдущему координатору что мы закрылись (этот процесс будет отличаться от onFinishFlow)
-    func dismissModule() {
-        router.dismiss()
-        onDismissed?()
-    }
-
-    // Показываем алёрт с ошибкой и при нажатии на кнопку на алёрте закрываем окно
-    func showDeliveryErrorAlertModule() {
-        let vc = moduleFactory.makeErrorAlert(for: .deliveryError) {
-            self.dismissModule()
-        }
-        router.present(vc)
-    }
 }
 
-// MARK: - Supporting methods
+// MARK: - Modules creation
 private extension DeliveryCoordinator {
-    func showChooseAddress() {
-        guard let vc = moduleFactory.makeModule(for: .chooseAddress) as? ChooseAddressVC else { return }
-        let viewModel = vc.getViewModel()
+    // Показываем экран с адресами и настраиваем Event Handler
+    func showChooseAddressModule() {
+        guard let vc = moduleFactory.makeModule(for: .chooseAddress) as? ChooseAddressViewController else { return }
+        let presenter = vc.output
+
+        presenter.coordinatorEventHandler = { [weak self] coordinatorEvent in
+            guard let self else { return }
+            switch coordinatorEvent {
+            case .dismissModule: router.dismiss()
+            case .showAddressErrorAlert: showChooseAddressErrorAlertModule()
+            case .addressSelected(let addressName): updateAddressName(with: addressName)
+            }
+        }
+
         router.present(vc)
-
-        // Нажали на закрыть окно
-        viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
-        }
-
-        // Выбрали ячейку
-        viewModel.onAddressCellTapped = { [weak self] addressName in
-            self?.updateUI(addressName: addressName)
-        }
-
-        // Нажали на редактирование адреса
-        viewModel.onEditAddressCellTapped = { [weak self] address in
-            self?.showEditAddressVC(vc)
-        }
-
-        // Нажали на добавить новый адрес
-        viewModel.onShowAddNewAddress = { [weak self] in
-            self?.showAddNewAddressVC(vc)
-        }
     }
+
+//    func showChooseAddress() {
+//        guard let vc = moduleFactory.makeModule(for: .chooseAddress) as? ChooseAddressVC else { return }
+//        let viewModel = vc.getViewModel()
+//        router.present(vc)
+//
+//        // Нажали на закрыть окно
+//        viewModel.onDismissButtonTapped = { [weak self] in
+//            self?.router.dismiss()
+//        }
+//
+//        // Выбрали ячейку
+//        viewModel.onAddressCellTapped = { [weak self] addressName in
+//            self?.updateUI(addressName: addressName)
+//        }
+//
+//        // Нажали на редактирование адреса
+//        viewModel.onEditAddressCellTapped = { [weak self] address in
+//            self?.showEditAddressVC(vc)
+//        }
+//
+//        // Нажали на добавить новый адрес
+//        viewModel.onShowAddNewAddress = { [weak self] in
+//            self?.showAddNewAddressVC(vc)
+//        }
+//    }
 
     func showEditAddressVC(_ parentVC: UIViewController) {
         guard let vc = moduleFactory.makeModule(for: .editAddress) as? EditAddressViewController else { return }
 
-        let viewModel = vc.getViewModel()
+        guard let presenter = vc.output as? EditAddressPresenter else { return }
 
-        viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
-        }
-
-        viewModel.onSaveButtonTapped = { [weak self] in
-            self?.router.dismiss()
+        presenter.coordinatorEventHandler = { [weak self] event in
+            guard let self else { return }
+            switch event {
+            case .dismissModule, .addressSaved: router.dismiss()
+            case .showError: showEditAddressError()
+            }
         }
 
         router.present(vc, modalPresentation: .fullScreen)
@@ -112,50 +127,129 @@ private extension DeliveryCoordinator {
 
     func showAddNewAddressVC(_ parentVC: UIViewController) {
         guard let vc = moduleFactory.makeModule(for: .addNewAddress) as? AddNewAddressViewController else { return }
-        let viewModel = vc.getViewModel()
+        let presenter = vc.output
 
-        viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
+        presenter.coordinatorEventHandler = { [weak self] event in
+            guard let self else { return }
+            switch event {
+            case .dismissModule, .addedNewAddress: router.dismiss()
+            case .addNewAddressError: showAddNewAddressError()
+            }
         }
 
-        viewModel.onSaveNewAddressButtonTapped = { [weak self] in
-            self?.router.dismiss()
-        }
-        
         router.present(vc, modalPresentation: .fullScreen)
     }
 
+    // Показываем экран с выбором метода оплаты и отрабатываем Event Handler
     func showChoosePaymentMethod() {
        guard let vc = moduleFactory.makeModule(for: .choosePaymentMethod) as? ChoosePaymentMethodVC else { return }
-        let viewModel = vc.getViewModel()
+        let presenter = vc.output
+
+        presenter.coordinatorEventHandler = { [weak self] event in
+            guard let self else { return }
+            switch event {
+            case .dismissModule: router.dismiss()
+            case .showPaymentMethodErrorAlertModule: showPaymentMethodErrorAlertModule()
+            case .paymentMethodSelected(let paymentMethod): updatePaymentMethod(with: paymentMethod)
+            }
+        }
+
         router.present(vc)
-
-        viewModel.onDismissButtonTapped = { [weak self] in
-            self?.router.dismiss()
-        }
-
-        viewModel.onPaymentMethodSelected = { [weak self] paymentMethod in
-            self?.updateUI(paymentMethod: paymentMethod)
-            self?.router.dismiss()
-        }
     }
 
     // Показываем финальный экран
     func showFinalVC() {
-        guard let vc = moduleFactory.makeModule(for: .final) as? FinalVC else { return }
-        let viewModel = vc.getViewModel()
+        guard let vc = moduleFactory.makeModule(for: .final) as? FinalViewController else { return }
+        let presenter = vc.output
 
-        viewModel.onFinalVCDismissed = { [weak self] in
-            self?.router.dismiss()
-            self?.onFinishFlow?()
+        presenter.coordinatorEventHandler = { [weak self] event in
+            guard let self else { return }
+            switch event {
+            case .dismissModule: finishFlow()
+            case .showFinalError: showFinalErrorAlertModule()
+            case .finishFlow: finishFlow()
+            }
         }
 
         router.present(vc)
     }
 }
 
+// MARK: - Errors Alerts
+private extension DeliveryCoordinator {
+    // Показываем алёрт с ошибкой и при нажатии на кнопку на алёрте закрываем окно
+    func showDeliveryErrorAlertModule() {
+        let vc = moduleFactory.makeErrorAlert(for: .deliveryError) {
+            self.dismissModule()
+        }
+        router.present(vc)
+    }
+
+    // Показываем алёрт с ошибкой и при нажатии на кнопку на алёрте закрываем окно
+    func showChooseAddressErrorAlertModule() {
+        let vc = moduleFactory.makeErrorAlert(for: .chooseAddress) {
+            self.dismissModule()
+        }
+        router.present(vc)
+    }
+
+    // Показываем алёрт с ошибкой и при нажатии на кнопку на алёрте закрываем окно
+    func showFinalErrorAlertModule() {
+        let vc = moduleFactory.makeErrorAlert(for: .finalError) {
+            self.finishFlow()
+        }
+        router.present(vc)
+    }
+
+    // Показываем алёрт с ошибкой и при нажатии на кнопку на алёрте закрываем окно
+    func showPaymentMethodErrorAlertModule() {
+        let vc = moduleFactory.makeErrorAlert(for: .paymentMethod) {
+            self.router.dismiss()
+        }
+        router.present(vc)
+    }
+
+    func showEditAddressError() {
+        let vc = moduleFactory.makeErrorAlert(for: .addressToEdit) { [weak self] in
+            self?.router.dismiss()
+        }
+        router.present(vc)
+    }
+
+    func showAddNewAddressError() {
+        let vc = moduleFactory.makeErrorAlert(for: .addNewAddress) { [weak self] in
+            self?.router.dismiss()
+        }
+        router.present(vc)
+    }
+}
+
 // MARK: - Supporting methods
 private extension DeliveryCoordinator {
+    // Закрываем экран и говорим предыдущему координатору что мы закрылись (этот процесс будет отличаться от onFinishFlow)
+    func dismissModule() {
+        router.dismiss()
+        onDismissed?()
+    }
+
+    // Метод завершает flow
+    func finishFlow() {
+        router.dismissAll()
+        onFinishFlow?()
+    }
+
+    // Когда юзер выбрал адрес, то мы закрываем экран на экране доставки обновляем адрес доставки
+    func updateAddressName(with addressName: String) {
+        router.dismiss()
+        updateUI(addressName: addressName)
+    }
+
+    // Когда юзер выбрал способ оплаты, то мы закрываем экран на экране доставки обновляем способ оплаты
+    func updatePaymentMethod(with paymentMethod: PaymentMethod) {
+        router.dismiss()
+        updateUI(paymentMethod: paymentMethod)
+    }
+
     // Обновляет данные на главном экране этого потока (в данном случае экрана "Доставка"). Сначала находим верхний экран, потом обновляем те данные, которые не nil.
     func updateUI(addressName: String? = nil, paymentMethod: PaymentMethod? = nil) {
         guard let deliveryVC else { print("Error: Top view controller is not DeliveryVC"); return }

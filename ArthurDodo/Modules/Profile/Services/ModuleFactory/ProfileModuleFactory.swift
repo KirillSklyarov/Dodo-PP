@@ -1,9 +1,8 @@
 import UIKit
 
 // Протокол фабрики, в котором метод создания всех экранов
-protocol ProfileModuleFactoryProtocol: AnyObject {
-    func makeModule(for profileScreen: ProfileModule) -> UIViewController
-    func makeErrorAlert(for errorAlert: AlertType, completion: (() -> Void)?) -> UIAlertController
+protocol ProfileModuleFactoryProtocol: BaseModuleFactory where Module == ProfileModule, ErrorType == ProfileError {
+
 }
 
 // Enum который указывает список экранов
@@ -13,6 +12,11 @@ enum ProfileModule {
     case chooseAddress
     case chatAlert
     case promo
+}
+
+enum ProfileError {
+    case profileError
+    case chooseAddressError
 }
 
 // Класс фабрика экранов отвечает за создание экранов
@@ -42,14 +46,18 @@ extension ProfileModuleFactory: ProfileModuleFactoryProtocol {
         }
     }
 
-    func makeErrorAlert(for errorAlert: AlertType, completion: (() -> Void)?) -> UIAlertController {
+    func makeErrorAlert(for errorAlert: ProfileError, completion: (() -> Void)?) -> UIAlertController {
         switch errorAlert {
-        case .profile: makeErrorAlertScreen(.profile) { completion?() }
-        case .cart: makeErrorAlertScreen(.cart) { completion?() }
-        case .productDetails: makeErrorAlertScreen(.productDetails) { completion?() }
-        case .chooseAddress: makeErrorAlertScreen(.chooseAddress) { completion?() }
-        case .personalData: makeErrorAlertScreen(.personalData) { completion?() }
-        default: UIAlertController()
+        case .profileError: makeErrorAlertScreen(.profile) { completion?() }
+        case .chooseAddressError: makeErrorAlertScreen(.chooseAddress) { completion?() }
+
+
+//        case .profile: makeErrorAlertScreen(.profile) { completion?() }
+//        case .cart: makeErrorAlertScreen(.cart) { completion?() }
+//        case .productDetails: makeErrorAlertScreen(.productDetails) { completion?() }
+//        case .chooseAddress: makeErrorAlertScreen(.chooseAddress) { completion?() }
+//        case .personalData: makeErrorAlertScreen(.personalData) { completion?() }
+//        default: UIAlertController()
         }
     }
 }
@@ -82,7 +90,7 @@ private extension ProfileModuleFactory {
 
     // Создаем экран с выбором адреса
     func makeAddressModule() -> ChooseAddressViewController {
-        let configurator = ChooseAddressConfigurator(moduleFactory: self, storageService: storageService)
+        let configurator = ChooseAddressConfigurator(storageService: storageService)
         return configurator.configure()
     }
 

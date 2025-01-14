@@ -25,7 +25,7 @@ extension ChooseAddressRouter: ChooseAddressRouterInput {
 
     // Показываем экран с ошибкой, через комплишн вызываем закрытие окна и флоу, при нажатии на кнопку на алерте
     func showAddressErrorAlert() {
-        let vc = moduleFactory.makeErrorAlert(for: .chooseAddress) { [weak self] in
+        let vc = moduleFactory.makeErrorAlert(for: .chooseAddressError) { [weak self] in
             self?.dismiss() // Закрываем экран
         }
 

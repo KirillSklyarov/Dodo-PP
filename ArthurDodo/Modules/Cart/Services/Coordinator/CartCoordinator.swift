@@ -35,14 +35,14 @@ extension CartCoordinator {
         let presenter = cartVC.output
 
         // Coordinator Event handler
-        presenter.coordinatorEventHandler = { [weak self] coordinatorEvent in
+        presenter.coordinatorEventHandler = { [weak self, weak presenter] coordinatorEvent in
             guard let self else { return }
             switch coordinatorEvent {
             case .dismissModule: dismissModule()
             case .showPromoModule: showPromoScreen()
             case .showDeliveryModule: onFinishFlow?()
             case .showCartErrorAlertModule: showCartErrorAlertModule()
-            case .showEditProductModule: showEditItemModule(presenter)
+            case .showEditProductModule: showEditItemModule(presenter!)
             }
         }
 

@@ -4,11 +4,11 @@ import UIKit
 final class CoordinatorFactory {
     // MARK: - Properties
     private let router: Router
-    private let screenFactory: ScreenFactory
+    private let screenFactory: ModuleFactory
     private let storage: DataManager
 
     // MARK: - Init
-    init(router: Router, screenFactory: ScreenFactory, storage: DataManager) {
+    init(router: Router, screenFactory: ModuleFactory, storage: DataManager) {
         self.router = router
         self.screenFactory = screenFactory
         self.storage = storage

@@ -40,6 +40,10 @@ final class CartPresenter {
         self.storage = storage
         self.storageService = storageService
     }
+
+    deinit {
+        print("CartPresenter deinit")
+    }
 }
 
 // MARK: - CartViewControllerOutput
@@ -50,8 +54,15 @@ extension CartPresenter: CartViewControllerOutput {
         loadData()
     }
 
+    // Выставляем для view состояние loading Получаем данные из хранилища и обновляем view
+    func loadData() {
+        view?.showLoading()
+        fetchData()
+        checkDataAndUpdateView()
+    }
+
     // Если какие-то данные не получили, то показываем ошибку, если все ок, то обновляем view
-    func updateViewWithData() {
+    func checkDataAndUpdateView() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             guard let self else { return }
             isErrorState() ? setErrorState() : updateUI()
@@ -76,13 +87,6 @@ extension CartPresenter: CartViewControllerOutput {
 
 // MARK: - Fetch Data
 private extension CartPresenter {
-    // Выставляем для view состояние loading Получаем данные из хранилища и обновляем view
-    func loadData() {
-        view?.showLoading()
-        fetchData()
-        updateViewWithData()
-    }
-
     // Получаем данные из хранилища
     func fetchData() {
         getPromoFromStorage()

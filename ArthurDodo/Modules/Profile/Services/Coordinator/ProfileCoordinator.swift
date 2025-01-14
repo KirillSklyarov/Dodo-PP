@@ -26,13 +26,14 @@ extension ProfileCoordinator: Coordinator {
         let presenter = viewController.output
 
         presenter.coordinatorEventHandler = { [weak self] coordinatorEvent in
+            guard let self else { return }
             switch coordinatorEvent {
-            case .dismissModule: self?.dismiss()
-            case .showSupportModule: self?.showSupportModule()
-            case .showPersonalDataModule: self?.showPersonalDataModule()
-            case .showPromoModule: self?.showPromoModule()
-            case .showChooseAddressModule: self?.showChooseAddressModule()
-            case .showProfileErrorAlertModule: self?.showProfileErrorAlertModule()
+            case .dismissModule: dismissModule()
+            case .showSupportModule: showSupportModule()
+            case .showPersonalDataModule: showPersonalDataModule()
+            case .showPromoModule: showPromoModule()
+            case .showChooseAddressModule: showChooseAddressModule()
+            case .showProfileErrorAlertModule: showProfileErrorAlertModule()
             }
         }
 
@@ -42,7 +43,7 @@ extension ProfileCoordinator: Coordinator {
 
 // MARK: - Supporting methods
 private extension ProfileCoordinator {
-    func dismiss() {
+    func dismissModule() {
         router.dismiss()
         onFlowFinished?()
     }
@@ -68,14 +69,33 @@ private extension ProfileCoordinator {
 
     // Показываем экран с адресами
     func showChooseAddressModule() {
-        let vc = moduleFactory.makeModule(for: .chooseAddress)
+        guard let vc = moduleFactory.makeModule(for: .chooseAddress) as? ChooseAddressViewController else { return }
+        let presenter = vc.output
+
+        presenter.coordinatorEventHandler = { [weak self] coordinatorEvent in
+            guard let self else { return }
+            switch coordinatorEvent {
+            case .dismissModule: router.dismiss()
+            case .showAddressErrorAlert: showChooseAddressErrorAlertModule()
+            default : break
+            }
+        }
+
         router.present(vc, modalPresentation: .fullScreen)
+    }
+
+    // Показываем алёрт с ошибкой и при нажатии на кнопку на алёрте закрываем окно
+    private func showChooseAddressErrorAlertModule() {
+        let vc = moduleFactory.makeErrorAlert(for: .chooseAddressError) {
+            self.dismissModule()
+        }
+        router.present(vc)
     }
 
     // Показываем экран с ошибкой, через комплишн вызываем закрытие окна и флоу, при нажатии на кнопку на алерте
     func showProfileErrorAlertModule() {
-        let vc = moduleFactory.makeErrorAlert(for: .profile) { [weak self] in
-            self?.dismiss()
+        let vc = moduleFactory.makeErrorAlert(for: .profileError) { [weak self] in
+            self?.dismissModule()
         }
 
         router.present(vc)

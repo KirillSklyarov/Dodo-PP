@@ -35,10 +35,10 @@ extension PersonalRouter: PersonalRouterInput {
 
     // Показываем экран с ошибкой
     func showPersonalErrorAlert() {
-        let vc = moduleFactory.makeErrorAlert(for: .personalData) { [weak self] in
-            self?.view?.dismissModule() // Закрываем экран c родительского экрана
-        }
-
-        view?.present(vc)
+//        let vc = moduleFactory.makeErrorAlert(for: .personalData) { [weak self] in
+//            self?.view?.dismissModule() // Закрываем экран c родительского экрана
+//        }
+//
+//        view?.present(vc)
     }
 }

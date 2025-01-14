@@ -47,13 +47,20 @@ extension ProfilePresenter: ProfileViewOutput {
     func viewLoaded() {
         view?.setupInitialState()
         loadData()
+        checkDataAndUpdateView()
+    }
+
+    // Инитим загрузку данных
+    func loadData() {
+        view?.showLoading()
+        fetchData()
     }
 
     // Если какие-то данные не получили, то показывает алерт с ошибкой, если все ок, то выставляем статус success
-    func updateViewWithData() {
+    func checkDataAndUpdateView() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             guard let self else { return }
-            isErrorState() ? setErrorState() : updateUI()
+            isDataValid() ? updateView() : setErrorState()
         }
     }
 
@@ -71,13 +78,6 @@ extension ProfilePresenter: ProfileViewOutput {
 
 // MARK: - Fetch Data
 private extension ProfilePresenter {
-    // Инитим загрузку данных
-    func loadData() {
-        view?.showLoading()
-        fetchData()
-        updateViewWithData()
-    }
-
     // Фетчим данные из хранилища
     func fetchData() {
         fetchUserDataFromStorage()
@@ -97,13 +97,13 @@ private extension ProfilePresenter {
 // MARK: - Supporting methods
 private extension ProfilePresenter {
     // Проверяем на nil все данные, если где-то будет nil, то это ошибка
-    func isErrorState() -> Bool {
+    func isDataValid() -> Bool {
         let data: [Any?] = [userData, promo]
-        return data.contains { $0 == nil }
+        return data.allSatisfy { $0 != nil }
     }
 
     // Прокидываем данные на view и формируем ее
-    func updateUI() {
+    func updateView() {
         guard let userData, let promo else { return }
         let data = (userData, promo)
         view?.configure(with: data)

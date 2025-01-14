@@ -6,14 +6,14 @@ final class AppStartManager {
     let networkService: NetworkService
     let storage: DataManager
     let featureToggleService: FeatureToggleService
-    let screenFactory: ScreenFactory
+    let screenFactory: ModuleFactory
     let router: Router
     let coordinatorFactory: CoordinatorFactory
     var window: UIWindow?
     var appCoordinator: AppCoordinator?
 
     // MARK: - Init
-    init(networkService: NetworkService, storage: DataManager, featureToggleService: FeatureToggleService, screenFactory: ScreenFactory, router: Router, coordinatorFactory: CoordinatorFactory) {
+    init(networkService: NetworkService, storage: DataManager, featureToggleService: FeatureToggleService, screenFactory: ModuleFactory, router: Router, coordinatorFactory: CoordinatorFactory) {
         self.networkService = networkService
         self.storage = storage
         self.featureToggleService = featureToggleService

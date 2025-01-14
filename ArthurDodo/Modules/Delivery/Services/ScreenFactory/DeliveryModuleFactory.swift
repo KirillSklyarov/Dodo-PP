@@ -13,6 +13,11 @@ enum DeliveryModule {
 // Список ошибок для Delivery
 enum DeliveryError {
     case deliveryError
+    case chooseAddress
+    case addressToEdit
+    case addNewAddress
+    case paymentMethod
+    case finalError
 }
 
 protocol DeliveryModuleFactoryProtocol: BaseModuleFactory where Module == DeliveryModule, ErrorType == DeliveryError {
@@ -53,6 +58,11 @@ extension DeliveryModuleFactory: DeliveryModuleFactoryProtocol {
     func makeErrorAlert(for errorAlert: DeliveryError, completion: (() -> Void)?) -> UIAlertController {
         switch errorAlert {
         case .deliveryError: return makeDeliveryErrorAlert { completion?() }
+        case .chooseAddress: return makeChooseAddressErrorAlert { completion?() }
+        case .paymentMethod: return makePaymentMethodErrorAlert { completion?() }
+        case .finalError: return makeFinalErrorAlert { completion?() }
+        case .addressToEdit: return makeAddressToEditErrorAlert { completion?() }
+        case .addNewAddress: return makeAddNewAddressErrorAlert { completion?() }
         }
     }
 }
@@ -64,34 +74,36 @@ private extension DeliveryModuleFactory {
         return configurator.configure()
     }
 
-    func makeChooseAddressModule() -> ChooseAddressVC {
-        let viewModel = ChooseAddressVM(storage: storage, storageService: storageService)
-        let view = ChooseAddressVC(viewModel: viewModel)
-        return view
+    // Создаем экран с выбором адреса
+    func makeChooseAddressModule() -> ChooseAddressViewController {
+        let configurator = ChooseAddressConfigurator(storageService: storageService)
+        return configurator.configure()
     }
 
+//    func makeChooseAddressModule() -> ChooseAddressVC {
+//        let viewModel = ChooseAddressVM(storage: storage, storageService: storageService)
+//        let view = ChooseAddressVC(viewModel: viewModel)
+//        return view
+//    }
+
     func makeChoosePaymentMethodModule() -> ChoosePaymentMethodVC {
-        let viewModel = ChoosePaymentMethodVM(storage: storage)
-        let view = ChoosePaymentMethodVC(viewModel: viewModel)
-        return view
+        let configurator = PaymentMethodConfigurator(storage: storage)
+        return configurator.configure()
     }
 
     func makeEditAddressModule() -> EditAddressViewController {
-        let viewModel = EditAddressViewModel(storage: addressStorage)
-        let view = EditAddressViewController(viewModel: viewModel)
-        return view
+        let configurator = EditAddressConfigurator(storage: addressStorage)
+        return configurator.configure()
     }
 
     func makeAddNewAddressModule() -> AddNewAddressViewController {
-        let viewModel = AddNewAddressVM(storage: addressStorage)
-        let view = AddNewAddressViewController(viewModel: viewModel)
-        return view
+        let configurator = AddNewAddressConfigurator(storage: addressStorage)
+        return configurator.configure()
     }
 
-    func makeFinalModule() -> FinalVC {
-        let viewModel = FinalViewModel(storageService: storageService)
-        let view = FinalVC(viewModel: viewModel)
-        return view
+    func makeFinalModule() -> FinalViewController {
+        let configurator = FinalConfigurator(storageService: storageService)
+        return configurator.configure()
     }
 }
 
@@ -99,6 +111,41 @@ private extension DeliveryModuleFactory {
 private extension DeliveryModuleFactory {
     func makeDeliveryErrorAlert(completion: (() -> Void)?) -> UIAlertController {
         return AppAlert.create(.delivery) {
+            completion?()
+        }
+    }
+
+    // Алерт ошибка экрана выбрать адрес
+    func makeChooseAddressErrorAlert(completion: (() -> Void)?) -> UIAlertController {
+        return AppAlert.create(.chooseAddress) {
+            completion?()
+        }
+    }
+
+    // Алерт ошибка экрана выбрать адрес
+    func makePaymentMethodErrorAlert(completion: (() -> Void)?) -> UIAlertController {
+        return AppAlert.create(.paymentMethod) {
+            completion?()
+        }
+    }
+
+    // Алерт ошибка экрана выбрать адрес
+    func makeFinalErrorAlert(completion: (() -> Void)?) -> UIAlertController {
+        return AppAlert.create(.final) {
+            completion?()
+        }
+    }
+
+    // Алерт ошибка экрана выбрать адрес
+    func makeAddressToEditErrorAlert(completion: (() -> Void)?) -> UIAlertController {
+        return AppAlert.create(.addressToEdit) {
+            completion?()
+        }
+    }
+
+    // Алерт ошибка экрана добавить новый адрес
+    func makeAddNewAddressErrorAlert(completion: (() -> Void)?) -> UIAlertController {
+        return AppAlert.create(.addNewAddress) {
             completion?()
         }
     }

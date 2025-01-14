@@ -48,8 +48,14 @@ extension EditItemPresenter: EditItemViewControllerOutput {
         loadData()
     }
 
+    func loadData() {
+        view?.showLoading()
+        fetchData()
+        checkDataAndUpdateView()
+    }
+
     // Если какие-то данные не получили, то показываем ошибку, если все ок, то обновляем view
-    func updateViewWithData() {
+    func checkDataAndUpdateView() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self else { return }
             isErrorState() ? setErrorState() : updateUI()
@@ -70,12 +76,6 @@ extension EditItemPresenter: EditItemViewControllerOutput {
 
 // MARK: - Fetch Data
 private extension EditItemPresenter {
-    func loadData() {
-        view?.showLoading()
-        fetchData()
-        updateViewWithData()
-    }
-
     func fetchData() {
         fetchSelectedItem()
         fetchToppings()

@@ -7,10 +7,6 @@ protocol ChooseAddressViewInput: AnyObject {
     func showError()
 }
 
-protocol ChooseAddressViewOutput: AnyObject {
-    func viewLoaded()
-    func sendAction(_ action: ChooseAddressViewModelAction)
-}
 
 final class ChooseAddressViewController: UIViewController, ModuleTransitionable {
 
@@ -20,10 +16,10 @@ final class ChooseAddressViewController: UIViewController, ModuleTransitionable 
     private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Presenter
-    private let output: ChooseAddressViewOutput
+    let output: any ChooseAddressViewControllerOutput
 
     // MARK: - Init
-    init(output: ChooseAddressViewOutput) {
+    init(output: any ChooseAddressViewControllerOutput) {
         self.output = output
         super.init(nibName: nil, bundle: nil)
     }

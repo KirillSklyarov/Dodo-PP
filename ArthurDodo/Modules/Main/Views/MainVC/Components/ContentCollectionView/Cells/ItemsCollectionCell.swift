@@ -45,10 +45,21 @@ private extension ItemsCollectionCell {
     }
 
     func setupContentStackView() -> UIStackView {
-        let detailsStackView = AppStackView( [titleLabel, ingredientsLabel, priceButton], axis: .vertical, spacing: 5, alignment: .leading)
+        let detailsStackView = AppStackView([titleLabel, ingredientsLabel, priceButton], axis: .vertical, spacing: 5, alignment: .leading, distribution: .equalSpacing)
+
+        setupUIComponentsPriorities()
 
         let contentStackView = AppStackView([pizzaImageView, detailsStackView], axis: .horizontal, spacing: 10, alignment: .center)
+
+
         return contentStackView
+    }
+
+    // Устанавливаем приоритеты сжатия, чтобы AutoLayout знал, кого можно сжимать а кого нет
+    func setupUIComponentsPriorities() {
+        titleLabel.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+        ingredientsLabel.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        priceButton.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
     }
 }
 

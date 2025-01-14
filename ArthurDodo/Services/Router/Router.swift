@@ -45,6 +45,10 @@ extension Router {
         guard let mainVC = navigationController.viewControllers.last as? MainViewController else {  print("Error: MainVC not found"); return nil}
         return mainVC
     }
+
+    func dismissAll(animated: Bool = true, completion: (() -> Void)? = nil) {
+        navigationController.dismiss(animated: animated, completion: completion)
+    }
 }
 
 // MARK: - Supporting methods

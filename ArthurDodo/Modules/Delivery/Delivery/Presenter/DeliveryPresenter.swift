@@ -42,7 +42,7 @@ extension DeliveryPresenter: DeliveryViewControllerOutput {
 
     // Если данные пришли с ошибкой, то выставляем статус ошибки.
     // Если все данные пришли, то мы обновляем экран с полученными данными
-    func updateViewWithData() {
+    func checkDataAndUpdateView() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             guard let self else { return }
             isDataValid() ? updateUI() : setErrorState()
@@ -68,7 +68,7 @@ extension DeliveryPresenter  {
     func loadData() {
         view?.showLoading()
         fetchData()
-        updateViewWithData()
+        checkDataAndUpdateView()
     }
 
     func fetchData() {

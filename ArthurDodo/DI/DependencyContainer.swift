@@ -3,7 +3,7 @@ import UIKit
 // Контейнер зависимостей. При его создании мы делаем экземпляр навигационного контроллера, который будет управлять навигацией и его мы назначим рутом в sceneDelegate
 final class DependencyContainer {
     let storage: DataManager
-    let screenFactory: ScreenFactory
+    let screenFactory: ModuleFactory
     let router: Router
     let coordinatorFactory: CoordinatorFactory
 
@@ -31,7 +31,7 @@ final class DependencyContainer {
 
 
         // Создаем фабрику экранов
-        screenFactory = ScreenFactory(storageService: storage, featureToggleService: featureToggleService)
+        screenFactory = ModuleFactory(storageService: storage, featureToggleService: featureToggleService)
 
         // Создаем роутер
         router = Router()
