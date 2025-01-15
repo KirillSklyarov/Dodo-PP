@@ -172,7 +172,6 @@ private extension StoriesViewController {
     }
 
     func updateUI(countOfSubStories: Int, storyImage: String) {
-        print(#function)
         setupProgressViews(countOfSubStories)
         updateStoryImage(storyImage)
     }

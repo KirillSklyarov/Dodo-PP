@@ -38,6 +38,7 @@ final class EditAddressViewController: UIViewController {
     }
 }
 
+// MARK: - EditAddressViewControllerInput
 extension EditAddressViewController: EditAddressViewControllerInput {
     func setupInitialState() {
         setupUI()
@@ -127,13 +128,6 @@ private extension EditAddressViewController {
         updateAddressDetailsView(addressToEdit)
         showAddressOnMap(addressToEdit)
         updateShortAddress(addressToEdit)
-    }
-
-    // Загружаем viewModel после того как карта загрузилась вся
-    func viewModelSetup() {
-//        mapView.onMapLoaded = { [weak self] in
-//            self?.output.loadData()
-//        }
     }
 
     // Обновляет адрес на вью

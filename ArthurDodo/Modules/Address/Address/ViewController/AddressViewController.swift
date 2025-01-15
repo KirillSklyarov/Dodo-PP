@@ -41,7 +41,6 @@ final class AddressViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         output.viewLoaded()
-        print(#function)
     }
 }
 

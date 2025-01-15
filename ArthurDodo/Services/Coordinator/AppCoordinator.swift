@@ -61,7 +61,6 @@ private extension AppCoordinator {
         }
 
         addChild(mainCoordinator) // Добавляем координатор в массив
-        print("childCoordinators \(childCoordinators)")
         mainCoordinator.start() // Подготавливаем все данные, но еще не показываем главный экран
     }
 }

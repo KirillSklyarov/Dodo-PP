@@ -62,7 +62,7 @@ extension AddNewAddressPresenter: AddNewAddressViewControllerOutput {
 private extension AddNewAddressPresenter {
     // Запрашиваем основной адрес у хранилища и показываем его на карте
     func fetchData() {
-//        mainAddress = storage.getMainAddress()
+        mainAddress = storage.getMainAddress()
     }
 }
 

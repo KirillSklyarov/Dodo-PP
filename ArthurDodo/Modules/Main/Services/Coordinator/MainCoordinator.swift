@@ -1,5 +1,14 @@
 import UIKit
 
+enum MainCoordinatorEvent {
+    case showProfile
+    case showCart
+    case showAddress
+    case showStories(IndexPath)
+    case showItemDetails
+    case showError
+}
+
 final class MainCoordinator: Coordinator {
     // MARK: - Properties
     private let router: Router
@@ -39,8 +48,8 @@ extension MainCoordinator {
     // Вызываем обновление корзины на главном экране
     func mainVCUpdateCart() {
         if let vc = router.getMainViewController() {
-            let viewModel = vc.getViewModel()
-            viewModel.sendAction(.updateCart)
+            let presenter = vc.output
+            presenter.sendAction(.updateCart)
         }
     }
 }
@@ -51,30 +60,18 @@ private extension MainCoordinator {
     func prepareForShow() {
         guard let mainVC = moduleFactory.makeModule(for: .main) as? MainViewController else { return } // Создаем экран
         self.mainVC = mainVC
-        let viewModel = mainVC.getViewModel()
-        setupActions(viewModel)
-    }
+        let presenter = mainVC.output
 
-    func setupActions(_ viewModel: any MainViewModelProtocol) {
-        // Настраиваем замыкания
-        viewModel.onProfileButtonTapped = { [weak self] in
-            self?.onShowProfile?()
-        }
-
-        viewModel.onAddressButtonTapped = { [weak self] in
-            self?.onShowAddress?()
-        }
-
-        viewModel.onStoryTapped = { [weak self] indexPath in
-            self?.showStories(indexPath)
-        }
-
-        viewModel.onProductDetailsTapped = { [weak self] in
-            self?.checkFeatureToggleAndShowFlow(.productDetails, viewModel: viewModel)
-        }
-
-        viewModel.onCartButtonTapped = { [weak self] in
-            self?.checkFeatureToggleAndShowFlow(.cart, viewModel: viewModel)
+        presenter.coordinatorEventHandler = { [weak self, weak presenter] event in
+            guard let self else { return }
+            switch event {
+            case .showCart: checkFeatureToggleAndShowFlow(.cart, presenter: presenter!)
+            case .showProfile: onShowProfile?()
+            case .showAddress: onShowAddress?()
+            case .showStories(let indexPath): showStories(indexPath)
+            case .showItemDetails: checkFeatureToggleAndShowFlow(.productDetails, presenter: presenter!)
+            case .showError: showMainAlert()
+            }
         }
     }
 }
@@ -96,15 +93,6 @@ private extension MainCoordinator {
         }
 
         router.present(vc, modalPresentation: .fullScreen) // Показываем экран
-
-//        // Настраиваем замыкания
-//        presenter.onDismissButtonTapped = { [weak self] in
-//            self?.router.dismiss()
-//        }
-//
-//        presenter.onShowPopupVC = { [weak self] popUpView in
-//            self?.router.present(popUpView, modalPresentation: .popover)
-//        }
 
     }
 
@@ -136,11 +124,6 @@ private extension MainCoordinator {
             }
         }
 
-//        presenter.onDismissed = { [weak self] in
-//            self?.mainVCUpdateStories() // Обновляем сторисы на главном экране
-//            self?.router.dismiss() // Закрываем окно
-//        }
-
         router.present(vc, modalPresentation: .fullScreen) // Показываем экран
     }
 
@@ -160,12 +143,14 @@ private extension MainCoordinator {
 // MARK: - Alert
 private extension MainCoordinator {
     // Создаем экран алерта (нужен когда фича выключена) и показываем его
-//    func showProfileAlert() {
-//        let vc = moduleFactory.makeAlertScreen(.profile)
-//        router.present(vc)
-//    }
-//
-    func showCartAlert() {
+    func showMainAlert() {
+        let vc = moduleFactory.makeErrorAlert(for: .main) { [weak self] in
+            self?.router.dismiss()
+        }
+        router.present(vc)
+    }
+
+    func showStoriesAlert() {
         let vc = moduleFactory.makeErrorAlert(for: .stories) { [weak self] in
             self?.router.dismiss()
         }
@@ -197,7 +182,7 @@ private extension MainCoordinator {
 
 // MARK: - FeatureToggles
 private extension MainCoordinator {
-    func checkFeatureToggleAndShowFlow(_ type: FeatureType, viewModel: any MainViewModelProtocol) {
+    func checkFeatureToggleAndShowFlow(_ type: FeatureType, presenter: any MainViewControllerOutput) {
 
 #if DEBUG
         switch type {
@@ -217,7 +202,7 @@ private extension MainCoordinator {
     // Проверяем (на всякий случай) есть ли в словаре фичей такая позиция. Если есть и у нее статус false (запретить фичу), то показываем алерт, если true (разрешить фичу) - то вызываем замыкание onShowCart. Если же в словаре такой фичи нет (чего не должно быть, но лучше проверить), то тогда просто вызываем замыкание onShowCart (это стандартная дорога приложения)
     func checkFeatureToggleAndShowCartFlow() {
         if let feature = features[.cart] {
-            feature ? onShowCart?() : showCartAlert()
+            feature ? onShowCart?() : showStoriesAlert()
         } else {
             print("No feature toggle for cart")
             onShowCart?()

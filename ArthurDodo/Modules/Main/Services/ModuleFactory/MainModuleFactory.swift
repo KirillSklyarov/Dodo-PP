@@ -1,7 +1,6 @@
 import UIKit
 
 protocol MainModuleFactoryProtocol: BaseModuleFactory where Module == MainModule, ErrorType == MainModuleError  {
-
 }
 
 enum MainModule {
@@ -33,7 +32,7 @@ final class MainModuleFactory {
 extension MainModuleFactory: MainModuleFactoryProtocol {
     func makeModule(for module: MainModule) -> UIViewController {
         switch module {
-        case .main: return makeMainScreen()
+        case .main: return makeMainModule()
         case .itemDetails: return makeItemDetailsScreen()
         case .stories(let indexPath): return makeStoriesModule(indexPath: indexPath)
         }
@@ -50,10 +49,9 @@ extension MainModuleFactory: MainModuleFactoryProtocol {
 
 // MARK: - Creating modules
 extension MainModuleFactory {
-    func makeMainScreen() -> MainViewController {
-        let viewModel = MainViewModel(storage: storage, featureTogglesService: featureToggleService)
-        let view = MainViewController(viewModel: viewModel)
-        return view
+    func makeMainModule() -> MainViewController {
+        let configurator = MainConfigurator(storage: storage, featureTogglesService: featureToggleService)
+        return configurator.configure()
     }
 
     func makeItemDetailsScreen() -> ItemDetailsViewController {

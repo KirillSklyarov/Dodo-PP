@@ -1,6 +1,10 @@
 import Foundation
-import Combine
 
+protocol MainViewControllerOutput: BaseViewControllerOutput where ActionType == MainAction, CoordinatorEvent == MainCoordinatorEvent {
+
+}
+
+// Enum действий юзера
 enum MainAction {
     case profileButtonTapped
     case addressButtonTapped
@@ -11,48 +15,13 @@ enum MainAction {
     case updateCart
 }
 
-final class MainViewModel: MainViewModelProtocol {
-    
-    // MARK: - Published properties
-    @Published private var cartPrice: Int?
-    @Published private var stories: [Story]?
-    @Published private var categories: [Category]?
-    @Published private var promoItems: [Item]?
-    @Published private var catalog: [Item]?
-    @Published private var addressName: String?
-    @Published private var userDodoCoins: Int?
-    @Published private var state: ScreenState = .loading
-    @Published private var orderPrice: Int?
-    @Published private var orderStatus: String?
-    @Published private var isShowOrderView: Bool?
+final class MainPresenter {
 
-    @Published private var isShowProfileButton: Bool?
-    @Published private var headerState: ScreenState?
+    // MARK: - Properties
+    private var mainData: MainData?
+    var coordinatorEventHandler: ((MainCoordinatorEvent) -> Void)?
 
-    var cartPricePublisher: Published<Int?>.Publisher { $cartPrice }
-    var storiesPublisher: Published<[Story]?>.Publisher { $stories }
-    var categoriesPublisher: Published<[Category]?>.Publisher { $categories }
-    var promoItemsPublisher: Published<[Item]?>.Publisher { $promoItems }
-    var catalogPublisher: Published<[Item]?>.Publisher { $catalog }
-    var addressNamePublisher: Published<String?>.Publisher { $addressName }
-    var userDodoCoinsPublisher: Published<Int?>.Publisher { $userDodoCoins }
-    var statePublisher: Published<ScreenState>.Publisher { $state }
-    var orderPricePublisher: Published<Int?>.Publisher { $orderPrice }
-    var orderStatusPublisher: Published<String?>.Publisher { $orderStatus }
-    var isShowOrderViewPublisher: Published<Bool?>.Publisher { $isShowOrderView }
-    var isShowProfileButtonPublisher: Published<Bool?>.Publisher { $isShowProfileButton }
-
-    var headerStatePublisher: Published<ScreenState?>.Publisher { $headerState }
-
-    lazy var addressDodoCoins = Publishers.CombineLatest(addressNamePublisher, userDodoCoinsPublisher)
-    lazy var orderPublisher = Publishers.CombineLatest(orderStatusPublisher, orderPricePublisher)
-
-    // MARK: - Other properties
-    var onProfileButtonTapped: (() -> Void)?
-    var onAddressButtonTapped: (() -> Void)?
-    var onStoryTapped: ((IndexPath) -> Void)?
-    var onProductDetailsTapped: (() -> Void)?
-    var onCartButtonTapped: (() -> Void)?
+    weak var view: (any MainViewControllerInput)?
 
     private let storage: MainStorage
     private let featureTogglesService: FeatureToggleService
@@ -64,47 +33,75 @@ final class MainViewModel: MainViewModelProtocol {
     }
 }
 
-// MARK: - MainViewModelProtocol
-extension MainViewModel {
-    // Основной загрузочный метод viewModel
+// MARK: - MainViewControllerOutput
+extension MainPresenter: MainViewControllerOutput {
+    // Когда узнаем что view загружено, то выставляем для view стартовое состояние, загружаем данные и делаем проверку на ошибку
+    func viewLoaded() {
+        view?.setupInitialState()
+        loadData()
+        checkDataAndUpdateView()
+    }
+
+    // Выставляем состояние loading для view, фетчим данные, делаем проверку на featureToggle и проверяем есть ли активный заказ
     func loadData() {
-        checkFeatureToggle(featureType: .profile)
+        view?.showLoading()
         fetchData()
+        checkFeatureToggle(featureType: .profile)
         isNeedToShowOrderView()
     }
 
-    // Запрашиваем данные о стоимости заказа из хранилища и обновляем view
-    func updateCart() {
-        cartPrice = storage.getCartPrice()
+    // Если данные валидны, то обновляем view, если нет - показываем ошибку
+    func checkDataAndUpdateView() {
+        isDataValid() ? updateView() : setErrorState()
     }
 
-    // Отрабатывает action
+    // Отрабатывает действия юзера на view
     func sendAction(_ action: MainAction) {
         switch action {
-        case .profileButtonTapped: onProfileButtonTapped?()
-        case .addressButtonTapped: onAddressButtonTapped?()
+        case .profileButtonTapped: coordinatorEventHandler?(.showProfile)
+        case .addressButtonTapped: coordinatorEventHandler?(.showAddress)
         case .itemSelected(let indexPath): itemSelected(at: indexPath)
-        case .storyTapped(let indexPath): onStoryTapped?(indexPath)
+        case .storyTapped(let indexPath): coordinatorEventHandler?(.showStories(indexPath))
         case .promoItemSelected(let indexPath): promoItemSelected(at: indexPath)
-        case .cartButtonTapped: onCartButtonTapped?()
+        case .cartButtonTapped: coordinatorEventHandler?(.showCart)
         case .updateCart: updateCart()
         }
     }
 }
 
-// MARK: - Feature Toggle
-private extension MainViewModel {
-    // Проверяется featureToggle (включена фича или нет)
-    // Прячем значок profile на основном экране (нужно при выключенной фиче)
-    func checkFeatureToggle(featureType: FeatureType) {
-        let isEnabled = featureTogglesService.isFeatureEnabled(featureType: featureType)
-        isShowProfileButton = isEnabled
+// MARK: - Supporting methods
+private extension MainPresenter {
+    // Запрашиваем данные о стоимости заказа из хранилища и обновляем view
+    func updateCart() {
+        guard var mainData else { print("MainData is nil"); return }
+        let cartPrice = storage.getCartPrice()
+        mainData.cartPrice = cartPrice
+        view?.updateCart(with: mainData)
+    }
+
+    func isDataValid() -> Bool {
+        return mainData != nil
+    }
+
+    func updateView() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            guard let mainData else { return }
+            view?.configure(with: mainData)
+        }
+    }
+
+    func setErrorState() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            view?.showError()
+            coordinatorEventHandler?(.showError)
+        }
     }
 }
 
-
 // MARK: - Fetch data from server
-private extension MainViewModel {
+private extension MainPresenter {
     // Обращаемся к хранилищу за необходимыми данными
     func fetchData() {
         getMainAddressFromStorage()
@@ -114,49 +111,56 @@ private extension MainViewModel {
 
     // Забираем основной адрес из хранилища и обновляем view
     func getMainAddressFromStorage() {
-        headerState = .loading
         guard let mainAddress = storage.getMainAddress() else { print("Error: mainAddress is nil"); return }
-        addressName = mainAddress.name
-        userDodoCoins = storage.getDodoCoins()
-        headerState = .success
+        let userDodoCoins = storage.getDodoCoins()
+        let headerData = HeaderData(mainAddress: mainAddress.name, userDodoCoins: userDodoCoins)
+        mainData = MainData(headerData: headerData)
     }
 
     // Забираем сторисы из хранилища и передаем их на view
     func getStoriesFromStorage() {
-        stories = storage.getFetchedStories()
+        let stories = storage.getFetchedStories()
+        mainData?.stories = stories
     }
 
     // Мы обращаемся к хранилищу за каталогом, инициируем сетевой запрос и забираем результаты. Так как спецпредложения это рандомная выборка из каталога, то можно делать это тут же.
     func getCatalogAndSpecialOffersFromStorage() {
-        getCategories()
         getSpecialOffers()
+        getCategories()
         getCatalog()
-//        setState(.success)
-    }
-
-    // Получаем категории и передаем в коллекцию
-    func getCategories() {
-        categories = storage.getCategories()
     }
 
     // Получаем спецпредложения и передаем в коллекцию
     func getSpecialOffers() {
-        promoItems = storage.getSpecialOffersArray()
+        let promoItems = storage.getSpecialOffersArray()
+        mainData?.promoItems = promoItems
+    }
+
+    // Получаем категории и передаем в коллекцию
+    func getCategories() {
+        let categories = storage.getCategories()
+        mainData?.categories = categories
     }
 
     // Получаем каталог и передаем в коллекцию
     func getCatalog() {
-        catalog = storage.getCatalog()
+        let catalog = storage.getCatalog()
+        mainData?.catalog = catalog
     }
+}
 
-    // Получаем состояние и передаем в коллекцию
-    func setState(_ state: ScreenState) {
-        self.state = state
+// MARK: - Feature Toggle
+private extension MainPresenter {
+    // Проверяется featureToggle (включена фича или нет)
+    // Прячем значок profile на основном экране (нужно при выключенной фиче)
+    func checkFeatureToggle(featureType: FeatureType) {
+        let isEnabled = featureTogglesService.isFeatureEnabled(featureType: featureType)
+        mainData?.featureToggle = [featureType: isEnabled]
     }
 }
 
 // MARK: - Supporting methods
-private extension MainViewModel {
+private extension MainPresenter {
     // Показать или не показать вью с заказом
     func isNeedToShowOrderView() {
         let isActiveOrder = UserDefaults.standard.isActiveOrder() // Проверяет у UserDefaults есть ли активный заказ
@@ -167,14 +171,16 @@ private extension MainViewModel {
 
     // Скрываем поле с заказом
     func hideOrderView() {
-        isShowOrderView = false
+        mainData?.order = OrderDetails(isActiveOrder: false)
     }
 
     // Забираем заказ из хранилища и отправляем его на вью
     func passOrderToView() {
         guard let order = storage.getOrder() else { print("We have no order in storage"); return }
-        orderPrice = storage.getCartPrice()
-        orderStatus = order.status.rawValue
+        let orderPrice = storage.getCartPrice()
+        let orderStatus = order.status.rawValue
+
+        mainData?.order = OrderDetails(isActiveOrder: true, orderPrice: orderPrice, orderStatus: orderStatus)
     }
 
     // Отправляем выбранный товар в хранилище
@@ -184,7 +190,7 @@ private extension MainViewModel {
 
     func showSelectedItem(_ item: Item) {
         sendSelectedItemToStorage(item)
-        onProductDetailsTapped?()
+        coordinatorEventHandler?(.showItemDetails)
     }
 
     // Запрашиваем данные о каталоге из хранилища, получаем конкретный товар, отмечаем его в хранилище как выбранный и открываем экран Product Details

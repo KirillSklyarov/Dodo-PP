@@ -37,6 +37,7 @@ final class AddNewAddressViewController: UIViewController {
     }
 }
 
+// MARK: - AddNewAddressViewControllerInput
 extension AddNewAddressViewController: AddNewAddressViewControllerInput {
     func setupInitialState() {
         setupUI()
@@ -142,12 +143,5 @@ private extension AddNewAddressViewController {
     func updateUIWithData(_ mainAddress: Address?) {
         guard let mainAddress else { print("No main address"); return }
         addressView.updateUIWithAddress(mainAddress)
-    }
-
-    // Мы начинаем флоу вью модели только после того как закончилась загрузка карты (чтобы не допустить ошибок и опережения)
-    func viewModelSetup() {
-        mapView.onMapLoaded = { [weak self] in
-            self?.output.loadData()
-        }
     }
 }

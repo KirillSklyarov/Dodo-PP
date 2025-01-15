@@ -4,12 +4,7 @@ protocol ItemDetailsViewControllerOutput: BaseViewControllerOutput where ActionT
 
 }
 
-enum ItemDetailsCoordinatorEvent {
-    case dismissModule
-    case showError
-    case showPopupVC(CpfcPopupView)
-}
-
+// Действия юзера от view
 enum ProductDetailsViewModelAction {
     case dismissButtonTapped
     case cartButtonTapped(Size, Dough)
@@ -17,27 +12,16 @@ enum ProductDetailsViewModelAction {
     case showPopupVC(CpfcPopupView)
 }
 
+// Действия для коориднатора
+enum ItemDetailsCoordinatorEvent {
+    case dismissModule
+    case showError
+    case showPopupVC(CpfcPopupView)
+}
+
 final class ItemDetailsPresenter {
     // MARK: - Published properties
     private var itemDetailsData = ItemDetailsData()
-
-    private var item: Item?
-    private var isOneSize: Bool?
-    private var isDoughOption: Bool?
-    private var weight: Int?
-    private var price: Int?
-    private var toppings: [Topping]?
-    private var productDetails: WeightPrice?
-
-//    var itemPublisher: Published<Item?>.Publisher { $item }
-//    var isOneSizePublisher: Published<Bool?>.Publisher { $isOneSize }
-//    var isDoughOptionPublisher: Published<Bool?>.Publisher { $isDoughOption }
-//    var weightPublisher: Published<Int?>.Publisher { $weight }
-//    var pricePublisher: Published<Int?>.Publisher { $price }
-//    var toppingsPublisher: Published<[Topping]?>.Publisher { $toppings }
-//    var productDetailsPublisher: Published<WeightPrice?>.Publisher { $productDetails }
-//
-//    lazy var weightPricePublisher = Publishers.CombineLatest(weightPublisher, pricePublisher)
 
     // MARK: - Other properties
     var coordinatorEventHandler: ((ItemDetailsCoordinatorEvent) -> Void)?
@@ -54,21 +38,25 @@ final class ItemDetailsPresenter {
 
 // MARK: - ItemDetailsViewControllerOutput
 extension ItemDetailsPresenter: ItemDetailsViewControllerOutput {
+    // Когда получаем сведения, что view загружена, то выставляем ей стартовое состояние и загружаем данные, потом проводим валидацию данных
     func viewLoaded() {
         view?.setupInitialState()
         loadData()
         checkDataAndUpdateView()
     }
 
+    // Выставляем статус загрузки и фетчим данные
     func loadData() {
         view?.showLoading()
         fetchData()
     }
 
+    // Если данные валидны, то обновляем view, если нет - показываем ошибку
     func checkDataAndUpdateView() {
         isDataValid() ? updateView() : setErrorState()
     }
 
+    // Обрабатываем действия юзера на view
     func sendAction(_ action: ProductDetailsViewModelAction) {
         switch action {
         case .dismissButtonTapped: coordinatorEventHandler?(.dismissModule)
@@ -83,11 +71,11 @@ extension ItemDetailsPresenter: ItemDetailsViewControllerOutput {
 private extension ItemDetailsPresenter {
     func fetchData() {
         fetchSelectedItem()
-        fetchToppings()
+//        fetchToppings()
     }
 
     func fetchSelectedItem() {
-        item = storage.getSelectedItemFromStorage()
+        let item = storage.getSelectedItemFromStorage()
         itemDetailsData = ItemDetailsData(item: item)
         updateUI()
     }
@@ -100,22 +88,20 @@ private extension ItemDetailsPresenter {
 
     // Решаем показывать или нет сегмент с размерами (если товар имеет только один размер, то показывать сегмент контрол не надо)
     func showOrHideSizeSegment() {
-        guard let item else { return }
+        guard let item = itemDetailsData.item else { return }
         itemDetailsData.isOneSize = item.hasOneSize()
-        isOneSize = item.hasOneSize() ? true : false
     }
 
     // Решаем показывать или нет сегмент с тестом (если товар не пицца, то показывать тесто не надо)
     func showOrHideDoughSegmentView() {
-        guard let item else { return }
+        guard let item = itemDetailsData.item else { return }
         let isPizza = item.category == .pizza
-        isDoughOption = isPizza
         itemDetailsData.isDoughOption = isPizza
     }
 
     // Обновляем вес и цену товара
     func updateWeightAndPriceUI() {
-        guard let item else { return }
+        guard let item = itemDetailsData.item else { return }
         if item.hasOneSize() {
             itemDetailsData.weight = item.itemSize.oneSize?.weight
             itemDetailsData.price = item.itemSize.oneSize?.price
@@ -123,16 +109,16 @@ private extension ItemDetailsPresenter {
     }
 
     // Загружаем начинки
-    func fetchToppings() {
-        guard let fetchedToppings = item?.toppings else { return }
-        toppings = fetchedToppings
-    }
+//    func fetchToppings() {
+//        guard let fetchedToppings = item?.toppings else { return }
+//        toppings = fetchedToppings
+//    }
 }
 
 // MARK: - Supporting methods
 private extension ItemDetailsPresenter {
     func isDataValid() -> Bool {
-        return item != nil
+        return itemDetailsData.item != nil
     }
 
     func updateView() {
@@ -141,6 +127,7 @@ private extension ItemDetailsPresenter {
 
     func setErrorState() {
         view?.showError()
+        coordinatorEventHandler?(.showError)
     }
 
     // При нажатии на кнопку корзины мы формируем заказ, добавляем позицию в заказ и отрабатываем замыкания
@@ -152,8 +139,8 @@ private extension ItemDetailsPresenter {
 
     // Когда меняются значения на сегментах (вес), то мы обновляем на вью вес товара и цену товара
     func itemSegmentValueChanged(_ index: Int) {
-        productDetails = item?.itemSize.getWeightAndPriceViaIndex(index)
-        guard let productDetails else { return }
+        guard let item = itemDetailsData.item else { return }
+        guard let productDetails = item.itemSize.getWeightAndPriceViaIndex(index) else { return }
         view?.changeViewWithSelectedSize(productDetails)
     }
 
@@ -163,7 +150,7 @@ private extension ItemDetailsPresenter {
     }
 
     func configureCart(_ size: Size, _ dough: Dough) -> CartItem? {
-        guard let item else { return nil}
+        guard let item = itemDetailsData.item else { return nil}
         let chosenSize = getCorrectSize(size)
         let chosenDough = getCorrectDough(dough)
         let weight = item.getWeight(size: chosenSize)
@@ -176,7 +163,7 @@ private extension ItemDetailsPresenter {
 
     // Если есть размер oneSize, то берем его, если нет - выбранный размер
     func getCorrectSize(_ size: Size) -> Size {
-        guard let item else { return .oneSize }
+        guard let item = itemDetailsData.item else { return .oneSize }
         let chosenSize = size
         let correctSize = item.hasOneSize() ? .oneSize : chosenSize
         return correctSize
@@ -184,14 +171,14 @@ private extension ItemDetailsPresenter {
 
     // Если товар - пицца, то берем тесто, если нет - ничего
     func getCorrectDough(_ dough: Dough) -> Dough? {
-        guard let item else { return nil }
+        guard let item = itemDetailsData.item else { return nil }
         let chosenDough = dough
         let correctDough = item.category == .pizza ? chosenDough : nil
         return correctDough
     }
 
     func getCorrectWeight() -> Int {
-        guard let item else { return 0 }
+        guard let item = itemDetailsData.item else { return 0 }
         var weight: Int?
         if item.hasOneSize() {
             weight = item.itemSize.oneSize?.weight

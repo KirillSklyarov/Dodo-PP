@@ -50,7 +50,7 @@ extension FeatureToggleStorage {
         }
 
         self.features = appDict
-        print("features \(features)")
+//        print("features \(features)")
     }
 
     // Отдаем правильные словарь фичей
