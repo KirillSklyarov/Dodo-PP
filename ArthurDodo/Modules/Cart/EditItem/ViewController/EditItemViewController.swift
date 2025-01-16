@@ -1,4 +1,5 @@
 import UIKit
+import ActivityIndicatorSPM
 
 protocol EditItemViewControllerInput: BaseViewControllerInput where inputData == ( CartItem, [Topping], WeightPrice) {
 
@@ -16,7 +17,7 @@ final class EditItemViewController: UIViewController {
     private lazy var contentStack = AppStackView([itemDetailsView, infoAndToppingsContainer], axis: .vertical, spacing: 5)
     private lazy var scrollView = configScrollView()
 
-    private lazy var activityIndicator = AppActivityIndicator()
+    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
 
     // MARK: - Presenter
     let output: any EditItemViewControllerOutput

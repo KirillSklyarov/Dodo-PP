@@ -1,4 +1,5 @@
 import UIKit
+import ActivityIndicatorSPM
 
 protocol ChoosePaymentMethodVCInput: BaseViewControllerInput where inputData == PaymentMethod {
 
@@ -12,7 +13,7 @@ final class ChoosePaymentMethodVC: UIViewController {
 
     private lazy var contentStack = AppStackView([headerView, paymentMethodsTableView], axis: .vertical, spacing: 10)
 
-    private lazy var activityIndicator = AppActivityIndicator()
+    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
 
     // MARK: - Output
     let output: any ChoosePaymentMethodVCOutput

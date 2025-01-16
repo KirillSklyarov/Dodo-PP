@@ -1,4 +1,5 @@
 import UIKit
+import ActivityIndicatorSPM
 
 protocol ChooseAddressViewInput: AnyObject {
     func setInitialState()
@@ -13,7 +14,7 @@ final class ChooseAddressViewController: UIViewController, ModuleTransitionable 
     // MARK: - UI Properties
     private lazy var headerView = AppNavigationBarView(type: .chooseAddress) // Заголовок с кнопкой
     private lazy var addressTableView = DeliveryAddressListTableView()
-    private lazy var activityIndicator = AppActivityIndicator()
+    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
 
     // MARK: - Presenter
     let output: any ChooseAddressViewControllerOutput

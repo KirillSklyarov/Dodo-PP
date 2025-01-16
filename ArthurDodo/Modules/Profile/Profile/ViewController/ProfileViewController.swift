@@ -1,4 +1,5 @@
 import UIKit
+import ActivityIndicatorSPM
 
 protocol ProfileViewInput: BaseViewControllerInput where inputData == (profile: User, promo: [Promo]) {
 }
@@ -13,7 +14,7 @@ final class ProfileViewController: UIViewController, ModuleTransitionable {
     private lazy var contentStackView = AppStackView([personalDataCollectionView, promoStackView, missionStackView], axis: .vertical, spacing: 10)
     private lazy var scrollView = setupScrollView()
 
-    private lazy var activityIndicator = AppActivityIndicator()
+    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
 
     // MARK: - Other Properties
     let output: any ProfileViewOutput

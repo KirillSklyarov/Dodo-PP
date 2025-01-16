@@ -1,4 +1,5 @@
 import UIKit
+import ActivityIndicatorSPM
 
 protocol DeliveryViewControllerInput: BaseViewControllerInput where inputData == DeliveryData {
 }
@@ -19,7 +20,7 @@ final class DeliveryViewController: UIViewController {
 
     private lazy var contentStackView = configureStackView()
 
-    private lazy var activityIndicator = AppActivityIndicator()
+    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
 
     // MARK: - Other Properties
     let output: any DeliveryViewControllerOutput

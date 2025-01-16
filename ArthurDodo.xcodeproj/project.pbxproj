@@ -153,6 +153,7 @@
 		737537DD2D15C00A00D6E056 /* PersonalPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737537DA2D15C00A00D6E056 /* PersonalPresenter.swift */; };
 		737537E92D15D4B500D6E056 /* AddressPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737537E62D15D4B500D6E056 /* AddressPresenter.swift */; };
 		737537EF2D15D4EA00D6E056 /* AddNewAddressPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737537EE2D15D4EA00D6E056 /* AddNewAddressPresenter.swift */; };
+		7375CA232D38FE7900772EFB /* ActivityIndicatorSPM in Frameworks */ = {isa = PBXBuildFile; productRef = 7375CA222D38FE7900772EFB /* ActivityIndicatorSPM */; };
 		7378987D2D2DBB2500741A78 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7378987A2D2DBB2500741A78 /* ProfilePresenter.swift */; };
 		737898A82D2DBB3C00741A78 /* CoinsOrdersCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737898972D2DBB3C00741A78 /* CoinsOrdersCollectionView.swift */; };
 		737898A92D2DBB3C00741A78 /* CoinsOrdersCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737898982D2DBB3C00741A78 /* CoinsOrdersCollectionViewCell.swift */; };
@@ -540,6 +541,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7375CA232D38FE7900772EFB /* ActivityIndicatorSPM in Frameworks */,
 				73BA01EE2CE8B4CE003117F6 /* SkeletonView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2382,6 +2384,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				73BA01EC2CE8B4CE003117F6 /* XCRemoteSwiftPackageReference "SkeletonView" */,
+				7375CA212D38FE7900772EFB /* XCRemoteSwiftPackageReference "ActivityIndicatorSPM" */,
 			);
 			productRefGroup = 737D0DCC2C99BF7000B7D739;
 			projectDirPath = "";
@@ -2891,6 +2894,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7375CA212D38FE7900772EFB /* XCRemoteSwiftPackageReference "ActivityIndicatorSPM" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/KirillSklyarov/ActivityIndicatorSPM.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		73BA01EC2CE8B4CE003117F6 /* XCRemoteSwiftPackageReference "SkeletonView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Juanpe/SkeletonView.git";
@@ -2902,6 +2913,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7375CA222D38FE7900772EFB /* ActivityIndicatorSPM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7375CA212D38FE7900772EFB /* XCRemoteSwiftPackageReference "ActivityIndicatorSPM" */;
+			productName = ActivityIndicatorSPM;
+		};
 		73BA01ED2CE8B4CE003117F6 /* SkeletonView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 73BA01EC2CE8B4CE003117F6 /* XCRemoteSwiftPackageReference "SkeletonView" */;

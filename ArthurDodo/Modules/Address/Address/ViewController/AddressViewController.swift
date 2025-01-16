@@ -1,4 +1,5 @@
 import UIKit
+import ActivityIndicatorSPM
 
 protocol AddressViewControllerInput: BaseViewControllerInput where inputData == [Address] {
     func showAddressOnMap()
@@ -12,7 +13,7 @@ final class AddressViewController: UIViewController {
     private lazy var addressView = DeliveryAddressView()
     private lazy var contentStack = AppStackView([mapView, addressView], axis: .vertical, spacing: -10)
 
-    private lazy var activityIndicator = AppActivityIndicator()
+    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
 
     // MARK: - Output
     let output: any AddressViewControllerOutput

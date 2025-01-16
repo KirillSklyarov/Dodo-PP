@@ -1,4 +1,5 @@
 import UIKit
+import ActivityIndicatorSPM
 
 protocol AddNewAddressViewControllerInput: BaseViewControllerInput where inputData == Address {
 
@@ -13,7 +14,7 @@ final class AddNewAddressViewController: UIViewController {
     private lazy var addressView = AddAddressView()
     private lazy var contentStackView = AppStackView([mapView, addressView], axis: .vertical, spacing: -5, distribution: .fill)
 
-    private lazy var activityIndicator = AppActivityIndicator()
+    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
 
     // MARK: - Output
     let output: any AddNewAddressViewControllerOutput
