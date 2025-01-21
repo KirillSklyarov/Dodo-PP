@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Вью с адресом и временем доставки на главном экране
 final class AddressStackView: UIStackView {

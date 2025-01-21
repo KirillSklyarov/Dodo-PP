@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 protocol PromoViewInput: AnyObject {
     func setInitialState()

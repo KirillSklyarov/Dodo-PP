@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Блок на экране с ингредиентами, весом и экраном с КБЖУ
 final class IngredientsView: UIView {

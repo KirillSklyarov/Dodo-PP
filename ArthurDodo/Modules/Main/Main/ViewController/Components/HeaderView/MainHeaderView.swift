@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 import SkeletonView
 
 final class MainHeaderView: UIView {

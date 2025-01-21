@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 import MapKit
 
 final class UserTrackingButton: MKUserTrackingButton {

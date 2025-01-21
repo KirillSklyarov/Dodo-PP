@@ -1,5 +1,5 @@
 import UIKit
-import ActivityIndicatorSPM
+import AppUIComponentsSPM
 
 protocol FinalViewControllerInput: BaseViewControllerInput where inputData == Int {
     func updateUI(_ seconds: Int)
@@ -11,7 +11,7 @@ final class FinalViewController: UIViewController {
     private lazy var dismissButton = AppDismissButtonView(type: .standard)
     private lazy var contentStack = FinalVCContentStackView()
 
-    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
+    private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Properties
     let output: any FinalViewControllerOutput
@@ -101,16 +101,3 @@ private extension FinalViewController {
         contentStack.alpha = show ? 1 : 0
     }
 }
-
-//// MARK: - Data binding
-//private extension FinalViewController {
-//    func dataBinding() {
-//        viewModel.timerPublisher
-//            .receive(on: RunLoop.main)
-//            .sink { [weak self] seconds in
-//                guard let self else { return }
-//                updateUI(seconds)
-//            }
-//            .store(in: &cancellables)
-//    }
-//}

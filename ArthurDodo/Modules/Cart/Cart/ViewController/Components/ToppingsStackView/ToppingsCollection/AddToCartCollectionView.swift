@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Это коллекция, которая отвечает за добавление новой позиции к действующему заказу (блок "Добавить к заказу")
 final class AddToCartCollectionView: UICollectionView {

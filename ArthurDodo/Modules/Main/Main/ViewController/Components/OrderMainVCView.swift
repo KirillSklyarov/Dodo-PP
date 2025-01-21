@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Это вью, которая появляется при оформлении заказа (с номером заказа и его статусом)
 final class OrderMainVCView: UIView {

@@ -1,5 +1,5 @@
 import UIKit
-import ActivityIndicatorSPM
+import AppUIComponentsSPM
 
 protocol MainViewControllerInput: BaseViewControllerInput where inputData == MainData {
     func updateStories()
@@ -16,7 +16,7 @@ final class MainViewController: UIViewController {
 
     private lazy var contentStackView = AppStackView([headerView, orderView, contentCollectionView], axis: .vertical, spacing: 5)
 
-    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
+    private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Output
     let output: any MainViewControllerOutput

@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Нижний блок с ценой и кнопкой на экране редактирования товара
 final class EditCartButtonView: UIView {

@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Секция выйти из профиля личных данных на экране профиля
 final class QuitProfileTableViewCell: UITableViewCell {

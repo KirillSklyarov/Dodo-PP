@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Вью с картинкой и сегмент контроллерами на экране редактирования товара
 final class EditItemDetailsView: UIView {
@@ -68,7 +69,7 @@ extension EditItemDetailsView {
 // MARK: - Setup UI
 private extension EditItemDetailsView {
     func setupUI() {
-        backgroundColor = AppColorsEnum.productBackground.color
+        backgroundColor = AppColors.detailsBackground
         layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
 

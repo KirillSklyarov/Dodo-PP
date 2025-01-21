@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 protocol SupportViewInput: AnyObject {
     func setInitialState()

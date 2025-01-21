@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Ячейка таблицы с адресами на экране адресов
 final class AddressTableViewCell: UITableViewCell {

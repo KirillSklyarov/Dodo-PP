@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Первая большая ячейка в коллекции с товарами
 final class ItemsHeaderCell: UICollectionViewCell {

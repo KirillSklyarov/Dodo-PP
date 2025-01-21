@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Ячейка раздела Акции в профиле и в корзине
 final class PromoCollectionCell: UICollectionViewCell {

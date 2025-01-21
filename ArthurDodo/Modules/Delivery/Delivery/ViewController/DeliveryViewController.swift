@@ -1,5 +1,5 @@
 import UIKit
-import ActivityIndicatorSPM
+import AppUIComponentsSPM
 
 protocol DeliveryViewControllerInput: BaseViewControllerInput where inputData == DeliveryData {
 }
@@ -8,11 +8,12 @@ final class DeliveryViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = AppNavigationBarView(type: .delivery) // Заголовок с кнопкой
-    private lazy var addressLabel = DeliveryVCLabel(title: "Адрес доставки") // Адрес доставки
+    private lazy var addressLabel = DeliveryVCLabel(type: .deliveryAddress) // Адрес доставки
     private lazy var addressTableView = AddressTableView() // Таблица с адресом
-    private lazy var timeLabel = DeliveryVCLabel(title: "Время доставки") // Время доставки
+    private lazy var timeLabel = DeliveryVCLabel(type: .deliveryTime) // Время доставки
     private lazy var timeCollection = TimeCollectionView() // Коллекция со временем
-    private lazy var paymentLabel = DeliveryVCLabel(title: "Оплата") // Оплата
+
+    private lazy var paymentLabel = DeliveryVCLabel(type: .paymentMethod) // Оплата
     private lazy var paymentTableView = PreferredPaymentMethodTableView() // Коллекция с методами оплаты
     private lazy var orderDetailsView = DodoCoinsView(title: "Доставка", value: "Бесплатно", textColor: AppColors.grayFont) // Блок с доставкой
     private lazy var totalPriceView = OrderTotalPriceView() // Общая стоимость заказа
@@ -20,7 +21,7 @@ final class DeliveryViewController: UIViewController {
 
     private lazy var contentStackView = configureStackView()
 
-    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
+    private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Other Properties
     let output: any DeliveryViewControllerOutput

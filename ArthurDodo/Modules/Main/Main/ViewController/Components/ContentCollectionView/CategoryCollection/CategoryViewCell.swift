@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Ячейка с названиями категорий на основном экране
 final class CategoryViewCell: UICollectionViewCell {

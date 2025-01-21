@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Ячейка раздела "Добавить к заказу" корзины
 final class AddToCartCollectionCell: UICollectionViewCell {

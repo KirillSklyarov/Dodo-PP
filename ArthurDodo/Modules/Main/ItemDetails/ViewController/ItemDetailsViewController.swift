@@ -1,5 +1,5 @@
 import UIKit
-import ActivityIndicatorSPM
+import AppUIComponentsSPM
 
 protocol ItemDetailsViewControllerInput: BaseViewControllerInput where inputData == ItemDetailsData {
     func changeViewWithSelectedSize(_ itemDetails: WeightPrice)
@@ -9,7 +9,7 @@ protocol ItemDetailsViewControllerInput: BaseViewControllerInput where inputData
 final class ItemDetailsViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var headerView = ProductHeaderView()
+    private lazy var headerView = ProductHeaderView(type: .itemDetails)
     private lazy var itemDetailsView = DetailsView()
     private lazy var infoAndToppingsContainer = InfoAndToppingsView()
     private lazy var cartButtonView = AppCartButtonView(type: .itemDetail)
@@ -17,7 +17,7 @@ final class ItemDetailsViewController: UIViewController {
 
     private lazy var scrollView = configScrollView()
 
-    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
+    private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Presenter
     let output: any ItemDetailsViewControllerOutput

@@ -1,13 +1,13 @@
 {
-  "originHash" : "7a73b19640b10ace09967bf74df4e2e22f629b5e4015b559d9991b38abe4fd18",
+  "originHash" : "5a30d76444e13d023ebc149be422d4b0d8d1791a6ae0d81674a288ea54bd8e06",
   "pins" : [
     {
-      "identity" : "activityindicatorspm",
+      "identity" : "appuicomponentsspm",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/KirillSklyarov/ActivityIndicatorSPM.git",
+      "location" : "https://github.com/KirillSklyarov/AppUIComponentsSPM.git",
       "state" : {
         "branch" : "main",
-        "revision" : "04fd7932331f9d8251eaeadd2e7d74c1c3dcb463"
+        "revision" : "20b8642a4dab07a0122088dea08796e47f722b79"
       }
     },
     {

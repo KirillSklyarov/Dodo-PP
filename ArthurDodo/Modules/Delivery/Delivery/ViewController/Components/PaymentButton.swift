@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Кнопка "Оплатить" на экране "Доставка", которая меняет дизайн в зависимости от выбранного способа оплаты
 final class PaymentButtonView: UIView {

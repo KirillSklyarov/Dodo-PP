@@ -3,12 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>UIAppFonts</key>
-	<array>
-		<string>SF-Pro-Rounded-Semibold.otf</string>
-		<string>SF-Pro-Rounded-Bold.otf</string>
-		<string>SF-Pro-Rounded-Regular.otf</string>
-		<string>SF-Pro-Rounded-Medium.otf</string>
-	</array>
+	<array/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Мы используем ваше местоположение для показа карты.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

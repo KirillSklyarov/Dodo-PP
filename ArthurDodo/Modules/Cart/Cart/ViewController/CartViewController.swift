@@ -1,5 +1,5 @@
 import UIKit
-import ActivityIndicatorSPM
+import AppUIComponentsSPM
 
 protocol CartViewControllerInput: BaseViewControllerInput where inputData == CartData {
 
@@ -21,7 +21,7 @@ final class CartViewController: UIViewController {
 
     private lazy var contentStack = AppStackView([headerView, scrollView, cartButtonView], axis: .vertical)
 
-    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
+    private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Presenter
     let output: any CartViewControllerOutput

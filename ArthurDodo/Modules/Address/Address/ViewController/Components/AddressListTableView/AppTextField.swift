@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 final class AppTextField: UITextField {
 
@@ -7,7 +8,7 @@ final class AppTextField: UITextField {
 
         let placeholder = "1"
         textColor = .white
-        font = AppFonts.semibold14
+        font = AppFonts.semibold(size: 14).font
         attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [.foregroundColor: AppColors.grayFont])
     }
     

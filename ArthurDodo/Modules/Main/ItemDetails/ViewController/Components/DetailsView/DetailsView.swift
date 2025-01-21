@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Вью с картинкой и сегментами на экране DetailsVC
 final class DetailsView: UIView {

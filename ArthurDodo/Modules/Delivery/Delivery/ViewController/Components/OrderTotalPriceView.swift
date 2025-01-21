@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Нижний блок экрана "Доставка" с ценой заказа
 final class OrderTotalPriceView: UIView {

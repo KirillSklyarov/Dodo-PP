@@ -1,5 +1,5 @@
 import UIKit
-import ActivityIndicatorSPM
+import AppUIComponentsSPM
 
 protocol EditItemViewControllerInput: BaseViewControllerInput where inputData == ( CartItem, [Topping], WeightPrice) {
 
@@ -9,7 +9,7 @@ protocol EditItemViewControllerInput: BaseViewControllerInput where inputData ==
 final class EditItemViewController: UIViewController {
 
     // MARK: - UI Properties
-    private lazy var headerView = ProductHeaderView() // Заголовок с названием
+    private lazy var headerView = ProductHeaderView(type: .itemEdit) // Заголовок с названием
     private lazy var itemDetailsView = EditItemDetailsView() // Основной блок с картинкой и сегментами
     private lazy var infoAndToppingsContainer = InfoAndToppingsView() // Блок с составом и топпингами
     private lazy var cartButtonView = EditCartButtonView() // Блок с ценой и кнопкой
@@ -17,7 +17,7 @@ final class EditItemViewController: UIViewController {
     private lazy var contentStack = AppStackView([itemDetailsView, infoAndToppingsContainer], axis: .vertical, spacing: 5)
     private lazy var scrollView = configScrollView()
 
-    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
+    private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Presenter
     let output: any EditItemViewControllerOutput
@@ -91,7 +91,6 @@ private extension EditItemViewController {
     }
 
     func setupProductHeaderViewLayout() {
-        headerView.setViewHeight(.small)
         headerView.setLocalConstraints(top: 0, left: 0, right: 0)
     }
 

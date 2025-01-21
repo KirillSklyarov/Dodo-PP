@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Ячейка таблицы с товарами в корзине (самая верхняя секция под хэдером)
 final class CartProductCell: UITableViewCell {

@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 enum CPFCData: String, Codable, CaseIterable {
     case weight = "Вес"

@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Это кнопка профиля на главном экране с додокоинами и картинкой
 final class ProfileMainHeaderView: UIView {

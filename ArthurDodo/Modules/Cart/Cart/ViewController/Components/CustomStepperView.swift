@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Степпер, который переключает кол-во единиц позиции в заказе
 final class CustomStepperView: UIView {

@@ -34,5 +34,3 @@ extension UIColor {
                       lroundf(Float(blue * 255)))
     }
 }
-
-

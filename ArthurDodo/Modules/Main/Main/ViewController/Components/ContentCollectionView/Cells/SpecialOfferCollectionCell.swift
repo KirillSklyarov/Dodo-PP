@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Коллекция "Вам понравится" на главном экране
 final class SpecialOfferCollectionCell: UICollectionViewCell {

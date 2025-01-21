@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Хэдер с сегмент контроллерами (доставки или в пиццерии) и кнопкой закрытия на экране карты
 final class AddressHeaderView: UIView {

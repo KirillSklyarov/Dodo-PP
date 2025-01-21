@@ -1,5 +1,5 @@
 import UIKit
-import ActivityIndicatorSPM
+import AppUIComponentsSPM
 
 protocol EditAddressViewControllerInput: BaseViewControllerInput where inputData == Address {
     func updateShortAddress(_ address: Address)
@@ -13,7 +13,7 @@ final class EditAddressViewController: UIViewController {
     private lazy var contentStackView = AppStackView([mapView, addressContainerView], axis: .vertical, spacing: -5, distribution: .fillEqually)
     private lazy var dismissButton = AppDismissButtonView(type: .chevron)
 
-    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
+    private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Output
     let output: any EditAddressViewControllerOutput

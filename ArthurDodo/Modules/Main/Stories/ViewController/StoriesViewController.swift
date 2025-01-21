@@ -1,5 +1,5 @@
 import UIKit
-import ActivityIndicatorSPM
+import AppUIComponentsSPM
 
 protocol StoriesViewControllerInput: BaseViewControllerInput where inputData == Int {
     func setupProgressViews(_ countOfSubStories: Int)
@@ -16,7 +16,7 @@ final class StoriesViewController: UIViewController {
     private lazy var progressViewsStack = AppStackView([], axis: .horizontal, spacing: 15, distribution: .fillEqually)
     private lazy var contentStack = AppStackView([progressViewsStack, dismissButton], axis: .horizontal, spacing: 10, alignment: .center)
 
-    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
+    private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Other properties
     private lazy var progressViews: [UIProgressView] = []

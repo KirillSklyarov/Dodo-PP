@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 final class PersonalTableView: UITableView {
 

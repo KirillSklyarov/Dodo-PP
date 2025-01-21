@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 final class OrderDetailsView: UIStackView {
 
@@ -39,4 +40,3 @@ private extension OrderDetailsView {
         spacing = 8
     }
 }
-

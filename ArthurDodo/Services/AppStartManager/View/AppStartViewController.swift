@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 final class AppStartViewController: UIViewController {
 
@@ -7,7 +8,7 @@ final class AppStartViewController: UIViewController {
         let label = UILabel()
         label.text = "D"
         label.textColor = AppColors.buttonOrange
-        label.font = AppFontsEnum.bold(size: 270).font
+        label.font = AppFonts.bold(size: 270).font
         label.textAlignment = .center
         label.alpha = 0
         return label
@@ -79,25 +80,3 @@ private extension AppStartViewController {
             self?.onStartAppScreenFinished?() }
     }
 }
-
-// MARK: - CAAnimationDelegate
-//extension AppStartViewController: CAAnimationDelegate {
-//    // Когда анимация метода setupAnimation() заканчивается, то стартуем новую анимацию
-//    func animationDidStop(_ animation: CAAnimation, finished flag: Bool) {
-//        dLabel.layer.mask = nil // Убираем градиент
-//        appearingAnimation() // Показываем новую анимацию
-//    }
-//
-//    // Настраиваем анимацию
-//    func setupAnimation() {
-//        let animation = CABasicAnimation(keyPath: "locations")
-//        animation.fromValue = [-0.5, -0.25, 0]
-//        animation.toValue = [1.0, 1.25, 2]
-//        animation.duration = 2.0
-//        animation.repeatCount = 1
-//        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-//        animation.delegate = self
-//
-//        gradientLayer.add(animation, forKey: "shimmerAnimation")
-//    }
-//}

@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Горизонтальная коллекция в профиле с додокоинами, заказами и адресами
 final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
@@ -76,7 +77,7 @@ private extension CoinsOrdersCollectionViewCell {
     // Настраиваем лейбл
     func designOrderLabel() {
         titleLabel.text = "Mои заказы"
-        titleLabel.font = AppFonts.bold22
+        titleLabel.font = AppFonts.bold(size: 22).font
     }
 
     // Настраиваем кнопку с заказами
@@ -106,7 +107,7 @@ private extension CoinsOrdersCollectionViewCell {
     func setTitle() {
         titleLabel.text = "Адреса доставки"
         titleLabel.numberOfLines = 0
-        titleLabel.font = AppFonts.bold22
+        titleLabel.font = AppFonts.bold(size: 22).font
     }
 
     // Устанавливаем адреса

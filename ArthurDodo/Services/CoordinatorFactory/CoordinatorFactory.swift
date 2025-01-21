@@ -1,5 +1,6 @@
 import UIKit
 
+// Enum всех координаторов в проекте
 enum appCoordinator {
     case app
     case main
@@ -27,11 +28,11 @@ final class CoordinatorFactory {
         let coordinator: Coordinator =
         switch route {
         case .app: makeAppCoordinator()
-        case .main:  makeMainCoordinator()
-        case .profile:  makeProfileCoordinator()
-        case .address:  makeAddressCoordinator()
-        case .cart:  makeCartCoordinator()
-        case .delivery:  makeDeliveryCoordinator()
+        case .main: makeMainCoordinator()
+        case .profile: makeProfileCoordinator()
+        case .address: makeAddressCoordinator()
+        case .cart: makeCartCoordinator()
+        case .delivery: makeDeliveryCoordinator()
         }
 
         guard let typedCoordinator = coordinator as? T else { fatalError("Wrong coordinator type") }

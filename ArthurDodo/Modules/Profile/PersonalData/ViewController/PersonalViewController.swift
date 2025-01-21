@@ -1,5 +1,5 @@
 import UIKit
-import ActivityIndicatorSPM
+import AppUIComponentsSPM
 
 protocol PersonalViewInput: BaseViewControllerInput {
     func configure(with profile: User)
@@ -13,7 +13,7 @@ final class PersonalViewController: UIViewController, ModuleTransitionable {
     private lazy var personalTableView = PersonalTableView()
     private lazy var contentStackView = AppStackView([headerView, personalTableView], axis: .vertical, spacing: 10)
 
-    private lazy var activityIndicator = ActivityIndicatorSPM.AppActivityIndicator()
+    private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Properties
     let output: PersonalViewOutput

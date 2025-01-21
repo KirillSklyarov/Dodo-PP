@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 enum AddressTextFieldType: String {
     case streetAndFlat = "Город, улица и дом"

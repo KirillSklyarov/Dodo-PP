@@ -48,6 +48,5 @@ extension UIView {
         if let right {
             trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -right).isActive = true
         }
-
     }
 }

@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Вью курьера на хэдере главного экрана
 final class CourierView: UIView {

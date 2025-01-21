@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 // Это вью на главном экране в хэдере справа: синяя вью с додокоинами и монеткой
 final class MainProfileCoinsView: UIView {
