@@ -1,10 +1,3 @@
-//
-//  Int+Seconds.swift
-//  ArthurDodo
-//
-//  Created by Kirill Sklyarov on 03.11.2024.
-//
-
 import Foundation
 
 extension Int {

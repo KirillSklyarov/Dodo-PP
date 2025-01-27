@@ -1547,6 +1547,7 @@
 				73031AF02CDE3AA3005928D2 /* Skeleton */,
 				7321ABDE2D06265000380085 /* ProductHeaderView.swift */,
 				734CC70A2D0C588800E902ED /* DeliveryVCLabel.swift */,
+				730BB1012CF76C1800C18126 /* InsetLabel.swift */,
 			);
 			path = "SPM-Archive";
 			sourceTree = "<group>";
@@ -2193,7 +2194,6 @@
 		73B969D62CC7C7C000A2415A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				730BB1012CF76C1800C18126 /* InsetLabel.swift */,
 				73B969D22CC7C7C000A2415A /* UICollection+Ext.swift */,
 				73272C932CF37C6200AEAF09 /* Layout+Ext.swift */,
 				73C067D82CE73FA500AEB125 /* UICollectionViewCell.swift */,
