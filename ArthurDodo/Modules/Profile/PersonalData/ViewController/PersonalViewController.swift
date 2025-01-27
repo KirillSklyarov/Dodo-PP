@@ -1,12 +1,11 @@
 import UIKit
 import AppUIComponentsSPM
 
-protocol PersonalViewInput: BaseViewControllerInput {
-    func configure(with profile: User)
+protocol PersonalViewInput: BaseViewControllerInput where inputData == User {
 }
 
 // Экран с личными данными юзера (имя, почта, телефон и проч.)
-final class PersonalViewController: UIViewController, ModuleTransitionable {
+final class PersonalViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var headerView = AppNavigationBarView(type: .personal) // Заголовок с кнопкой
@@ -16,10 +15,10 @@ final class PersonalViewController: UIViewController, ModuleTransitionable {
     private lazy var activityIndicator = AppActivityIndicator()
 
     // MARK: - Properties
-    let output: PersonalViewOutput
+    let output: any PersonalViewOutput
 
     // MARK: - Init
-    init(output: PersonalViewOutput) {
+    init(output: any PersonalViewOutput) {
         self.output = output
         super.init(nibName: nil, bundle: nil)
     }

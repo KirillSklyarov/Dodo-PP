@@ -30,13 +30,13 @@ final class ProfilePresenter {
     private var promo: [Promo]?
 
     // MARK: - Other properties
-    private let storage: ProfileStorage
+    private let storage: ProfileStorageProtocol
     weak var view: (any ProfileViewInput)?
 
     var coordinatorEventHandler: ((ProfileCoordinatorEvent) -> Void)?
 
     // MARK: - Init
-    init(storage: ProfileStorage) {
+    init(storage: ProfileStorageProtocol) {
         self.storage = storage
     }
 }
@@ -69,7 +69,6 @@ extension ProfilePresenter: ProfileViewOutput {
         case .chatAlertButtonTapped: coordinatorEventHandler?(.showSupportModule)
         case .dismissButtonTapped: coordinatorEventHandler?(.dismissModule)
         case .personalDataButtonTapped: coordinatorEventHandler?(.showPersonalDataModule)
-
         case .promoTapped(let promo): promoTapped(promo)
         case .addressCellTapped: coordinatorEventHandler?(.showChooseAddressModule)
         }

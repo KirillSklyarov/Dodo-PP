@@ -17,6 +17,7 @@ enum ProfileModule {
 enum ProfileError {
     case profileError
     case chooseAddressError
+    case personalDataError
 }
 
 // Класс фабрика экранов отвечает за создание экранов
@@ -50,7 +51,7 @@ extension ProfileModuleFactory: ProfileModuleFactoryProtocol {
         switch errorAlert {
         case .profileError: makeErrorAlertScreen(.profile) { completion?() }
         case .chooseAddressError: makeErrorAlertScreen(.chooseAddress) { completion?() }
-
+        case .personalDataError: makeErrorAlertScreen(.personalData) { completion?() }
 
 //        case .profile: makeErrorAlertScreen(.profile) { completion?() }
 //        case .cart: makeErrorAlertScreen(.cart) { completion?() }
@@ -58,6 +59,7 @@ extension ProfileModuleFactory: ProfileModuleFactoryProtocol {
 //        case .chooseAddress: makeErrorAlertScreen(.chooseAddress) { completion?() }
 //        case .personalData: makeErrorAlertScreen(.personalData) { completion?() }
 //        default: UIAlertController()
+
         }
     }
 }

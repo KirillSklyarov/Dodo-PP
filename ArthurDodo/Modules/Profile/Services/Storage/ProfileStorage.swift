@@ -5,6 +5,16 @@ protocol PromoStorageProtocol: AnyObject {
     func getSelectedPromo() -> Promo?
 }
 
+protocol ProfileStorageProtocol: PromoStorageProtocol {
+    func setUserData(_ user: User)
+    func getUserData() -> User?
+    func getUserAddresses() -> [Address]?
+    func isUserDataLoaded() -> Bool
+    
+    func setPromo(_ promos: [Promo])
+    func getPromo() -> [Promo]
+}
+
 // Хранилище данных пользователя (фио, телефон, кол-во додокоинов и проч), а также акции, которые есть на экране профиля
 final class ProfileStorage {
 
@@ -15,7 +25,7 @@ final class ProfileStorage {
 }
 
 // MARK: - Methods
-extension ProfileStorage {
+extension ProfileStorage: ProfileStorageProtocol {
     // Получаем личные данные
     func setUserData(_ user: User) {
         fetchedUserData = user
@@ -40,10 +50,7 @@ extension ProfileStorage {
     func getDodoCoins() -> Int {
         fetchedUserData?.dodoCoins ?? 0
     }
-}
 
-// MARK: - PromoStorageProtocol (храним выбранную акцию)
-extension ProfileStorage: PromoStorageProtocol {
     // Устанавливаем выбранную акцию
     func setSelectedPromo(_ promo: Promo) {
         selectedPromo = promo

@@ -1,4 +1,5 @@
 import UIKit
+import SafariServices
 
 final class ProfileCoordinator {
     // MARK: - Properties
@@ -56,7 +57,24 @@ private extension ProfileCoordinator {
 
     func showPersonalDataModule() {
         let vc = moduleFactory.makeModule(for: .personalData)
+        guard let vc = vc as? PersonalViewController else { return }
+        let presenter = vc.output
+
+        presenter.coordinatorEventHandler = { [weak self, weak vc] coordinatorEvent in
+            guard let self, let vc else { return }
+            switch coordinatorEvent {
+            case .dismissModule: router.dismiss()
+            case .showLegalInfoModule(let url): showURL(url: url, view: vc)
+            case .showPersonalDataErrorAlertModule: showPersonalDataErrorAlertModule()
+            }
+        }
+
         router.present(vc)
+    }
+
+    func showURL(url: URL, view: UIViewController) {
+        let safariVC = SFSafariViewController(url: url)
+        view.present(safariVC, animated: true)
     }
 
     func showPromoModule() {
@@ -83,9 +101,12 @@ private extension ProfileCoordinator {
 
         router.present(vc, modalPresentation: .fullScreen)
     }
+}
 
+// MARK: - Show Error Alerts
+private extension ProfileCoordinator {
     // Показываем алёрт с ошибкой и при нажатии на кнопку на алёрте закрываем окно
-    private func showChooseAddressErrorAlertModule() {
+    func showChooseAddressErrorAlertModule() {
         let vc = moduleFactory.makeErrorAlert(for: .chooseAddressError) {
             self.dismissModule()
         }
@@ -95,6 +116,15 @@ private extension ProfileCoordinator {
     // Показываем экран с ошибкой, через комплишн вызываем закрытие окна и флоу, при нажатии на кнопку на алерте
     func showProfileErrorAlertModule() {
         let vc = moduleFactory.makeErrorAlert(for: .profileError) { [weak self] in
+            self?.dismissModule()
+        }
+
+        router.present(vc)
+    }
+
+    // Показываем экран с ошибкой, через комплишн вызываем закрытие окна и флоу, при нажатии на кнопку на алерте
+    func showPersonalDataErrorAlertModule() {
+        let vc = moduleFactory.makeErrorAlert(for: .chooseAddressError) { [weak self] in
             self?.dismissModule()
         }
 

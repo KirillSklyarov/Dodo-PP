@@ -12,12 +12,10 @@ final class PersonalConfigurator {
 
     // MARK: - Methods
     func configure() -> PersonalViewController {
-        let router = PersonalRouter(moduleFactory: moduleFactory)
-        let presenter = PersonalPresenter(storage: storage, router: router)
+        let presenter = PersonalPresenter(storage: storage)
         let view = PersonalViewController(output: presenter)
 
         presenter.view = view
-        router.view = view
 
         return view
     }
