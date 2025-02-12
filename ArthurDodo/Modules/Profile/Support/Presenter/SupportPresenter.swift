@@ -1,31 +1,33 @@
 import Foundation
 
-protocol SupportViewOutput: AnyObject {
-    func viewLoaded()
-    func sendAction(_ action: SupportAction)
-}
-
 enum SupportAction {
     case dismiss
     case chatButtonTapped
     case callButtonTapped
 }
 
+enum SupportCoordinatorEvent {
+    case dismissModule
+}
+
+protocol SupportViewOutput: AnyObject {
+    func viewLoaded()
+    func sendAction(_ action: SupportAction)
+
+    var coordinatorEventHandler: ((SupportCoordinatorEvent) -> Void)? { get set }
+}
+
 final class SupportPresenter {
     // MARK: - Properties
     weak var view: SupportViewInput?
-    private let router: SupportRouterInput
-
-    // MARK: - Init
-    init(router: SupportRouterInput) {
-        self.router = router
-    }
+    var coordinatorEventHandler: ((SupportCoordinatorEvent) -> Void)?
 }
 
+// MARK: - SupportViewOutput
 extension SupportPresenter: SupportViewOutput {
     // Делаем первоначальную загрузку экрана и показываем анимацию на кнопки
     func viewLoaded() {
-        view?.setInitialState()
+        view?.setupInitialState()
         showContentStack()
     }
 
@@ -38,6 +40,7 @@ extension SupportPresenter: SupportViewOutput {
         }
     }
 }
+
 // MARK: - Supporting methods
 private extension SupportPresenter {
     // Показываем анимацию выезжающих кнопок
@@ -50,6 +53,6 @@ private extension SupportPresenter {
     // Показываем анимацию уезжающих кнопок и закрываем окно
     func hideContentStackAndDismiss() {
         view?.hideContentStack()
-        router.dismiss()
+        coordinatorEventHandler?(.dismissModule)
     }
 }

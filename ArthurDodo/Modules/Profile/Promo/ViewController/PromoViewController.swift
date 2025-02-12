@@ -1,14 +1,12 @@
 import UIKit
 import AppUIComponentsSPM
 
-protocol PromoViewInput: AnyObject {
-    func setInitialState()
+protocol PromoViewInput: BaseViewControllerInput where inputData == Promo {
     func updateUIWithAppliedPromo()
-    func configureUI(with promo: Promo)
 }
 
 // Вылезающий снизу экран "Акции"
-final class PromoViewController: UIViewController, ModuleTransitionable {
+final class PromoViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var promoImageView = AppImageView(type: .promoImage)
@@ -20,10 +18,13 @@ final class PromoViewController: UIViewController, ModuleTransitionable {
 
     private lazy var contentStack = setupContentStack()
 
-    private let output: PromoViewOutput
+    private lazy var activityIndicator = AppActivityIndicator()
+
+    // MARK: - Output
+    var output: any PromoViewOutput
 
     // MARK: - Init
-    init(output: PromoViewOutput) {
+    init(output: any PromoViewOutput) {
         self.output = output
         super.init(nibName: nil, bundle: nil)
     }
@@ -42,9 +43,18 @@ final class PromoViewController: UIViewController, ModuleTransitionable {
 // MARK: - PromoViewInput
 extension PromoViewController: PromoViewInput {
     // Делаем первоначальное состояние экрана
-    func setInitialState() {
+    func setupInitialState() {
         setupUI()
         setupActions()
+    }
+
+    func showLoading() {
+        isShowContent(false)
+        activityIndicator.startAnimating()
+    }
+    
+    func showError() {
+        activityIndicator.stopAnimating()
     }
 
     func updateUIWithAppliedPromo() {
@@ -52,12 +62,9 @@ extension PromoViewController: PromoViewInput {
         applyButton.setNewBackgroundColor(AppColors.buttonGray)
     }
 
-    func configureUI(with promo: Promo) {
-        let image = UIImage(named: promo.imageName)
-        promoImageView.image = image
-
-        promoDateLabel.text = promo.date
-        promoDetailsLabel.text = promo.details
+    func configure(with data: Promo) {
+        isShowContent(true)
+        updateUI(with: data)
     }
 }
 
@@ -78,12 +85,15 @@ extension PromoViewController {
 private extension PromoViewController {
     func setupUI() {
         view.backgroundColor = AppColors.backgroundGray
-        view.addSubviews(contentStack)
+        view.addSubviews(contentStack, activityIndicator)
         setupLayout()
     }
 
     func setupLayout() {
         contentStack.setConstraints(isSafeArea: true, allInsets: 10)
+
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 
     func setupContentStack() -> UIStackView {
@@ -100,5 +110,19 @@ private extension PromoViewController {
         let contentStack = AppStackView([imageContainer, promoDateLabel, promoDetailsLabel, legalTextLabel, applyButton], axis: .vertical, distribution: .equalSpacing)
 
         return contentStack
+    }
+}
+
+// MARK: - Supporting methods
+private extension PromoViewController {
+    func isShowContent(_ bool: Bool) {
+        contentStack.alpha = bool ? 1 : 0
+    }
+
+    func updateUI(with data: Promo) {
+        let image = UIImage(named: data.imageName)
+        promoImageView.image = image
+        promoDateLabel.text = data.date
+        promoDetailsLabel.text = data.details
     }
 }

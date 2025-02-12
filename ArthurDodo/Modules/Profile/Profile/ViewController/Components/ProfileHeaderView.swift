@@ -53,6 +53,21 @@ private extension ProfileHeaderView {
     func setupUI() {
         addSubviews(contentStackView)
         setupLayout()
+
+        configureUIElements()
+    }
+
+    // Убираем блендинг у UI элементов
+    func configureUIElements() {
+        [dismissButton].forEach {
+            $0.isOpaque = true
+            $0.backgroundColor = AppColors.backgroundGray
+        }
+
+        chatButton.titleLabel?.isOpaque = true
+        chatButton.titleLabel?.backgroundColor = AppColors.backgroundGray
+        chatButton.isOpaque = true
+        chatButton.backgroundColor = AppColors.backgroundGray
     }
 
     func setupLayout() {

@@ -10,12 +10,10 @@ final class PromoConfigurator {
 
     // MARK: - Methods
     func configure() -> PromoViewController {
-        let router = PromoRouter()
-        let presenter = PromoPresenter(storage: storage, router: router)
+        let presenter = PromoPresenter(storage: storage)
         let view = PromoViewController(output: presenter)
 
         presenter.view = view
-        router.view = view
 
         return view
     }

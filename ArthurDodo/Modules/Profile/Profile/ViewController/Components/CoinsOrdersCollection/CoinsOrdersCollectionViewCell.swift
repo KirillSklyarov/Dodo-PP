@@ -23,7 +23,6 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Public methods
     func configureCell(_ indexPath: IndexPath, data: User) {
-        let data = data
         let item = indexPath.item
 
         switch item {
@@ -32,6 +31,18 @@ final class CoinsOrdersCollectionViewCell: UICollectionViewCell {
         case 2: designAddressCell(data)
         default: break
         }
+
+        configureUIElements()
+    }
+
+    // Убираем блендинг у UI элементов
+    func configureUIElements() {
+        [iconImageView, titleLabel].forEach {
+            $0.isOpaque = true
+            $0.backgroundColor = contentView.backgroundColor
+        }
+
+        iconImageView.clipsToBounds = true
     }
 }
 
@@ -47,7 +58,7 @@ private extension CoinsOrdersCollectionViewCell {
     // Устанавливаем картинку
     func designCoinsImage() {
         contentView.backgroundColor = AppColors.dodoCoinsBlue
-        let image = UIImage(named: "dodoCoinsImage")
+        let image = UIImage(named: "dodoCoins-blue")
         iconImageView.image = image
     }
 
@@ -70,7 +81,7 @@ private extension CoinsOrdersCollectionViewCell {
     // Устанавливаем картинку
     func designOrderImage() {
         contentView.backgroundColor = AppColors.backgroundGray
-        let image = UIImage(named: "dodoCoinsImage")
+        let image = UIImage(named: "dodoCoins-black")
         iconImageView.image = image
     }
 

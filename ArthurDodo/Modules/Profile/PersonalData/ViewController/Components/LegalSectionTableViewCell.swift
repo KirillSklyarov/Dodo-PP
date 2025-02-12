@@ -38,10 +38,8 @@ private extension LegalSectionTableViewCell {
         setupLayout()
     }
 
-
     func setupLayout() {
         titleLabel.setLocalConstraints(left: 0, right: 0)
         titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
     }
 }
-

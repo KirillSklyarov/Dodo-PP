@@ -1,4 +1,5 @@
 import UIKit
+import AppUIComponentsSPM
 
 final class CustomPageControl: UIPageControl {
 
@@ -14,6 +15,8 @@ final class CustomPageControl: UIPageControl {
     }
 
     private func setupPageControl() {
+        isOpaque = true
+        backgroundColor = AppColors.backgroundBlack
         numberOfPages = 2
         isUserInteractionEnabled = false
         currentPageIndicatorTintColor = .white

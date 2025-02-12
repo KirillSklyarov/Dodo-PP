@@ -67,10 +67,16 @@ private extension PromoStackView {
 private extension PromoStackView {
     // Базовые настройки стека
     func setupUI() {
-        layer.cornerRadius = cornerRadius
-        clipsToBounds = true
         axis = .vertical
         spacing = 10
+
+        configureUIElements()
+    }
+
+    // Убираем блендинг у UI элементов
+    func configureUIElements() {
+        headerLabel.isOpaque = true
+        headerLabel.backgroundColor = AppColors.backgroundBlack
     }
 
     // Метод определяет что показывать в зависимости от состояния стека

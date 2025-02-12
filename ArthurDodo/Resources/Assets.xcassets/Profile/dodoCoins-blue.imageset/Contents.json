@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "dodoCoins-removebg-preview-removebg-preview.png",
+      "filename" : "Frame 1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "dodoCoins-removebg-preview-removebg-preview@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "dodoCoins-removebg-preview-removebg-preview@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

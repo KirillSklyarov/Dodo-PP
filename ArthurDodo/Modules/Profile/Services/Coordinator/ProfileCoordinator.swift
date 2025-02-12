@@ -52,13 +52,23 @@ private extension ProfileCoordinator {
     func showSupportModule() {
         let vc = moduleFactory.makeModule(for: .chatAlert)
         vc.modalTransitionStyle = .crossDissolve
+        guard let supportViewInput = vc as? SupportViewController else { return }
+        let presenter = supportViewInput.output
+
+        presenter.coordinatorEventHandler = { [weak self] coordinatorEvent in
+            guard let self else { return }
+            switch coordinatorEvent {
+            case .dismissModule: router.dismiss()
+            }
+        }
+
         router.present(vc, modalPresentation: .overFullScreen)
     }
 
     func showPersonalDataModule() {
         let vc = moduleFactory.makeModule(for: .personalData)
-        guard let vc = vc as? PersonalViewController else { return }
-        let presenter = vc.output
+        guard let personalViewInput = vc as? PersonalViewController else { return }
+        let presenter = personalViewInput.output
 
         presenter.coordinatorEventHandler = { [weak self, weak vc] coordinatorEvent in
             guard let self, let vc else { return }
@@ -82,6 +92,17 @@ private extension ProfileCoordinator {
         guard let configureSheet = vc.sheetPresentationController else { return }
         configureSheet.detents = [.medium()]
         configureSheet.prefersGrabberVisible = true
+
+        guard let inputViewController = vc as? PromoViewController else { return }
+        let presenter = inputViewController.output
+
+        presenter.coordinatorEventHandler = { [weak self] coordinatorEvent in
+            guard let self else { return }
+            switch coordinatorEvent {
+            case .showError: showPromoErrorAlertModule()
+            }
+        }
+
         router.present(vc)
     }
 
@@ -116,6 +137,15 @@ private extension ProfileCoordinator {
     // Показываем экран с ошибкой, через комплишн вызываем закрытие окна и флоу, при нажатии на кнопку на алерте
     func showProfileErrorAlertModule() {
         let vc = moduleFactory.makeErrorAlert(for: .profileError) { [weak self] in
+            self?.dismissModule()
+        }
+
+        router.present(vc)
+    }
+
+    // Показываем экран с ошибкой, через комплишн вызываем закрытие окна и флоу, при нажатии на кнопку на алерте
+    func showPromoErrorAlertModule() {
+        let vc = moduleFactory.makeErrorAlert(for: .promoError) { [weak self] in
             self?.dismissModule()
         }
 

@@ -40,6 +40,9 @@ private extension AppActionSheetButtonView {
             actionSheetButton = AppButtons(type: .actionSheetButton, text: "Отменить")
         }
 
+        actionSheetButton?.isOpaque = true
+        actionSheetButton?.backgroundColor = AppColors.backgroundGray
+
         guard let actionSheetButton else { return }
         addSubviews(blurView, actionSheetButton)
 

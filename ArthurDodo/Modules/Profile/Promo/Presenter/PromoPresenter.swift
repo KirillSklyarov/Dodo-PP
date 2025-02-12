@@ -1,25 +1,35 @@
 import Foundation
 
-protocol PromoViewOutput: AnyObject {
-    func viewLoaded()
-    func sendAction(_ action: PromoAction)
-}
+//protocol PromoViewOutput: AnyObject {
+//    func viewLoaded()
+//    func sendAction(_ action: PromoAction)
+//}
 
 enum PromoAction {
     case applyPromo
 }
 
+enum PromoCoordinatorEvent {
+    case showError
+}
+
+protocol PromoViewOutput: BaseViewControllerOutput where ActionType == PromoAction, CoordinatorEvent == PromoCoordinatorEvent, ViewInputProtocol == any PromoViewInput {
+
+}
+
+
 final class PromoPresenter {
 
     // MARK: - Properties
-    weak var view: PromoViewInput?
+    var promo: Promo?
+    var coordinatorEventHandler: ((PromoCoordinatorEvent) -> Void)?
+
+    weak var view: (any PromoViewInput)?
     private let storage: PromoStorageProtocol
-    private let router: PromoRouterInput
 
     // MARK: - Init
-    init(storage: PromoStorageProtocol, router: PromoRouterInput) {
+    init(storage: PromoStorageProtocol) {
         self.storage = storage
-        self.router = router
     }
 
     required init?(coder: NSCoder) {
@@ -31,8 +41,21 @@ final class PromoPresenter {
 extension PromoPresenter: PromoViewOutput {
     // Как только узнали, что view загрузилась, то выставляем ей базовое состояние и фетчим данные
     func viewLoaded() {
-        view?.setInitialState()
+        view?.setupInitialState()
+        loadData()
+        checkDataAndUpdateView()
+    }
+
+    func loadData() {
+        view?.showLoading()
         fetchData()
+    }
+    
+    func checkDataAndUpdateView() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            guard let self else { return }
+            isDataValid() ? updateView() : setErrorState()
+        }
     }
 
     func sendAction(_ action: PromoAction) {
@@ -44,10 +67,26 @@ extension PromoPresenter: PromoViewOutput {
 
 // MARK: - Supporting methods
 private extension PromoPresenter {
+    // Проверяем на nil все данные, если где-то будет nil, то это ошибка
+    func isDataValid() -> Bool {
+        let data: [Any?] = [promo]
+        return data.allSatisfy { $0 != nil }
+    }
+
+    // Обновляем вью
+    func updateView() {
+        guard let promo else { return }
+        view?.configure(with: promo)
+    }
+
+    // Когда получаем ошибку, то роутеру говорим показать алерт и вью показывает UI для ошибки
+    func setErrorState() {
+        coordinatorEventHandler?(.showError)
+        view?.showError()
+    }
+
     // Забираем данные из хранилища и обновляем UI
     func fetchData() {
-        guard let offer = storage.getSelectedPromo() else { print("No promo selected"); return }
-        view?.configureUI(with: offer)
+        promo = storage.getSelectedPromo()
     }
 }
-

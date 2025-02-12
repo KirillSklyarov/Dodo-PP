@@ -10,11 +10,11 @@ final class CoinsOrdersCollectionView: UICollectionView {
     private var collectionHeight: CGFloat = 200
     private let countOfItems = 3
 
-    var onToppingSelected: ( (Int) -> Void )?
-    var onAddressCellTapped: ( () -> Void )?
-
     private var personalData: User?
     private var state: ScreenState = .loading
+
+    var onToppingSelected: ( (Int) -> Void )?
+    var onAddressCellTapped: ( () -> Void )?
 
     // MARK: - Init
     override init(frame: CGRect = .zero, collectionViewLayout layout: UICollectionViewLayout = UICollectionViewLayout()) {

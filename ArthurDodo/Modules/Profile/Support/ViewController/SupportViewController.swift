@@ -1,13 +1,14 @@
 import UIKit
 import AppUIComponentsSPM
 
+// Так как это мелкий модуль, то для него не требуется наследование от стандартного протокола, так как тут почти не присутствует бизнес-логика
 protocol SupportViewInput: AnyObject {
-    func setInitialState()
+    func setupInitialState()
     func hideContentStack()
     func showContentStack()
 }
 
-final class SupportViewController: UIViewController, ModuleTransitionable {
+final class SupportViewController: UIViewController {
 
     // MARK: - UI Properties
     private lazy var callButtonView = AppActionSheetButtonView(.call)
@@ -20,10 +21,10 @@ final class SupportViewController: UIViewController, ModuleTransitionable {
     // MARK: - Other Properties
     private var bottomConstraint: NSLayoutConstraint!
 
-    private let output: SupportViewOutput
+    let output: any SupportViewOutput
 
     // MARK: - Init
-    init(output: SupportViewOutput) {
+    init(output: any SupportViewOutput) {
         self.output = output
         super.init(nibName: nil, bundle: nil)
     }
@@ -42,7 +43,7 @@ final class SupportViewController: UIViewController, ModuleTransitionable {
 // MARK: - SupportViewInput
 extension SupportViewController: SupportViewInput {
     // Устанавливаем начальное состояние экрана (настраиваем все UI)
-    func setInitialState() {
+    func setupInitialState() {
         setupUI()
         setupAction()
     }
